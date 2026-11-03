@@ -1,0 +1,45 @@
+import { createRootRoute, createRoute, createRouter, Outlet } from "@tanstack/react-router";
+import HomePage from "./pages/HomePage";
+import SearchPage from "./pages/SearchPage";
+import BookingPage from "./pages/BookingPage";
+import BookingSuccessPage from "./pages/BookingSuccessPage";
+import MyBookingsPage from "./pages/MyBookingsPage";
+import { AdminLayout } from "./components/hotel/StaffChrome";
+import { AdminActivityPage, AdminDashboardPage, AdminExpensesPage, AdminFrontDeskPage, AdminGuestsPage, AdminHousekeepingPage, AdminIndexPage, AdminInventoryPage, AdminLoginPage, AdminPaymentsPage, AdminReportsPage, AdminReservationsPage, AdminRestaurantPage, AdminRoomsPage, AdminSettingsPage, AdminStaffPage } from "./pages/AdminPages";
+
+function dateInput(offset: number) { const date = new Date(); date.setHours(12, 0, 0, 0); date.setDate(date.getDate() + offset); return date.toISOString().slice(0, 10); }
+const staySearch = (search: Record<string, unknown>) => ({ checkIn: typeof search.checkIn === "string" ? search.checkIn : dateInput(1), checkOut: typeof search.checkOut === "string" ? search.checkOut : dateInput(3), adults: Math.max(1, Number(search.adults) || 2), children: Math.max(0, Number(search.children) || 0), rooms: Math.max(1, Number(search.rooms) || 1), guests: Math.max(1, Number(search.guests) || Number(search.adults) || 2) });
+const bookingSearch = (search: Record<string, unknown>) => staySearch(search);
+const successSearch = (search: Record<string, unknown>) => ({ bookingId: typeof search.bookingId === "string" ? search.bookingId : "" });
+const reservationSearch = (search: Record<string, unknown>) => ({ q: typeof search.q === "string" ? search.q : "" });
+const rootRoute = createRootRoute({ component: () => <Outlet /> });
+const homeRoute = createRoute({ getParentRoute: () => rootRoute, path: "/", component: HomePage });
+const searchRoute = createRoute({ getParentRoute: () => rootRoute, path: "/search", validateSearch: staySearch, component: SearchPage });
+const bookingRoute = createRoute({ getParentRoute: () => rootRoute, path: "/book/$roomId", validateSearch: bookingSearch, component: BookingPage });
+const bookingSuccessRoute = createRoute({ getParentRoute: () => rootRoute, path: "/booking/success", validateSearch: successSearch, component: BookingSuccessPage });
+const lookupRoute = createRoute({ getParentRoute: () => rootRoute, path: "/booking/lookup", component: MyBookingsPage });
+const adminLoginRoute = createRoute({ getParentRoute: () => rootRoute, path: "/admin/login", component: AdminLoginPage });
+const adminRoute = createRoute({ getParentRoute: () => rootRoute, path: "/admin", component: AdminLayout });
+const adminIndexRoute = createRoute({ getParentRoute: () => adminRoute, path: "/", component: AdminIndexPage });
+const adminDashboardRoute = createRoute({ getParentRoute: () => adminRoute, path: "/dashboard", component: AdminDashboardPage });
+const adminReservationsRoute = createRoute({ getParentRoute: () => adminRoute, path: "/reservations", validateSearch: reservationSearch, component: AdminReservationsPage });
+const adminRoomsRoute = createRoute({ getParentRoute: () => adminRoute, path: "/rooms", component: AdminRoomsPage });
+const adminRoomTypesRoute = createRoute({ getParentRoute: () => adminRoute, path: "/room-types", component: AdminRoomsPage });
+const adminGuestsRoute = createRoute({ getParentRoute: () => adminRoute, path: "/guests", component: AdminGuestsPage });
+const adminFrontDeskRoute = createRoute({ getParentRoute: () => adminRoute, path: "/front-desk", component: AdminFrontDeskPage });
+const adminCheckInRoute = createRoute({ getParentRoute: () => adminRoute, path: "/check-in", component: AdminFrontDeskPage });
+const adminCheckOutRoute = createRoute({ getParentRoute: () => adminRoute, path: "/check-out", component: AdminFrontDeskPage });
+const adminHousekeepingRoute = createRoute({ getParentRoute: () => adminRoute, path: "/housekeeping", component: AdminHousekeepingPage });
+const adminStaffRoute = createRoute({ getParentRoute: () => adminRoute, path: "/staff", component: AdminStaffPage });
+const adminAttendanceRoute = createRoute({ getParentRoute: () => adminRoute, path: "/attendance", component: AdminStaffPage });
+const adminPaymentsRoute = createRoute({ getParentRoute: () => adminRoute, path: "/payments", component: AdminPaymentsPage });
+const adminInvoicesRoute = createRoute({ getParentRoute: () => adminRoute, path: "/invoices", component: AdminPaymentsPage });
+const adminExpensesRoute = createRoute({ getParentRoute: () => adminRoute, path: "/expenses", component: AdminExpensesPage });
+const adminInventoryRoute = createRoute({ getParentRoute: () => adminRoute, path: "/inventory", component: AdminInventoryPage });
+const adminRestaurantRoute = createRoute({ getParentRoute: () => adminRoute, path: "/restaurant", component: AdminRestaurantPage });
+const adminReportsRoute = createRoute({ getParentRoute: () => adminRoute, path: "/reports", component: AdminReportsPage });
+const adminSettingsRoute = createRoute({ getParentRoute: () => adminRoute, path: "/settings", component: AdminSettingsPage });
+const adminActivityRoute = createRoute({ getParentRoute: () => adminRoute, path: "/activity-logs", component: AdminActivityPage });
+const routeTree = rootRoute.addChildren([homeRoute, searchRoute, bookingRoute, bookingSuccessRoute, lookupRoute, adminLoginRoute, adminRoute.addChildren([adminIndexRoute, adminDashboardRoute, adminReservationsRoute, adminRoomsRoute, adminRoomTypesRoute, adminGuestsRoute, adminFrontDeskRoute, adminCheckInRoute, adminCheckOutRoute, adminHousekeepingRoute, adminStaffRoute, adminAttendanceRoute, adminPaymentsRoute, adminInvoicesRoute, adminExpensesRoute, adminInventoryRoute, adminRestaurantRoute, adminReportsRoute, adminSettingsRoute, adminActivityRoute])]);
+export const router = createRouter({ routeTree });
+declare module "@tanstack/react-router" { interface Register { router: typeof router; } }

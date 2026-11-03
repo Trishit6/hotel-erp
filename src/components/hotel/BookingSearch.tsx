@@ -1,0 +1,21 @@
+import { ArrowRight, CalendarDays, DoorOpen, Search, Users } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
+import { isDateRangeValid } from "../../lib/hotel-data";
+
+function dateInput(offset: number) { const date = new Date(); date.setHours(12, 0, 0, 0); date.setDate(date.getDate() + offset); return date.toISOString().slice(0, 10); }
+interface BookingSearchProps { compact?: boolean; initialCheckIn?: string; initialCheckOut?: string; initialAdults?: number; initialChildren?: number; initialRooms?: number; }
+export function BookingSearch({ compact = false, initialCheckIn = dateInput(1), initialCheckOut = dateInput(3), initialAdults = 2, initialChildren = 0, initialRooms = 1 }: BookingSearchProps) {
+  const navigate = useNavigate(); const [checkIn, setCheckIn] = useState(initialCheckIn); const [checkOut, setCheckOut] = useState(initialCheckOut); const [adults, setAdults] = useState(initialAdults); const [children, setChildren] = useState(initialChildren); const [rooms, setRooms] = useState(initialRooms); const [error, setError] = useState("");
+  const submit = (event: React.FormEvent) => { event.preventDefault(); if (!isDateRangeValid(checkIn, checkOut)) { setError("Choose a checkout date after check-in."); return; } setError(""); navigate({ to: "/search", search: { checkIn, checkOut, adults, children, rooms, guests: adults + children } }); };
+  return <form onSubmit={submit} className={`relative z-10 grid gap-1.5 rounded-[1.2rem] border border-[#e5e8ec] bg-white p-2 shadow-[0_18px_55px_rgba(24,45,78,0.13)] ${compact ? "md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-[1.1fr_1.1fr_0.8fr_0.8fr_0.8fr_auto]" : "md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-[1fr_1fr_0.85fr_0.85fr_0.85fr_auto]"}`}>
+    <label className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-white"><CalendarDays className="h-4 w-4 shrink-0 text-[#6f8b78]" /><span className="flex min-w-0 flex-col gap-0.5"><span className="text-[10px] font-semibold uppercase tracking-wider text-[#8490a0]">Check in</span><input required type="date" value={checkIn} onChange={(e) => setCheckIn(e.target.value)} className="w-full bg-transparent text-xs text-[#202b3c] outline-none" /></span></label>
+    <label className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-white"><CalendarDays className="h-4 w-4 shrink-0 text-[#6f8b78]" /><span className="flex min-w-0 flex-col gap-0.5"><span className="text-[10px] font-semibold uppercase tracking-wider text-[#8490a0]">Check out</span><input required type="date" min={checkIn} value={checkOut} onChange={(e) => setCheckOut(e.target.value)} className="w-full bg-transparent text-xs text-[#202b3c] outline-none" /></span></label>
+    <SelectField icon={<Users className="h-4 w-4 text-[#6f8b78]" />} label="Adults" value={adults} setValue={setAdults} max={8} />
+    <SelectField icon={<Users className="h-4 w-4 text-[#b99a68]" />} label="Children" value={children} setValue={setChildren} max={6} allowZero />
+    <SelectField icon={<DoorOpen className="h-4 w-4 text-[#6f8b78]" />} label="Rooms" value={rooms} setValue={setRooms} max={4} />
+    <button type="submit" className="flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#172b49] px-4 text-xs font-semibold text-white transition-colors hover:bg-[#294363]"><span className="hidden xl:inline">Search availability</span><Search className="h-4 w-4 xl:hidden" /><ArrowRight className="h-4 w-4" /></button>
+    {error && <p className="px-3 pb-1 text-xs text-[#d9534f] md:col-span-full">{error}</p>}
+  </form>;
+}
+function SelectField({ icon, label, value, setValue, max, allowZero = false }: { icon: React.ReactNode; label: string; value: number; setValue: (value: number) => void; max: number; allowZero?: boolean }) { return <label className="flex items-center gap-2 rounded-xl px-3 py-2.5 hover:bg-white">{icon}<span className="flex min-w-0 flex-col gap-0.5"><span className="text-[10px] font-semibold uppercase tracking-wider text-[#8490a0]">{label}</span><select value={value} onChange={(e) => setValue(Number(e.target.value))} className="bg-transparent text-xs text-[#202b3c] outline-none">{Array.from({ length: max - (allowZero ? 0 : 1) + 1 }, (_, index) => index + (allowZero ? 0 : 1)).map((amount) => <option value={amount} key={amount}>{amount}</option>)}</select></span></label>; }
