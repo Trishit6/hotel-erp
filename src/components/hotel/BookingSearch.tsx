@@ -1,21 +1,177 @@
-import { ArrowRight, CalendarDays, DoorOpen, Search, Users } from "lucide-react";
-import { useState } from "react";
+import { ArrowRight, CalendarDays, DoorOpen, Loader2, Search, Users } from "lucide-react";
+import { useEffect, useState, useTransition } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { isDateRangeValid } from "../../lib/hotel-data";
+import { addDays, dateAt, isDateOnly, isDateRangeValid } from "../../lib/hotel-data";
 
-function dateInput(offset: number) { const date = new Date(); date.setHours(12, 0, 0, 0); date.setDate(date.getDate() + offset); return date.toISOString().slice(0, 10); }
-interface BookingSearchProps { compact?: boolean; initialCheckIn?: string; initialCheckOut?: string; initialAdults?: number; initialChildren?: number; initialRooms?: number; }
-export function BookingSearch({ compact = false, initialCheckIn = dateInput(1), initialCheckOut = dateInput(3), initialAdults = 2, initialChildren = 0, initialRooms = 1 }: BookingSearchProps) {
-  const navigate = useNavigate(); const [checkIn, setCheckIn] = useState(initialCheckIn); const [checkOut, setCheckOut] = useState(initialCheckOut); const [adults, setAdults] = useState(initialAdults); const [children, setChildren] = useState(initialChildren); const [rooms, setRooms] = useState(initialRooms); const [error, setError] = useState("");
-  const submit = (event: React.FormEvent) => { event.preventDefault(); if (!isDateRangeValid(checkIn, checkOut)) { setError("Choose a checkout date after check-in."); return; } setError(""); navigate({ to: "/search", search: { checkIn, checkOut, adults, children, rooms, guests: adults + children } }); };
-  return <form onSubmit={submit} className={`relative z-10 grid gap-1.5 rounded-[1.2rem] border border-[#e5e8ec] bg-white p-2 shadow-[0_18px_55px_rgba(24,45,78,0.13)] ${compact ? "md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-[1.1fr_1.1fr_0.8fr_0.8fr_0.8fr_auto]" : "md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-[1fr_1fr_0.85fr_0.85fr_0.85fr_auto]"}`}>
-    <label className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-white"><CalendarDays className="h-4 w-4 shrink-0 text-[#6f8b78]" /><span className="flex min-w-0 flex-col gap-0.5"><span className="text-[10px] font-semibold uppercase tracking-wider text-[#8490a0]">Check in</span><input required type="date" value={checkIn} onChange={(e) => setCheckIn(e.target.value)} className="w-full bg-transparent text-xs text-[#202b3c] outline-none" /></span></label>
-    <label className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-white"><CalendarDays className="h-4 w-4 shrink-0 text-[#6f8b78]" /><span className="flex min-w-0 flex-col gap-0.5"><span className="text-[10px] font-semibold uppercase tracking-wider text-[#8490a0]">Check out</span><input required type="date" min={checkIn} value={checkOut} onChange={(e) => setCheckOut(e.target.value)} className="w-full bg-transparent text-xs text-[#202b3c] outline-none" /></span></label>
-    <SelectField icon={<Users className="h-4 w-4 text-[#6f8b78]" />} label="Adults" value={adults} setValue={setAdults} max={8} />
-    <SelectField icon={<Users className="h-4 w-4 text-[#b99a68]" />} label="Children" value={children} setValue={setChildren} max={6} allowZero />
-    <SelectField icon={<DoorOpen className="h-4 w-4 text-[#6f8b78]" />} label="Rooms" value={rooms} setValue={setRooms} max={4} />
-    <button type="submit" className="flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#172b49] px-4 text-xs font-semibold text-white transition-colors hover:bg-[#294363]"><span className="hidden xl:inline">Search availability</span><Search className="h-4 w-4 xl:hidden" /><ArrowRight className="h-4 w-4" /></button>
-    {error && <p className="px-3 pb-1 text-xs text-[#d9534f] md:col-span-full">{error}</p>}
-  </form>;
+interface BookingSearchProps {
+  compact?: boolean;
+  initialCheckIn?: string;
+  initialCheckOut?: string;
+  initialAdults?: number;
+  initialChildren?: number;
+  initialRooms?: number;
 }
-function SelectField({ icon, label, value, setValue, max, allowZero = false }: { icon: React.ReactNode; label: string; value: number; setValue: (value: number) => void; max: number; allowZero?: boolean }) { return <label className="flex items-center gap-2 rounded-xl px-3 py-2.5 hover:bg-white">{icon}<span className="flex min-w-0 flex-col gap-0.5"><span className="text-[10px] font-semibold uppercase tracking-wider text-[#8490a0]">{label}</span><select value={value} onChange={(e) => setValue(Number(e.target.value))} className="bg-transparent text-xs text-[#202b3c] outline-none">{Array.from({ length: max - (allowZero ? 0 : 1) + 1 }, (_, index) => index + (allowZero ? 0 : 1)).map((amount) => <option value={amount} key={amount}>{amount}</option>)}</select></span></label>; }
+
+export function BookingSearch({
+  compact = false,
+  initialCheckIn = dateAt(1),
+  initialCheckOut = dateAt(3),
+  initialAdults = 2,
+  initialChildren = 0,
+  initialRooms = 1,
+}: BookingSearchProps) {
+  const navigate = useNavigate();
+  const [isPending, startTransition] = useTransition();
+  const [checkIn, setCheckIn] = useState(initialCheckIn);
+  const [checkOut, setCheckOut] = useState(initialCheckOut);
+  const [adults, setAdults] = useState(initialAdults);
+  const [children, setChildren] = useState(initialChildren);
+  const [rooms, setRooms] = useState(initialRooms);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    setCheckIn(initialCheckIn);
+    setCheckOut(initialCheckOut);
+    setAdults(initialAdults);
+    setChildren(initialChildren);
+    setRooms(initialRooms);
+  }, [initialAdults, initialCheckIn, initialCheckOut, initialChildren, initialRooms]);
+
+  const today = dateAt(0);
+  const minCheckOut = addDays(checkIn, 1);
+
+  const changeCheckIn = (value: string) => {
+    setCheckIn(value);
+    if (isDateOnly(value) && value >= today && checkOut <= value) setCheckOut(addDays(value, 1));
+    if (error) setError("");
+  };
+
+  const changeCheckOut = (value: string) => {
+    setCheckOut(value);
+    if (error) setError("");
+  };
+
+  const submit = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!isDateOnly(checkIn) || checkIn < today) {
+      setError("Choose a check-in date from today onward.");
+      return;
+    }
+    if (!isDateOnly(checkOut) || !isDateRangeValid(checkIn, checkOut)) {
+      setError("Choose a checkout date after your check-in date.");
+      return;
+    }
+    if (adults < 1) {
+      setError("At least one adult is required.");
+      return;
+    }
+    if (rooms < 1) {
+      setError("Choose at least one room.");
+      return;
+    }
+    setError("");
+    startTransition(() => {
+      navigate({ to: "/search", search: { checkIn, checkOut, adults, children, rooms, guests: adults + children } });
+    });
+  };
+
+  const pad = compact ? "p-2" : "p-2 md:p-2.5";
+
+  return (
+    <form
+      onSubmit={submit}
+      noValidate
+      aria-label="Search room availability"
+      className={`relative z-20 grid gap-1.5 rounded-[1.35rem] border border-[var(--line)] bg-[var(--surface)] ${pad} shadow-[0_24px_70px_rgba(23,43,73,0.14)] md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-[1.05fr_1.05fr_0.8fr_0.8fr_0.8fr_auto]`}
+    >
+      <label className="group flex min-w-0 items-center gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-[var(--surface-2)] focus-within:bg-[var(--surface-2)]">
+        <CalendarDays className="h-4 w-4 shrink-0 text-[var(--sage)]" />
+        <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--faint)]">Check in</span>
+          <input
+            required
+            type="date"
+            value={checkIn}
+            min={today}
+            onChange={(event) => changeCheckIn(event.target.value)}
+            className="w-full min-w-0 bg-transparent text-sm text-[var(--text)] outline-none"
+          />
+        </span>
+      </label>
+
+      <label className="group flex min-w-0 items-center gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-[var(--surface-2)] focus-within:bg-[var(--surface-2)]">
+        <CalendarDays className="h-4 w-4 shrink-0 text-[var(--sage)]" />
+        <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--faint)]">Check out</span>
+          <input
+            required
+            type="date"
+            value={checkOut}
+            min={minCheckOut}
+            onChange={(event) => changeCheckOut(event.target.value)}
+            className="w-full min-w-0 bg-transparent text-sm text-[var(--text)] outline-none"
+          />
+        </span>
+      </label>
+
+      <div className="grid grid-cols-3 gap-1.5 md:contents">
+        <SelectField icon={<Users className="h-4 w-4 text-[var(--sage)]" />} label="Adults" value={adults} setValue={setAdults} min={1} max={8} />
+        <SelectField icon={<Users className="h-4 w-4 text-[var(--accent-strong)]" />} label="Children" value={children} setValue={setChildren} min={0} max={6} />
+        <SelectField icon={<DoorOpen className="h-4 w-4 text-[var(--sage)]" />} label="Rooms" value={rooms} setValue={setRooms} min={1} max={4} />
+      </div>
+
+      <button
+        type="submit"
+        disabled={isPending}
+        className="flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 text-sm font-semibold text-[var(--on-primary)] transition-colors hover:bg-[var(--primary-hover)] disabled:cursor-wait disabled:opacity-70 md:col-span-1"
+      >
+        {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4 xl:hidden" />}
+        <span className="hidden xl:inline">{isPending ? "Searching..." : "Search availability"}</span>
+        <span className="xl:hidden">Search</span>
+        <ArrowRight className="hidden h-4 w-4 xl:block" />
+      </button>
+
+      {error && (
+        <p role="alert" className="col-span-full px-3 pb-1 text-xs font-medium text-[var(--danger)]">
+          {error}
+        </p>
+      )}
+    </form>
+  );
+}
+
+function SelectField({
+  icon,
+  label,
+  value,
+  setValue,
+  min,
+  max,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: number;
+  setValue: (value: number) => void;
+  min: number;
+  max: number;
+}) {
+  return (
+    <label className="flex min-w-0 items-center gap-2 rounded-xl px-2 py-2.5 transition-colors hover:bg-[var(--surface-2)] focus-within:bg-[var(--surface-2)] sm:px-3">
+      <span className="hidden shrink-0 sm:block">{icon}</span>
+      <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+        <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--faint)]">{label}</span>
+        <select
+          value={value}
+          onChange={(event) => setValue(Number(event.target.value))}
+          className="w-full bg-transparent text-sm text-[var(--text)] outline-none"
+        >
+          {Array.from({ length: max - min + 1 }, (_, index) => index + min).map((amount) => (
+            <option value={amount} key={amount}>
+              {amount}
+            </option>
+          ))}
+        </select>
+      </span>
+    </label>
+  );
+}

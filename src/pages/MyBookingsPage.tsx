@@ -1,9 +1,115 @@
-import { ArrowRight, CalendarDays, Search, ShieldCheck } from "lucide-react";
 import { useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { ArrowRight, CalendarDays, Mail, Search, ShieldCheck } from "lucide-react";
+import { Link, useSearch } from "@tanstack/react-router";
 import { PublicFooter, PublicHeader } from "../components/hotel/PublicChrome";
 import { SectionEyebrow, StatusBadge } from "../components/hotel/HotelUi";
-import { formatCurrency, formatDate, getRoomType } from "../lib/hotel-data";
+import { defaultStaySearch, formatCurrency, formatDate, getRoomType, hotelInfo } from "../lib/hotel-data";
 import { useHotel } from "../lib/hotel-store";
 
-export default function MyBookingsPage() { const { reservations, getGuest, getRoom } = useHotel(); const [query, setQuery] = useState(""); const [searched, setSearched] = useState(false); const matches = reservations.filter((reservation) => { const guest = getGuest(reservation.guestId); return `${reservation.reference} ${guest?.email} ${guest?.name}`.toLowerCase().includes(query.toLowerCase()); }); return <div className="min-h-screen bg-[#f8f6f1] text-[#202b3c]"><PublicHeader /><main className="mx-auto max-w-3xl px-5 py-14 md:px-10 md:py-20"><div className="text-center"><SectionEyebrow>Guest access</SectionEyebrow><h1 className="mt-5 text-5xl font-normal tracking-[-0.06em] md:text-7xl">Your bookings.</h1><p className="mx-auto mt-5 max-w-md text-sm leading-6 text-[#718093]">Enter your confirmation number or booking email to find a stay.</p></div><form onSubmit={(e) => { e.preventDefault(); setSearched(true); }} className="mx-auto mt-9 flex max-w-xl gap-2 rounded-2xl border border-[#e5e8ec] bg-white p-2 shadow-sm"><Search className="ml-3 mt-3 h-4 w-4 text-[#8490a0]" /><input value={query} onChange={(e) => setQuery(e.target.value)} required placeholder="RIVR-2481 or you@example.com" className="min-w-0 flex-1 px-2 text-sm outline-none" /><button type="submit" className="rounded-xl bg-[#172b49] px-4 py-3 text-xs font-semibold text-white">Find booking</button></form>{searched && <div className="mt-8 grid gap-3">{matches.map((reservation) => { const guest = getGuest(reservation.guestId); const room = getRoom(reservation.roomId); return <div key={reservation.id} className="rounded-2xl border border-[#e5e8ec] bg-white p-5"><div className="flex items-start justify-between gap-3"><div><p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#8490a0]">{reservation.reference}</p><h2 className="mt-1 text-lg font-semibold">{getRoomType(room!)?.name} · Room {room?.number}</h2></div><StatusBadge status={reservation.status} /></div><div className="mt-5 grid gap-3 text-xs text-[#667386] sm:grid-cols-3"><span className="flex items-center gap-2"><CalendarDays className="h-4 w-4 text-[#6f8b78]" />{formatDate(reservation.checkIn)} — {formatDate(reservation.checkOut)}</span><span>{guest?.name}</span><span className="font-semibold text-[#202b3c]">{formatCurrency(reservation.total)}</span></div><div className="mt-4 flex items-center justify-between border-t border-[#e7eaee] pt-4 text-xs text-[#8490a0]"><span className="flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5 text-[#6f8b78]" /> Payment {reservation.paymentStatus}</span><Link to="/booking/success" search={{ bookingId: reservation.id }} className="flex items-center gap-1.5 font-semibold text-[#172b49]">View confirmation <ArrowRight className="h-3.5 w-3.5" /></Link></div></div>; })}{matches.length === 0 && <div className="rounded-2xl border border-dashed border-[#cbd2db] p-8 text-center text-sm text-[#8490a0]">No matching booking found. Check the confirmation or email and try again.</div>}</div>}</main><PublicFooter /></div>; }
+export default function MyBookingsPage() {
+  const search = useSearch({ strict: false }) as { q?: string };
+  const { reservations, getGuest, getRoom } = useHotel();
+  const [query, setQuery] = useState(search.q ?? "");
+  const [searched, setSearched] = useState(Boolean(search.q));
+  const normalized = query.trim().toLowerCase();
+  const matches = reservations.filter((reservation) => {
+    const guest = getGuest(reservation.guestId);
+    return `${reservation.reference} ${guest?.email ?? ""} ${guest?.name ?? ""} ${guest?.phone ?? ""}`.toLowerCase().includes(normalized);
+  });
+
+  return (
+    <div className="min-h-screen bg-[var(--canvas)] text-[var(--text)]">
+      <PublicHeader />
+      <main className="mx-auto max-w-3xl px-5 py-14 md:px-10 md:py-20">
+        <div className="text-center">
+          <SectionEyebrow>Guest dashboard</SectionEyebrow>
+          <h1 className="mt-5 font-display text-[clamp(2.8rem,6vw,4.8rem)] leading-[0.98] tracking-[-0.03em] text-[var(--ink)]">Your bookings.</h1>
+          <p className="mx-auto mt-5 max-w-md text-sm leading-7 text-[var(--muted)]">Enter your confirmation number, booking email, or phone number to find a stay. No sign-in is required for this browser-local lookup.</p>
+        </div>
+
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            setSearched(true);
+          }}
+          className="mx-auto mt-9 flex max-w-xl gap-2 rounded-2xl border border-[var(--line)] bg-[var(--surface)] p-2 shadow-[0_10px_35px_rgba(23,43,73,0.06)]"
+        >
+          <Search className="ml-3 mt-3 h-4 w-4 shrink-0 text-[var(--faint)]" />
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            required
+            placeholder="Reference, email, or phone"
+            aria-label="Confirmation number, booking email, or phone"
+            className="min-w-0 flex-1 bg-transparent px-2 text-sm text-[var(--text)] outline-none placeholder:text-[var(--faint)]"
+          />
+          <button type="submit" className="rounded-xl bg-[var(--primary)] px-4 py-3 text-xs font-semibold text-[var(--on-primary)] transition-colors hover:bg-[var(--primary-hover)]">
+            Find booking
+          </button>
+        </form>
+
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-3 text-[11px] text-[var(--faint)]">
+          <Link to="/login" className="inline-flex items-center gap-1.5 font-semibold text-[var(--ink)]">Sign in for a guest dashboard <ArrowRight className="h-3 w-3" /></Link>
+          <span>·</span>
+          <Link to="/booking" search={defaultStaySearch} className="font-semibold text-[var(--ink)]">Book another stay</Link>
+        </div>
+
+        {searched && (
+          <div className="mt-8 grid gap-3" aria-live="polite">
+            {matches.length > 0 && (
+              <p className="text-center text-xs text-[var(--faint)]">
+                {matches.length} {matches.length === 1 ? "booking" : "bookings"} found
+              </p>
+            )}
+            {matches.map((reservation) => {
+              const guest = getGuest(reservation.guestId);
+              const room = getRoom(reservation.roomId);
+              return (
+                <div key={reservation.id} className="rounded-[1.25rem] border border-[var(--line)] bg-[var(--surface)] p-5 shadow-[0_8px_28px_rgba(31,43,60,0.04)]">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--faint)]">{reservation.reference}</p>
+                      <h2 className="mt-1 font-display text-2xl text-[var(--ink)]">{room ? getRoomType(room)?.name : "Room"} · Room {room?.number ?? "—"}</h2>
+                    </div>
+                    <StatusBadge status={reservation.status} />
+                  </div>
+                  <div className="mt-5 grid gap-3 text-xs text-[var(--muted)] sm:grid-cols-3">
+                    <span className="flex items-center gap-2">
+                      <CalendarDays className="h-4 w-4 text-[var(--sage)]" />
+                      {formatDate(reservation.checkIn)} — {formatDate(reservation.checkOut)}
+                    </span>
+                    <span>{guest?.name}</span>
+                    <span className="font-semibold text-[var(--ink)]">{formatCurrency(reservation.total)}</span>
+                  </div>
+                  <div className="mt-4 flex flex-col justify-between gap-3 border-t border-[var(--line)] pt-4 text-xs text-[var(--faint)] sm:flex-row sm:items-center">
+                    <span className="flex items-center gap-1.5">
+                      <ShieldCheck className="h-3.5 w-3.5 text-[var(--sage)]" /> Payment {reservation.paymentStatus}
+                    </span>
+                    <Link to="/booking/success" search={{ bookingId: reservation.id }} className="flex items-center gap-1.5 font-semibold text-[var(--ink)]">
+                      View confirmation <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+            {matches.length === 0 && (
+              <div className="rounded-[1.25rem] border border-dashed border-[var(--line-strong)] bg-[var(--surface)] p-8 text-center">
+                <Search className="mx-auto mb-3 h-6 w-6 text-[var(--faint)]" />
+                <h2 className="font-display text-2xl text-[var(--ink)]">No matching booking found.</h2>
+                <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-[var(--muted)]">Check the confirmation number, email, or phone number and try again. Reservations made in another browser will not appear here.</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className="mt-12 flex flex-col items-center gap-2 border-t border-[var(--line)] pt-8 text-center text-xs text-[var(--faint)]">
+          <p>Need a hand finding your stay?</p>
+          <a href={`mailto:${hotelInfo.email}`} className="flex items-center gap-1.5 font-semibold text-[var(--ink)]">
+            <Mail className="h-3.5 w-3.5 text-[var(--sage)]" /> {hotelInfo.email}
+          </a>
+        </div>
+      </main>
+      <PublicFooter />
+    </div>
+  );
+}
