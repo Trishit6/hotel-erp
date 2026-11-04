@@ -1,7 +1,8 @@
 import { ArrowUpRight, BedDouble, Check, ChevronRight, CircleAlert, Sparkles } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { dateAt, formatCurrency, getRoomType, type Room, type RoomStatus } from "../../lib/hotel-data";
+import { dateAt, formatCurrency, type Room } from "../../lib/hotel-data";
+import { useHotel } from "../../lib/hotel-store";
 
 export function BrandMark({ dark = false }: { dark?: boolean }) {
   return <Link to="/" className="flex w-fit items-center gap-2.5 group"><span className={`grid h-9 w-9 place-items-center rounded-xl ${dark ? "bg-white/10" : "bg-[var(--primary)]"}`}><span className="h-3 w-3 rounded-full border-2 border-[var(--accent)]" /></span><span className={`text-sm font-semibold tracking-[0.18em] ${dark ? "text-white" : "text-[var(--ink)]"}`}>RIVR</span></Link>;
@@ -13,7 +14,8 @@ export function StatusBadge({ status }: { status: string }) {
 }
 
 export function RoomVisual({ room, compact = false }: { room: Room; compact?: boolean }) {
-  const type = getRoomType(room);
+  const { getRoomType } = useHotel();
+  const type = getRoomType(room.typeId);
   return <div className={`relative overflow-hidden rounded-[1.2rem] bg-[var(--surface-3)] ${compact ? "h-24" : "h-48"}`}><img src={type?.image} alt={`${type?.name ?? "Room"} interior`} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-t from-[var(--deep)]/65 via-transparent to-transparent" /><div className="absolute bottom-4 left-4 flex items-center gap-2 text-white/90"><BedDouble className={compact ? "h-4 w-4" : "h-5 w-5"} /><span className={compact ? "text-[10px]" : "text-xs"}>Room {room.number}</span></div></div>;
 }
 

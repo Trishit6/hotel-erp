@@ -267,7 +267,7 @@ export function PublicFooter() {
       </div>
       <div className="mx-auto mt-10 flex max-w-7xl flex-col justify-between gap-2 border-t border-[var(--line)] pt-5 text-xs text-[var(--faint)] md:flex-row">
         <span>© {new Date().getFullYear()} RIVR Hotel &amp; Residences · India</span>
-        <span>Reservations are stored in this browser for the demo environment.</span>
+        <span>Reservations are stored securely by the hotel team.</span>
       </div>
       {hotelInfo.isPlaceholder && <p className="mx-auto mt-2 max-w-7xl text-[11px] text-[var(--faint)]">{hotelInfo.notice}</p>}
     </footer>

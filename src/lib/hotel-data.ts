@@ -2,7 +2,7 @@ export type RoomStatus = "available" | "occupied" | "reserved" | "cleaning" | "m
 export type ReservationStatus = "pending" | "confirmed" | "checked-in" | "checked-out" | "cancelled" | "no-show";
 export type PaymentStatus = "pending" | "partial" | "paid" | "refunded";
 export type PaymentMethod = "cash" | "upi" | "card" | "bank-transfer" | "online";
-export type StaffRole = "super-admin" | "manager" | "receptionist" | "housekeeping" | "accountant" | "restaurant";
+export type StaffRole = "super-admin" | "admin" | "manager" | "receptionist" | "housekeeping" | "accountant" | "restaurant";
 export type Department = "Reception" | "Housekeeping" | "Restaurant" | "Maintenance" | "Security" | "Management" | "Finance";
 export type HousekeepingStatus = "dirty" | "assigned" | "in-progress" | "cleaned" | "inspected";
 

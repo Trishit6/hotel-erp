@@ -7,7 +7,8 @@ import { PublicFooter, PublicHeader } from "../components/hotel/PublicChrome";
 import { Reveal } from "../components/hotel/Reveal";
 import { RoomTypeCard } from "../components/hotel/RoomTypeCard";
 import { SectionEyebrow } from "../components/hotel/HotelUi";
-import { defaultStaySearch, roomTypes } from "../lib/hotel-data";
+import { defaultStaySearch } from "../lib/hotel-data";
+import { useHotel } from "../lib/hotel-store";
 
 type RoomFilter = "all" | "two" | "family";
 
@@ -18,6 +19,7 @@ const filters: { id: RoomFilter; label: string }[] = [
 ];
 
 export default function RoomsPage() {
+  const { roomTypes } = useHotel();
   const [filter, setFilter] = useState<RoomFilter>("all");
   const filtered = roomTypes.filter((type) => (filter === "all" ? true : filter === "two" ? type.capacity <= 2 : type.capacity >= 3));
 

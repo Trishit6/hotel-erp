@@ -8,7 +8,15 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "typecheck": "tsc --noEmit",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "dev:api": "pnpm --filter @rivr/api dev",
+    "build:api": "pnpm --filter @rivr/api build",
+    "typecheck:api": "pnpm --filter @rivr/api typecheck",
+    "test:api": "pnpm --filter @rivr/api test",
+    "db:migrate": "pnpm --filter @rivr/api db:migrate",
+    "db:seed": "pnpm --filter @rivr/api db:seed",
+    "db:reset": "pnpm --filter @rivr/api db:reset",
+    "create-admin": "pnpm --filter @rivr/api create-admin"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.170.46",

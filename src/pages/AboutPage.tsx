@@ -4,7 +4,8 @@ import { PageHero } from "../components/hotel/PageHero";
 import { PublicFooter, PublicHeader } from "../components/hotel/PublicChrome";
 import { Reveal } from "../components/hotel/Reveal";
 import { FeatureLine, SectionEyebrow } from "../components/hotel/HotelUi";
-import { defaultStaySearch, hotelInfo, roomTypes, rooms } from "../lib/hotel-data";
+import { defaultStaySearch, hotelInfo } from "../lib/hotel-data";
+import { useHotel } from "../lib/hotel-store";
 
 const values = [
   { icon: HeartHandshake, title: "Hospitality, not theatre", copy: "A human welcome, a remembered preference, and the confidence to leave you to your stay." },
@@ -14,6 +15,7 @@ const values = [
 ];
 
 export default function AboutPage() {
+  const { roomTypes, rooms } = useHotel();
   return (
     <div className="min-h-screen bg-[var(--canvas)] text-[var(--text)]">
       <PublicHeader />

@@ -1,13 +1,30 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { z } from "zod";
 import {
-  activities as seedActivities, attendance as seedAttendance, calculateNights, expenses as seedExpenses, guests as seedGuests,
-  housekeepingTasks as seedTasks, inventory as seedInventory, invoices as seedInvoices, payments as seedPayments,
-  reservations as seedReservations, restaurantOrders as seedOrders, rooms as seedRooms, roomTypes as seedRoomTypes,
-  staff as seedStaff, dateAt, formatCurrency, isIndianPhone, isIndianPin, taxConfig, type ActivityLog, type Attendance, type Department, type Expense, type Guest, type HousekeepingTask,
-  type InventoryItem, type Invoice, type Payment, type PaymentMethod, type Reservation, type ReservationStatus,
-  type RestaurantOrder, type Room, type RoomStatus, type RoomType, type StaffMember, type StaffRole,
+  calculateNights,
+  dateAt,
+  isIndianPhone,
+  isIndianPin,
+  type ActivityLog,
+  type Attendance,
+  type Department,
+  type Expense,
+  type Guest,
+  type HousekeepingTask,
+  type InventoryItem,
+  type Invoice,
+  type Payment,
+  type PaymentMethod,
+  type Reservation,
+  type ReservationStatus,
+  type RestaurantOrder,
+  type Room,
+  type RoomStatus,
+  type RoomType,
+  type StaffMember,
+  type StaffRole,
 } from "./hotel-data";
+import { ApiError, api } from "./api";
 
 const reservationInputSchema = z.object({
   guestName: z.string().trim().min(2),
@@ -25,59 +42,718 @@ const reservationInputSchema = z.object({
   state: z.string().max(80).optional(),
   postalCode: z.string().max(10).optional().refine((value) => !value || isIndianPin(value), "Enter a valid 6-digit PIN code."),
 });
-const guestInputSchema = z.object({ name: z.string().trim().min(2), email: z.string().email(), phone: z.string().trim().refine(isIndianPhone, "Enter a valid Indian mobile number."), address: z.string().default(""), preferences: z.string().default("") });
-const expenseInputSchema = z.object({ category: z.string().min(2), description: z.string().min(2), amount: z.number().positive(), method: z.enum(["cash", "upi", "card", "bank-transfer", "online"]), date: z.string() });
+
+const guestInputSchema = z.object({
+  name: z.string().trim().min(2),
+  email: z.string().email(),
+  phone: z.string().trim().refine(isIndianPhone, "Enter a valid Indian mobile number."),
+  address: z.string().default(""),
+  preferences: z.string().default(""),
+});
+
+const expenseInputSchema = z.object({
+  category: z.string().min(2),
+  description: z.string().min(2),
+  amount: z.number().positive(),
+  method: z.enum(["cash", "upi", "card", "bank-transfer", "online"]),
+  date: z.string(),
+});
 
 export type ReservationInput = z.infer<typeof reservationInputSchema>;
 export type GuestInput = z.infer<typeof guestInputSchema>;
 export type ExpenseInput = z.infer<typeof expenseInputSchema>;
 
+export interface SessionUser {
+  id: string;
+  name: string;
+  email: string;
+  role: StaffRole;
+  staffId?: string | null;
+  isActive?: boolean;
+  lastLoginAt?: string | null;
+  createdAt?: string;
+}
+
+export interface BusyRange {
+  roomId: string;
+  checkIn: string;
+  checkOut: string;
+}
+
+export type StoreStatus = "loading" | "ready" | "error";
+
+type MutationResult = { error?: string };
+type ReservationResult = { reservation?: Reservation; error?: string };
+type GuestResult = { guest?: Guest; error?: string };
+
+type PublicCatalogResponse = {
+  roomTypes: RoomType[];
+  rooms: Room[];
+  busyRanges: BusyRange[];
+};
+
+type BootstrapResponse = {
+  user: SessionUser;
+  roomTypes?: RoomType[];
+  rooms?: Room[];
+  reservations?: Reservation[];
+  tasks?: HousekeepingTask[];
+  staff?: StaffMember[];
+  inventory?: InventoryItem[];
+  orders?: RestaurantOrder[];
+  guests?: Guest[];
+  payments?: Payment[];
+  invoices?: Invoice[];
+  expenses?: Expense[];
+  attendance?: Attendance[];
+  activities?: ActivityLog[];
+  users?: SessionUser[];
+};
+
+const ACTIVE_RESERVATION_STATUSES: ReservationStatus[] = ["pending", "confirmed", "checked-in"];
+
+const activeRanges = (reservations: Reservation[]): BusyRange[] =>
+  reservations
+    .filter((reservation) => ACTIVE_RESERVATION_STATUSES.includes(reservation.status))
+    .map((reservation) => ({
+      roomId: reservation.roomId,
+      checkIn: reservation.checkIn,
+      checkOut: reservation.checkOut,
+    }));
+
 export interface HotelStore {
-  rooms: Room[]; roomTypes: RoomType[]; guests: Guest[]; reservations: Reservation[]; payments: Payment[]; invoices: Invoice[];
-  tasks: HousekeepingTask[]; staff: StaffMember[]; attendance: Attendance[]; inventory: InventoryItem[]; expenses: Expense[]; orders: RestaurantOrder[]; activities: ActivityLog[];
-  role: StaffRole | null; actorName: string;
-  login: (role: StaffRole) => void; logout: () => void; can: (allowed: StaffRole[]) => boolean;
-  getRoom: (id: string) => Room | undefined; getRoomType: (id: string) => RoomType | undefined; getGuest: (id: string) => Guest | undefined; getReservation: (id: string) => Reservation | undefined;
-  isRoomAvailable: (roomId: string, checkIn: string, checkOut: string) => boolean; getAvailableRooms: (checkIn: string, checkOut: string, guests: number) => Room[];
-  createReservation: (input: ReservationInput) => { reservation?: Reservation; error?: string };
-  updateReservationStatus: (id: string, status: ReservationStatus) => void; assignReservationRoom: (id: string, roomId: string) => { error?: string };
-  checkIn: (id: string) => { error?: string }; checkOut: (id: string) => { error?: string };
-  recordPayment: (reservationId: string, amount: number, method: PaymentMethod) => { error?: string };
-  updateRoomStatus: (id: string, status: RoomStatus) => void; createRoom: (input: { number: string; typeId: string; floor: number }) => void;
-  createGuest: (input: GuestInput) => { guest?: Guest; error?: string }; updateGuest: (id: string, input: Partial<Guest>) => void;
-  updateTask: (id: string, update: Partial<HousekeepingTask>) => void; createTask: (roomId: string) => void; addStaff: (input: Omit<StaffMember, "id" | "joinedAt">) => void; updateAttendance: (id: string, status: Attendance["status"]) => void;
-  addExpense: (input: ExpenseInput) => { error?: string }; approveExpense: (id: string, status: Expense["status"]) => void;
-  adjustInventory: (id: string, amount: number) => void; addOrder: (input: Omit<RestaurantOrder, "id" | "createdAt" | "status">) => void; updateOrder: (id: string, status: RestaurantOrder["status"]) => void;
-  refreshDemoData: () => void;
+  rooms: Room[];
+  roomTypes: RoomType[];
+  guests: Guest[];
+  reservations: Reservation[];
+  payments: Payment[];
+  invoices: Invoice[];
+  tasks: HousekeepingTask[];
+  staff: StaffMember[];
+  attendance: Attendance[];
+  inventory: InventoryItem[];
+  expenses: Expense[];
+  orders: RestaurantOrder[];
+  activities: ActivityLog[];
+  users: SessionUser[];
+  busyRanges: BusyRange[];
+  user: SessionUser | null;
+  role: StaffRole | null;
+  actorName: string;
+  status: StoreStatus;
+  error: string | null;
+  clearError: () => void;
+  login: (email: string, password: string) => Promise<MutationResult>;
+  logout: () => Promise<void>;
+  can: (allowed: StaffRole[]) => boolean;
+  refresh: () => Promise<void>;
+  getRoom: (id: string) => Room | undefined;
+  getRoomType: (id: string) => RoomType | undefined;
+  getGuest: (id: string) => Guest | undefined;
+  getReservation: (id: string) => Reservation | undefined;
+  isRoomAvailable: (roomId: string, checkIn: string, checkOut: string) => boolean;
+  getAvailableRooms: (checkIn: string, checkOut: string, guests: number) => Room[];
+  createReservation: (input: ReservationInput) => Promise<ReservationResult>;
+  updateReservationStatus: (id: string, status: ReservationStatus) => Promise<MutationResult>;
+  assignReservationRoom: (id: string, roomId: string) => Promise<MutationResult>;
+  checkIn: (id: string) => Promise<MutationResult>;
+  checkOut: (id: string) => Promise<MutationResult>;
+  recordPayment: (reservationId: string, amount: number, method: PaymentMethod) => Promise<MutationResult>;
+  updateRoomStatus: (id: string, status: RoomStatus) => Promise<MutationResult>;
+  createRoom: (input: { number: string; typeId: string; floor: number }) => Promise<MutationResult>;
+  createGuest: (input: GuestInput) => Promise<GuestResult>;
+  updateGuest: (id: string, input: Partial<Guest>) => Promise<MutationResult>;
+  updateTask: (id: string, update: Partial<HousekeepingTask>) => Promise<MutationResult>;
+  createTask: (roomId: string) => Promise<MutationResult>;
+  addStaff: (input: Omit<StaffMember, "id" | "joinedAt">) => Promise<MutationResult>;
+  updateAttendance: (id: string, status: Attendance["status"]) => Promise<MutationResult>;
+  addExpense: (input: ExpenseInput) => Promise<MutationResult>;
+  approveExpense: (id: string, status: Expense["status"]) => Promise<MutationResult>;
+  adjustInventory: (id: string, amount: number) => Promise<MutationResult>;
+  addOrder: (input: Omit<RestaurantOrder, "id" | "createdAt" | "status">) => Promise<MutationResult>;
+  updateOrder: (id: string, status: RestaurantOrder["status"]) => Promise<MutationResult>;
+  createUser: (input: { name: string; email: string; password: string; role: StaffRole }) => Promise<MutationResult>;
+  updateUser: (id: string, input: { role?: StaffRole; isActive?: boolean }) => Promise<MutationResult>;
+  changePassword: (currentPassword: string, newPassword: string) => Promise<MutationResult>;
+  refreshDemoData: () => Promise<MutationResult>;
 }
 
 const StoreContext = createContext<HotelStore | null>(null);
-function stored<T>(key: string, fallback: T) { try { if (typeof window === "undefined") return fallback; const value = localStorage.getItem(key); return value ? JSON.parse(value) as T : fallback; } catch { return fallback; } }
-const key = (name: string) => `rivr-hotel-${name}`;
 
 export function HotelProvider({ children }: { children: ReactNode }) {
-  const [rooms, setRooms] = useState(() => stored(key("rooms"), seedRooms)); const [roomTypes] = useState(seedRoomTypes); const [guests, setGuests] = useState(() => stored(key("guests"), seedGuests));
-  const [reservations, setReservations] = useState(() => stored(key("reservations"), seedReservations)); const [payments, setPayments] = useState(() => stored(key("payments"), seedPayments)); const [invoices, setInvoices] = useState(() => stored(key("invoices"), seedInvoices));
-  const [tasks, setTasks] = useState(() => stored(key("tasks"), seedTasks)); const [staff, setStaff] = useState(() => stored(key("staff"), seedStaff)); const [attendance, setAttendance] = useState(() => stored(key("attendance"), seedAttendance));
-  const [inventory, setInventory] = useState(() => stored(key("inventory"), seedInventory)); const [expenses, setExpenses] = useState(() => stored(key("expenses"), seedExpenses)); const [orders, setOrders] = useState(() => stored(key("orders"), seedOrders)); const [activities, setActivities] = useState(() => stored(key("activities"), seedActivities));
-  const [role, setRole] = useState<StaffRole | null>(() => stored(key("role"), null)); const [actorName, setActorName] = useState(() => stored(key("actor"), "RIVR team"));
-  const persist = (name: string, value: unknown) => { try { localStorage.setItem(key(name), JSON.stringify(value)); } catch { /* storage is optional */ } };
-  useEffect(() => persist("rooms", rooms), [rooms]); useEffect(() => persist("guests", guests), [guests]); useEffect(() => persist("reservations", reservations), [reservations]); useEffect(() => persist("payments", payments), [payments]); useEffect(() => persist("invoices", invoices), [invoices]); useEffect(() => persist("tasks", tasks), [tasks]); useEffect(() => persist("staff", staff), [staff]); useEffect(() => persist("attendance", attendance), [attendance]); useEffect(() => persist("inventory", inventory), [inventory]); useEffect(() => persist("expenses", expenses), [expenses]); useEffect(() => persist("orders", orders), [orders]); useEffect(() => persist("activities", activities), [activities]);
-  useEffect(() => { if (role) { persist("role", role); persist("actor", actorName); } else { localStorage.removeItem(key("role")); } }, [actorName, role]);
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [roomTypes, setRoomTypes] = useState<RoomType[]>([]);
+  const [guests, setGuests] = useState<Guest[]>([]);
+  const [reservations, setReservations] = useState<Reservation[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [tasks, setTasks] = useState<HousekeepingTask[]>([]);
+  const [staff, setStaff] = useState<StaffMember[]>([]);
+  const [attendance, setAttendance] = useState<Attendance[]>([]);
+  const [inventory, setInventory] = useState<InventoryItem[]>([]);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [orders, setOrders] = useState<RestaurantOrder[]>([]);
+  const [activities, setActivities] = useState<ActivityLog[]>([]);
+  const [users, setUsers] = useState<SessionUser[]>([]);
+  const [busyRanges, setBusyRanges] = useState<BusyRange[]>([]);
+  const [user, setUser] = useState<SessionUser | null>(null);
+  const [role, setRole] = useState<StaffRole | null>(null);
+  const [actorName, setActorName] = useState("RIVR team");
+  const [status, setStatus] = useState<StoreStatus>("loading");
+  const [error, setError] = useState<string | null>(null);
+
+  const loadPublicData = async () => {
+    const catalog = await api.get<PublicCatalogResponse>("/public/catalog");
+    setRoomTypes(catalog.roomTypes);
+    setRooms(catalog.rooms);
+    setBusyRanges(catalog.busyRanges);
+  };
+
+  const loadAdminData = async () => {
+    const bootstrap = await api.get<BootstrapResponse>("/admin/bootstrap");
+    setRoomTypes(bootstrap.roomTypes ?? []);
+    setRooms(bootstrap.rooms ?? []);
+    setReservations(bootstrap.reservations ?? []);
+    setTasks(bootstrap.tasks ?? []);
+    setStaff(bootstrap.staff ?? []);
+    setInventory(bootstrap.inventory ?? []);
+    setOrders(bootstrap.orders ?? []);
+    setGuests(bootstrap.guests ?? []);
+    setPayments(bootstrap.payments ?? []);
+    setInvoices(bootstrap.invoices ?? []);
+    setExpenses(bootstrap.expenses ?? []);
+    setAttendance(bootstrap.attendance ?? []);
+    setActivities(bootstrap.activities ?? []);
+    setUsers(bootstrap.users ?? []);
+    setBusyRanges(activeRanges(bootstrap.reservations ?? []));
+  };
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const initialise = async () => {
+      try {
+        await loadPublicData();
+        let session: SessionUser | null = null;
+        try {
+          const result = await api.get<{ user: SessionUser }>("/auth/me");
+          session = result.user;
+        } catch (sessionError) {
+          if (!(sessionError instanceof ApiError) || sessionError.status !== 401) throw sessionError;
+        }
+        if (cancelled) return;
+        if (session) {
+          setUser(session);
+          setRole(session.role);
+          setActorName(session.name);
+          await loadAdminData();
+        }
+        if (!cancelled) setStatus("ready");
+      } catch (initialError) {
+        if (cancelled) return;
+        setError(initialError instanceof Error ? initialError.message : "The hotel data could not be loaded.");
+        setStatus("error");
+      }
+    };
+
+    void initialise();
+    return () => {
+      cancelled = true;
+    };
+    // The API client is stable for the lifetime of the provider.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const value = useMemo<HotelStore>(() => {
-    const getRoom = (id: string) => rooms.find((room) => room.id === id); const getRoomType = (id: string) => roomTypes.find((type) => type.id === id); const getGuest = (id: string) => guests.find((guest) => guest.id === id); const getReservation = (id: string) => reservations.find((reservation) => reservation.id === id || reservation.reference === id);
-    const addActivity = (action: string, detail: string, tone: ActivityLog["tone"] = "info") => setActivities((current) => [{ id: `act-${Date.now()}`, actor: actorName, action, detail, tone, createdAt: new Date().toISOString() }, ...current].slice(0, 40));
-    const isRoomAvailable = (roomId: string, checkIn: string, checkOut: string) => { const room = getRoom(roomId); if (!room || ["maintenance", "out-of-order", "cleaning"].includes(room.status)) return false; return !reservations.some((reservation) => reservation.roomId === roomId && !["cancelled", "checked-out", "no-show"].includes(reservation.status) && reservation.checkIn < checkOut && reservation.checkOut > checkIn); };
-    const getAvailableRooms = (checkIn: string, checkOut: string, party: number) => rooms.filter((room) => { const type = getRoomType(room.typeId); return Boolean(type && type.capacity >= party && isRoomAvailable(room.id, checkIn, checkOut)); });
-    const createReservation = (input: ReservationInput) => { const parsed = reservationInputSchema.safeParse(input); if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Please check the reservation details." }; const data = parsed.data; const type = getRoomType(getRoom(data.roomId)?.typeId ?? ""); const nights = calculateNights(data.checkIn, data.checkOut); if (!type || nights < 1) return { error: "Choose a valid stay range and room." }; if (data.adults + data.children > type.capacity) return { error: "This room does not fit the selected guests." }; if (!isRoomAvailable(data.roomId, data.checkIn, data.checkOut)) return { error: "That room is no longer available for these dates." }; const billingAddress = [data.address, data.city, data.state, data.postalCode].filter(Boolean).join(", "); let guest = guests.find((item) => item.email.toLowerCase() === data.email.toLowerCase()); if (!guest) { guest = { id: `guest-${Date.now()}`, name: data.guestName, email: data.email, phone: data.phone, address: billingAddress, city: data.city, state: data.state, postalCode: data.postalCode, idType: "Pending", idLastFour: "", preferences: "", totalStays: 0, totalSpent: 0 }; setGuests((current) => [guest!, ...current]); } else if (billingAddress || data.phone) { const guestId = guest.id; setGuests((current) => current.map((item) => item.id === guestId ? { ...item, phone: data.phone, address: billingAddress || item.address, city: data.city || item.city, state: data.state || item.state, postalCode: data.postalCode || item.postalCode } : item)); } const roomCharges = nights * type.rate; const tax = Math.round((roomCharges - data.discount) * taxConfig.rate); const reservation: Reservation = { id: `res-${Date.now()}`, reference: `RIVR-${Math.floor(1000 + Math.random() * 8999)}`, guestId: guest.id, roomId: data.roomId, checkIn: data.checkIn, checkOut: data.checkOut, adults: data.adults, children: data.children, status: "confirmed", paymentStatus: "pending", roomCharges, additionalCharges: 0, discount: data.discount, tax, total: roomCharges - data.discount + tax, paidAmount: 0, specialRequests: data.specialRequests, createdAt: new Date().toISOString() }; setReservations((current) => [reservation, ...current]); setRooms((current) => current.map((room) => room.id === data.roomId ? { ...room, status: "reserved" } : room)); addActivity("Created reservation", `${reservation.reference} · ${data.guestName}`, "success"); return { reservation }; };
-    const updateReservationStatus = (id: string, status: ReservationStatus) => { const reservation = getReservation(id); if (!reservation) return; setReservations((current) => current.map((item) => item.id === reservation.id ? { ...item, status } : item)); if (status === "cancelled") setRooms((current) => current.map((room) => room.id === reservation.roomId && room.status === "reserved" ? { ...room, status: "available" } : room)); addActivity(`Updated reservation to ${status}`, reservation.reference, status === "cancelled" ? "warning" : "info"); };
-    const assignReservationRoom = (id: string, roomId: string) => { const reservation = getReservation(id); if (!reservation || !isRoomAvailable(roomId, reservation.checkIn, reservation.checkOut)) return { error: "Room is unavailable for those dates." }; setReservations((current) => current.map((item) => item.id === reservation.id ? { ...item, roomId } : item)); addActivity("Changed room assignment", `${reservation.reference} · Room ${getRoom(roomId)?.number}`, "info"); return {}; };
-    const checkIn = (id: string) => { const reservation = getReservation(id); if (!reservation) return { error: "Reservation not found." }; const room = getRoom(reservation.roomId); if (!room || ["maintenance", "out-of-order"].includes(room.status)) return { error: "Assigned room is not ready." }; setReservations((current) => current.map((item) => item.id === reservation.id ? { ...item, status: "checked-in" } : item)); setRooms((current) => current.map((item) => item.id === room.id ? { ...item, status: "occupied" } : item)); addActivity("Checked in guest", `${reservation.reference} · Room ${room.number}`, "success"); return {}; };
-    const checkOut = (id: string) => { const reservation = getReservation(id); if (!reservation) return { error: "Reservation not found." }; setReservations((current) => current.map((item) => item.id === reservation.id ? { ...item, status: "checked-out" } : item)); setRooms((current) => current.map((item) => item.id === reservation.roomId ? { ...item, status: "cleaning" } : item)); setTasks((current) => [{ id: `hk-${Date.now()}`, roomId: reservation.roomId, status: "dirty", priority: "high", issue: "Post-checkout clean", updatedAt: new Date().toISOString() }, ...current]); addActivity("Checked out guest", reservation.reference, "success"); return {}; };
-    const recordPayment = (reservationId: string, amount: number, method: PaymentMethod) => { const reservation = getReservation(reservationId); if (!reservation || amount <= 0 || amount > reservation.total - reservation.paidAmount) return { error: "Enter an amount within the outstanding balance." }; const paidAmount = reservation.paidAmount + amount; const status = paidAmount >= reservation.total ? "paid" : "partial" as const; setPayments((current) => [{ id: `pay-${Date.now()}`, reservationId, amount, method, status: "completed", paidAt: new Date().toISOString(), note: "Recorded by front desk" }, ...current]); setReservations((current) => current.map((item) => item.id === reservation.id ? { ...item, paidAmount, paymentStatus: status } : item)); setInvoices((current) => current.map((invoice) => invoice.reservationId === reservation.id ? { ...invoice, status, dueAmount: reservation.total - paidAmount } : invoice)); addActivity("Recorded payment", `${reservation.reference} · ${formatCurrency(amount)}`, "success"); return {}; };
-    return { rooms, roomTypes, guests, reservations, payments, invoices, tasks, staff, attendance, inventory, expenses, orders, activities, role, actorName, login: (nextRole: StaffRole) => { setRole(nextRole); setActorName(nextRole === "super-admin" ? "Meera Shah" : `${nextRole[0].toUpperCase()}${nextRole.slice(1)} user`); }, logout: () => setRole(null), can: (allowed: StaffRole[]) => Boolean(role && allowed.includes(role)), getRoom, getRoomType, getGuest, getReservation, isRoomAvailable, getAvailableRooms, createReservation, updateReservationStatus, assignReservationRoom, checkIn, checkOut, recordPayment, updateRoomStatus: (id, status) => { setRooms((current) => current.map((room) => room.id === id ? { ...room, status } : room)); addActivity("Updated room status", `${getRoom(id)?.number} · ${status}`, "info"); }, createRoom: (input) => { const room: Room = { id: `room-${Date.now()}`, ...input, status: "available", notes: "New room" }; setRooms((current) => [room, ...current]); addActivity("Added room", `Room ${input.number}`, "success"); }, createGuest: (input) => { const parsed = guestInputSchema.safeParse(input); if (!parsed.success) return { error: parsed.error.issues[0]?.message }; const guest: Guest = { id: `guest-${Date.now()}`, ...parsed.data, idType: "Pending", idLastFour: "", totalStays: 0, totalSpent: 0 }; setGuests((current) => [guest, ...current]); addActivity("Added guest", guest.name, "success"); return { guest }; }, updateGuest: (id, input) => setGuests((current) => current.map((guest) => guest.id === id ? { ...guest, ...input } : guest)), updateTask: (id, update) => { setTasks((current) => current.map((task) => task.id === id ? { ...task, ...update, updatedAt: new Date().toISOString() } : task)); if (update.status === "inspected") { const task = tasks.find((item) => item.id === id); if (task) setRooms((current) => current.map((room) => room.id === task.roomId ? { ...room, status: "available" } : room)); } }, createTask: (roomId) => { setTasks((current) => [{ id: `hk-${Date.now()}`, roomId, status: "dirty", priority: "normal", issue: "New cleaning task", updatedAt: new Date().toISOString() }, ...current]); addActivity("Created housekeeping task", `Room ${getRoom(roomId)?.number}`, "info"); }, addStaff: (input) => { const person: StaffMember = { id: `staff-${Date.now()}`, ...input, joinedAt: dateAt(0) }; setStaff((current) => [person, ...current]); addActivity("Added staff member", person.name, "success"); }, updateAttendance: (id, status) => setAttendance((current) => current.map((item) => item.id === id ? { ...item, status } : item)), addExpense: (input) => { const parsed = expenseInputSchema.safeParse(input); if (!parsed.success) return { error: parsed.error.issues[0]?.message }; setExpenses((current) => [{ id: `exp-${Date.now()}`, ...parsed.data, status: "pending" }, ...current]); addActivity("Submitted expense", parsed.data.description, "info"); return {}; }, approveExpense: (id, status) => setExpenses((current) => current.map((expense) => expense.id === id ? { ...expense, status } : expense)), adjustInventory: (id, amount) => setInventory((current) => current.map((item) => item.id === id ? { ...item, quantity: Math.max(0, item.quantity + amount) } : item)), addOrder: (input) => setOrders((current) => [{ id: `ord-${Date.now()}`, ...input, status: "new", createdAt: new Date().toISOString() }, ...current]), updateOrder: (id, status) => setOrders((current) => current.map((order) => order.id === id ? { ...order, status } : order)), refreshDemoData: () => { Object.entries({ rooms: seedRooms, guests: seedGuests, reservations: seedReservations, payments: seedPayments, invoices: seedInvoices, tasks: seedTasks, staff: seedStaff, attendance: seedAttendance, inventory: seedInventory, expenses: seedExpenses, orders: seedOrders, activities: seedActivities }).forEach(([name, data]) => persist(name, data)); window.location.reload(); } };
-  }, [actorName, attendance, activities, expenses, guests, inventory, invoices, orders, payments, reservations, role, rooms, staff, tasks]);
+    const getRoom = (id: string) => rooms.find((room) => room.id === id);
+    const getRoomType = (id: string) => roomTypes.find((type) => type.id === id);
+    const getGuest = (id: string) => guests.find((guest) => guest.id === id);
+    const getReservation = (id: string) =>
+      reservations.find((reservation) => reservation.id === id || reservation.reference === id);
+
+    const handleError = (caught: unknown, sessionExpiry = true): MutationResult => {
+      const message =
+        caught instanceof ApiError ? caught.message : "Something went wrong. Please try again.";
+      if (sessionExpiry && caught instanceof ApiError && caught.status === 401) {
+        setUser(null);
+        setRole(null);
+        setActorName("RIVR team");
+        setError("Your session expired. Please sign in again.");
+      } else {
+        setError(message);
+      }
+      return { error: message };
+    };
+
+    const refresh = async () => {
+      try {
+        if (user) await loadAdminData();
+        else await loadPublicData();
+        setStatus("ready");
+      } catch (caught) {
+        handleError(caught);
+      }
+    };
+
+    const isRoomAvailable = (roomId: string, checkIn: string, checkOut: string) => {
+      const room = getRoom(roomId);
+      if (!room || ["maintenance", "out-of-order", "cleaning"].includes(room.status)) return false;
+      return !busyRanges.some(
+        (range) => range.roomId === roomId && range.checkIn < checkOut && range.checkOut > checkIn,
+      );
+    };
+
+    const getAvailableRooms = (checkIn: string, checkOut: string, party: number) =>
+      rooms.filter((room) => {
+        const type = getRoomType(room.typeId);
+        return Boolean(type && type.capacity >= party && isRoomAvailable(room.id, checkIn, checkOut));
+      });
+
+    const login = async (email: string, password: string): Promise<MutationResult> => {
+      try {
+        const result = await api.post<{ user: SessionUser }>("/auth/login", { email, password });
+        setUser(result.user);
+        setRole(result.user.role);
+        setActorName(result.user.name);
+        setError(null);
+        await loadAdminData();
+        setStatus("ready");
+        return {};
+      } catch (caught) {
+        setUser(null);
+        setRole(null);
+        setActorName("RIVR team");
+        const message =
+          caught instanceof ApiError ? caught.message : "Sign in failed. Please try again.";
+        setError(message);
+        return { error: message };
+      }
+    };
+
+    const logout = async () => {
+      try {
+        await api.post("/auth/logout");
+      } catch {
+        // Clearing the local session is still the correct outcome.
+      }
+      setUser(null);
+      setRole(null);
+      setActorName("RIVR team");
+      setReservations([]);
+      setGuests([]);
+      setPayments([]);
+      setInvoices([]);
+      setTasks([]);
+      setStaff([]);
+      setAttendance([]);
+      setInventory([]);
+      setExpenses([]);
+      setOrders([]);
+      setActivities([]);
+      setUsers([]);
+      try {
+        await loadPublicData();
+        setStatus("ready");
+      } catch (caught) {
+        handleError(caught);
+      }
+    };
+
+    const createReservation = async (input: ReservationInput): Promise<ReservationResult> => {
+      const parsed = reservationInputSchema.safeParse(input);
+      if (!parsed.success) {
+        return { error: parsed.error.issues[0]?.message ?? "Please check the reservation details." };
+      }
+      const data = parsed.data;
+      const type = getRoomType(getRoom(data.roomId)?.typeId ?? "");
+      const nights = calculateNights(data.checkIn, data.checkOut);
+      if (!type || nights < 1) return { error: "Choose a valid stay range and room." };
+      if (data.adults + data.children > type.capacity) {
+        return { error: "This room does not fit the selected guests." };
+      }
+      if (!isRoomAvailable(data.roomId, data.checkIn, data.checkOut)) {
+        return { error: "That room is no longer available for these dates." };
+      }
+
+      try {
+        const body = {
+          guestName: data.guestName,
+          email: data.email,
+          phone: data.phone,
+          roomId: data.roomId,
+          checkIn: data.checkIn,
+          checkOut: data.checkOut,
+          adults: data.adults,
+          children: data.children,
+          specialRequests: data.specialRequests,
+          address: data.address ?? "",
+          city: data.city ?? "",
+          state: data.state ?? "",
+          postalCode: data.postalCode ?? "",
+          ...(user ? { discount: data.discount } : {}),
+        };
+        const result = await api.post<{ reservation: Reservation }>(
+          user ? "/admin/reservations" : "/public/reservations",
+          body,
+        );
+        await refresh();
+        return { reservation: result.reservation };
+      } catch (caught) {
+        return handleError(caught, false);
+      }
+    };
+
+    const checkIn = async (id: string): Promise<MutationResult> => {
+      try {
+        await api.post(`/admin/reservations/${id}/check-in`);
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const checkOut = async (id: string): Promise<MutationResult> => {
+      try {
+        await api.post(`/admin/reservations/${id}/check-out`);
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const updateReservationStatus = async (
+      id: string,
+      nextStatus: ReservationStatus,
+    ): Promise<MutationResult> => {
+      if (nextStatus === "checked-in") return checkIn(id);
+      if (nextStatus === "checked-out") return checkOut(id);
+      try {
+        await api.patch(`/admin/reservations/${id}/status`, { status: nextStatus });
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const assignReservationRoom = async (id: string, roomId: string): Promise<MutationResult> => {
+      try {
+        await api.patch(`/admin/reservations/${id}/room`, { roomId });
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const recordPayment = async (
+      reservationId: string,
+      amount: number,
+      method: PaymentMethod,
+    ): Promise<MutationResult> => {
+      try {
+        await api.post("/admin/payments", { reservationId, amount, method, note: "Recorded by front desk" });
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const updateRoomStatus = async (id: string, nextStatus: RoomStatus): Promise<MutationResult> => {
+      try {
+        await api.patch(`/admin/rooms/${id}/status`, { status: nextStatus });
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const createRoom = async (input: {
+      number: string;
+      typeId: string;
+      floor: number;
+    }): Promise<MutationResult> => {
+      try {
+        await api.post("/admin/rooms", { ...input, notes: "New room" });
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const createGuest = async (input: GuestInput): Promise<GuestResult> => {
+      const parsed = guestInputSchema.safeParse(input);
+      if (!parsed.success) return { error: parsed.error.issues[0]?.message };
+      try {
+        const result = await api.post<{ guest: Guest }>("/admin/guests", parsed.data);
+        await refresh();
+        return { guest: result.guest };
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const updateGuest = async (id: string, input: Partial<Guest>): Promise<MutationResult> => {
+      try {
+        const body: Record<string, unknown> = {};
+        for (const key of ["name", "email", "phone", "address", "city", "state", "postalCode", "idType", "idLastFour", "preferences"] as const) {
+          if (key in input && input[key] !== undefined) body[key] = input[key];
+        }
+        await api.patch(`/admin/guests/${id}`, body);
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const updateTask = async (id: string, update: Partial<HousekeepingTask>): Promise<MutationResult> => {
+      try {
+        const body: Record<string, unknown> = {};
+        if ("assignedTo" in update) body.assignedTo = update.assignedTo ?? null;
+        if (update.status) body.status = update.status;
+        if (update.priority) body.priority = update.priority;
+        if (update.issue !== undefined) body.issue = update.issue;
+        await api.patch(`/admin/housekeeping/tasks/${id}`, body);
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const createTask = async (roomId: string): Promise<MutationResult> => {
+      try {
+        await api.post("/admin/housekeeping/tasks", {
+          roomId,
+          priority: "normal",
+          issue: "New cleaning task",
+        });
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const addStaff = async (input: Omit<StaffMember, "id" | "joinedAt">): Promise<MutationResult> => {
+      try {
+        await api.post("/admin/staff", { ...input, joinedAt: dateAt(0) });
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const updateAttendance = async (id: string, nextStatus: Attendance["status"]): Promise<MutationResult> => {
+      try {
+        await api.patch(`/admin/staff/attendance/${id}`, { status: nextStatus });
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const addExpense = async (input: ExpenseInput): Promise<MutationResult> => {
+      const parsed = expenseInputSchema.safeParse(input);
+      if (!parsed.success) return { error: parsed.error.issues[0]?.message };
+      try {
+        await api.post("/admin/expenses", parsed.data);
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const approveExpense = async (id: string, nextStatus: Expense["status"]): Promise<MutationResult> => {
+      try {
+        await api.patch(`/admin/expenses/${id}/approval`, { status: nextStatus });
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const adjustInventory = async (id: string, amount: number): Promise<MutationResult> => {
+      try {
+        await api.post(`/admin/inventory/${id}/adjust`, { amount });
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const addOrder = async (
+      input: Omit<RestaurantOrder, "id" | "createdAt" | "status">,
+    ): Promise<MutationResult> => {
+      try {
+        await api.post("/admin/restaurant/orders", {
+          guestName: input.guestName,
+          items: input.items,
+          amount: input.amount,
+          roomNumber: input.roomNumber ?? "",
+          reservationId: input.reservationId ?? null,
+        });
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const updateOrder = async (id: string, nextStatus: RestaurantOrder["status"]): Promise<MutationResult> => {
+      try {
+        await api.patch(`/admin/restaurant/orders/${id}/status`, { status: nextStatus });
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const createUser = async (input: {
+      name: string;
+      email: string;
+      password: string;
+      role: StaffRole;
+    }): Promise<MutationResult> => {
+      try {
+        await api.post("/admin/users", input);
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const updateUser = async (
+      id: string,
+      input: { role?: StaffRole; isActive?: boolean },
+    ): Promise<MutationResult> => {
+      try {
+        await api.patch(`/admin/users/${id}`, input);
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const changePassword = async (
+      currentPassword: string,
+      newPassword: string,
+    ): Promise<MutationResult> => {
+      try {
+        await api.post("/auth/change-password", { currentPassword, newPassword });
+        return {};
+      } catch (caught) {
+        return handleError(caught, false);
+      }
+    };
+
+    const refreshDemoData = async (): Promise<MutationResult> => {
+      try {
+        await api.post("/admin/dev/reset");
+      } catch (caught) {
+        return handleError(caught);
+      }
+      setUser(null);
+      setRole(null);
+      setActorName("RIVR team");
+      setReservations([]);
+      setGuests([]);
+      setPayments([]);
+      setInvoices([]);
+      setTasks([]);
+      setStaff([]);
+      setAttendance([]);
+      setInventory([]);
+      setExpenses([]);
+      setOrders([]);
+      setActivities([]);
+      setUsers([]);
+      try {
+        await loadPublicData();
+        setStatus("ready");
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    return {
+      rooms,
+      roomTypes,
+      guests,
+      reservations,
+      payments,
+      invoices,
+      tasks,
+      staff,
+      attendance,
+      inventory,
+      expenses,
+      orders,
+      activities,
+      users,
+      busyRanges,
+      user,
+      role,
+      actorName,
+      status,
+      error,
+      clearError: () => setError(null),
+      login,
+      logout,
+      can: (allowed: StaffRole[]) => Boolean(role && allowed.includes(role)),
+      refresh,
+      getRoom,
+      getRoomType,
+      getGuest,
+      getReservation,
+      isRoomAvailable,
+      getAvailableRooms,
+      createReservation,
+      updateReservationStatus,
+      assignReservationRoom,
+      checkIn,
+      checkOut,
+      recordPayment,
+      updateRoomStatus,
+      createRoom,
+      createGuest,
+      updateGuest,
+      updateTask,
+      createTask,
+      addStaff,
+      updateAttendance,
+      addExpense,
+      approveExpense,
+      adjustInventory,
+      addOrder,
+      updateOrder,
+      createUser,
+      updateUser,
+      changePassword,
+      refreshDemoData,
+    };
+  }, [activities, actorName, attendance, busyRanges, error, expenses, guests, inventory, invoices, orders, payments, reservations, role, rooms, roomTypes, staff, status, tasks, user, users]);
+
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
 }
-export function useHotel() { const context = useContext(StoreContext); if (!context) throw new Error("useHotel must be used inside HotelProvider"); return context; }
+
+export function useHotel() {
+  const context = useContext(StoreContext);
+  if (!context) throw new Error("useHotel must be used inside HotelProvider");
+  return context;
+}

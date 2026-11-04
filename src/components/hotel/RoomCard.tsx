@@ -1,11 +1,13 @@
 import { motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight, BedDouble, Maximize2, Users } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { formatCurrency, getRoomType, type Room, type StaySearch } from "../../lib/hotel-data";
+import { formatCurrency, type Room, type StaySearch } from "../../lib/hotel-data";
+import { useHotel } from "../../lib/hotel-store";
 import { FeatureLine, StatusBadge } from "./HotelUi";
 
 export function RoomCard({ room, search }: { room: Room; search: StaySearch }) {
-  const type = getRoomType(room);
+  const { getRoomType } = useHotel();
+  const type = getRoomType(room.typeId);
   const reduceMotion = useReducedMotion();
   if (!type) return null;
 

@@ -6,7 +6,8 @@ import { PublicFooter, PublicHeader } from "../components/hotel/PublicChrome";
 import { Reveal } from "../components/hotel/Reveal";
 import { RoomTypeCard } from "../components/hotel/RoomTypeCard";
 import { FeatureLine, SectionEyebrow } from "../components/hotel/HotelUi";
-import { defaultStaySearch, formatCurrency, roomTypes } from "../lib/hotel-data";
+import { defaultStaySearch, formatCurrency } from "../lib/hotel-data";
+import { useHotel } from "../lib/hotel-store";
 
 const stayFeatures = [
   { icon: BedDouble, title: "Rooms with room to breathe", copy: "Considered layouts, generous light, and the quiet details that make a stay feel settled." },
@@ -16,6 +17,8 @@ const stayFeatures = [
 ];
 
 export default function StayPage() {
+  const { roomTypes } = useHotel();
+  const minRate = roomTypes.length ? Math.min(...roomTypes.map((type) => type.rate)) : 0;
   return (
     <div className="min-h-screen bg-[var(--canvas)] text-[var(--text)]">
       <PublicHeader />
@@ -74,8 +77,8 @@ export default function StayPage() {
               <h2 className="mt-5 max-w-md font-display text-[clamp(2.6rem,4.8vw,4.4rem)] leading-[1.02] tracking-[-0.03em] text-[var(--ink)]">The details are the stay.</h2>
               <p className="mt-6 max-w-md text-sm leading-7 text-[var(--muted)]">A stay here is made of small things: a breakfast that runs late, a room that feels lived-in rather than staged, and a team that remembers how you take your coffee.</p>
               <ul className="mt-7 grid gap-2.5">
-                <FeatureLine>Rates from {formatCurrency(Math.min(...roomTypes.map((type) => type.rate)))} per night</FeatureLine>
-                <FeatureLine>Direct reservations with no online payment in this demo</FeatureLine>
+                <FeatureLine>Rates from {formatCurrency(minRate)} per night</FeatureLine>
+                <FeatureLine>Direct reservations with no online payment; settle at the hotel</FeatureLine>
                 <FeatureLine>Concierge help before and during your stay</FeatureLine>
               </ul>
             </Reveal>

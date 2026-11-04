@@ -1,22 +1,22 @@
 import { useMemo } from "react";
-import { ArrowRight, CalendarDays, SlidersHorizontal, Users } from "lucide-react";
+import { ArrowRight, CalendarDays, Loader2, SlidersHorizontal, Users } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { BookingSearch } from "./BookingSearch";
 import { PublicFooter, PublicHeader } from "./PublicChrome";
 import { Reveal } from "./Reveal";
 import { RoomCard } from "./RoomCard";
 import { SectionEyebrow } from "./HotelUi";
-import { formatDate, getRoomType, type StaySearch } from "../../lib/hotel-data";
+import { formatDate, type StaySearch } from "../../lib/hotel-data";
 import { useHotel } from "../../lib/hotel-store";
 
 export function AvailabilityResults({ search }: { search: StaySearch }) {
-  const { getAvailableRooms } = useHotel();
+  const { getAvailableRooms, getRoomType, status, error } = useHotel();
   const available = useMemo(
     () =>
       [...getAvailableRooms(search.checkIn, search.checkOut, search.adults + search.children)].sort(
-        (a, b) => (getRoomType(a)?.rate ?? 0) - (getRoomType(b)?.rate ?? 0),
+        (a, b) => (getRoomType(a.typeId)?.rate ?? 0) - (getRoomType(b.typeId)?.rate ?? 0),
       ),
-    [getAvailableRooms, search.adults, search.checkIn, search.checkOut, search.children],
+    [getAvailableRooms, getRoomType, search.adults, search.checkIn, search.checkOut, search.children],
   );
 
   return (
@@ -59,7 +59,13 @@ export function AvailabilityResults({ search }: { search: StaySearch }) {
           <span className="text-xs text-[var(--faint)]">Rates per night · taxes calculated at checkout</span>
         </div>
 
-        {available.length === 0 ? (
+        {status === "loading" ? (
+          <div className="mt-8 flex items-center justify-center gap-3 rounded-[1.4rem] border border-[var(--line)] bg-[var(--surface)] p-12 text-sm text-[var(--muted)]">
+            <Loader2 className="h-5 w-5 animate-spin text-[var(--sage)]" /> Loading live availability…
+          </div>
+        ) : status === "error" ? (
+          <div className="mt-8 rounded-[1.4rem] border border-[var(--danger)]/25 bg-[var(--danger-soft)] p-8 text-center text-sm text-[var(--danger)]">{error ?? "Live availability could not be loaded. Please try again."}</div>
+        ) : available.length === 0 ? (
           <div className="mt-8 rounded-[1.4rem] border border-dashed border-[var(--line-strong)] bg-[var(--surface)] p-12 text-center">
             <CalendarDays className="mx-auto mb-4 h-7 w-7 text-[var(--faint)]" />
             <h2 className="font-display text-3xl text-[var(--ink)]">No rooms fit those dates.</h2>

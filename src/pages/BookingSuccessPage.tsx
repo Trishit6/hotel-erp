@@ -1,11 +1,12 @@
-import { useState } from "react";
-import { ArrowRight, CalendarCheck2, CalendarPlus, Check, Copy, Mail, MapPin, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowRight, CalendarCheck2, CalendarPlus, Check, Copy, Loader2, Mail, MapPin, Sparkles } from "lucide-react";
 import { Link, useSearch } from "@tanstack/react-router";
 import { PublicFooter, PublicHeader } from "../components/hotel/PublicChrome";
 import { SectionEyebrow } from "../components/hotel/HotelUi";
-import { calculateNights, formatCurrency, formatDate, getRoomType, hotelInfo } from "../lib/hotel-data";
-import { useHotel } from "../lib/hotel-store";
-import type { Reservation } from "../lib/hotel-data";
+import { calculateNights, formatCurrency, formatDate, hotelInfo, type Guest, type Reservation, type Room, type RoomType } from "../lib/hotel-data";
+import { api } from "../lib/api";
+
+type ReservationDetail = { reservation: Reservation; guest: Guest; room: Room; roomType: RoomType };
 
 function downloadCalendar(reservation: Reservation) {
   const start = reservation.checkIn.replaceAll("-", "");
@@ -36,17 +37,47 @@ function downloadCalendar(reservation: Reservation) {
 
 export default function BookingSuccessPage() {
   const { bookingId } = useSearch({ from: "/booking/success" });
-  const { getReservation, getGuest, getRoom } = useHotel();
   const [copied, setCopied] = useState(false);
-  const reservation = getReservation(bookingId);
+  const [detail, setDetail] = useState<ReservationDetail | null>(null);
+  const [state, setState] = useState<"loading" | "ready" | "missing">("loading");
 
-  if (!reservation) {
+  useEffect(() => {
+    let cancelled = false;
+    api
+      .get<ReservationDetail>(`/public/reservations/${encodeURIComponent(bookingId)}`)
+      .then((result) => {
+        if (cancelled) return;
+        setDetail(result);
+        setState("ready");
+      })
+      .catch(() => {
+        if (!cancelled) setState("missing");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [bookingId]);
+
+  if (state === "loading") {
+    return (
+      <div className="min-h-screen bg-[var(--canvas)] text-[var(--text)]">
+        <PublicHeader />
+        <main className="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center gap-3 px-5 text-center">
+          <Loader2 className="h-6 w-6 animate-spin text-[var(--sage)]" />
+          <p className="text-sm text-[var(--muted)]">Loading your reservation…</p>
+        </main>
+        <PublicFooter />
+      </div>
+    );
+  }
+
+  if (state === "missing" || !detail) {
     return (
       <div className="min-h-screen bg-[var(--canvas)] text-[var(--text)]">
         <PublicHeader />
         <main className="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center px-5 text-center">
           <h1 className="font-display text-4xl text-[var(--ink)]">Reservation not found</h1>
-          <p className="mt-3 text-sm leading-6 text-[var(--muted)]">The confirmation link may be incomplete, or the reservation is stored in a different browser.</p>
+          <p className="mt-3 text-sm leading-6 text-[var(--muted)]">The confirmation link may be incomplete. Search with your booking reference, email, or phone number.</p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link to="/my-bookings" className="rounded-full bg-[var(--primary)] px-5 py-3 text-xs font-semibold text-[var(--on-primary)]">Find my booking</Link>
             <Link to="/" className="rounded-full border border-[var(--line-strong)] px-5 py-3 text-xs font-semibold text-[var(--ink)]">Return home</Link>
@@ -57,9 +88,7 @@ export default function BookingSuccessPage() {
     );
   }
 
-  const guest = getGuest(reservation.guestId);
-  const room = getRoom(reservation.roomId);
-  const type = room ? getRoomType(room) : undefined;
+  const { reservation, guest, room, roomType: type } = detail;
   const nights = calculateNights(reservation.checkIn, reservation.checkOut);
 
   const copyReference = async () => {
@@ -81,7 +110,7 @@ export default function BookingSuccessPage() {
         </div>
         <SectionEyebrow>Reservation confirmed</SectionEyebrow>
         <h1 className="mt-5 font-display text-[clamp(2.8rem,6vw,5rem)] leading-[0.98] tracking-[-0.03em] text-[var(--ink)]">We’ll see you by the water.</h1>
-        <p className="mt-5 max-w-md text-sm leading-7 text-[var(--muted)]">Your stay is reserved, {guest?.name.split(" ")[0] ?? "friend"}. Keep this confirmation number handy.</p>
+        <p className="mt-5 max-w-md text-sm leading-7 text-[var(--muted)]">Your stay is reserved, {guest.name.split(" ")[0] ?? "friend"}. Keep this confirmation number handy.</p>
 
         <div className="mt-10 w-full rounded-[1.4rem] border border-[var(--line)] bg-[var(--surface)] p-5 text-left shadow-[0_14px_45px_rgba(23,43,73,0.07)] md:p-8">
           <div className="flex flex-col justify-between gap-4 border-b border-[var(--line)] pb-5 sm:flex-row sm:items-start">
@@ -118,7 +147,7 @@ export default function BookingSuccessPage() {
           </div>
 
           <div className="flex items-center gap-2 rounded-xl bg-[var(--surface-2)] px-3.5 py-3 text-xs text-[var(--muted)]">
-            <Mail className="h-4 w-4 text-[var(--sage)]" /> A confirmation has been recorded for {guest?.email} in this browser.
+            <Mail className="h-4 w-4 text-[var(--sage)]" /> A confirmation has been recorded for {guest.email}.
           </div>
 
           <div className="mt-5 flex flex-col gap-2 sm:flex-row">

@@ -1,0 +1,5 @@
+.env
+apps/api/.env
+apps/api/.env.local
+apps/api/dist
+node_modules

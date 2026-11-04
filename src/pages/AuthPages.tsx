@@ -5,7 +5,6 @@ import { motion, useReducedMotion } from "motion/react";
 import { BrandMark } from "../components/hotel/HotelUi";
 import { ThemeToggle } from "../components/hotel/ThemeToggle";
 import { hotelInfo, isIndianPhone } from "../lib/hotel-data";
-import { useHotel } from "../lib/hotel-store";
 
 const inputClass = "w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors placeholder:text-[var(--faint)] focus:border-[var(--sage)]";
 const labelClass = "mb-2 block text-xs font-semibold text-[var(--muted-strong)]";
@@ -39,7 +38,7 @@ function AuthShell({ eyebrow, title, subtitle, image, imageAlt, children, footer
             <h1 className="mt-4 max-w-md font-display text-[clamp(2.8rem,4vw,4.4rem)] leading-[0.98] tracking-[-0.03em]">A quieter kind of arrival.</h1>
             <p className="mt-4 max-w-sm text-sm leading-6 text-white/70">Sign in to keep your details close, or find a reservation with your confirmation number.</p>
             <div className="mt-6 flex items-center gap-2 text-[11px] text-white/55">
-              <ShieldCheck className="h-3.5 w-3.5 text-[var(--sage-on-dark)]" /> Guest accounts require a connected backend in this demo.
+              <ShieldCheck className="h-3.5 w-3.5 text-[var(--sage-on-dark)]" /> Guest accounts are not enabled in this build. Staff can sign in to the operations portal.
             </div>
           </div>
         </section>
@@ -113,14 +112,14 @@ export function LoginPage() {
     setErrors(nextErrors);
     setStatus("");
     if (Object.keys(nextErrors).length) return;
-    setStatus("Guest authentication is not connected in this local demo. No credentials were sent or stored. Use booking lookup or contact the hotel for help.");
+    setStatus("Guest sign-in is not enabled. Staff can sign in to the operations portal. To find a booking, use booking lookup or contact the hotel.");
   };
 
   return (
     <AuthShell
       eyebrow="Guest sign in"
       title="Welcome back."
-      subtitle="Sign in to see your stays and keep your details close. Guest accounts need a connected authentication service."
+      subtitle="Guest accounts are not enabled. Staff sign in through the operations portal to manage the hotel."
       image="https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1600&q=90"
       imageAlt="A warm guest room at RIVR"
       footer={<><span>New to RIVR? </span><Link to="/register" className="font-semibold text-[var(--ink)] underline underline-offset-4">Create an account</Link></>}
@@ -149,7 +148,7 @@ export function LoginPage() {
         {status && <Status tone="info">{status}</Status>}
         <div className="rounded-xl border border-[var(--line)] bg-[var(--surface-2)] px-3.5 py-3 text-xs leading-5 text-[var(--muted)]">
           <p className="font-semibold text-[var(--ink)]">Staff access</p>
-          <p className="mt-1">The ERP uses the existing demo role picker. It is not production authentication.</p>
+          <p className="mt-1">Staff authentication is handled by the RIVR API with server-managed sessions and role-based access.</p>
           <Link to="/admin/login" className="mt-2 inline-flex items-center gap-1.5 font-semibold text-[var(--ink)]">Open staff portal <ArrowRight className="h-3.5 w-3.5" /></Link>
         </div>
       </form>
@@ -158,7 +157,6 @@ export function LoginPage() {
 }
 
 export function RegisterPage() {
-  const { guests } = useHotel();
   const [form, setForm] = useState({ fullName: "", email: "", phone: "", password: "", confirmPassword: "", terms: false });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState("");
@@ -180,18 +178,16 @@ export function RegisterPage() {
     if (form.password.length < 8) nextErrors.password = "Use at least 8 characters.";
     if (form.confirmPassword !== form.password) nextErrors.confirmPassword = "Passwords do not match.";
     if (!form.terms) nextErrors.terms = "Please accept the terms to continue.";
-    const duplicate = guests.some((guest) => guest.email.toLowerCase() === form.email.trim().toLowerCase());
-    if (duplicate) nextErrors.email = "An account with this email already exists in the local guest records.";
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length) return;
-    setStatus("Registration requires a connected backend. No account was created and no details were stored.");
+    setStatus("Guest accounts are not enabled. No account was created and no details were stored.");
   };
 
   return (
     <AuthShell
       eyebrow="Create an account"
       title="Make RIVR yours."
-      subtitle="Create a guest profile to keep your details close. Registration needs a connected backend, so this form validates but does not create an account."
+      subtitle="Guest accounts are not enabled in this build. This form validates your details but does not create an account."
       image="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1600&q=90"
       imageAlt="The RIVR pool and terrace"
       footer={<><span>Already have an account? </span><Link to="/login" className="font-semibold text-[var(--ink)] underline underline-offset-4">Sign in</Link></>}
@@ -260,7 +256,7 @@ export function ForgotPasswordPage() {
       return;
     }
     setError("");
-    setStatus("Password reset requires a connected backend. No reset email was sent in this demo.");
+    setStatus("Password reset is not enabled for guest accounts. No reset email was sent.");
   };
 
   return (
@@ -305,7 +301,7 @@ export function ResetPasswordPage() {
     if (confirmPassword !== password) nextErrors.confirmPassword = "Passwords do not match.";
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length) return;
-    setStatus("Password reset requires a connected backend. No password was changed in this demo.");
+    setStatus("Password reset is not enabled for guest accounts. No password was changed.");
   };
 
   return (
@@ -336,7 +332,7 @@ export function VerifyEmailPage() {
     <AuthShell
       eyebrow="Email verification"
       title="Check your inbox."
-      subtitle="Email verification requires a connected backend. This demo cannot send verification messages."
+      subtitle="Email verification is not enabled for guest accounts. This build cannot send verification messages."
       image="https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1600&q=90"
       imageAlt="A warm guest room at RIVR"
       footer={<Link to="/login" className="font-semibold text-[var(--ink)] underline underline-offset-4">Back to sign in</Link>}

@@ -3,7 +3,7 @@ import { ArrowRight, CalendarDays, Check, CreditCard, Leaf, Loader2, LockKeyhole
 import { Link, useNavigate, useParams, useSearch } from "@tanstack/react-router";
 import { PublicFooter, PublicHeader } from "../components/hotel/PublicChrome";
 import { RoomVisual, SectionEyebrow } from "../components/hotel/HotelUi";
-import { calculateNights, formatCurrency, formatDate, getRoomType, indianStates, isDateRangeValid, isIndianPhone, isIndianPin, taxConfig } from "../lib/hotel-data";
+import { calculateNights, formatCurrency, formatDate, indianStates, isDateRangeValid, isIndianPhone, isIndianPin, taxConfig } from "../lib/hotel-data";
 import { useHotel } from "../lib/hotel-store";
 
 const emptyForm = { guestName: "", email: "", phone: "", address: "", city: "", state: "", postalCode: "", specialRequests: "" };
@@ -12,12 +12,13 @@ export default function BookingPage() {
   const { roomId } = useParams({ from: "/book/$roomId" });
   const search = useSearch({ from: "/book/$roomId" });
   const navigate = useNavigate();
-  const { getRoom, createReservation, isRoomAvailable } = useHotel();
+  const { getRoom, getRoomType, createReservation, isRoomAvailable, status, error: loadError } = useHotel();
   const [form, setForm] = useState(emptyForm);
   const [error, setError] = useState("");
-  const [isPending, startTransition] = useTransition();
+  const [submitting, setSubmitting] = useState(false);
+  const [, startTransition] = useTransition();
   const room = getRoom(roomId);
-  const type = room ? getRoomType(room) : undefined;
+  const type = room ? getRoomType(room.typeId) : undefined;
   const nights = calculateNights(search.checkIn, search.checkOut);
   const datesValid = isDateRangeValid(search.checkIn, search.checkOut);
   const available = room ? isRoomAvailable(room.id, search.checkIn, search.checkOut) : false;
@@ -28,6 +29,24 @@ export default function BookingPage() {
     const tax = Math.round(roomCharges * taxConfig.rate);
     return { roomCharges, tax, total: roomCharges + tax };
   }, [nights, type]);
+
+  if (status === "loading") {
+    return (
+      <div className="grid min-h-screen place-items-center bg-[var(--canvas)] px-5">
+        <div className="flex items-center gap-3 rounded-[1.4rem] border border-[var(--line)] bg-[var(--surface)] px-6 py-5 text-sm text-[var(--muted)]">
+          <Loader2 className="h-5 w-5 animate-spin text-[var(--sage)]" /> Loading your room…
+        </div>
+      </div>
+    );
+  }
+
+  if (status === "error") {
+    return (
+      <div className="grid min-h-screen place-items-center bg-[var(--canvas)] px-5">
+        <div className="max-w-md rounded-[1.4rem] border border-[var(--danger)]/25 bg-[var(--danger-soft)] p-8 text-center text-sm text-[var(--danger)]">{loadError ?? "The booking service could not be reached. Please try again."}</div>
+      </div>
+    );
+  }
 
   if (!room || !type) {
     return (
@@ -63,7 +82,7 @@ export default function BookingPage() {
     if (error) setError("");
   };
 
-  const submit = (event: React.FormEvent) => {
+  const submit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!isIndianPhone(form.phone)) {
       setError("Enter a valid Indian mobile number, for example +91 98765 43210.");
@@ -73,7 +92,9 @@ export default function BookingPage() {
       setError("Enter a valid 6-digit Indian PIN code.");
       return;
     }
-    const result = createReservation({
+    setSubmitting(true);
+    setError("");
+    const result = await createReservation({
       ...form,
       roomId: room.id,
       checkIn: search.checkIn,
@@ -82,8 +103,9 @@ export default function BookingPage() {
       children: search.children,
       discount: 0,
     });
-    if (result.error) {
-      setError(result.error);
+    setSubmitting(false);
+    if (result.error || !result.reservation) {
+      setError(result.error ?? "The reservation could not be confirmed.");
       return;
     }
     startTransition(() => {
@@ -158,7 +180,7 @@ export default function BookingPage() {
                 <MapPin className="h-4 w-4 text-[var(--sage)]" />
                 <h2 className="text-sm font-semibold text-[var(--ink)]">Billing address <span className="font-normal text-[var(--faint)]">(optional)</span></h2>
               </div>
-              <p className="mt-1 text-xs leading-5 text-[var(--muted)]">Add a billing address if you need it on the invoice. We do not collect payment online in this demo.</p>
+              <p className="mt-1 text-xs leading-5 text-[var(--muted)]">Add a billing address if you need it on the invoice. No payment is collected online; settle at the hotel or by bank transfer.</p>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <label className="sm:col-span-2">
                   <span className="mb-2 block text-xs font-semibold text-[var(--muted-strong)]">Address</span>
@@ -187,7 +209,7 @@ export default function BookingPage() {
             </div>
 
             <div className="mt-7 flex items-center gap-2 border-t border-[var(--line)] pt-5 text-xs text-[var(--muted)]">
-              <CreditCard className="h-4 w-4 text-[var(--sage)]" /> Instant confirmation. No payment is collected online in this demo.
+              <CreditCard className="h-4 w-4 text-[var(--sage)]" /> Instant confirmation. No payment is collected online.
             </div>
 
             {error && (
@@ -198,13 +220,13 @@ export default function BookingPage() {
 
             <button
               type="submit"
-              disabled={isPending || !available}
+              disabled={submitting || !available}
               className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] py-3.5 text-sm font-semibold text-[var(--on-primary)] transition-colors hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-              {isPending ? "Confirming..." : "Confirm reservation"} {!isPending && <ArrowRight className="h-4 w-4" />}
+              {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+              {submitting ? "Confirming..." : "Confirm reservation"} {!submitting && <ArrowRight className="h-4 w-4" />}
             </button>
-            <p className="mt-3 text-center text-[11px] leading-5 text-[var(--faint)]">By confirming, you agree to the rate and stay dates shown here. This demo stores the reservation in your browser.</p>
+            <p className="mt-3 text-center text-[11px] leading-5 text-[var(--faint)]">By confirming, you agree to the rate and stay dates shown here. Your reservation is saved to the hotel system.</p>
           </form>
 
           <aside className="h-fit overflow-hidden rounded-[1.4rem] border border-[var(--line)] bg-[var(--surface)] shadow-[0_10px_35px_rgba(23,43,73,0.05)]">

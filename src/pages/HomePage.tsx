@@ -7,7 +7,7 @@ import { BookingPill, PublicFooter, PublicHeader } from "../components/hotel/Pub
 import { Reveal } from "../components/hotel/Reveal";
 import { RoomCard } from "../components/hotel/RoomCard";
 import { FeatureLine, SectionEyebrow } from "../components/hotel/HotelUi";
-import { dateAt, defaultStaySearch, formatCurrency, formatDate, hotelInfo, offers, reviews, roomTypes, rooms } from "../lib/hotel-data";
+import { dateAt, defaultStaySearch, formatCurrency, formatDate, hotelInfo, offers, reviews } from "../lib/hotel-data";
 import { useHotel } from "../lib/hotel-store";
 
 const featuredSearch = defaultStaySearch;
@@ -27,12 +27,12 @@ export default function HomePage() {
   const reduceMotion = useReducedMotion();
   const location = useLocation();
   const heroRef = useRef<HTMLElement | null>(null);
-  const { getAvailableRooms } = useHotel();
+  const { getAvailableRooms, roomTypes, rooms, status } = useHotel();
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
   const featuredRooms = getAvailableRooms(featuredSearch.checkIn, featuredSearch.checkOut, 2).slice(0, 3);
   const availableTonight = getAvailableRooms(dateAt(0), dateAt(1), 2).length;
-  const minRate = Math.min(...roomTypes.map((type) => type.rate));
+  const minRate = roomTypes.length ? Math.min(...roomTypes.map((type) => type.rate)) : 0;
 
   useEffect(() => {
     const id = location.hash.replace(/^#/, "");
@@ -135,7 +135,7 @@ export default function HomePage() {
               >
                 <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--sage)]">Tonight at RIVR</p>
                 <p className="mt-1 font-display text-xl leading-snug">
-                  {availableTonight > 0 ? `${availableTonight} rooms available` : "Live availability"}
+                  {status === "loading" ? "Loading availability" : availableTonight > 0 ? `${availableTonight} rooms available` : "Live availability"}
                 </p>
                 <p className="mt-1 text-[11px] leading-4 opacity-70">Rates from {minRate ? formatCurrency(minRate) : "the hotel"} per night.</p>
               </motion.div>
