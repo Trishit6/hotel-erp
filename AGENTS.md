@@ -1,56 +1,527 @@
-# AGENTS.md
+# RIVR — Hotel Management & Operations System
 
-Compact, repo-specific guidance for working in RIVR Hotel ERP.
+**A modern, full-stack Hotel ERP designed to simplify hotel operations, streamline workflows, and centralize property management.**
 
-## Commands
+RIVR is a hotel management and operations platform that brings guest-facing services and internal hotel operations together in one system. It combines a modern React-based frontend with an Express.js API, MariaDB database, and Drizzle ORM.
 
-- Use pnpm (`packageManager: pnpm@11.25.0`, `pnpm-lock.yaml`). Do not switch to npm/yarn.
-- `pnpm dev` — Vite dev server.
-- `pnpm exec tsc -b` — **actual typecheck** for both `tsconfig.app.json` and `tsconfig.node.json`.
-- `pnpm typecheck` is a no-op: root `tsconfig.json` has `files: []` + project references, and `tsc --noEmit` exits 0 even with type errors in `src/` (verified). Use `pnpm exec tsc -b` or `pnpm build`.
-- `pnpm build` — `tsc -b && vite build`, writes to `dist/`.
-- There is **no lint, test suite, or CI**. Do not claim tests pass; verify with `pnpm exec tsc -b` and a manual dev-server check.
-- `tsc -b` rewrites the **tracked** `node_modules/.tmp/tsconfig.app.tsbuildinfo`; never stage that change.
+The platform is designed to manage essential hotel workflows, including room management, reservations, guest records, payments, invoices, staff operations, housekeeping, inventory, expenses, and restaurant orders.
 
-## Repo hygiene (easy to get wrong)
+---
 
-- There is no `.gitignore`. `node_modules/` (~18k files) and `dist/` are committed.
-- `pnpm install` can rewrite tracked `node_modules` files with machine-specific paths. Never stage `node_modules/`; keep commits scoped to `src/` (plus `dist/` only when intentionally rebuilding).
-- `dist/` uses hashed filenames. A rebuild leaves old tracked bundles behind, so stage deletions too when committing build output.
-- `.opencode/`, `.copilot/`, `opencode.jsonc`, `.mcp.json` are tracked. `.opencode/skills/motion` and `.copilot/skills/motion` are duplicate copies — keep both in sync if editing.
+## Project Overview
 
-## Architecture
+| Attribute | Details |
+|---|---|
+| Project Name | RIVR Hotel ERP |
+| Project Type | Full-Stack Hotel Management System |
+| Architecture | pnpm Monorepo |
+| Frontend | React 19 + TypeScript |
+| Backend | Node.js + Express.js |
+| Database | MariaDB |
+| ORM | Drizzle ORM |
+| API Style | REST API |
+| Authentication | Session-Based Authentication |
+| Authorization | Role-Based Access Control (RBAC) |
+| Package Manager | pnpm |
 
-- Client-only Vite/React SPA: no server, API, database, real auth, or payment gateway. Guest auth forms validate but create no account; the role picker at `/admin/login` is dev UX.
-- Entry chain: `index.html` → `src/main.tsx` → `src/App.tsx` (`ThemeProvider` > `HotelProvider` > `RouterProvider`) → `src/router.tsx`.
-- `src/lib/hotel-store.tsx` is the single domain layer: state, mutations, permissions, persistence, availability checks. Replace this provider (per README) when adding a backend.
-- `src/lib/hotel-data.ts` owns all domain types, seed data, formatters, `taxConfig`, `hotelInfo`, and IST date helpers. Seed dates are relative to today via `dateAt(offset)`; never hardcode dates.
-- `src/lib/theme.tsx` handles light/dark: writes `data-theme` on `<html>` and persists `rivr-theme`.
-- UI lives in `src/pages/*` and `src/components/hotel/*`. Shared primitives (`Card`, `StatusBadge`, `RoomVisual`, `Money`, etc.) are in `HotelUi.tsx`; admin layout/role guard in `StaffChrome.tsx`; public header/footer in `PublicChrome.tsx`; motion wrappers in `Reveal.tsx` / `PageHero.tsx`.
-- `src/pages/AdminPages.tsx` is one intentionally large file holding every admin page plus local form/modal helpers, mostly dense one-line JSX. Match its terse style instead of reformatting or splitting files arbitrarily.
-- Imports are relative; there are no path aliases.
+## Key Features
 
-## Routing and roles
+### 1. Guest Management
+- Public hotel website and room catalogue.
+- Room availability search.
+- Guest reservation creation.
+- Reservation lookup using booking reference and contact details.
+- Guest information management.
 
-- Routes are registered manually in `src/router.tsx`; there is no file-based routing or generated route tree. A new page needs a `createRoute` entry added to `routeTree`.
-- Sidebar visibility is separate: add the path to `navGroups` in `StaffChrome.tsx` or it will only be reachable by URL. `adminNav` (exported from the same file) drives the restricted-access panel.
-- Several aliases intentionally reuse one component: `/admin/room-types` → `AdminRoomsPage`, `/admin/check-in` and `/admin/check-out` → `AdminFrontDeskPage`, `/admin/invoices` → `AdminPaymentsPage`, `/admin/attendance` → `AdminStaffPage`. Keep new aliases consistent with this pattern.
-- `navGroups[].roles` is the permission source of truth. `AdminLayout` redirects to `/admin/login` when `role` is null and shows a restricted panel when the current role is not allowed; admin pages themselves do not re-check permissions.
-- Search params are validated per route (`staySearch` → `normalizeStaySearch`, `reservationSearch`, `successSearch`, `resetSearch`); keep defaults/clamping there when adding params.
+### 2. Room Management
+- Centralized room and room-type management.
+- Room availability and status tracking.
+- Room assignment and reservation management.
+- Room lifecycle management.
 
-## Domain rules
+### 3. Reservation Management
+- Reservation creation and modification.
+- Booking confirmation and cancellation.
+- Check-in and check-out workflows.
+- Room availability and overlapping-booking prevention.
+- Reservation status tracking.
 
-- Dates are date-only `YYYY-MM-DD` strings compared lexicographically. Use the helpers: `dateAt` (today in Asia/Kolkata), `calculateNights` (parses `T00:00:00Z`), `formatDate` (parses `T12:00:00+05:30`), `isDateRangeValid`.
-- Money is integer INR via `formatCurrency` (`en-IN`, no decimals). Tax is `taxConfig.rate` (0.12 demo) in `hotel-data.ts`, applied in `createReservation` — not a literal in the store.
-- `hotelInfo` is deliberately placeholder (`isPlaceholder: true`). Do not present its address/phone as verified property details.
-- Availability is centralized in `isRoomAvailable`: `maintenance`, `out-of-order`, and `cleaning` rooms are unavailable, as are overlapping reservations whose status is not `cancelled`, `checked-out`, or `no-show`. Do not duplicate this logic in components.
-- State transitions are coupled: create → reservation `confirmed` + room `reserved`; cancel → room `available`; check-in → `occupied`; check-out → `cleaning` + dirty task; task `inspected` → room `available`. Update every affected slice, not just one.
-- Mutations validate with Zod schemas at the store boundary and return `{ error }` instead of throwing; surface that string in the UI.
-- Guests are deduplicated by lowercase email. `getReservation` accepts either an id or a booking reference.
-- State persists per slice to `localStorage` keys `rivr-hotel-*` (`rivr-hotel-role`/`rivr-hotel-actor` hold the demo session). `refreshDemoData` re-persists seeds and reloads, but does not clear role or theme.
+### 4. Payments & Invoices
+- Payment recording and management.
+- Invoice tracking.
+- Server-side calculation of monetary values.
+- Payment and invoice balance management.
 
-## Styling and animation
+### 5. Staff Management
+- Staff account management.
+- Role-based access permissions.
+- Staff attendance management.
+- Secure staff authentication.
 
-- Tailwind CSS v4 is CSS-first: there is no `tailwind.config.*`. Components use CSS variables (`var(--canvas)`, `--surface`, `--ink`, `--muted`, `--accent`, …) defined in `:root` and overridden by `[data-theme="dark"]` in `src/index.css`; use them instead of raw hex so dark mode works.
-- `@theme` adds font + brand tokens (`navy`, `midnight`, `ivory`, `beige`, `gold`, `sage`); custom utilities (`.animate-rise-in`, `.scrollbar-thin`) and print rules (`.no-print`) also live in `src/index.css`. Google Fonts load via `@import` over the network.
-- Motion (`motion/react`) drives the public/auth pages, shared `Reveal`/`PageHero`, and the root route fade; admin pages avoid it. The Motion MCP server is configured in `opencode.jsonc` / `.mcp.json`.
+### 6. Housekeeping Management
+- Housekeeping task creation and assignment.
+- Room cleaning status tracking.
+- Task completion and inspection workflows.
+- Integration with room availability.
+
+### 7. Inventory Management
+- Inventory item management.
+- Stock adjustments.
+- Inventory tracking.
+
+### 8. Expense Management
+- Expense recording.
+- Expense approval workflows.
+- Operational expense tracking.
+
+### 9. Restaurant Management
+- Restaurant order creation.
+- Order status management.
+- Restaurant operations tracking.
+
+### 10. Dashboard & Activity Monitoring
+- Operational dashboard.
+- Business activity tracking.
+- Administrative overview and reporting.
+
+---
+
+## Technology Stack
+
+### Frontend
+- React 19
+- TypeScript
+- Vite
+- TanStack Router
+- Tailwind CSS 4
+- Motion
+- Lucide Icons
+- Zod
+
+### Backend
+- Node.js
+- Express.js 4
+- TypeScript
+- Zod
+- Drizzle ORM
+- MySQL2
+- Argon2id
+
+### Database
+- MariaDB
+- SQL migrations
+- Database-backed session management
+
+### Development & Testing
+- pnpm Workspaces
+- Vitest
+- Supertest
+- Git
+- Visual Studio Code
+
+---
+
+## System Architecture
+
+RIVR follows a modular full-stack architecture.
+
+```text
+                 RIVR HOTEL ERP
+                       |
+          +------------+------------+
+          |                         |
+     FRONTEND                    BACKEND
+          |                         |
+   React + TypeScript          Express.js API
+          |                         |
+   TanStack Router             REST Endpoints
+          |                         |
+   API Client                   Middleware
+          |                         |
+          +------------+------------+
+                       |
+                  Drizzle ORM
+                       |
+                   MariaDB
+                       |
+             Persistent Data Storage
+```
+
+### Architecture Highlights
+
+- Frontend and backend are maintained in a single pnpm monorepo.
+- Express.js handles API requests and business logic.
+- Drizzle ORM manages database interactions.
+- MariaDB stores hotel business records and sessions.
+- Zod validates incoming API data.
+- Authentication and permissions are enforced server-side.
+- The frontend communicates with the backend through a centralized API client.
+
+---
+
+## Repository Structure
+
+```text
+hotel-erp/
+│
+├── apps/
+│   └── api/
+│       ├── drizzle/
+│       │   └── migrations/
+│       ├── scripts/
+│       ├── src/
+│       │   ├── config/
+│       │   ├── database/
+│       │   ├── middleware/
+│       │   ├── modules/
+│       │   ├── services/
+│       │   ├── utils/
+│       │   ├── app.ts
+│       │   └── server.ts
+│       └── tests/
+│
+├── src/
+│   ├── components/
+│   │   └── hotel/
+│   ├── lib/
+│   │   ├── api.ts
+│   │   ├── hotel-data.ts
+│   │   └── hotel-store.tsx
+│   ├── pages/
+│   ├── router.tsx
+│   ├── App.tsx
+│   └── main.tsx
+│
+├── public/
+├── index.html
+├── package.json
+├── pnpm-lock.yaml
+├── pnpm-workspace.yaml
+├── vite.config.ts
+├── tsconfig.json
+└── README.md
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+Ensure the following tools are installed:
+
+- Node.js 20 or newer
+- pnpm 11
+- MariaDB 10.6 or newer
+- Git
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Trishit6/hotel-erp.git
+```
+
+Navigate into the project:
+
+```bash
+cd hotel-erp
+```
+
+### 2. Install Dependencies
+
+```bash
+pnpm install
+```
+
+### 3. Configure Environment Variables
+
+Create an environment file from the provided example.
+
+**Windows PowerShell:**
+
+```powershell
+Copy-Item apps/api/.env.example apps/api/.env
+```
+
+**macOS/Linux:**
+
+```bash
+cp apps/api/.env.example apps/api/.env
+```
+
+Configure the database credentials and other required settings inside:
+
+```text
+apps/api/.env
+```
+
+### 4. Create the Database
+
+Log in to MariaDB and execute:
+
+```sql
+CREATE DATABASE rivr_hotel
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
+CREATE DATABASE rivr_hotel_test
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+```
+
+Configure the database names and credentials in the API environment file.
+
+### 5. Run Database Migrations
+
+```bash
+pnpm db:migrate
+```
+
+### 6. Seed Initial Data
+
+```bash
+pnpm db:seed
+```
+
+### 7. Create the Administrator Account
+
+```bash
+pnpm create-admin
+```
+
+Follow the interactive instructions to create the initial administrator account.
+
+---
+
+## Running the Application
+
+RIVR uses separate development processes for the frontend and backend.
+
+### Start the Backend
+
+Open a terminal in the project root:
+
+```bash
+pnpm dev:api
+```
+
+The API uses port `4000` by default.
+
+### Start the Frontend
+
+Open another terminal:
+
+```bash
+pnpm dev
+```
+
+The Vite development server uses port `5173` by default.
+
+### Access the Application
+
+| Service | Local URL |
+|---|---|
+| Guest Website | http://localhost:5173 |
+| Staff Login | http://localhost:5173/admin/login |
+| Backend API | http://localhost:4000/api |
+| API Health Check | http://localhost:4000/api/health |
+
+Vite proxies `/api` requests to the backend by default.
+
+---
+
+## API Overview
+
+The Express backend exposes REST API endpoints grouped by functionality.
+
+| Module | Base Route |
+|---|---|
+| Health | `/api/health` |
+| Public Catalogue | `/api/public/` |
+| Authentication | `/api/auth/` |
+| Dashboard & Administration | `/api/admin/` |
+| Reservations | `/api/admin/reservations` |
+| Rooms | `/api/admin/rooms` |
+| Guests | `/api/admin/guests` |
+| Payments | `/api/admin/payments` |
+| Housekeeping | `/api/admin/housekeeping/tasks` |
+| Staff | `/api/admin/staff` |
+| Inventory | `/api/admin/inventory` |
+| Expenses | `/api/admin/expenses` |
+| Restaurant Orders | `/api/admin/restaurant/orders` |
+| Reports | `/api/admin/reports/` |
+| User Management | `/api/admin/users` |
+
+Administrative endpoints require an authenticated session and appropriate permissions.
+
+---
+
+## Authentication & Security
+
+RIVR incorporates several security mechanisms:
+
+- Argon2id password hashing.
+- Database-backed session management.
+- HTTP-only authentication cookies.
+- Server-side role-based access control.
+- Zod request validation.
+- Helmet security headers.
+- Rate limiting.
+- Explicit-origin CORS configuration.
+- Server-side permission enforcement.
+- Session invalidation following account deactivation or password changes.
+
+### Supported Roles
+
+- Super Administrator
+- Administrator
+- Manager
+- Receptionist
+- Housekeeping
+- Accountant
+- Restaurant Staff
+
+Permissions are determined by the backend rather than trusted client-side role values.
+
+---
+
+## Business Logic & Data Integrity
+
+The system includes important hotel-operational rules:
+
+- Prevention of overlapping room reservations.
+- Room availability management.
+- Reservation status transitions.
+- Automated housekeeping task creation after checkout.
+- Room status updates following check-in and check-out.
+- Server-authoritative payment calculations.
+- Monetary storage using `DECIMAL(12,2)`.
+- Integer-paise calculations for financial operations.
+- Date handling based on `YYYY-MM-DD` and `Asia/Kolkata`.
+
+The documented demo tax rate is 12%. Actual tax configuration must be verified before real-world use.
+
+---
+
+## Development Commands
+
+| Command | Description |
+|---|---|
+| `pnpm install` | Install dependencies |
+| `pnpm dev` | Start frontend development server |
+| `pnpm dev:api` | Start backend development server |
+| `pnpm build` | Build frontend |
+| `pnpm build:api` | Build backend |
+| `pnpm preview` | Preview frontend production build |
+| `pnpm exec tsc -b` | Frontend TypeScript project check |
+| `pnpm typecheck:api` | Backend type checking |
+| `pnpm test:api` | Run backend integration tests |
+| `pnpm db:migrate` | Apply database migrations |
+| `pnpm db:seed` | Seed initial data |
+| `pnpm db:reset` | Reset database schema — destructive |
+| `pnpm create-admin` | Create administrator |
+
+**Note:** API integration tests require a configured MariaDB test database. Use `pnpm exec tsc -b` for the actual frontend TypeScript project-reference check.
+
+---
+
+## Testing & Quality Assurance
+
+Before preparing a release, execute:
+
+```bash
+pnpm exec tsc -b
+pnpm build
+pnpm typecheck:api
+pnpm test:api
+```
+
+The backend test suite is designed to verify API functionality, authentication, permissions, validation, payment workflows, reservation operations, and database-dependent business rules.
+
+Tests must use a dedicated test database. Never run destructive database reset commands against production data.
+
+---
+
+## Current Project Status
+
+RIVR has progressed beyond a frontend-only prototype into a full-stack application structure.
+
+| Component | Project status |
+|---|---|
+| React frontend | Implemented |
+| Express.js API workspace | Implemented |
+| MariaDB integration code | Implemented; local connection verification pending |
+| Drizzle ORM schema and migrations | Implemented |
+| Authentication and session architecture | Implemented |
+| Role-based access control | Implemented |
+| Hotel operations modules | Implemented in the documented API structure |
+| Frontend API integration | Implemented in the documented application architecture |
+| Database migration execution | Pending local verification |
+| Full database-backed test execution | Pending verification |
+| Production deployment | Pending |
+
+**Important:** The presence of implementation code does not establish that every workflow has passed end-to-end testing. Database connectivity, migrations, integration tests, and production deployment must be verified separately.
+
+---
+
+## Known Limitations
+
+- Guest account registration and guest password recovery are not enabled.
+- Online payment gateway integration is not currently documented as implemented.
+- Payment recording is staff-managed.
+- The current configuration targets a single property.
+- Hotel identity and contact information contain placeholder values that must be replaced.
+- Demo seed data is not a production data-import mechanism.
+- Legacy browser `localStorage` business records are not automatically migrated into MariaDB.
+- Email and SMS delivery integrations are not currently documented as implemented.
+
+---
+
+## Production Deployment Considerations
+
+Before deploying RIVR:
+
+1. Configure production environment variables.
+2. Use strong and unique session secrets.
+3. Enable HTTPS and secure cookies.
+4. Configure the production database and least-privilege credentials.
+5. Run database migrations as a release step.
+6. Disable demo reset functionality.
+7. Remove or rotate initial setup tokens.
+8. Configure the production frontend origin.
+9. Verify authentication, authorization, and all critical business workflows.
+10. Configure backups, monitoring, and operational recovery procedures.
+
+Do not expose `.env` files, database passwords, administrator credentials, or session secrets in GitHub.
+
+---
+
+## Future Improvements
+
+Potential areas for continued development include:
+
+- Online payment gateway integration.
+- Email and SMS notifications.
+- Advanced analytics and operational reporting.
+- Multi-property management.
+- Guest account management.
+- Enhanced inventory and procurement workflows.
+- Automated deployment and monitoring.
+- Expanded integration and end-to-end testing.
+
+---
+
+## Project Repository
+
+**GitHub:** https://github.com/Trishit6/hotel-erp
+
+---
+
+## License
+
+All rights reserved. This project is currently maintained as a private development initiative. No open-source license is granted unless a license file is added to the repository.
+
+---
+
+**RIVR Hotel ERP**  
+*One Platform. Smarter Hotel Operations.*
