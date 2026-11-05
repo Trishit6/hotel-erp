@@ -359,3 +359,33 @@ export const activityLogs = mysqlTable(
   },
   (table) => [index("activity_logs_created_idx").on(table.createdAt)],
 );
+
+/**
+ * Single-row property configuration. Keeping this in the database lets the
+ * public site, invoices and server-side tax calculation share one source of
+ * truth instead of duplicating hotel details in the frontend bundle.
+ */
+export const systemSettings = mysqlTable("system_settings", {
+  id: id().primaryKey(),
+  hotelName: varchar("hotel_name", { length: 120 }).notNull(),
+  legalName: varchar("legal_name", { length: 160 }).notNull().default(""),
+  email: varchar("email", { length: 191 }).notNull().default(""),
+  phone: varchar("phone", { length: 32 }).notNull().default(""),
+  website: varchar("website", { length: 200 }).notNull().default(""),
+  addressLine1: varchar("address_line_1", { length: 200 }).notNull().default(""),
+  addressLine2: varchar("address_line_2", { length: 200 }).notNull().default(""),
+  city: varchar("city", { length: 80 }).notNull().default(""),
+  state: varchar("state", { length: 80 }).notNull().default(""),
+  postalCode: varchar("postal_code", { length: 10 }).notNull().default(""),
+  country: varchar("country", { length: 80 }).notNull().default("India"),
+  timezone: varchar("timezone", { length: 64 }).notNull().default("Asia/Kolkata"),
+  currency: varchar("currency", { length: 8 }).notNull().default("INR"),
+  taxRateBps: int("tax_rate_bps").notNull().default(1200),
+  checkInTime: varchar("check_in_time", { length: 8 }).notNull().default("14:00"),
+  checkOutTime: varchar("check_out_time", { length: 8 }).notNull().default("11:00"),
+  invoicePrefix: varchar("invoice_prefix", { length: 16 }).notNull().default("INV"),
+  logoUrl: varchar("logo_url", { length: 500 }).notNull().default(""),
+  updatedBy: id("updated_by").references(() => users.id, { onDelete: "set null", onUpdate: "cascade" }),
+  createdAt: createdAt(),
+  updatedAt: updatedAt(),
+});

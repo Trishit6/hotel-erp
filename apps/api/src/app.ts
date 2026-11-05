@@ -4,6 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { env } from "./config/env";
 import { attachUser } from "./middleware/auth";
+import { requestLogger } from "./middleware/requestLogger";
 import { errorHandler, notFoundHandler } from "./middleware/error";
 import { globalLimiter } from "./middleware/rateLimit";
 import { HttpError } from "./utils/http";
@@ -42,6 +43,7 @@ export function createApp() {
 
   app.use(express.json({ limit: "200kb" }));
   app.use(cookieParser());
+  app.use(requestLogger);
   app.use(attachUser);
   app.use(globalLimiter);
 

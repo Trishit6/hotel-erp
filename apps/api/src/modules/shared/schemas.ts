@@ -189,3 +189,58 @@ export const userUpdateSchema = z.object({
   isActive: z.boolean().optional(),
   password: z.string().min(12).max(200).optional(),
 });
+
+export const roomTypeSchema = z.object({
+  name: z.string().trim().min(2).max(120),
+  description: z.string().trim().min(2).max(2000),
+  capacity: z.coerce.number().int().min(1).max(20),
+  size: z.coerce.number().int().min(1).max(2000),
+  rate: z.coerce.number().positive("Enter a nightly rate."),
+  image: z.string().trim().max(500).default(""),
+  amenities: z.array(z.string().trim().min(1).max(120)).max(30).default([]),
+});
+
+export const roomUpdateSchema = z.object({
+  number: z.string().trim().min(1).max(20).optional(),
+  typeId: z.string().min(1).max(64).optional(),
+  floor: z.coerce.number().int().min(0).max(100).optional(),
+  notes: z.string().max(500).optional(),
+});
+
+export const inventoryUpdateSchema = inventorySchema.partial();
+
+export const expenseUpdateSchema = expenseSchema.partial();
+
+export const attendanceUpsertSchema = z.object({
+  date: dateOnly,
+  status: z.enum(ATTENDANCE_STATUSES),
+  clockIn: z.string().max(8).nullable().optional(),
+  clockOut: z.string().max(8).nullable().optional(),
+});
+
+const timeOfDay = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Use 24-hour time such as 14:00.");
+
+export const settingsUpdateSchema = z
+  .object({
+    hotelName: z.string().trim().min(2).max(120),
+    legalName: z.string().trim().max(160),
+    email: z.union([z.literal(""), email]),
+    phone: z.string().trim().max(32),
+    website: z.string().trim().max(200),
+    addressLine1: z.string().trim().max(200),
+    addressLine2: z.string().trim().max(200),
+    city: z.string().trim().max(80),
+    state: z.string().trim().max(80),
+    postalCode: z.string().trim().max(10),
+    country: z.string().trim().max(80),
+    timezone: z.string().trim().min(1).max(64),
+    currency: z.string().trim().length(3),
+    taxRateBps: z.coerce.number().int().min(0).max(5000),
+    checkInTime: timeOfDay,
+    checkOutTime: timeOfDay,
+    invoicePrefix: z.string().trim().min(1).max(16),
+    logoUrl: z.string().trim().max(500),
+  })
+  .partial()
+  .refine((value) => Object.keys(value).length > 0, "Provide at least one setting to update.");
+

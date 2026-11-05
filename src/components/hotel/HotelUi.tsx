@@ -1,29 +1,217 @@
-import { ArrowUpRight, BedDouble, Check, ChevronRight, CircleAlert, Sparkles } from "lucide-react";
+import {
+  ArrowUpRight,
+  BedDouble,
+  Check,
+  ChevronRight,
+  CircleAlert,
+  Sparkles,
+} from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { dateAt, formatCurrency, type Room } from "../../lib/hotel-data";
 import { useHotel } from "../../lib/hotel-store";
 
 export function BrandMark({ dark = false }: { dark?: boolean }) {
-  return <Link to="/" className="flex w-fit items-center gap-2.5 group"><span className={`grid h-9 w-9 place-items-center rounded-xl ${dark ? "bg-white/10" : "bg-[var(--primary)]"}`}><span className="h-3 w-3 rounded-full border-2 border-[var(--accent)]" /></span><span className={`text-sm font-semibold tracking-[0.18em] ${dark ? "text-white" : "text-[var(--ink)]"}`}>RIVR</span></Link>;
+  return (
+    <Link to="/" className="flex w-fit items-center gap-2.5 group">
+      <span
+        className={`grid h-9 w-9 place-items-center rounded-xl ${dark ? "bg-white/10" : "bg-[var(--primary)]"}`}
+      >
+        <span className="h-3 w-3 rounded-full border-2 border-[var(--accent)]" />
+      </span>
+      <span
+        className={`text-sm font-semibold tracking-[0.18em] ${dark ? "text-white" : "text-[var(--ink)]"}`}
+      >
+        RIVR
+      </span>
+    </Link>
+  );
 }
 
 export function StatusBadge({ status }: { status: string }) {
-  const styles: Record<string, string> = { available: "bg-[var(--success-soft)] text-[var(--success)]", confirmed: "bg-[var(--info-soft)] text-[var(--info)]", pending: "bg-[var(--warning-soft)] text-[var(--warning)]", occupied: "bg-[var(--warning-soft)] text-[var(--warning)]", reserved: "bg-[var(--violet-soft)] text-[var(--violet)]", cleaning: "bg-[var(--info-soft)] text-[var(--info)]", maintenance: "bg-[var(--danger-soft)] text-[var(--danger)]", "out-of-order": "bg-[var(--danger-soft)] text-[var(--danger)]", "checked-in": "bg-[var(--success-soft)] text-[var(--success)]", "checked-out": "bg-[var(--neutral-soft)] text-[var(--neutral)]", cancelled: "bg-[var(--danger-soft)] text-[var(--danger)]", "no-show": "bg-[var(--danger-soft)] text-[var(--danger)]", dirty: "bg-[var(--danger-soft)] text-[var(--danger)]", assigned: "bg-[var(--warning-soft)] text-[var(--warning)]", "in-progress": "bg-[var(--info-soft)] text-[var(--info)]", cleaned: "bg-[var(--success-soft)] text-[var(--success)]", inspected: "bg-[var(--success-soft)] text-[var(--success)]", paid: "bg-[var(--success-soft)] text-[var(--success)]", partial: "bg-[var(--warning-soft)] text-[var(--warning)]", refunded: "bg-[var(--neutral-soft)] text-[var(--neutral)]", completed: "bg-[var(--success-soft)] text-[var(--success)]", approved: "bg-[var(--success-soft)] text-[var(--success)]", rejected: "bg-[var(--danger-soft)] text-[var(--danger)]" };
-  return <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium capitalize ${styles[status] ?? "bg-[var(--surface-2)] text-[var(--muted)]"}`}><span className="h-1.5 w-1.5 rounded-full bg-current" />{status.replaceAll("-", " ")}</span>;
+  const styles: Record<string, string> = {
+    available: "bg-[var(--success-soft)] text-[var(--success)]",
+    confirmed: "bg-[var(--info-soft)] text-[var(--info)]",
+    pending: "bg-[var(--warning-soft)] text-[var(--warning)]",
+    occupied: "bg-[var(--warning-soft)] text-[var(--warning)]",
+    reserved: "bg-[var(--violet-soft)] text-[var(--violet)]",
+    cleaning: "bg-[var(--info-soft)] text-[var(--info)]",
+    maintenance: "bg-[var(--danger-soft)] text-[var(--danger)]",
+    "out-of-order": "bg-[var(--danger-soft)] text-[var(--danger)]",
+    "checked-in": "bg-[var(--success-soft)] text-[var(--success)]",
+    "checked-out": "bg-[var(--neutral-soft)] text-[var(--neutral)]",
+    cancelled: "bg-[var(--danger-soft)] text-[var(--danger)]",
+    "no-show": "bg-[var(--danger-soft)] text-[var(--danger)]",
+    dirty: "bg-[var(--danger-soft)] text-[var(--danger)]",
+    assigned: "bg-[var(--warning-soft)] text-[var(--warning)]",
+    "in-progress": "bg-[var(--info-soft)] text-[var(--info)]",
+    cleaned: "bg-[var(--success-soft)] text-[var(--success)]",
+    inspected: "bg-[var(--success-soft)] text-[var(--success)]",
+    paid: "bg-[var(--success-soft)] text-[var(--success)]",
+    partial: "bg-[var(--warning-soft)] text-[var(--warning)]",
+    refunded: "bg-[var(--neutral-soft)] text-[var(--neutral)]",
+    completed: "bg-[var(--success-soft)] text-[var(--success)]",
+    approved: "bg-[var(--success-soft)] text-[var(--success)]",
+    rejected: "bg-[var(--danger-soft)] text-[var(--danger)]",
+  };
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium capitalize ${styles[status] ?? "bg-[var(--surface-2)] text-[var(--muted)]"}`}
+    >
+      <span className="h-1.5 w-1.5 rounded-full bg-current" />
+      {status.replaceAll("-", " ")}
+    </span>
+  );
 }
 
-export function RoomVisual({ room, compact = false }: { room: Room; compact?: boolean }) {
+export function RoomVisual({
+  room,
+  compact = false,
+}: {
+  room: Room;
+  compact?: boolean;
+}) {
   const { getRoomType } = useHotel();
   const type = getRoomType(room.typeId);
-  return <div className={`relative overflow-hidden rounded-[1.2rem] bg-[var(--surface-3)] ${compact ? "h-24" : "h-48"}`}><img src={type?.image} alt={`${type?.name ?? "Room"} interior`} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-t from-[var(--deep)]/65 via-transparent to-transparent" /><div className="absolute bottom-4 left-4 flex items-center gap-2 text-white/90"><BedDouble className={compact ? "h-4 w-4" : "h-5 w-5"} /><span className={compact ? "text-[10px]" : "text-xs"}>Room {room.number}</span></div></div>;
+  return (
+    <div
+      className={`relative overflow-hidden rounded-[1.2rem] bg-[var(--surface-3)] ${compact ? "h-24" : "h-48"}`}
+    >
+      <img
+        src={type?.image}
+        alt={`${type?.name ?? "Room"} interior`}
+        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-[var(--deep)]/65 via-transparent to-transparent" />
+      <div className="absolute bottom-4 left-4 flex items-center gap-2 text-white/90">
+        <BedDouble className={compact ? "h-4 w-4" : "h-5 w-5"} />
+        <span className={compact ? "text-[10px]" : "text-xs"}>
+          Room {room.number}
+        </span>
+      </div>
+    </div>
+  );
 }
 
-export function SectionEyebrow({ children }: { children: ReactNode }) { return <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--muted)]"><Sparkles className="h-3.5 w-3.5 text-[var(--accent-strong)]" />{children}</div>; }
-export function FeatureLine({ children }: { children: ReactNode }) { return <li className="flex items-center gap-2 text-xs text-[var(--muted)]"><span className="grid h-4 w-4 place-items-center rounded-full bg-[var(--success-soft)] text-[var(--success)]"><Check className="h-2.5 w-2.5" /></span>{children}</li>; }
-export function EmptyState({ title, copy }: { title: string; copy: string }) { return <div className="rounded-2xl border border-dashed border-[var(--line-strong)] bg-[var(--surface)] p-10 text-center"><CircleAlert className="mx-auto mb-3 h-7 w-7 text-[var(--faint)]" /><h3 className="text-base font-semibold text-[var(--text)]">{title}</h3><p className="mt-1 text-sm text-[var(--faint)]">{copy}</p></div>; }
-export function ArrowButton({ children }: { children: ReactNode }) { return <span className="inline-flex items-center gap-2 rounded-full bg-[var(--primary)] px-4 py-2.5 text-xs font-semibold text-[var(--on-primary)] transition-transform group-hover:translate-x-0.5"><span>{children}</span><ArrowUpRight className="h-4 w-4" /></span>; }
-export function BackLink({ to = "/", children }: { to?: "/" | "/search" | "/admin/dashboard"; children: ReactNode }) { if (to === "/search") return <Link to="/search" search={{ checkIn: dateAt(1), checkOut: dateAt(3), adults: 2, children: 0, rooms: 1, guests: 2 }} className="inline-flex items-center gap-1 text-xs text-[var(--muted)] hover:text-[var(--ink)]"><ChevronRight className="h-3.5 w-3.5 rotate-180" />{children}</Link>; return <Link to={to} className="inline-flex items-center gap-1 text-xs text-[var(--muted)] hover:text-[var(--ink)]"><ChevronRight className="h-3.5 w-3.5 rotate-180" />{children}</Link>; }
-export function Card({ children, className = "" }: { children: ReactNode; className?: string }) { return <section className={`rounded-[1.15rem] border border-[var(--line)] bg-[var(--surface)] shadow-[0_8px_28px_rgba(31,43,60,0.04)] ${className}`}>{children}</section>; }
-export function MetricCard({ label, value, detail, icon: Icon, tone = "sage" }: { label: string; value: string; detail: string; icon: React.ComponentType<{ className?: string }>; tone?: "sage" | "blue" | "gold" | "rose" }) { const tones = { sage: "bg-[var(--success-soft)] text-[var(--success)]", blue: "bg-[var(--info-soft)] text-[var(--info)]", gold: "bg-[var(--warning-soft)] text-[var(--warning)]", rose: "bg-[var(--danger-soft)] text-[var(--danger)]" }; return <Card className="p-4"><div className={`grid h-9 w-9 place-items-center rounded-xl ${tones[tone]}`}><Icon className="h-4 w-4" /></div><p className="mt-5 text-xs text-[var(--faint)]">{label}</p><p className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-[var(--text)]">{value}</p><p className="mt-1 text-[11px] text-[var(--faint)]">{detail}</p></Card>; }
-export function Money({ value }: { value: number }) { return <span>{formatCurrency(value)}</span>; }
+export function SectionEyebrow({ children }: { children: ReactNode }) {
+  return (
+    <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+      <Sparkles className="h-3.5 w-3.5 text-[var(--accent-strong)]" />
+      {children}
+    </div>
+  );
+}
+export function FeatureLine({ children }: { children: ReactNode }) {
+  return (
+    <li className="flex items-center gap-2 text-xs text-[var(--muted)]">
+      <span className="grid h-4 w-4 place-items-center rounded-full bg-[var(--success-soft)] text-[var(--success)]">
+        <Check className="h-2.5 w-2.5" />
+      </span>
+      {children}
+    </li>
+  );
+}
+export function EmptyState({ title, copy }: { title: string; copy: string }) {
+  return (
+    <div className="rounded-2xl border border-dashed border-[var(--line-strong)] bg-[var(--surface)] p-10 text-center">
+      <CircleAlert className="mx-auto mb-3 h-7 w-7 text-[var(--faint)]" />
+      <h3 className="text-base font-semibold text-[var(--text)]">{title}</h3>
+      <p className="mt-1 text-sm text-[var(--faint)]">{copy}</p>
+    </div>
+  );
+}
+export function ArrowButton({ children }: { children: ReactNode }) {
+  return (
+    <span className="inline-flex items-center gap-2 rounded-full bg-[var(--primary)] px-4 py-2.5 text-xs font-semibold text-[var(--on-primary)] transition-transform group-hover:translate-x-0.5">
+      <span>{children}</span>
+      <ArrowUpRight className="h-4 w-4" />
+    </span>
+  );
+}
+export function BackLink({
+  to = "/",
+  children,
+}: {
+  to?: "/" | "/search" | "/admin/dashboard";
+  children: ReactNode;
+}) {
+  if (to === "/search")
+    return (
+      <Link
+        to="/search"
+        search={{
+          checkIn: dateAt(1),
+          checkOut: dateAt(3),
+          adults: 2,
+          children: 0,
+          rooms: 1,
+          guests: 2,
+        }}
+        className="inline-flex items-center gap-1 text-xs text-[var(--muted)] hover:text-[var(--ink)]"
+      >
+        <ChevronRight className="h-3.5 w-3.5 rotate-180" />
+        {children}
+      </Link>
+    );
+  return (
+    <Link
+      to={to}
+      className="inline-flex items-center gap-1 text-xs text-[var(--muted)] hover:text-[var(--ink)]"
+    >
+      <ChevronRight className="h-3.5 w-3.5 rotate-180" />
+      {children}
+    </Link>
+  );
+}
+export function Card({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <section
+      className={`rounded-[1.15rem] border border-[var(--line)] bg-[var(--surface)] shadow-[0_8px_28px_rgba(31,43,60,0.04)] ${className}`}
+    >
+      {children}
+    </section>
+  );
+}
+export function MetricCard({
+  label,
+  value,
+  detail,
+  icon: Icon,
+  tone = "sage",
+}: {
+  label: string;
+  value: string;
+  detail: string;
+  icon: React.ComponentType<{ className?: string }>;
+  tone?: "sage" | "blue" | "gold" | "rose";
+}) {
+  const tones = {
+    sage: "bg-[var(--success-soft)] text-[var(--success)]",
+    blue: "bg-[var(--info-soft)] text-[var(--info)]",
+    gold: "bg-[var(--warning-soft)] text-[var(--warning)]",
+    rose: "bg-[var(--danger-soft)] text-[var(--danger)]",
+  };
+  return (
+    <Card className="p-4">
+      <div
+        className={`grid h-9 w-9 place-items-center rounded-xl ${tones[tone]}`}
+      >
+        <Icon className="h-4 w-4" />
+      </div>
+      <p className="mt-5 text-xs text-[var(--faint)]">{label}</p>
+      <p className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-[var(--text)]">
+        {value}
+      </p>
+      <p className="mt-1 text-[11px] text-[var(--faint)]">{detail}</p>
+    </Card>
+  );
+}
+export function Money({ value }: { value: number }) {
+  return <span>{formatCurrency(value)}</span>;
+}

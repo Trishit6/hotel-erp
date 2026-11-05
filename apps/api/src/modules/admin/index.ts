@@ -19,6 +19,7 @@ import {
   mapReservation,
   mapRoom,
   mapRoomType,
+  mapSettings,
   mapStaff,
   mapTask,
   mapUser,
@@ -36,6 +37,7 @@ import { expensesRouter } from "./expenses.routes";
 import { restaurantRouter } from "./restaurant.routes";
 import { reportsRouter } from "./reports.routes";
 import { usersRouter } from "./users.routes";
+import { settingsRouter } from "./settings.routes";
 
 export const adminRouter = Router();
 
@@ -57,7 +59,7 @@ adminRouter.get(
       db.select().from(schema.restaurantOrders).orderBy(desc(schema.restaurantOrders.createdAt)).limit(500),
     ]);
 
-    const [amenityRows, guestRows, paymentRows, invoiceRows, expenseRows, attendanceRows, activityRows, userRows] =
+    const [amenityRows, guestRows, paymentRows, invoiceRows, expenseRows, attendanceRows, activityRows, userRows, settingsRows] =
       await Promise.all([
         db.select().from(schema.roomTypeAmenities),
         can("guests:read")
@@ -69,6 +71,7 @@ adminRouter.get(
         can("attendance:read") ? db.select().from(schema.attendance).orderBy(desc(schema.attendance.date)).limit(500) : Promise.resolve([]),
         can("activity:read") ? db.select().from(schema.activityLogs).orderBy(desc(schema.activityLogs.createdAt)).limit(100) : Promise.resolve([]),
         can("users:manage") ? db.select().from(schema.users).orderBy(desc(schema.users.createdAt)) : Promise.resolve([]),
+        db.select().from(schema.systemSettings).limit(1),
       ]);
 
     const amenitiesByType = new Map<string, string[]>();
@@ -94,6 +97,7 @@ adminRouter.get(
       attendance: attendanceRows.map(mapAttendance),
       activities: activityRows.map(mapActivity),
       users: userRows.map(mapUser),
+      settings: can("settings:manage") && settingsRows[0] ? mapSettings(settingsRows[0]) : undefined,
     });
   }),
 );
@@ -137,3 +141,4 @@ adminRouter.use("/expenses", expensesRouter);
 adminRouter.use("/restaurant", restaurantRouter);
 adminRouter.use("/reports", reportsRouter);
 adminRouter.use("/users", usersRouter);
+adminRouter.use("/settings", settingsRouter);

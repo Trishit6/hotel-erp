@@ -15,6 +15,8 @@ export async function getDashboard() {
       total: sql<number>`count(*)`,
       available: sql<number>`sum(case when ${rooms.status} = 'available' then 1 else 0 end)`,
       occupied: sql<number>`sum(case when ${rooms.status} = 'occupied' then 1 else 0 end)`,
+      reserved: sql<number>`sum(case when ${rooms.status} = 'reserved' then 1 else 0 end)`,
+      cleaning: sql<number>`sum(case when ${rooms.status} = 'cleaning' then 1 else 0 end)`,
       offline: sql<number>`sum(case when ${rooms.status} in ('maintenance','out-of-order') then 1 else 0 end)`,
     })
     .from(rooms);
@@ -42,6 +44,34 @@ export async function getDashboard() {
 
   const recentActivities = await db.select().from(activityLogs).orderBy(sql`${activityLogs.createdAt} desc`).limit(8);
 
+  const todayDate = new Date(`${today}T00:00:00.000Z`);
+  const firstMonth = new Date(Date.UTC(todayDate.getUTCFullYear(), todayDate.getUTCMonth() - 11, 1));
+  const [monthlyRows] = await Promise.all([
+    db
+      .select({
+        month: sql<string>`date_format(${reservations.checkIn}, '%Y-%m')`,
+        revenue: sql<number>`coalesce(sum(${reservations.total}), 0)`,
+        bookings: sql<number>`count(*)`,
+      })
+      .from(reservations)
+      .where(and(gte(reservations.checkIn, firstMonth.toISOString().slice(0, 10)), ne(reservations.status, "cancelled")))
+      .groupBy(sql`date_format(${reservations.checkIn}, '%Y-%m')`)
+      .orderBy(sql`date_format(${reservations.checkIn}, '%Y-%m')`),
+  ]);
+
+  const monthlyByKey = new Map(monthlyRows.map((row) => [row.month, row]));
+  const revenueSeries = Array.from({ length: 12 }, (_, index) => {
+    const date = new Date(Date.UTC(firstMonth.getUTCFullYear(), firstMonth.getUTCMonth() + index, 1));
+    const key = date.toISOString().slice(0, 7);
+    const row = monthlyByKey.get(key);
+    return {
+      month: key,
+      label: date.toLocaleString("en-IN", { month: "short", timeZone: "UTC" }),
+      revenue: num(row?.revenue),
+      bookings: num(row?.bookings),
+    };
+  });
+
   const totalRooms = num(roomSummary?.total);
   const occupied = num(roomSummary?.occupied);
 
@@ -50,6 +80,8 @@ export async function getDashboard() {
       total: totalRooms,
       available: num(roomSummary?.available),
       occupied,
+      reserved: num(roomSummary?.reserved),
+      cleaning: num(roomSummary?.cleaning),
       offline: num(roomSummary?.offline),
       occupancy: totalRooms ? Math.round((occupied / totalRooms) * 100) : 0,
     },
@@ -64,6 +96,7 @@ export async function getDashboard() {
       revenue: num(reservationSummary?.revenue),
       outstanding: num(reservationSummary?.outstanding),
     },
+    revenueSeries,
     housekeeping: { open: num(taskSummary?.open) },
     inventory: { lowStock: num(inventorySummary?.low) },
     activities: recentActivities.map(mapActivity),
@@ -83,7 +116,13 @@ export async function getReportSummary(from: string, to: string) {
   const [paymentRow] = await db
     .select({ collected: sql<number>`coalesce(sum(${payments.amount}), 0)` })
     .from(payments)
-    .where(and(gte(payments.paidAt, new Date(`${from}T00:00:00Z`)), lte(payments.paidAt, new Date(`${to}T23:59:59Z`))));
+    .where(
+      and(
+        eq(payments.status, "completed"),
+        gte(payments.paidAt, new Date(`${from}T00:00:00Z`)),
+        lte(payments.paidAt, new Date(`${to}T23:59:59Z`)),
+      ),
+    );
 
   const [expenseRow] = await db
     .select({ approved: sql<number>`coalesce(sum(${expenses.amount}), 0)` })

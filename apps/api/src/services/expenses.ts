@@ -86,3 +86,54 @@ export async function approveExpense(
   const [updated] = await db.select().from(expenses).where(eq(expenses.id, id)).limit(1);
   return mapExpense(updated);
 }
+
+export async function updateExpense(
+  id: string,
+  input: Partial<{
+    category: string;
+    description: string;
+    amount: number;
+    method: PaymentMethod;
+    date: string;
+  }>,
+  actor: { id: string; name: string },
+) {
+  const [existing] = await db.select().from(expenses).where(eq(expenses.id, id)).limit(1);
+  if (!existing) throw notFound("Expense not found.");
+  if (existing.status !== "pending") throw conflict("Only pending expenses can be edited.");
+  await db
+    .update(expenses)
+    .set({
+      ...(input.category !== undefined ? { category: input.category } : {}),
+      ...(input.description !== undefined ? { description: input.description } : {}),
+      ...(input.amount !== undefined ? { amount: fromPaise(toPaise(input.amount)) } : {}),
+      ...(input.method !== undefined ? { method: input.method } : {}),
+      ...(input.date !== undefined ? { date: input.date } : {}),
+      updatedAt: new Date(),
+    })
+    .where(eq(expenses.id, id));
+  await logActivity(db, {
+    actor: actor.name,
+    action: "Updated expense",
+    detail: input.description ?? existing.description,
+    tone: "info",
+    userId: actor.id,
+  });
+  const [updated] = await db.select().from(expenses).where(eq(expenses.id, id)).limit(1);
+  return mapExpense(updated);
+}
+
+export async function deleteExpense(id: string, actor: { id: string; name: string }) {
+  const [existing] = await db.select().from(expenses).where(eq(expenses.id, id)).limit(1);
+  if (!existing) throw notFound("Expense not found.");
+  if (existing.status !== "pending") throw conflict("Only pending expenses can be deleted.");
+  await db.delete(expenses).where(eq(expenses.id, id));
+  await logActivity(db, {
+    actor: actor.name,
+    action: "Deleted expense",
+    detail: `${existing.description} - INR ${existing.amount}`,
+    tone: "warning",
+    userId: actor.id,
+  });
+  return { ok: true };
+}

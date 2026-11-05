@@ -8,6 +8,13 @@
       "when": 1793772301867,
       "tag": "0000_complex_hawkeye",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1793860725728,
+      "tag": "0001_solid_black_panther",
+      "breakpoints": true
     }
   ]
 }

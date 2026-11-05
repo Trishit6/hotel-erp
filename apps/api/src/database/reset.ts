@@ -26,6 +26,7 @@ export const TABLES = [
   "users",
   "staff",
   "roles",
+  "system_settings",
   "schema_migrations",
 ] as const;
 

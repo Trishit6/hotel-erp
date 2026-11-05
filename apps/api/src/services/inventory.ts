@@ -92,3 +92,60 @@ export async function adjustInventory(id: string, amount: number, actor: { id: s
     return mapInventory(updated);
   });
 }
+
+export async function updateInventoryItem(
+  id: string,
+  input: Partial<{
+    name: string;
+    category: string;
+    quantity: number;
+    unit: string;
+    minimumStock: number;
+    supplier: string;
+    purchasePrice: number;
+  }>,
+  actor: { id: string; name: string },
+) {
+  const [existing] = await db.select().from(inventory).where(eq(inventory.id, id)).limit(1);
+  if (!existing) throw notFound("Inventory item not found.");
+  if (input.name && input.name !== existing.name) {
+    const [duplicate] = await db.select({ id: inventory.id }).from(inventory).where(eq(inventory.name, input.name)).limit(1);
+    if (duplicate) throw badRequest("An inventory item with that name already exists.");
+  }
+  await db
+    .update(inventory)
+    .set({
+      ...(input.name !== undefined ? { name: input.name } : {}),
+      ...(input.category !== undefined ? { category: input.category } : {}),
+      ...(input.quantity !== undefined ? { quantity: input.quantity } : {}),
+      ...(input.unit !== undefined ? { unit: input.unit } : {}),
+      ...(input.minimumStock !== undefined ? { minimumStock: input.minimumStock } : {}),
+      ...(input.supplier !== undefined ? { supplier: input.supplier } : {}),
+      ...(input.purchasePrice !== undefined ? { purchasePrice: fromPaise(toPaise(input.purchasePrice)) } : {}),
+      updatedAt: new Date(),
+    })
+    .where(eq(inventory.id, id));
+  await logActivity(db, {
+    actor: actor.name,
+    action: "Updated inventory item",
+    detail: input.name ?? existing.name,
+    tone: "info",
+    userId: actor.id,
+  });
+  const [updated] = await db.select().from(inventory).where(eq(inventory.id, id)).limit(1);
+  return mapInventory(updated);
+}
+
+export async function deleteInventoryItem(id: string, actor: { id: string; name: string }) {
+  const [existing] = await db.select().from(inventory).where(eq(inventory.id, id)).limit(1);
+  if (!existing) throw notFound("Inventory item not found.");
+  await db.delete(inventory).where(eq(inventory.id, id));
+  await logActivity(db, {
+    actor: actor.name,
+    action: "Deleted inventory item",
+    detail: existing.name,
+    tone: "warning",
+    userId: actor.id,
+  });
+  return { ok: true };
+}

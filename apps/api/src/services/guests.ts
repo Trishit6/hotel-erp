@@ -1,7 +1,7 @@
 import { and, asc, desc, eq, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "../database/client";
-import { guests } from "../database/schema";
-import { badRequest, notFound } from "../utils/http";
+import { guests, reservations } from "../database/schema";
+import { badRequest, conflict, notFound } from "../utils/http";
 import { paginated } from "../utils/pagination";
 import { newId } from "../utils/id";
 import { logActivity } from "./activity";
@@ -134,4 +134,25 @@ export async function updateGuest(
     userId: actor.id,
   });
   return getGuest(id);
+}
+
+export async function deleteGuest(id: string, actor: { id: string; name: string }) {
+  const [existing] = await db.select().from(guests).where(eq(guests.id, id)).limit(1);
+  if (!existing) throw notFound("Guest not found.");
+  const [reservationCount] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(reservations)
+    .where(eq(reservations.guestId, id));
+  if (Number(reservationCount?.count ?? 0) > 0) {
+    throw conflict("This guest has reservation history and cannot be deleted.");
+  }
+  await db.delete(guests).where(eq(guests.id, id));
+  await logActivity(db, {
+    actor: actor.name,
+    action: "Deleted guest",
+    detail: existing.name,
+    tone: "warning",
+    userId: actor.id,
+  });
+  return { ok: true };
 }

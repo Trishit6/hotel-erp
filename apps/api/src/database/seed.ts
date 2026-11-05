@@ -18,6 +18,7 @@ import {
   seedRoles,
   seedRoomTypes,
   seedRooms,
+  seedSettings,
   seedStaff,
 } from "./seed-data";
 
@@ -38,6 +39,7 @@ const BUSINESS_TABLES = [
   "sessions",
   "users",
   "staff",
+  "system_settings",
 ] as const;
 
 export async function clearBusinessData(): Promise<void> {
@@ -67,6 +69,31 @@ export async function seedDatabase(): Promise<void> {
   await seedRolesOnly();
 
   const now = new Date();
+
+  await db
+    .insert(schema.systemSettings)
+    .values({ ...seedSettings, updatedAt: now })
+    .onDuplicateKeyUpdate({
+      set: {
+        hotelName: sql`values(hotel_name)`,
+        legalName: sql`values(legal_name)`,
+        email: sql`values(email)`,
+        phone: sql`values(phone)`,
+        addressLine1: sql`values(address_line_1)`,
+        addressLine2: sql`values(address_line_2)`,
+        city: sql`values(city)`,
+        state: sql`values(state)`,
+        postalCode: sql`values(postal_code)`,
+        country: sql`values(country)`,
+        timezone: sql`values(timezone)`,
+        currency: sql`values(currency)`,
+        taxRateBps: sql`values(tax_rate_bps)`,
+        checkInTime: sql`values(check_in_time)`,
+        checkOutTime: sql`values(check_out_time)`,
+        invoicePrefix: sql`values(invoice_prefix)`,
+        updatedAt: now,
+      },
+    });
 
   await db.insert(schema.roomTypes).values(seedRoomTypes.map(({ amenities, ...type }) => ({ ...type, updatedAt: now })));
   await db.insert(schema.roomTypeAmenities).values(

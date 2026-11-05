@@ -2,7 +2,7 @@ import { Router } from "express";
 import { requirePermission } from "../../middleware/auth";
 import { validate } from "../../middleware/validate";
 import { asyncHandler } from "../../utils/http";
-import { attendanceUpdateSchema, idParam, staffSchema } from "../shared/schemas";
+import { attendanceUpdateSchema, attendanceUpsertSchema, idParam, staffSchema } from "../shared/schemas";
 import { attendanceQuerySchema } from "../shared/query";
 import { actorFrom } from "../shared/actor";
 import {
@@ -11,6 +11,7 @@ import {
   listStaff,
   updateAttendance,
   updateStaff,
+  upsertAttendance,
 } from "../../services/staff";
 
 export const staffRouter = Router();
@@ -40,6 +41,16 @@ staffRouter.patch(
   validate(attendanceUpdateSchema),
   asyncHandler(async (req, res) => {
     res.json({ attendance: await updateAttendance(req.params.id, req.body, actorFrom(req)) });
+  }),
+);
+
+staffRouter.post(
+  "/:id/attendance",
+  requirePermission("attendance:write"),
+  validate(idParam, "params"),
+  validate(attendanceUpsertSchema),
+  asyncHandler(async (req, res) => {
+    res.json({ attendance: await upsertAttendance(req.params.id, req.body, actorFrom(req)) });
   }),
 );
 

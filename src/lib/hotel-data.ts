@@ -179,6 +179,68 @@ export interface Review {
   date: string;
 }
 
+export interface PublicSettings {
+  hotelName: string;
+  email: string;
+  phone: string;
+  website: string;
+  address: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+  timezone: string;
+  currency: string;
+  taxRateBps: number;
+  taxRatePercent: number;
+  checkInTime: string;
+  checkOutTime: string;
+  logoUrl: string;
+}
+
+export interface SystemSettings extends PublicSettings {
+  id: string;
+  legalName: string;
+  addressLine1: string;
+  addressLine2: string;
+  invoicePrefix: string;
+  updatedAt: string;
+}
+
+export interface RevenuePoint {
+  month: string;
+  label: string;
+  revenue: number;
+  bookings: number;
+}
+
+export interface DashboardSummary {
+  rooms: {
+    total: number;
+    available: number;
+    occupied: number;
+    reserved: number;
+    cleaning: number;
+    offline: number;
+    occupancy: number;
+  };
+  reservations: {
+    total: number;
+    pending: number;
+    confirmed: number;
+    checkedIn: number;
+    cancelled: number;
+    arrivals: number;
+    departures: number;
+    revenue: number;
+    outstanding: number;
+  };
+  revenueSeries: RevenuePoint[];
+  housekeeping: { open: number };
+  inventory: { lowStock: number };
+  activities: ActivityLog[];
+}
+
 export const IST_TIME_ZONE = "Asia/Kolkata";
 
 function currentIstParts() {

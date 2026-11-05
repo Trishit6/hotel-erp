@@ -5,7 +5,7 @@ import { asyncHandler } from "../../utils/http";
 import { guestSchema, guestUpdateSchema, idParam } from "../shared/schemas";
 import { guestQuerySchema } from "../shared/query";
 import { actorFrom } from "../shared/actor";
-import { createGuest, getGuest, listGuests, updateGuest } from "../../services/guests";
+import { createGuest, deleteGuest, getGuest, listGuests, updateGuest } from "../../services/guests";
 import { notFound } from "../../utils/http";
 
 export const guestsRouter = Router();
@@ -46,5 +46,15 @@ guestsRouter.patch(
   validate(guestUpdateSchema),
   asyncHandler(async (req, res) => {
     res.json({ guest: await updateGuest(req.params.id, req.body, actorFrom(req)) });
+  }),
+);
+
+guestsRouter.delete(
+  "/:id",
+  requirePermission("guests:write"),
+  validate(idParam, "params"),
+  asyncHandler(async (req, res) => {
+    await deleteGuest(req.params.id, actorFrom(req));
+    res.status(204).end();
   }),
 );

@@ -1,5 +1,14 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ArrowUpRight, CalendarDays, Mail, MapPin, Menu, Phone, ShieldCheck, X } from "lucide-react";
+import {
+  ArrowUpRight,
+  CalendarDays,
+  Mail,
+  MapPin,
+  Menu,
+  Phone,
+  ShieldCheck,
+  X,
+} from "lucide-react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { defaultStaySearch, hotelInfo } from "../../lib/hotel-data";
@@ -13,7 +22,17 @@ function scrollToSection(id: string, smooth = true) {
   window.scrollTo({ top, behavior: smooth ? "smooth" : "auto" });
 }
 
-export function SectionLink({ id, className, onNavigate, children }: { id: string; className: string; onNavigate?: () => void; children: ReactNode }) {
+export function SectionLink({
+  id,
+  className,
+  onNavigate,
+  children,
+}: {
+  id: string;
+  className: string;
+  onNavigate?: () => void;
+  children: ReactNode;
+}) {
   const location = useLocation();
   const navigate = useNavigate();
   const reduceMotion = useReducedMotion();
@@ -22,7 +41,10 @@ export function SectionLink({ id, className, onNavigate, children }: { id: strin
     event.preventDefault();
     onNavigate?.();
     navigate({ to: "/", hash: id, resetScroll: false });
-    window.setTimeout(() => scrollToSection(id, !reduceMotion), location.pathname === "/" ? 0 : 90);
+    window.setTimeout(
+      () => scrollToSection(id, !reduceMotion),
+      location.pathname === "/" ? 0 : 90,
+    );
   };
 
   return (
@@ -77,9 +99,20 @@ export function PublicHeader() {
   const close = useCallback(() => setOpen(false), []);
   const path = location.pathname;
   const isHome = path === "/";
-  const roomsActive = path === "/rooms" || path === "/search" || path.startsWith("/book/");
-  const bookingsActive = path === "/my-bookings" || path.startsWith("/booking/lookup") || path === "/booking/success";
-  const authActive = ["/login", "/register", "/forgot-password", "/reset-password", "/verify-email", "/admin/login"].includes(path);
+  const roomsActive =
+    path === "/rooms" || path === "/search" || path.startsWith("/book/");
+  const bookingsActive =
+    path === "/my-bookings" ||
+    path.startsWith("/booking/lookup") ||
+    path === "/booking/success";
+  const authActive = [
+    "/login",
+    "/register",
+    "/forgot-password",
+    "/reset-password",
+    "/verify-email",
+    "/admin/login",
+  ].includes(path);
 
   return (
     <header
@@ -92,30 +125,94 @@ export function PublicHeader() {
       <div className="mx-auto flex min-h-[76px] max-w-[1440px] items-center justify-between gap-4 px-5 md:px-8 lg:px-10">
         <BrandMark />
 
-        <nav aria-label="Primary" className="hidden items-center gap-5 text-[13px] font-medium text-[var(--muted)] lg:flex xl:gap-8">
-          <Link to="/" className="relative py-2 transition-colors hover:text-[var(--ink)]" activeProps={{ className: "text-[var(--ink)]" }} activeOptions={{ exact: true }}>
+        <nav
+          aria-label="Primary"
+          className="hidden items-center gap-5 text-[13px] font-medium text-[var(--muted)] lg:flex xl:gap-8"
+        >
+          <Link
+            to="/"
+            className="relative py-2 transition-colors hover:text-[var(--ink)]"
+            activeProps={{ className: "text-[var(--ink)]" }}
+            activeOptions={{ exact: true }}
+          >
             Home
-            {isHome && <motion.span layoutId="nav-active" className="absolute -bottom-0.5 left-0 right-0 h-px bg-[var(--accent)]" transition={underline} />}
+            {isHome && (
+              <motion.span
+                layoutId="nav-active"
+                className="absolute -bottom-0.5 left-0 right-0 h-px bg-[var(--accent)]"
+                transition={underline}
+              />
+            )}
           </Link>
-          <Link to="/stay" className="relative py-2 transition-colors hover:text-[var(--ink)]" activeProps={{ className: "text-[var(--ink)]" }}>
+          <Link
+            to="/stay"
+            className="relative py-2 transition-colors hover:text-[var(--ink)]"
+            activeProps={{ className: "text-[var(--ink)]" }}
+          >
             Stay With Us
-            {path === "/stay" && <motion.span layoutId="nav-active" className="absolute -bottom-0.5 left-0 right-0 h-px bg-[var(--accent)]" transition={underline} />}
+            {path === "/stay" && (
+              <motion.span
+                layoutId="nav-active"
+                className="absolute -bottom-0.5 left-0 right-0 h-px bg-[var(--accent)]"
+                transition={underline}
+              />
+            )}
           </Link>
-          <Link to="/rooms" className="relative py-2 transition-colors hover:text-[var(--ink)]" activeProps={{ className: "text-[var(--ink)]" }}>
+          <Link
+            to="/rooms"
+            className="relative py-2 transition-colors hover:text-[var(--ink)]"
+            activeProps={{ className: "text-[var(--ink)]" }}
+          >
             Explore Rooms
-            {roomsActive && <motion.span layoutId="nav-active" className="absolute -bottom-0.5 left-0 right-0 h-px bg-[var(--accent)]" transition={underline} />}
+            {roomsActive && (
+              <motion.span
+                layoutId="nav-active"
+                className="absolute -bottom-0.5 left-0 right-0 h-px bg-[var(--accent)]"
+                transition={underline}
+              />
+            )}
           </Link>
-          <Link to="/amenities" className="relative py-2 transition-colors hover:text-[var(--ink)]" activeProps={{ className: "text-[var(--ink)]" }}>
+          <Link
+            to="/amenities"
+            className="relative py-2 transition-colors hover:text-[var(--ink)]"
+            activeProps={{ className: "text-[var(--ink)]" }}
+          >
             Amenities
-            {path === "/amenities" && <motion.span layoutId="nav-active" className="absolute -bottom-0.5 left-0 right-0 h-px bg-[var(--accent)]" transition={underline} />}
+            {path === "/amenities" && (
+              <motion.span
+                layoutId="nav-active"
+                className="absolute -bottom-0.5 left-0 right-0 h-px bg-[var(--accent)]"
+                transition={underline}
+              />
+            )}
           </Link>
-          <Link to="/about" className="relative py-2 transition-colors hover:text-[var(--ink)]" activeProps={{ className: "text-[var(--ink)]" }}>
+          <Link
+            to="/about"
+            className="relative py-2 transition-colors hover:text-[var(--ink)]"
+            activeProps={{ className: "text-[var(--ink)]" }}
+          >
             About Us
-            {path === "/about" && <motion.span layoutId="nav-active" className="absolute -bottom-0.5 left-0 right-0 h-px bg-[var(--accent)]" transition={underline} />}
+            {path === "/about" && (
+              <motion.span
+                layoutId="nav-active"
+                className="absolute -bottom-0.5 left-0 right-0 h-px bg-[var(--accent)]"
+                transition={underline}
+              />
+            )}
           </Link>
-          <Link to="/contact" className="relative py-2 transition-colors hover:text-[var(--ink)]" activeProps={{ className: "text-[var(--ink)]" }}>
+          <Link
+            to="/contact"
+            className="relative py-2 transition-colors hover:text-[var(--ink)]"
+            activeProps={{ className: "text-[var(--ink)]" }}
+          >
             Contact
-            {path === "/contact" && <motion.span layoutId="nav-active" className="absolute -bottom-0.5 left-0 right-0 h-px bg-[var(--accent)]" transition={underline} />}
+            {path === "/contact" && (
+              <motion.span
+                layoutId="nav-active"
+                className="absolute -bottom-0.5 left-0 right-0 h-px bg-[var(--accent)]"
+                transition={underline}
+              />
+            )}
           </Link>
         </nav>
 
@@ -126,12 +223,20 @@ export function PublicHeader() {
             activeProps={{ className: "text-[var(--ink)]" }}
           >
             My Bookings
-            {bookingsActive && <motion.span layoutId="nav-active" className="absolute -bottom-0.5 left-0 right-0 h-px bg-[var(--accent)]" transition={underline} />}
+            {bookingsActive && (
+              <motion.span
+                layoutId="nav-active"
+                className="absolute -bottom-0.5 left-0 right-0 h-px bg-[var(--accent)]"
+                transition={underline}
+              />
+            )}
           </Link>
           <Link
             to="/my-bookings"
             className="hidden h-10 w-10 place-items-center rounded-full border border-[var(--line-2)] text-[var(--muted-strong)] transition-colors hover:border-[var(--ink)] hover:text-[var(--ink)] lg:grid xl:hidden"
-            activeProps={{ className: "border-[var(--accent)] text-[var(--ink)]" }}
+            activeProps={{
+              className: "border-[var(--accent)] text-[var(--ink)]",
+            }}
             aria-label="My bookings"
             title="My bookings"
           >
@@ -140,7 +245,9 @@ export function PublicHeader() {
           <Link
             to="/login"
             className="hidden h-10 w-10 place-items-center rounded-full border border-[var(--line-2)] text-[var(--muted-strong)] transition-colors hover:border-[var(--ink)] hover:text-[var(--ink)] sm:grid xl:hidden"
-            activeProps={{ className: "border-[var(--accent)] text-[var(--ink)]" }}
+            activeProps={{
+              className: "border-[var(--accent)] text-[var(--ink)]",
+            }}
             aria-label="Sign in"
             title="Sign in"
           >
@@ -149,7 +256,9 @@ export function PublicHeader() {
           <Link
             to="/login"
             className="hidden items-center gap-2 rounded-full border border-[var(--line-2)] px-3.5 py-2.5 text-xs font-medium text-[var(--muted-strong)] transition-colors hover:border-[var(--ink)] hover:text-[var(--ink)] xl:flex"
-            activeProps={{ className: "border-[var(--accent)] text-[var(--ink)]" }}
+            activeProps={{
+              className: "border-[var(--accent)] text-[var(--ink)]",
+            }}
           >
             <ShieldCheck className="h-3.5 w-3.5" /> Sign In
           </Link>
@@ -184,16 +293,73 @@ export function PublicHeader() {
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden border-t border-[var(--line)] bg-[var(--canvas)] lg:hidden"
           >
-            <nav aria-label="Mobile" className="mx-auto grid max-h-[calc(100vh-76px)] max-w-[1440px] gap-1 overflow-y-auto px-5 py-4 md:px-8">
-              <Link onClick={close} to="/" className={`rounded-xl px-3 py-3 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--ink)] ${isHome ? "bg-[var(--surface-2)] text-[var(--ink)]" : "text-[var(--muted)]"}`}>Home</Link>
-              <Link onClick={close} to="/stay" className={`rounded-xl px-3 py-3 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--ink)] ${path === "/stay" ? "bg-[var(--surface-2)] text-[var(--ink)]" : "text-[var(--muted)]"}`}>Stay With Us</Link>
-              <Link onClick={close} to="/rooms" className={`rounded-xl px-3 py-3 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--ink)] ${roomsActive ? "bg-[var(--surface-2)] text-[var(--ink)]" : "text-[var(--muted)]"}`}>Explore Rooms</Link>
-              <Link onClick={close} to="/amenities" className={`rounded-xl px-3 py-3 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--ink)] ${path === "/amenities" ? "bg-[var(--surface-2)] text-[var(--ink)]" : "text-[var(--muted)]"}`}>Amenities</Link>
-              <Link onClick={close} to="/about" className={`rounded-xl px-3 py-3 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--ink)] ${path === "/about" ? "bg-[var(--surface-2)] text-[var(--ink)]" : "text-[var(--muted)]"}`}>About Us</Link>
-              <Link onClick={close} to="/contact" className={`rounded-xl px-3 py-3 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--ink)] ${path === "/contact" ? "bg-[var(--surface-2)] text-[var(--ink)]" : "text-[var(--muted)]"}`}>Contact</Link>
-              <Link onClick={close} to="/my-bookings" className={`rounded-xl px-3 py-3 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--ink)] ${bookingsActive ? "bg-[var(--surface-2)] text-[var(--ink)]" : "text-[var(--muted)]"}`}>My Bookings</Link>
-              <Link onClick={close} to="/login" className={`rounded-xl px-3 py-3 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--ink)] ${authActive ? "bg-[var(--surface-2)] text-[var(--ink)]" : "text-[var(--muted)]"}`}>Sign In</Link>
-              <Link onClick={close} to="/admin/login" className={`rounded-xl px-3 py-3 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--ink)] ${path === "/admin/login" ? "bg-[var(--surface-2)] text-[var(--ink)]" : "text-[var(--muted)]"}`}>Staff portal</Link>
+            <nav
+              aria-label="Mobile"
+              className="mx-auto grid max-h-[calc(100vh-76px)] max-w-[1440px] gap-1 overflow-y-auto px-5 py-4 md:px-8"
+            >
+              <Link
+                onClick={close}
+                to="/"
+                className={`rounded-xl px-3 py-3 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--ink)] ${isHome ? "bg-[var(--surface-2)] text-[var(--ink)]" : "text-[var(--muted)]"}`}
+              >
+                Home
+              </Link>
+              <Link
+                onClick={close}
+                to="/stay"
+                className={`rounded-xl px-3 py-3 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--ink)] ${path === "/stay" ? "bg-[var(--surface-2)] text-[var(--ink)]" : "text-[var(--muted)]"}`}
+              >
+                Stay With Us
+              </Link>
+              <Link
+                onClick={close}
+                to="/rooms"
+                className={`rounded-xl px-3 py-3 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--ink)] ${roomsActive ? "bg-[var(--surface-2)] text-[var(--ink)]" : "text-[var(--muted)]"}`}
+              >
+                Explore Rooms
+              </Link>
+              <Link
+                onClick={close}
+                to="/amenities"
+                className={`rounded-xl px-3 py-3 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--ink)] ${path === "/amenities" ? "bg-[var(--surface-2)] text-[var(--ink)]" : "text-[var(--muted)]"}`}
+              >
+                Amenities
+              </Link>
+              <Link
+                onClick={close}
+                to="/about"
+                className={`rounded-xl px-3 py-3 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--ink)] ${path === "/about" ? "bg-[var(--surface-2)] text-[var(--ink)]" : "text-[var(--muted)]"}`}
+              >
+                About Us
+              </Link>
+              <Link
+                onClick={close}
+                to="/contact"
+                className={`rounded-xl px-3 py-3 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--ink)] ${path === "/contact" ? "bg-[var(--surface-2)] text-[var(--ink)]" : "text-[var(--muted)]"}`}
+              >
+                Contact
+              </Link>
+              <Link
+                onClick={close}
+                to="/my-bookings"
+                className={`rounded-xl px-3 py-3 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--ink)] ${bookingsActive ? "bg-[var(--surface-2)] text-[var(--ink)]" : "text-[var(--muted)]"}`}
+              >
+                My Bookings
+              </Link>
+              <Link
+                onClick={close}
+                to="/login"
+                className={`rounded-xl px-3 py-3 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--ink)] ${authActive ? "bg-[var(--surface-2)] text-[var(--ink)]" : "text-[var(--muted)]"}`}
+              >
+                Sign In
+              </Link>
+              <Link
+                onClick={close}
+                to="/admin/login"
+                className={`rounded-xl px-3 py-3 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--ink)] ${path === "/admin/login" ? "bg-[var(--surface-2)] text-[var(--ink)]" : "text-[var(--muted)]"}`}
+              >
+                Staff portal
+              </Link>
               <div className="mt-3 flex items-center justify-between rounded-2xl border border-[var(--line)] bg-[var(--surface)] p-2 pl-3">
                 <span className="text-xs text-[var(--muted)]">Appearance</span>
                 <ThemeToggle />
@@ -229,47 +395,109 @@ export function PublicFooter() {
       <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1.2fr_0.7fr_0.9fr_1fr]">
         <div>
           <BrandMark />
-          <p className="mt-4 max-w-xs text-xs leading-5">Thoughtful rooms and generous hospitality in {hotelInfo.city}, with the city and the water close at hand.</p>
-          <p className="mt-4 text-[11px] text-[var(--faint)]">Direct reservations · India · {hotelInfo.timeZone}</p>
+          <p className="mt-4 max-w-xs text-xs leading-5">
+            Thoughtful rooms and generous hospitality in {hotelInfo.city}, with
+            the city and the water close at hand.
+          </p>
+          <p className="mt-4 text-[11px] text-[var(--faint)]">
+            Direct reservations · India · {hotelInfo.timeZone}
+          </p>
         </div>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--ink)]">Explore</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--ink)]">
+            Explore
+          </p>
           <div className="mt-3 grid gap-2 text-xs">
-            <Link to="/stay" className="transition-colors hover:text-[var(--ink)]">Stay with us</Link>
-            <Link to="/rooms" className="transition-colors hover:text-[var(--ink)]">Rooms &amp; suites</Link>
-            <Link to="/amenities" className="transition-colors hover:text-[var(--ink)]">Amenities</Link>
-            <Link to="/about" className="transition-colors hover:text-[var(--ink)]">About RIVR</Link>
-            <Link to="/contact" className="transition-colors hover:text-[var(--ink)]">Contact</Link>
-            <Link to="/my-bookings" className="transition-colors hover:text-[var(--ink)]">My bookings</Link>
+            <Link
+              to="/stay"
+              className="transition-colors hover:text-[var(--ink)]"
+            >
+              Stay with us
+            </Link>
+            <Link
+              to="/rooms"
+              className="transition-colors hover:text-[var(--ink)]"
+            >
+              Rooms &amp; suites
+            </Link>
+            <Link
+              to="/amenities"
+              className="transition-colors hover:text-[var(--ink)]"
+            >
+              Amenities
+            </Link>
+            <Link
+              to="/about"
+              className="transition-colors hover:text-[var(--ink)]"
+            >
+              About RIVR
+            </Link>
+            <Link
+              to="/contact"
+              className="transition-colors hover:text-[var(--ink)]"
+            >
+              Contact
+            </Link>
+            <Link
+              to="/my-bookings"
+              className="transition-colors hover:text-[var(--ink)]"
+            >
+              My bookings
+            </Link>
           </div>
         </div>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--ink)]">Contact</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--ink)]">
+            Contact
+          </p>
           <div className="mt-3 grid gap-2.5 text-xs">
-            <a href={`tel:${hotelInfo.phoneHref}`} className="flex items-start gap-2 transition-colors hover:text-[var(--ink)]">
-              <Phone className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--sage)]" /> {hotelInfo.phone}
+            <a
+              href={`tel:${hotelInfo.phoneHref}`}
+              className="flex items-start gap-2 transition-colors hover:text-[var(--ink)]"
+            >
+              <Phone className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--sage)]" />{" "}
+              {hotelInfo.phone}
             </a>
-            <a href={`mailto:${hotelInfo.email}`} className="flex items-start gap-2 transition-colors hover:text-[var(--ink)]">
-              <Mail className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--sage)]" /> {hotelInfo.email}
+            <a
+              href={`mailto:${hotelInfo.email}`}
+              className="flex items-start gap-2 transition-colors hover:text-[var(--ink)]"
+            >
+              <Mail className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--sage)]" />{" "}
+              {hotelInfo.email}
             </a>
             <span className="flex items-start gap-2">
-              <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--sage)]" /> {hotelInfo.address}
+              <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--sage)]" />{" "}
+              {hotelInfo.address}
             </span>
           </div>
         </div>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--ink)]">Concierge</p>
-          <p className="mt-3 text-xs leading-5">Planning something particular? Our team is happy to help with arrivals, celebrations, and stays that need a little more care.</p>
-          <a href={`mailto:${hotelInfo.email}`} className="mt-4 inline-flex items-center gap-2 rounded-full border border-[var(--line-strong)] px-4 py-2.5 text-xs font-semibold text-[var(--ink)] transition-colors hover:border-[var(--accent)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--ink)]">
+            Concierge
+          </p>
+          <p className="mt-3 text-xs leading-5">
+            Planning something particular? Our team is happy to help with
+            arrivals, celebrations, and stays that need a little more care.
+          </p>
+          <a
+            href={`mailto:${hotelInfo.email}`}
+            className="mt-4 inline-flex items-center gap-2 rounded-full border border-[var(--line-strong)] px-4 py-2.5 text-xs font-semibold text-[var(--ink)] transition-colors hover:border-[var(--accent)]"
+          >
             Write to the concierge <ArrowUpRight className="h-3.5 w-3.5" />
           </a>
         </div>
       </div>
       <div className="mx-auto mt-10 flex max-w-7xl flex-col justify-between gap-2 border-t border-[var(--line)] pt-5 text-xs text-[var(--faint)] md:flex-row">
-        <span>© {new Date().getFullYear()} RIVR Hotel &amp; Residences · India</span>
+        <span>
+          © {new Date().getFullYear()} RIVR Hotel &amp; Residences · India
+        </span>
         <span>Reservations are stored securely by the hotel team.</span>
       </div>
-      {hotelInfo.isPlaceholder && <p className="mx-auto mt-2 max-w-7xl text-[11px] text-[var(--faint)]">{hotelInfo.notice}</p>}
+      {hotelInfo.isPlaceholder && (
+        <p className="mx-auto mt-2 max-w-7xl text-[11px] text-[var(--faint)]">
+          {hotelInfo.notice}
+        </p>
+      )}
     </footer>
   );
 }

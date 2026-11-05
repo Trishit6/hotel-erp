@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 import { z } from "zod";
 import {
   calculateNights,
@@ -8,6 +15,7 @@ import {
   type ActivityLog,
   type Attendance,
   type Department,
+  type DashboardSummary,
   type Expense,
   type Guest,
   type HousekeepingTask,
@@ -15,6 +23,7 @@ import {
   type Invoice,
   type Payment,
   type PaymentMethod,
+  type PublicSettings,
   type Reservation,
   type ReservationStatus,
   type RestaurantOrder,
@@ -23,13 +32,17 @@ import {
   type RoomType,
   type StaffMember,
   type StaffRole,
+  type SystemSettings,
 } from "./hotel-data";
 import { ApiError, api } from "./api";
 
 const reservationInputSchema = z.object({
   guestName: z.string().trim().min(2),
   email: z.string().email(),
-  phone: z.string().trim().refine(isIndianPhone, "Enter a valid Indian mobile number."),
+  phone: z
+    .string()
+    .trim()
+    .refine(isIndianPhone, "Enter a valid Indian mobile number."),
   roomId: z.string().min(1),
   checkIn: z.string(),
   checkOut: z.string(),
@@ -40,13 +53,23 @@ const reservationInputSchema = z.object({
   address: z.string().max(200).optional(),
   city: z.string().max(80).optional(),
   state: z.string().max(80).optional(),
-  postalCode: z.string().max(10).optional().refine((value) => !value || isIndianPin(value), "Enter a valid 6-digit PIN code."),
+  postalCode: z
+    .string()
+    .max(10)
+    .optional()
+    .refine(
+      (value) => !value || isIndianPin(value),
+      "Enter a valid 6-digit PIN code.",
+    ),
 });
 
 const guestInputSchema = z.object({
   name: z.string().trim().min(2),
   email: z.string().email(),
-  phone: z.string().trim().refine(isIndianPhone, "Enter a valid Indian mobile number."),
+  phone: z
+    .string()
+    .trim()
+    .refine(isIndianPhone, "Enter a valid Indian mobile number."),
   address: z.string().default(""),
   preferences: z.string().default(""),
 });
@@ -62,6 +85,26 @@ const expenseInputSchema = z.object({
 export type ReservationInput = z.infer<typeof reservationInputSchema>;
 export type GuestInput = z.infer<typeof guestInputSchema>;
 export type ExpenseInput = z.infer<typeof expenseInputSchema>;
+
+export type RoomTypeInput = {
+  name: string;
+  description: string;
+  capacity: number;
+  size: number;
+  rate: number;
+  image?: string;
+  amenities?: string[];
+};
+
+export type InventoryInput = {
+  name: string;
+  category: string;
+  quantity: number;
+  unit: string;
+  minimumStock: number;
+  supplier: string;
+  purchasePrice: number;
+};
 
 export interface SessionUser {
   id: string;
@@ -90,6 +133,7 @@ type PublicCatalogResponse = {
   roomTypes: RoomType[];
   rooms: Room[];
   busyRanges: BusyRange[];
+  settings?: PublicSettings;
 };
 
 type BootstrapResponse = {
@@ -108,13 +152,20 @@ type BootstrapResponse = {
   attendance?: Attendance[];
   activities?: ActivityLog[];
   users?: SessionUser[];
+  settings?: SystemSettings;
 };
 
-const ACTIVE_RESERVATION_STATUSES: ReservationStatus[] = ["pending", "confirmed", "checked-in"];
+const ACTIVE_RESERVATION_STATUSES: ReservationStatus[] = [
+  "pending",
+  "confirmed",
+  "checked-in",
+];
 
 const activeRanges = (reservations: Reservation[]): BusyRange[] =>
   reservations
-    .filter((reservation) => ACTIVE_RESERVATION_STATUSES.includes(reservation.status))
+    .filter((reservation) =>
+      ACTIVE_RESERVATION_STATUSES.includes(reservation.status),
+    )
     .map((reservation) => ({
       roomId: reservation.roomId,
       checkIn: reservation.checkIn,
@@ -137,6 +188,9 @@ export interface HotelStore {
   activities: ActivityLog[];
   users: SessionUser[];
   busyRanges: BusyRange[];
+  settings: PublicSettings | null;
+  systemSettings: SystemSettings | null;
+  dashboard: DashboardSummary | null;
   user: SessionUser | null;
   role: StaffRole | null;
   actorName: string;
@@ -151,30 +205,111 @@ export interface HotelStore {
   getRoomType: (id: string) => RoomType | undefined;
   getGuest: (id: string) => Guest | undefined;
   getReservation: (id: string) => Reservation | undefined;
-  isRoomAvailable: (roomId: string, checkIn: string, checkOut: string) => boolean;
-  getAvailableRooms: (checkIn: string, checkOut: string, guests: number) => Room[];
+  isRoomAvailable: (
+    roomId: string,
+    checkIn: string,
+    checkOut: string,
+  ) => boolean;
+  getAvailableRooms: (
+    checkIn: string,
+    checkOut: string,
+    guests: number,
+  ) => Room[];
   createReservation: (input: ReservationInput) => Promise<ReservationResult>;
-  updateReservationStatus: (id: string, status: ReservationStatus) => Promise<MutationResult>;
-  assignReservationRoom: (id: string, roomId: string) => Promise<MutationResult>;
+  updateReservationStatus: (
+    id: string,
+    status: ReservationStatus,
+  ) => Promise<MutationResult>;
+  assignReservationRoom: (
+    id: string,
+    roomId: string,
+  ) => Promise<MutationResult>;
   checkIn: (id: string) => Promise<MutationResult>;
   checkOut: (id: string) => Promise<MutationResult>;
-  recordPayment: (reservationId: string, amount: number, method: PaymentMethod) => Promise<MutationResult>;
+  recordPayment: (
+    reservationId: string,
+    amount: number,
+    method: PaymentMethod,
+  ) => Promise<MutationResult>;
   updateRoomStatus: (id: string, status: RoomStatus) => Promise<MutationResult>;
-  createRoom: (input: { number: string; typeId: string; floor: number }) => Promise<MutationResult>;
+  createRoom: (input: {
+    number: string;
+    typeId: string;
+    floor: number;
+    notes?: string;
+  }) => Promise<MutationResult>;
+  updateRoom: (
+    id: string,
+    input: { number?: string; typeId?: string; floor?: number; notes?: string },
+  ) => Promise<MutationResult>;
+  deleteRoom: (id: string) => Promise<MutationResult>;
+  createRoomType: (input: RoomTypeInput) => Promise<MutationResult>;
+  updateRoomType: (
+    id: string,
+    input: Partial<RoomTypeInput>,
+  ) => Promise<MutationResult>;
+  deleteRoomType: (id: string) => Promise<MutationResult>;
   createGuest: (input: GuestInput) => Promise<GuestResult>;
   updateGuest: (id: string, input: Partial<Guest>) => Promise<MutationResult>;
-  updateTask: (id: string, update: Partial<HousekeepingTask>) => Promise<MutationResult>;
+  deleteGuest: (id: string) => Promise<MutationResult>;
+  updateTask: (
+    id: string,
+    update: Partial<HousekeepingTask>,
+  ) => Promise<MutationResult>;
   createTask: (roomId: string) => Promise<MutationResult>;
-  addStaff: (input: Omit<StaffMember, "id" | "joinedAt">) => Promise<MutationResult>;
-  updateAttendance: (id: string, status: Attendance["status"]) => Promise<MutationResult>;
+  addStaff: (
+    input: Omit<StaffMember, "id" | "joinedAt">,
+  ) => Promise<MutationResult>;
+  updateStaff: (
+    id: string,
+    input: Partial<Omit<StaffMember, "id" | "joinedAt">>,
+  ) => Promise<MutationResult>;
+  updateAttendance: (
+    id: string,
+    status: Attendance["status"],
+  ) => Promise<MutationResult>;
+  createAttendance: (
+    staffId: string,
+    input: Pick<Attendance, "date" | "status" | "clockIn" | "clockOut">,
+  ) => Promise<MutationResult>;
   addExpense: (input: ExpenseInput) => Promise<MutationResult>;
-  approveExpense: (id: string, status: Expense["status"]) => Promise<MutationResult>;
+  updateExpense: (id: string, input: Partial<ExpenseInput>) => Promise<MutationResult>;
+  deleteExpense: (id: string) => Promise<MutationResult>;
+  approveExpense: (
+    id: string,
+    status: Expense["status"],
+  ) => Promise<MutationResult>;
   adjustInventory: (id: string, amount: number) => Promise<MutationResult>;
-  addOrder: (input: Omit<RestaurantOrder, "id" | "createdAt" | "status">) => Promise<MutationResult>;
-  updateOrder: (id: string, status: RestaurantOrder["status"]) => Promise<MutationResult>;
-  createUser: (input: { name: string; email: string; password: string; role: StaffRole }) => Promise<MutationResult>;
-  updateUser: (id: string, input: { role?: StaffRole; isActive?: boolean }) => Promise<MutationResult>;
-  changePassword: (currentPassword: string, newPassword: string) => Promise<MutationResult>;
+  createInventory: (input: InventoryInput) => Promise<MutationResult>;
+  updateInventory: (
+    id: string,
+    input: Partial<InventoryInput>,
+  ) => Promise<MutationResult>;
+  deleteInventory: (id: string) => Promise<MutationResult>;
+  addOrder: (
+    input: Omit<RestaurantOrder, "id" | "createdAt" | "status">,
+  ) => Promise<MutationResult>;
+  updateOrder: (
+    id: string,
+    status: RestaurantOrder["status"],
+  ) => Promise<MutationResult>;
+  createUser: (input: {
+    name: string;
+    email: string;
+    password: string;
+    role: StaffRole;
+  }) => Promise<MutationResult>;
+  updateUser: (
+    id: string,
+    input: { role?: StaffRole; isActive?: boolean },
+  ) => Promise<MutationResult>;
+  updateSettings: (
+    input: Partial<Omit<SystemSettings, "id" | "address" | "taxRatePercent" | "updatedAt">>,
+  ) => Promise<MutationResult>;
+  changePassword: (
+    currentPassword: string,
+    newPassword: string,
+  ) => Promise<MutationResult>;
   refreshDemoData: () => Promise<MutationResult>;
 }
 
@@ -196,6 +331,11 @@ export function HotelProvider({ children }: { children: ReactNode }) {
   const [activities, setActivities] = useState<ActivityLog[]>([]);
   const [users, setUsers] = useState<SessionUser[]>([]);
   const [busyRanges, setBusyRanges] = useState<BusyRange[]>([]);
+  const [settings, setSettings] = useState<PublicSettings | null>(null);
+  const [systemSettings, setSystemSettings] = useState<SystemSettings | null>(
+    null,
+  );
+  const [dashboard, setDashboard] = useState<DashboardSummary | null>(null);
   const [user, setUser] = useState<SessionUser | null>(null);
   const [role, setRole] = useState<StaffRole | null>(null);
   const [actorName, setActorName] = useState("RIVR team");
@@ -207,10 +347,14 @@ export function HotelProvider({ children }: { children: ReactNode }) {
     setRoomTypes(catalog.roomTypes);
     setRooms(catalog.rooms);
     setBusyRanges(catalog.busyRanges);
+    if (catalog.settings) setSettings(catalog.settings);
   };
 
   const loadAdminData = async () => {
-    const bootstrap = await api.get<BootstrapResponse>("/admin/bootstrap");
+    const [bootstrap, dashboardSummary] = await Promise.all([
+      api.get<BootstrapResponse>("/admin/bootstrap"),
+      api.get<DashboardSummary>("/admin/reports/dashboard"),
+    ]);
     setRoomTypes(bootstrap.roomTypes ?? []);
     setRooms(bootstrap.rooms ?? []);
     setReservations(bootstrap.reservations ?? []);
@@ -226,6 +370,11 @@ export function HotelProvider({ children }: { children: ReactNode }) {
     setActivities(bootstrap.activities ?? []);
     setUsers(bootstrap.users ?? []);
     setBusyRanges(activeRanges(bootstrap.reservations ?? []));
+    setDashboard(dashboardSummary);
+    if (bootstrap.settings) {
+      setSystemSettings(bootstrap.settings);
+      setSettings(bootstrap.settings);
+    }
   };
 
   useEffect(() => {
@@ -239,7 +388,11 @@ export function HotelProvider({ children }: { children: ReactNode }) {
           const result = await api.get<{ user: SessionUser }>("/auth/me");
           session = result.user;
         } catch (sessionError) {
-          if (!(sessionError instanceof ApiError) || sessionError.status !== 401) throw sessionError;
+          if (
+            !(sessionError instanceof ApiError) ||
+            sessionError.status !== 401
+          )
+            throw sessionError;
         }
         if (cancelled) return;
         if (session) {
@@ -251,7 +404,11 @@ export function HotelProvider({ children }: { children: ReactNode }) {
         if (!cancelled) setStatus("ready");
       } catch (initialError) {
         if (cancelled) return;
-        setError(initialError instanceof Error ? initialError.message : "The hotel data could not be loaded.");
+        setError(
+          initialError instanceof Error
+            ? initialError.message
+            : "The hotel data could not be loaded.",
+        );
         setStatus("error");
       }
     };
@@ -266,15 +423,27 @@ export function HotelProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<HotelStore>(() => {
     const getRoom = (id: string) => rooms.find((room) => room.id === id);
-    const getRoomType = (id: string) => roomTypes.find((type) => type.id === id);
+    const getRoomType = (id: string) =>
+      roomTypes.find((type) => type.id === id);
     const getGuest = (id: string) => guests.find((guest) => guest.id === id);
     const getReservation = (id: string) =>
-      reservations.find((reservation) => reservation.id === id || reservation.reference === id);
+      reservations.find(
+        (reservation) => reservation.id === id || reservation.reference === id,
+      );
 
-    const handleError = (caught: unknown, sessionExpiry = true): MutationResult => {
+    const handleError = (
+      caught: unknown,
+      sessionExpiry = true,
+    ): MutationResult => {
       const message =
-        caught instanceof ApiError ? caught.message : "Something went wrong. Please try again.";
-      if (sessionExpiry && caught instanceof ApiError && caught.status === 401) {
+        caught instanceof ApiError
+          ? caught.message
+          : "Something went wrong. Please try again.";
+      if (
+        sessionExpiry &&
+        caught instanceof ApiError &&
+        caught.status === 401
+      ) {
         setUser(null);
         setRole(null);
         setActorName("RIVR team");
@@ -295,23 +464,48 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    const isRoomAvailable = (roomId: string, checkIn: string, checkOut: string) => {
+    const isRoomAvailable = (
+      roomId: string,
+      checkIn: string,
+      checkOut: string,
+    ) => {
       const room = getRoom(roomId);
-      if (!room || ["maintenance", "out-of-order", "cleaning"].includes(room.status)) return false;
+      if (
+        !room ||
+        ["maintenance", "out-of-order", "cleaning"].includes(room.status)
+      )
+        return false;
       return !busyRanges.some(
-        (range) => range.roomId === roomId && range.checkIn < checkOut && range.checkOut > checkIn,
+        (range) =>
+          range.roomId === roomId &&
+          range.checkIn < checkOut &&
+          range.checkOut > checkIn,
       );
     };
 
-    const getAvailableRooms = (checkIn: string, checkOut: string, party: number) =>
+    const getAvailableRooms = (
+      checkIn: string,
+      checkOut: string,
+      party: number,
+    ) =>
       rooms.filter((room) => {
         const type = getRoomType(room.typeId);
-        return Boolean(type && type.capacity >= party && isRoomAvailable(room.id, checkIn, checkOut));
+        return Boolean(
+          type &&
+            type.capacity >= party &&
+            isRoomAvailable(room.id, checkIn, checkOut),
+        );
       });
 
-    const login = async (email: string, password: string): Promise<MutationResult> => {
+    const login = async (
+      email: string,
+      password: string,
+    ): Promise<MutationResult> => {
       try {
-        const result = await api.post<{ user: SessionUser }>("/auth/login", { email, password });
+        const result = await api.post<{ user: SessionUser }>("/auth/login", {
+          email,
+          password,
+        });
         setUser(result.user);
         setRole(result.user.role);
         setActorName(result.user.name);
@@ -324,7 +518,9 @@ export function HotelProvider({ children }: { children: ReactNode }) {
         setRole(null);
         setActorName("RIVR team");
         const message =
-          caught instanceof ApiError ? caught.message : "Sign in failed. Please try again.";
+          caught instanceof ApiError
+            ? caught.message
+            : "Sign in failed. Please try again.";
         setError(message);
         return { error: message };
       }
@@ -359,15 +555,22 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    const createReservation = async (input: ReservationInput): Promise<ReservationResult> => {
+    const createReservation = async (
+      input: ReservationInput,
+    ): Promise<ReservationResult> => {
       const parsed = reservationInputSchema.safeParse(input);
       if (!parsed.success) {
-        return { error: parsed.error.issues[0]?.message ?? "Please check the reservation details." };
+        return {
+          error:
+            parsed.error.issues[0]?.message ??
+            "Please check the reservation details.",
+        };
       }
       const data = parsed.data;
       const type = getRoomType(getRoom(data.roomId)?.typeId ?? "");
       const nights = calculateNights(data.checkIn, data.checkOut);
-      if (!type || nights < 1) return { error: "Choose a valid stay range and room." };
+      if (!type || nights < 1)
+        return { error: "Choose a valid stay range and room." };
       if (data.adults + data.children > type.capacity) {
         return { error: "This room does not fit the selected guests." };
       }
@@ -430,7 +633,9 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       if (nextStatus === "checked-in") return checkIn(id);
       if (nextStatus === "checked-out") return checkOut(id);
       try {
-        await api.patch(`/admin/reservations/${id}/status`, { status: nextStatus });
+        await api.patch(`/admin/reservations/${id}/status`, {
+          status: nextStatus,
+        });
         await refresh();
         return {};
       } catch (caught) {
@@ -438,7 +643,10 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    const assignReservationRoom = async (id: string, roomId: string): Promise<MutationResult> => {
+    const assignReservationRoom = async (
+      id: string,
+      roomId: string,
+    ): Promise<MutationResult> => {
       try {
         await api.patch(`/admin/reservations/${id}/room`, { roomId });
         await refresh();
@@ -454,7 +662,12 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       method: PaymentMethod,
     ): Promise<MutationResult> => {
       try {
-        await api.post("/admin/payments", { reservationId, amount, method, note: "Recorded by front desk" });
+        await api.post("/admin/payments", {
+          reservationId,
+          amount,
+          method,
+          note: "Recorded by front desk",
+        });
         await refresh();
         return {};
       } catch (caught) {
@@ -462,7 +675,10 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    const updateRoomStatus = async (id: string, nextStatus: RoomStatus): Promise<MutationResult> => {
+    const updateRoomStatus = async (
+      id: string,
+      nextStatus: RoomStatus,
+    ): Promise<MutationResult> => {
       try {
         await api.patch(`/admin/rooms/${id}/status`, { status: nextStatus });
         await refresh();
@@ -476,9 +692,71 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       number: string;
       typeId: string;
       floor: number;
+      notes?: string;
     }): Promise<MutationResult> => {
       try {
-        await api.post("/admin/rooms", { ...input, notes: "New room" });
+        await api.post("/admin/rooms", {
+          ...input,
+          notes: input.notes ?? "",
+        });
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const updateRoom = async (
+      id: string,
+      input: { number?: string; typeId?: string; floor?: number; notes?: string },
+    ): Promise<MutationResult> => {
+      try {
+        await api.patch(`/admin/rooms/${id}`, input);
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const deleteRoom = async (id: string): Promise<MutationResult> => {
+      try {
+        await api.delete(`/admin/rooms/${id}`);
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const createRoomType = async (
+      input: RoomTypeInput,
+    ): Promise<MutationResult> => {
+      try {
+        await api.post("/admin/rooms/types", input);
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const updateRoomType = async (
+      id: string,
+      input: Partial<RoomTypeInput>,
+    ): Promise<MutationResult> => {
+      try {
+        await api.patch(`/admin/rooms/types/${id}`, input);
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const deleteRoomType = async (id: string): Promise<MutationResult> => {
+      try {
+        await api.delete(`/admin/rooms/types/${id}`);
         await refresh();
         return {};
       } catch (caught) {
@@ -490,7 +768,10 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       const parsed = guestInputSchema.safeParse(input);
       if (!parsed.success) return { error: parsed.error.issues[0]?.message };
       try {
-        const result = await api.post<{ guest: Guest }>("/admin/guests", parsed.data);
+        const result = await api.post<{ guest: Guest }>(
+          "/admin/guests",
+          parsed.data,
+        );
         await refresh();
         return { guest: result.guest };
       } catch (caught) {
@@ -498,10 +779,24 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    const updateGuest = async (id: string, input: Partial<Guest>): Promise<MutationResult> => {
+    const updateGuest = async (
+      id: string,
+      input: Partial<Guest>,
+    ): Promise<MutationResult> => {
       try {
         const body: Record<string, unknown> = {};
-        for (const key of ["name", "email", "phone", "address", "city", "state", "postalCode", "idType", "idLastFour", "preferences"] as const) {
+        for (const key of [
+          "name",
+          "email",
+          "phone",
+          "address",
+          "city",
+          "state",
+          "postalCode",
+          "idType",
+          "idLastFour",
+          "preferences",
+        ] as const) {
           if (key in input && input[key] !== undefined) body[key] = input[key];
         }
         await api.patch(`/admin/guests/${id}`, body);
@@ -512,7 +807,20 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    const updateTask = async (id: string, update: Partial<HousekeepingTask>): Promise<MutationResult> => {
+    const deleteGuest = async (id: string): Promise<MutationResult> => {
+      try {
+        await api.delete(`/admin/guests/${id}`);
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const updateTask = async (
+      id: string,
+      update: Partial<HousekeepingTask>,
+    ): Promise<MutationResult> => {
       try {
         const body: Record<string, unknown> = {};
         if ("assignedTo" in update) body.assignedTo = update.assignedTo ?? null;
@@ -541,7 +849,9 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    const addStaff = async (input: Omit<StaffMember, "id" | "joinedAt">): Promise<MutationResult> => {
+    const addStaff = async (
+      input: Omit<StaffMember, "id" | "joinedAt">,
+    ): Promise<MutationResult> => {
       try {
         await api.post("/admin/staff", { ...input, joinedAt: dateAt(0) });
         await refresh();
@@ -551,9 +861,45 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    const updateAttendance = async (id: string, nextStatus: Attendance["status"]): Promise<MutationResult> => {
+    const updateStaff = async (
+      id: string,
+      input: Partial<Omit<StaffMember, "id" | "joinedAt">>,
+    ): Promise<MutationResult> => {
       try {
-        await api.patch(`/admin/staff/attendance/${id}`, { status: nextStatus });
+        await api.patch(`/admin/staff/${id}`, input);
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const updateAttendance = async (
+      id: string,
+      nextStatus: Attendance["status"],
+    ): Promise<MutationResult> => {
+      try {
+        await api.patch(`/admin/staff/attendance/${id}`, {
+          status: nextStatus,
+        });
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const createAttendance = async (
+      staffId: string,
+      input: Pick<Attendance, "date" | "status" | "clockIn" | "clockOut">,
+    ): Promise<MutationResult> => {
+      try {
+        await api.post(`/admin/staff/${staffId}/attendance`, {
+          date: input.date,
+          status: input.status,
+          clockIn: input.clockIn ?? null,
+          clockOut: input.clockOut ?? null,
+        });
         await refresh();
         return {};
       } catch (caught) {
@@ -573,9 +919,14 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    const approveExpense = async (id: string, nextStatus: Expense["status"]): Promise<MutationResult> => {
+    const approveExpense = async (
+      id: string,
+      nextStatus: Expense["status"],
+    ): Promise<MutationResult> => {
       try {
-        await api.patch(`/admin/expenses/${id}/approval`, { status: nextStatus });
+        await api.patch(`/admin/expenses/${id}/approval`, {
+          status: nextStatus,
+        });
         await refresh();
         return {};
       } catch (caught) {
@@ -583,9 +934,70 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    const adjustInventory = async (id: string, amount: number): Promise<MutationResult> => {
+    const updateExpense = async (
+      id: string,
+      input: Partial<ExpenseInput>,
+    ): Promise<MutationResult> => {
+      try {
+        await api.patch(`/admin/expenses/${id}`, input);
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const deleteExpense = async (id: string): Promise<MutationResult> => {
+      try {
+        await api.delete(`/admin/expenses/${id}`);
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const adjustInventory = async (
+      id: string,
+      amount: number,
+    ): Promise<MutationResult> => {
       try {
         await api.post(`/admin/inventory/${id}/adjust`, { amount });
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const createInventory = async (
+      input: InventoryInput,
+    ): Promise<MutationResult> => {
+      try {
+        await api.post("/admin/inventory", input);
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const updateInventory = async (
+      id: string,
+      input: Partial<InventoryInput>,
+    ): Promise<MutationResult> => {
+      try {
+        await api.patch(`/admin/inventory/${id}`, input);
+        await refresh();
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
+    const deleteInventory = async (id: string): Promise<MutationResult> => {
+      try {
+        await api.delete(`/admin/inventory/${id}`);
         await refresh();
         return {};
       } catch (caught) {
@@ -611,9 +1023,14 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    const updateOrder = async (id: string, nextStatus: RestaurantOrder["status"]): Promise<MutationResult> => {
+    const updateOrder = async (
+      id: string,
+      nextStatus: RestaurantOrder["status"],
+    ): Promise<MutationResult> => {
       try {
-        await api.patch(`/admin/restaurant/orders/${id}/status`, { status: nextStatus });
+        await api.patch(`/admin/restaurant/orders/${id}/status`, {
+          status: nextStatus,
+        });
         await refresh();
         return {};
       } catch (caught) {
@@ -649,12 +1066,33 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       }
     };
 
+    const updateSettings = async (
+      input: Partial<
+        Omit<SystemSettings, "id" | "address" | "taxRatePercent" | "updatedAt">
+      >,
+    ): Promise<MutationResult> => {
+      try {
+        const result = await api.patch<{ settings: SystemSettings }>(
+          "/admin/settings",
+          input,
+        );
+        setSystemSettings(result.settings);
+        setSettings(result.settings);
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
     const changePassword = async (
       currentPassword: string,
       newPassword: string,
     ): Promise<MutationResult> => {
       try {
-        await api.post("/auth/change-password", { currentPassword, newPassword });
+        await api.post("/auth/change-password", {
+          currentPassword,
+          newPassword,
+        });
         return {};
       } catch (caught) {
         return handleError(caught, false);
@@ -707,6 +1145,9 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       activities,
       users,
       busyRanges,
+      settings,
+      systemSettings,
+      dashboard,
       user,
       role,
       actorName,
@@ -731,25 +1172,65 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       recordPayment,
       updateRoomStatus,
       createRoom,
+      updateRoom,
+      deleteRoom,
+      createRoomType,
+      updateRoomType,
+      deleteRoomType,
       createGuest,
       updateGuest,
+      deleteGuest,
       updateTask,
       createTask,
       addStaff,
+      updateStaff,
       updateAttendance,
+      createAttendance,
       addExpense,
+      updateExpense,
+      deleteExpense,
       approveExpense,
       adjustInventory,
+      createInventory,
+      updateInventory,
+      deleteInventory,
       addOrder,
       updateOrder,
       createUser,
       updateUser,
+      updateSettings,
       changePassword,
       refreshDemoData,
     };
-  }, [activities, actorName, attendance, busyRanges, error, expenses, guests, inventory, invoices, orders, payments, reservations, role, rooms, roomTypes, staff, status, tasks, user, users]);
+  }, [
+    activities,
+    actorName,
+    attendance,
+    busyRanges,
+    dashboard,
+    error,
+    expenses,
+    guests,
+    inventory,
+    invoices,
+    orders,
+    payments,
+    reservations,
+    role,
+    rooms,
+    roomTypes,
+    settings,
+    staff,
+    status,
+    systemSettings,
+    tasks,
+    user,
+    users,
+  ]);
 
-  return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
+  return (
+    <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
+  );
 }
 
 export function useHotel() {

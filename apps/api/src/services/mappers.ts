@@ -15,6 +15,7 @@ type ExpenseRow = typeof schema.expenses.$inferSelect;
 type OrderRow = typeof schema.restaurantOrders.$inferSelect;
 type ActivityRow = typeof schema.activityLogs.$inferSelect;
 type UserRow = typeof schema.users.$inferSelect;
+type SettingsRow = typeof schema.systemSettings.$inferSelect;
 
 const number = (value: string | number) => Number(value);
 const iso = (value: Date | null | undefined) => (value ? value.toISOString() : null);
@@ -203,5 +204,40 @@ export function mapUser(row: UserRow) {
     isActive: row.isActive,
     lastLoginAt: iso(row.lastLoginAt),
     createdAt: row.createdAt.toISOString(),
+  };
+}
+
+export function mapSettings(row: SettingsRow) {
+  const address = [
+    row.addressLine1,
+    row.addressLine2,
+    [row.city, row.state, row.postalCode].filter(Boolean).join(", "),
+    row.country,
+  ]
+    .filter(Boolean)
+    .join(", ");
+  return {
+    id: row.id,
+    hotelName: row.hotelName,
+    legalName: row.legalName,
+    email: row.email,
+    phone: row.phone,
+    website: row.website,
+    addressLine1: row.addressLine1,
+    addressLine2: row.addressLine2,
+    city: row.city,
+    state: row.state,
+    postalCode: row.postalCode,
+    country: row.country,
+    address,
+    timezone: row.timezone,
+    currency: row.currency,
+    taxRateBps: row.taxRateBps,
+    taxRatePercent: row.taxRateBps / 100,
+    checkInTime: row.checkInTime,
+    checkOutTime: row.checkOutTime,
+    invoicePrefix: row.invoicePrefix,
+    logoUrl: row.logoUrl,
+    updatedAt: row.updatedAt.toISOString(),
   };
 }

@@ -18,6 +18,29 @@ export const seedRoles = [
   { code: "restaurant", name: "Restaurant Staff", description: "Restaurant orders and service." },
 ] as const;
 
+export const seedSettings = {
+  id: "default",
+  hotelName: "RIVR Hotel & Residences",
+  legalName: "RIVR Hospitality Private Limited",
+  email: "stay@rivrhotel.in",
+  phone: "+91 22 0000 0000",
+  website: "",
+  addressLine1: "RIVR Hotel & Residences",
+  addressLine2: "Hotel address to be configured",
+  city: "Mumbai",
+  state: "Maharashtra",
+  postalCode: "400001",
+  country: "India",
+  timezone: "Asia/Kolkata",
+  currency: "INR",
+  taxRateBps: 1200,
+  checkInTime: "14:00",
+  checkOutTime: "11:00",
+  invoicePrefix: "INV",
+  logoUrl: "",
+} as const;
+
+
 export const seedRoomTypes = [
   {
     id: "type-king",

@@ -1,4 +1,4 @@
-import { asc, desc, eq } from "drizzle-orm";
+import { and, asc, desc, eq } from "drizzle-orm";
 import { db } from "../database/client";
 import { attendance, staff } from "../database/schema";
 import type { AttendanceStatus, Department, StaffRole, StaffStatus } from "../constants";
@@ -130,4 +130,52 @@ export async function ensureAttendance(staffId: string, date = todayIst()) {
   await db.insert(attendance).values({ id, staffId, date, status: "present", clockIn: null, clockOut: null, updatedAt: new Date() });
   const [created] = await db.select().from(attendance).where(eq(attendance.id, id)).limit(1);
   return mapAttendance(created);
+}
+
+export async function upsertAttendance(
+  staffId: string,
+  input: { date: string; status: AttendanceStatus; clockIn?: string | null; clockOut?: string | null },
+  actor: { id: string; name: string },
+) {
+  const [person] = await db.select({ id: staff.id, name: staff.name }).from(staff).where(eq(staff.id, staffId)).limit(1);
+  if (!person) throw notFound("Staff member not found.");
+  const [existing] = await db
+    .select()
+    .from(attendance)
+    .where(and(eq(attendance.staffId, staffId), eq(attendance.date, input.date)))
+    .limit(1);
+  if (existing) {
+    await db
+      .update(attendance)
+      .set({
+        status: input.status,
+        ...(input.clockIn !== undefined ? { clockIn: input.clockIn } : {}),
+        ...(input.clockOut !== undefined ? { clockOut: input.clockOut } : {}),
+        updatedAt: new Date(),
+      })
+      .where(eq(attendance.id, existing.id));
+  } else {
+    await db.insert(attendance).values({
+      id: newId("att"),
+      staffId,
+      date: input.date,
+      status: input.status,
+      clockIn: input.clockIn ?? null,
+      clockOut: input.clockOut ?? null,
+      updatedAt: new Date(),
+    });
+  }
+  await logActivity(db, {
+    actor: actor.name,
+    action: existing ? "Updated attendance" : "Marked attendance",
+    detail: `${person.name} - ${input.status} on ${input.date}`,
+    tone: input.status === "absent" ? "warning" : "info",
+    userId: actor.id,
+  });
+  const [updated] = await db
+    .select()
+    .from(attendance)
+    .where(and(eq(attendance.staffId, staffId), eq(attendance.date, input.date)))
+    .limit(1);
+  return mapAttendance(updated);
 }

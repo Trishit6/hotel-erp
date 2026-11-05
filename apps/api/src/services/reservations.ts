@@ -8,6 +8,7 @@ import {
   roomTypeAmenities,
   roomTypes,
   rooms,
+  systemSettings,
 } from "../database/schema";
 import {
   CHECKIN_BLOCKED_ROOM_STATUSES,
@@ -178,7 +179,11 @@ export async function createReservation(input: ReservationCreateInput, actor?: A
     const roomChargesPaise = toPaise(type.rate) * nights;
     if (discountPaise > roomChargesPaise) throw badRequest("Discount cannot exceed the room charges.");
     const taxablePaise = roomChargesPaise - discountPaise;
-    const taxPaise = applyBasisPoints(taxablePaise, TAX_BASIS_POINTS);
+    const [settingsRow] = await tx
+      .select({ taxRateBps: systemSettings.taxRateBps, invoicePrefix: systemSettings.invoicePrefix })
+      .from(systemSettings)
+      .limit(1);
+    const taxPaise = applyBasisPoints(taxablePaise, settingsRow?.taxRateBps ?? TAX_BASIS_POINTS);
     const totalPaise = taxablePaise + taxPaise;
 
     const guest = await upsertGuest(tx, input);
@@ -223,7 +228,7 @@ export async function createReservation(input: ReservationCreateInput, actor?: A
     const invoiceId = newId("inv");
     await tx.insert(invoices).values({
       id: invoiceId,
-      number: `INV-${new Date().getUTCFullYear()}-${reference.replace("RIVR-", "")}`,
+      number: `${settingsRow?.invoicePrefix || "INV"}-${new Date().getUTCFullYear()}-${reference.replace("RIVR-", "")}`,
       reservationId,
       status: "pending",
       issuedAt: new Date(),
