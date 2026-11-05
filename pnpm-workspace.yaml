@@ -3,3 +3,7 @@ packages:
 
 allowBuilds:
   esbuild: true
+
+permissions:
+  '@tanstack/react-router':
+    skills: false
