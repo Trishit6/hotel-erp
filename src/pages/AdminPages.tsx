@@ -52,6 +52,7 @@ import {
   formatCurrency,
   formatDate,
   formatDateTime,
+  type DashboardSummary,
   type Department,
   type Expense,
   type Guest,
@@ -241,6 +242,16 @@ export function AdminIndexPage() {
 }
 
 export function AdminDashboardPage() {
+  const { role } = useHotel();
+  if (role === "housekeeping") return <HousekeepingDashboard />;
+  if (role === "accountant") return <AccountantDashboard />;
+  if (role === "receptionist") return <ReceptionistDashboard />;
+  if (role === "restaurant") return <RestaurantDashboard />;
+  if (role === "manager") return <ManagerDashboard />;
+  return <ExecutiveDashboard />;
+}
+
+function ExecutiveDashboard() {
   const {
     rooms,
     reservations,
@@ -251,7 +262,10 @@ export function AdminDashboardPage() {
     getGuest,
     getRoom,
     getRoomType,
+    staff,
+    can,
   } = useHotel();
+  const [revenueView, setRevenueView] = useState<"monthly" | "yearly">("monthly");
   const summary = dashboard;
   const occupied = summary?.rooms.occupied ?? rooms.filter((room) => room.status === "occupied").length;
   const available = summary?.rooms.available ?? rooms.filter((room) => room.status === "available").length;
@@ -263,14 +277,38 @@ export function AdminDashboardPage() {
   const departures = summary?.reservations.departures ?? reservations.filter((item) => item.checkOut === today && item.status === "checked-in").length;
   const occupancy = summary?.rooms.occupancy ?? (totalRooms ? Math.round((occupied / totalRooms) * 100) : 0);
   const revenueSeries = summary?.revenueSeries ?? [];
-  const currentMonthRevenue = revenueSeries[revenueSeries.length - 1]?.revenue ?? 0;
-  const maxRevenue = Math.max(1, ...revenueSeries.map((point) => point.revenue));
+  const yearlySeries = useMemo(() => {
+    const byYear = new Map<
+      string,
+      { month: string; label: string; revenue: number; bookings: number }
+    >();
+    for (const point of revenueSeries) {
+      const year = point.month.slice(0, 4);
+      const current = byYear.get(year) ?? {
+        month: year,
+        label: year,
+        revenue: 0,
+        bookings: 0,
+      };
+      current.revenue += point.revenue;
+      current.bookings += point.bookings;
+      byYear.set(year, current);
+    }
+    return [...byYear.values()];
+  }, [revenueSeries]);
+  const chartSeries = revenueView === "monthly" ? revenueSeries : yearlySeries;
+  const currentMonthRevenue =
+    revenueSeries[revenueSeries.length - 1]?.revenue ?? 0;
+  const maxRevenue = Math.max(1, ...chartSeries.map((point) => point.revenue));
   const totalReservations = summary?.reservations.total ?? reservations.length;
   const pendingReservations = summary?.reservations.pending ?? reservations.filter((item) => item.status === "pending").length;
   const outstanding = summary?.reservations.outstanding ?? reservations.reduce((sum, item) => sum + item.total - item.paidAmount, 0);
   const openTasks = summary?.housekeeping.open ?? tasks.filter((task) => !["cleaned", "inspected"].includes(task.status)).length;
   const recentActivities = summary?.activities ?? activities;
   const offlineCount = Math.max(0, totalRooms - occupied - available - reserved - cleaning);
+  const activeStaff = staff.filter((person) => person.status === "active").length;
+  const onLeave = staff.filter((person) => person.status === "on-leave").length;
+  const lowStock = summary?.inventory.lowStock ?? 0;
   return (
     <AdminPageShell
       eyebrow="Today at RIVR"
@@ -333,6 +371,46 @@ export function AdminDashboardPage() {
           tone="rose"
         />
       </div>
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <QuickAction
+          to="/admin/front-desk"
+          label="Open front desk"
+          detail="Arrivals, departures and guest requests"
+          icon={Hotel}
+          tone="violet"
+        />
+        <QuickAction
+          to="/admin/reservations"
+          label="New reservation"
+          detail="Create or adjust a booking"
+          icon={CalendarCheck2}
+          tone="blue"
+        />
+        <QuickAction
+          to="/admin/housekeeping"
+          label="Housekeeping board"
+          detail={`${openTasks} rooms need attention`}
+          icon={ClipboardCheck}
+          tone="teal"
+        />
+        {can(["super-admin", "admin", "manager", "accountant"]) ? (
+          <QuickAction
+            to="/admin/reports"
+            label="Open reports"
+            detail="Revenue and operational analytics"
+            icon={BarChart3}
+            tone="gold"
+          />
+        ) : (
+          <QuickAction
+            to="/admin/payments"
+            label="Payments"
+            detail="Collect and reconcile balances"
+            icon={CreditCard}
+            tone="gold"
+          />
+        )}
+      </div>
       <div className="mt-6 grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
         <Card className="p-5 md:p-6">
           <div className="flex items-start justify-between">
@@ -342,53 +420,63 @@ export function AdminDashboardPage() {
                 Booking revenue over the last 12 periods.
               </p>
             </div>
-            <div className="flex gap-1 rounded-lg border border-[var(--line)] p-1">
+            <div className="flex gap-1 rounded-lg border border-[var(--line)] bg-[var(--surface-2)] p-1">
               <button
                 type="button"
-                className="rounded-md bg-[var(--primary)] px-2.5 py-1.5 text-[10px] text-white"
+                onClick={() => setRevenueView("monthly")}
+                className={`rounded-md px-2.5 py-1.5 text-[10px] font-semibold transition-colors ${
+                  revenueView === "monthly"
+                    ? "bg-[var(--primary)] text-white shadow-sm"
+                    : "text-[var(--faint)] hover:text-[var(--ink)]"
+                }`}
               >
                 Monthly
               </button>
               <button
                 type="button"
-                className="rounded-md px-2.5 py-1.5 text-[10px] text-[var(--faint)]"
+                onClick={() => setRevenueView("yearly")}
+                className={`rounded-md px-2.5 py-1.5 text-[10px] font-semibold transition-colors ${
+                  revenueView === "yearly"
+                    ? "bg-[var(--primary)] text-white shadow-sm"
+                    : "text-[var(--faint)] hover:text-[var(--ink)]"
+                }`}
               >
                 Yearly
               </button>
             </div>
           </div>
           <div className="mt-8 flex h-48 items-end gap-2 border-b border-l border-[var(--line)] px-3 pb-0 pt-4">
-            {revenueSeries.length === 0 && (
+            {chartSeries.length === 0 && (
               <p className="m-auto text-xs text-[var(--faint)]">
                 Revenue analytics will appear after the first booking.
               </p>
             )}
-            {revenueSeries.map((point) => (
+            {chartSeries.map((point) => (
               <div
                 key={point.month}
                 className="group relative flex h-full flex-1 items-end"
                 title={`${point.label}: ${formatCurrency(point.revenue)} · ${point.bookings} bookings`}
               >
                 <div
-                  className="w-full rounded-t-md bg-[var(--sage-soft-2)] transition-colors group-hover:bg-[var(--sage)]"
+                  className="chart-bar w-full rounded-t-lg"
                   style={{
                     height: `${Math.max(3, Math.round((point.revenue / maxRevenue) * 100))}%`,
                   }}
                 />
                 <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[9px] text-[var(--faint)]">
-                  {point.label.slice(0, 1)}
+                  {point.label.slice(0, revenueView === "yearly" ? 4 : 1)}
                 </span>
               </div>
             ))}
           </div>
           <div className="mt-8 flex flex-wrap items-center gap-6 text-xs text-[var(--muted)]">
             <span>
-              <i className="mr-2 inline-block h-2 w-2 rounded-full bg-[var(--sage)]" />
+              <i className="mr-2 inline-block h-2 w-2 rounded-full bg-[var(--violet)]" />
               Revenue
             </span>
             <span>
-              {revenueSeries.reduce((sum, point) => sum + point.bookings, 0)}{" "}
-              bookings across 12 months
+              {chartSeries.reduce((sum, point) => sum + point.bookings, 0)}{" "}
+              bookings in this view
             </span>
           </div>
         </Card>
@@ -563,6 +651,107 @@ export function AdminDashboardPage() {
           ))}
         </div>
       </Card>
+      <div className="mt-6 grid gap-5 xl:grid-cols-[0.95fr_1.05fr]">
+        <Card className="p-5">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h3 className="text-base font-semibold">Team snapshot</h3>
+              <p className="mt-1 text-xs text-[var(--faint)]">
+                People available across the property.
+              </p>
+            </div>
+            {can(["super-admin", "admin", "manager"]) && (
+              <Link
+                to="/admin/staff"
+                className="text-xs font-semibold text-[var(--violet)]"
+              >
+                Manage
+              </Link>
+            )}
+          </div>
+          <div className="mt-5 grid grid-cols-3 gap-3 text-center">
+            <div className="rounded-xl bg-[var(--surface-2)] p-3">
+              <strong className="text-lg">{staff.length}</strong>
+              <p className="mt-1 text-[10px] text-[var(--faint)]">People</p>
+            </div>
+            <div className="rounded-xl bg-[var(--success-soft)] p-3 text-[var(--success)]">
+              <strong className="text-lg">{activeStaff}</strong>
+              <p className="mt-1 text-[10px]">Active</p>
+            </div>
+            <div className="rounded-xl bg-[var(--warning-soft)] p-3 text-[var(--warning)]">
+              <strong className="text-lg">{onLeave}</strong>
+              <p className="mt-1 text-[10px]">On leave</p>
+            </div>
+          </div>
+          <div className="mt-4 grid gap-2">
+            {staff.slice(0, 4).map((person) => (
+              <div
+                key={person.id}
+                className="flex items-center gap-3 rounded-xl border border-[var(--line)] bg-[var(--surface)]/50 p-3"
+              >
+                <span className="grid h-8 w-8 place-items-center rounded-full bg-[var(--violet-soft)] text-[11px] font-bold text-[var(--violet)]">
+                  {person.name.slice(0, 1)}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-xs font-semibold">{person.name}</p>
+                  <p className="mt-0.5 truncate text-[10px] text-[var(--faint)]">
+                    {roleLabels[person.role]} · {person.shift}
+                  </p>
+                </div>
+                <span className="h-2 w-2 rounded-full bg-[var(--success)]" />
+              </div>
+            ))}
+            {staff.length === 0 && (
+              <p className="py-4 text-center text-xs text-[var(--faint)]">
+                No staff records loaded for this role.
+              </p>
+            )}
+          </div>
+        </Card>
+        <Card className="p-5">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h3 className="text-base font-semibold">Operational alerts</h3>
+              <p className="mt-1 text-xs text-[var(--faint)]">
+                Items that need a decision today.
+              </p>
+            </div>
+            <span className="rounded-full bg-[var(--danger-soft)] px-2.5 py-1 text-[10px] font-semibold text-[var(--danger)]">
+              {offline + lowStock + openTasks} open
+            </span>
+          </div>
+          <div className="mt-5 grid gap-2">
+            <AlertRow
+              to="/admin/rooms"
+              label="Rooms offline"
+              value={String(offline)}
+              detail="Maintenance or out of order"
+              tone="rose"
+            />
+            <AlertRow
+              to="/admin/inventory"
+              label="Low stock items"
+              value={String(lowStock)}
+              detail="At or below minimum stock"
+              tone="gold"
+            />
+            <AlertRow
+              to="/admin/payments"
+              label="Outstanding payments"
+              value={formatCurrency(outstanding)}
+              detail="Guest balances to collect"
+              tone="blue"
+            />
+            <AlertRow
+              to="/admin/housekeeping"
+              label="Open housekeeping"
+              value={String(openTasks)}
+              detail="Cleaning and inspection queue"
+              tone="teal"
+            />
+          </div>
+        </Card>
+      </div>
     </AdminPageShell>
   );
 }
@@ -594,6 +783,691 @@ function OperationRow({
       <span className="flex-1 text-xs text-[var(--muted)]">{label}</span>
       <strong className="text-sm">{value}</strong>
     </div>
+  );
+}
+
+type AdminLink =
+  | "/admin/dashboard"
+  | "/admin/reservations"
+  | "/admin/rooms"
+  | "/admin/guests"
+  | "/admin/front-desk"
+  | "/admin/housekeeping"
+  | "/admin/staff"
+  | "/admin/payments"
+  | "/admin/expenses"
+  | "/admin/inventory"
+  | "/admin/restaurant"
+  | "/admin/reports"
+  | "/admin/activity-logs"
+  | "/admin/settings";
+
+function QuickAction({
+  to,
+  label,
+  detail,
+  icon: Icon,
+  tone,
+}: {
+  to: AdminLink;
+  label: string;
+  detail: string;
+  icon: ComponentType<{ className?: string }>;
+  tone: "violet" | "blue" | "gold" | "teal";
+}) {
+  const tones = {
+    violet: "bg-[var(--violet-soft)] text-[var(--violet)]",
+    blue: "bg-[var(--info-soft)] text-[var(--info)]",
+    gold: "bg-[var(--warning-soft)] text-[var(--warning)]",
+    teal: "bg-[var(--success-soft)] text-[var(--success)]",
+  };
+  return (
+    <Link
+      to={to}
+      className="glass-card group flex items-center gap-3 rounded-2xl p-4 transition hover:-translate-y-0.5 hover:border-[var(--violet)]/30"
+    >
+      <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${tones[tone]}`}>
+        <Icon className="h-4 w-4" />
+      </span>
+      <span className="min-w-0">
+        <span className="block text-xs font-semibold text-[var(--text)]">{label}</span>
+        <span className="mt-0.5 block truncate text-[10px] text-[var(--faint)]">{detail}</span>
+      </span>
+      <ArrowUpRight className="ml-auto h-4 w-4 shrink-0 text-[var(--faint)] transition group-hover:text-[var(--violet)]" />
+    </Link>
+  );
+}
+
+function AlertRow({
+  to,
+  label,
+  value,
+  detail,
+  tone,
+}: {
+  to: AdminLink;
+  label: string;
+  value: string;
+  detail: string;
+  tone: "rose" | "gold" | "blue" | "teal";
+}) {
+  const dots = {
+    rose: "bg-[var(--danger)]",
+    gold: "bg-[var(--warning)]",
+    blue: "bg-[var(--info)]",
+    teal: "bg-[var(--success)]",
+  };
+  return (
+    <Link
+      to={to}
+      className="group flex items-center gap-3 rounded-xl border border-[var(--line)] bg-[var(--surface)]/45 p-3 transition hover:border-[var(--violet)]/30 hover:bg-[var(--violet-soft)]/25"
+    >
+      <span className={`h-2 w-2 shrink-0 rounded-full ${dots[tone]}`} />
+      <span className="min-w-0 flex-1">
+        <span className="block text-xs font-semibold">{label}</span>
+        <span className="mt-0.5 block truncate text-[10px] text-[var(--faint)]">{detail}</span>
+      </span>
+      <strong className="text-sm">{value}</strong>
+      <ArrowUpRight className="h-3.5 w-3.5 text-[var(--faint)] transition group-hover:text-[var(--violet)]" />
+    </Link>
+  );
+}
+
+function PanelHeader({
+  title,
+  copy,
+  icon: Icon,
+  action,
+}: {
+  title: string;
+  copy: string;
+  icon?: ComponentType<{ className?: string }>;
+  action?: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-start justify-between gap-3">
+      <div>
+        <h3 className="text-base font-semibold text-[var(--text)]">{title}</h3>
+        <p className="mt-1 text-xs text-[var(--faint)]">{copy}</p>
+      </div>
+      {action ?? (Icon ? <Icon className="h-5 w-5 text-[var(--violet)]" /> : null)}
+    </div>
+  );
+}
+
+function RevenueSpark({ series }: { series: DashboardSummary["revenueSeries"] }) {
+  const max = Math.max(1, ...series.map((point) => point.revenue));
+  return (
+    <div className="mt-6 flex h-44 items-end gap-2 border-b border-l border-[var(--line)] px-3 pb-0 pt-4">
+      {series.map((point) => (
+        <div
+          key={point.month}
+          className="group relative flex h-full flex-1 items-end"
+          title={`${point.label}: ${formatCurrency(point.revenue)} · ${point.bookings} bookings`}
+        >
+          <div
+            className="chart-bar w-full rounded-t-lg"
+            style={{
+              height: `${Math.max(3, Math.round((point.revenue / max) * 100))}%`,
+            }}
+          />
+          <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[9px] text-[var(--faint)]">
+            {point.label}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function OccupancyRing({ occupancy }: { occupancy: number }) {
+  const value = Math.max(0, Math.min(100, occupancy));
+  return (
+    <div
+      className="grid h-36 w-36 shrink-0 place-items-center rounded-full p-2 shadow-inner"
+      style={{
+        background: `conic-gradient(var(--violet) 0 ${value}%, var(--surface-3) ${value}% 100%)`,
+      }}
+    >
+      <div className="grid h-full w-full place-items-center rounded-full bg-[var(--surface)]">
+        <div className="text-center">
+          <span className="text-2xl font-bold tracking-[-0.04em]">{value}%</span>
+          <p className="mt-0.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-[var(--faint)]">
+            Occupied
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ReservationMix({
+  summary,
+}: {
+  summary?: DashboardSummary["reservations"];
+}) {
+  const rows = [
+    { label: "Confirmed", value: summary?.confirmed ?? 0, color: "var(--info)" },
+    { label: "Pending", value: summary?.pending ?? 0, color: "var(--warning)" },
+    { label: "In-house", value: summary?.checkedIn ?? 0, color: "var(--success)" },
+    { label: "Cancelled", value: summary?.cancelled ?? 0, color: "var(--danger)" },
+  ];
+  const max = Math.max(1, ...rows.map((row) => row.value));
+  return (
+    <div className="mt-5 grid gap-4">
+      {rows.map((row) => (
+        <div key={row.label}>
+          <div className="mb-2 flex items-center justify-between text-xs">
+            <span className="text-[var(--muted)]">{row.label}</span>
+            <strong>{row.value}</strong>
+          </div>
+          <div className="h-2.5 overflow-hidden rounded-full bg-[var(--surface-3)]">
+            <div
+              className="h-full rounded-full transition-all duration-500"
+              style={{
+                width: `${Math.max(4, Math.round((row.value / max) * 100))}%`,
+                background: row.color,
+              }}
+            />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function TaskQueue({
+  tasks,
+  rooms,
+  limit = 5,
+}: {
+  tasks: HousekeepingTask[];
+  rooms: Room[];
+  limit?: number;
+}) {
+  const open = tasks
+    .filter((task) => !["cleaned", "inspected"].includes(task.status))
+    .slice(0, limit);
+  if (!open.length) {
+    return (
+      <p className="mt-5 rounded-xl border border-dashed border-[var(--line-2)] p-5 text-center text-xs text-[var(--faint)]">
+        No open housekeeping tasks right now.
+      </p>
+    );
+  }
+  return (
+    <div className="mt-4 divide-y divide-[var(--line)]">
+      {open.map((task) => {
+        const room = rooms.find((item) => item.id === task.roomId);
+        return (
+          <div key={task.id} className="flex items-center gap-3 py-3">
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--info-soft)] text-xs font-bold text-[var(--info)]">
+              {room?.number ?? "—"}
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-xs font-semibold">
+                {room ? `Room ${room.number}` : "Room task"} ·{" "}
+                {task.issue || "Housekeeping service"}
+              </p>
+              <p className="mt-0.5 text-[10px] capitalize text-[var(--faint)]">
+                {task.priority} priority · {task.status.replaceAll("-", " ")}
+              </p>
+            </div>
+            <StatusBadge status={task.status} />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function ActivityFeed({
+  activities,
+  limit = 5,
+}: {
+  activities: DashboardSummary["activities"];
+  limit?: number;
+}) {
+  if (!activities.length) {
+    return (
+      <p className="mt-5 rounded-xl border border-dashed border-[var(--line-2)] p-5 text-center text-xs text-[var(--faint)]">
+        No activity has been recorded for this role yet.
+      </p>
+    );
+  }
+  return (
+    <div className="mt-4 grid gap-2">
+      {activities.slice(0, limit).map((activity) => (
+        <div
+          key={activity.id}
+          className="flex items-start gap-3 rounded-xl border border-[var(--line)] bg-[var(--surface)]/40 p-3"
+        >
+          <span
+            className={`mt-1 h-2 w-2 shrink-0 rounded-full ${
+              activity.tone === "danger"
+                ? "bg-[var(--danger)]"
+                : activity.tone === "warning"
+                  ? "bg-[var(--warning)]"
+                  : activity.tone === "success"
+                    ? "bg-[var(--success)]"
+                    : "bg-[var(--info)]"
+            }`}
+          />
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="text-xs font-semibold">{activity.action}</p>
+              <span className="text-[10px] text-[var(--faint)]">
+                {formatDateTime(activity.createdAt)}
+              </span>
+            </div>
+            <p className="mt-1 text-[11px] text-[var(--muted)]">
+              {activity.detail}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ManagerDashboard() {
+  const {
+    rooms,
+    reservations,
+    tasks,
+    activities,
+    dashboard,
+    actorName,
+    staff,
+    attendance,
+    inventory,
+    getGuest,
+    can,
+  } = useHotel();
+  const summary = dashboard;
+  const totalRooms = summary?.rooms.total ?? rooms.length;
+  const occupied = summary?.rooms.occupied ?? rooms.filter((room) => room.status === "occupied").length;
+  const occupancy = summary?.rooms.occupancy ?? (totalRooms ? Math.round((occupied / totalRooms) * 100) : 0);
+  const revenue = summary?.reservations.revenue ?? reservations.reduce((sum, item) => sum + item.total, 0);
+  const outstanding = summary?.reservations.outstanding ?? reservations.reduce((sum, item) => sum + item.total - item.paidAmount, 0);
+  const openTasks = summary?.housekeeping.open ?? tasks.filter((task) => !["cleaned", "inspected"].includes(task.status)).length;
+  const lowStock = summary?.inventory.lowStock ?? inventory.filter((item) => item.quantity <= item.minimumStock).length;
+  const todayAttendance = attendance.filter((item) => item.date === today);
+  const onDuty = todayAttendance.filter((item) => ["present", "late"].includes(item.status)).length;
+  const revenueSeries = summary?.revenueSeries ?? [];
+  return (
+    <AdminPageShell
+      eyebrow="Manager command centre"
+      title={`Good morning, ${actorName.split(" ")[0] || "team"}.`}
+      description="Occupancy, revenue, people, and service delivery in one operating view."
+    >
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <MetricCard label="Occupancy" value={`${occupancy}%`} detail={`${occupied} of ${totalRooms} rooms occupied`} icon={Hotel} tone="gold" />
+        <MetricCard label="Revenue" value={formatCurrency(revenue)} detail="Non-cancelled stay value" icon={IndianRupee} tone="blue" />
+        <MetricCard label="Outstanding" value={formatCurrency(outstanding)} detail="Guest balances to collect" icon={WalletCards} tone="rose" />
+        <MetricCard label="Open tasks" value={String(openTasks)} detail={`${lowStock} low-stock items`} icon={ClipboardCheck} />
+        <MetricCard label="Confirmed stays" value={String(summary?.reservations.confirmed ?? 0)} detail={`${summary?.reservations.pending ?? 0} pending review`} icon={CalendarCheck2} tone="blue" />
+        <MetricCard label="In-house guests" value={String(summary?.reservations.checkedIn ?? 0)} detail={`${summary?.reservations.arrivals ?? 0} arrivals today`} icon={UsersRound} tone="gold" />
+        <MetricCard label="Team on duty" value={String(onDuty)} detail={`${staff.filter((person) => person.status === "active").length} active staff`} icon={ShieldCheck} />
+        <MetricCard label="Low stock" value={String(lowStock)} detail="Items at or below minimum" icon={Package} tone="rose" />
+      </div>
+      <div className="mt-6 grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
+        <Card className="p-5">
+          <PanelHeader title="Revenue performance" copy="Monthly booking value across the last 12 periods." icon={BarChart3} />
+          <RevenueSpark series={revenueSeries} />
+        </Card>
+        <Card className="p-5">
+          <PanelHeader title="Occupancy health" copy="Live distribution of sellable and occupied rooms." icon={Hotel} />
+          <div className="mt-5 flex flex-wrap items-center gap-5">
+            <OccupancyRing occupancy={occupancy} />
+            <div className="grid gap-3 text-xs">
+              <span className="flex items-center gap-2"><i className="h-2 w-2 rounded-full bg-[var(--success)]" />{summary?.rooms.available ?? rooms.filter((room) => room.status === "available").length} available</span>
+              <span className="flex items-center gap-2"><i className="h-2 w-2 rounded-full bg-[var(--warning)]" />{summary?.rooms.reserved ?? 0} reserved</span>
+              <span className="flex items-center gap-2"><i className="h-2 w-2 rounded-full bg-[var(--info)]" />{summary?.rooms.cleaning ?? 0} cleaning</span>
+              <span className="flex items-center gap-2"><i className="h-2 w-2 rounded-full bg-[var(--danger)]" />{summary?.rooms.offline ?? 0} offline</span>
+            </div>
+          </div>
+        </Card>
+      </div>
+      <div className="mt-6 grid gap-5 xl:grid-cols-[1.05fr_0.95fr]">
+        <Card className="p-5">
+          <PanelHeader title="Reservation mix" copy="Where the booking book stands today." icon={CalendarDays} />
+          <ReservationMix summary={summary?.reservations} />
+        </Card>
+        <Card className="p-5">
+          <PanelHeader
+            title="Housekeeping queue"
+            copy="Rooms waiting for service or inspection."
+            action={
+              can(["super-admin", "admin", "manager"]) ? (
+                <Link to="/admin/housekeeping" className="text-xs font-semibold text-[var(--violet)]">Open board</Link>
+              ) : undefined
+            }
+          />
+          <TaskQueue tasks={tasks} rooms={rooms} />
+        </Card>
+      </div>
+      <Card className="mt-6 p-5">
+        <PanelHeader title="Team pulse" copy="Attendance and recent operating activity." icon={UsersRound} />
+        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+          <div className="rounded-xl bg-[var(--surface-2)] p-3 text-center"><strong className="text-lg">{onDuty}</strong><p className="mt-1 text-[10px] text-[var(--faint)]">On duty</p></div>
+          <div className="rounded-xl bg-[var(--warning-soft)] p-3 text-center text-[var(--warning)]"><strong className="text-lg">{staff.filter((person) => person.status === "on-leave").length}</strong><p className="mt-1 text-[10px]">On leave</p></div>
+          <div className="rounded-xl bg-[var(--info-soft)] p-3 text-center text-[var(--info)]"><strong className="text-lg">{new Set(staff.map((person) => person.department)).size}</strong><p className="mt-1 text-[10px]">Departments</p></div>
+        </div>
+        <ActivityFeed activities={activities} limit={4} />
+      </Card>
+    </AdminPageShell>
+  );
+}
+
+function ReceptionistDashboard() {
+  const {
+    rooms,
+    reservations,
+    guests,
+    dashboard,
+    actorName,
+    getGuest,
+    getRoom,
+  } = useHotel();
+  const arrivals = reservations.filter((item) => item.checkIn === today && ["confirmed", "pending"].includes(item.status));
+  const departures = reservations.filter((item) => item.checkOut === today && item.status === "checked-in");
+  const inHouse = reservations.filter((item) => item.status === "checked-in");
+  const availableRooms = rooms.filter((room) => room.status === "available");
+  const requests = reservations.filter((item) => item.specialRequests.trim()).slice(0, 5);
+  const outstanding = dashboard?.reservations.outstanding ?? reservations.reduce((sum, item) => sum + item.total - item.paidAmount, 0);
+  return (
+    <AdminPageShell
+      eyebrow="Front desk"
+      title={`Good morning, ${actorName.split(" ")[0] || "team"}.`}
+      description="Arrivals, departures, room availability, and guest requests for today."
+    >
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <MetricCard label="Arrivals today" value={String(arrivals.length)} detail="Expected check-ins" icon={CalendarCheck2} tone="blue" />
+        <MetricCard label="Departures today" value={String(departures.length)} detail="Expected check-outs" icon={ArrowUpRight} tone="gold" />
+        <MetricCard label="In-house" value={String(inHouse.length)} detail={`${guests.length} guest profiles`} icon={UsersRound} />
+        <MetricCard label="Available rooms" value={String(availableRooms.length)} detail={`${rooms.length} rooms total`} icon={BedDouble} tone="rose" />
+      </div>
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <QuickAction to="/admin/front-desk" label="Open front desk" detail="Run check-in and check-out" icon={Hotel} tone="violet" />
+        <QuickAction to="/admin/reservations" label="New reservation" detail="Create or update a booking" icon={CalendarCheck2} tone="blue" />
+        <QuickAction to="/admin/guests" label="Guest directory" detail="Profiles, contact and preferences" icon={UsersRound} tone="teal" />
+        <QuickAction to="/admin/payments" label="Collect payment" detail="Record a guest settlement" icon={CreditCard} tone="gold" />
+      </div>
+      <div className="mt-6 grid gap-5 xl:grid-cols-2">
+        <Card className="p-5">
+          <PanelHeader title="Today’s arrivals" copy="Guests expected to check in." action={<Link to="/admin/front-desk" className="text-xs font-semibold text-[var(--violet)]">Front desk</Link>} />
+          <div className="mt-4 grid gap-2">
+            {arrivals.slice(0, 6).map((reservation) => (
+              <div key={reservation.id} className="flex items-center gap-3 rounded-xl border border-[var(--line)] bg-[var(--surface)]/40 p-3">
+                <span className="grid h-9 w-9 place-items-center rounded-full bg-[var(--violet-soft)] text-xs font-bold text-[var(--violet)]">
+                  {(getGuest(reservation.guestId)?.name ?? "G").slice(0, 1)}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-xs font-semibold">{getGuest(reservation.guestId)?.name ?? "Guest"}</p>
+                  <p className="mt-0.5 text-[10px] text-[var(--faint)]">{reservation.reference} · Room {getRoom(reservation.roomId)?.number ?? "—"} · {formatDate(reservation.checkIn)}</p>
+                </div>
+                <StatusBadge status={reservation.status} />
+              </div>
+            ))}
+            {!arrivals.length && <p className="rounded-xl border border-dashed border-[var(--line-2)] p-5 text-center text-xs text-[var(--faint)]">No arrivals scheduled for today.</p>}
+          </div>
+        </Card>
+        <Card className="p-5">
+          <PanelHeader title="Today’s departures" copy="In-house guests due to leave." action={<Link to="/admin/front-desk" className="text-xs font-semibold text-[var(--violet)]">Front desk</Link>} />
+          <div className="mt-4 grid gap-2">
+            {departures.slice(0, 6).map((reservation) => (
+              <div key={reservation.id} className="flex items-center gap-3 rounded-xl border border-[var(--line)] bg-[var(--surface)]/40 p-3">
+                <span className="grid h-9 w-9 place-items-center rounded-full bg-[var(--warning-soft)] text-xs font-bold text-[var(--warning)]">
+                  {(getGuest(reservation.guestId)?.name ?? "G").slice(0, 1)}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-xs font-semibold">{getGuest(reservation.guestId)?.name ?? "Guest"}</p>
+                  <p className="mt-0.5 text-[10px] text-[var(--faint)]">{reservation.reference} · Room {getRoom(reservation.roomId)?.number ?? "—"} · {formatDate(reservation.checkOut)}</p>
+                </div>
+                <StatusBadge status={reservation.status} />
+              </div>
+            ))}
+            {!departures.length && <p className="rounded-xl border border-dashed border-[var(--line-2)] p-5 text-center text-xs text-[var(--faint)]">No departures scheduled for today.</p>}
+          </div>
+        </Card>
+      </div>
+      <div className="mt-6 grid gap-5 xl:grid-cols-[1.05fr_0.95fr]">
+        <Card className="p-5">
+          <PanelHeader title="Guest requests" copy="Special requests attached to active stays." icon={ClipboardCheck} />
+          <div className="mt-4 grid gap-2">
+            {requests.map((reservation) => (
+              <div key={reservation.id} className="rounded-xl border border-[var(--line)] bg-[var(--surface)]/40 p-3">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-xs font-semibold">{getGuest(reservation.guestId)?.name ?? "Guest"} · Room {getRoom(reservation.roomId)?.number ?? "—"}</p>
+                  <StatusBadge status={reservation.status} />
+                </div>
+                <p className="mt-2 text-[11px] text-[var(--muted)]">{reservation.specialRequests}</p>
+              </div>
+            ))}
+            {!requests.length && <p className="rounded-xl border border-dashed border-[var(--line-2)] p-5 text-center text-xs text-[var(--faint)]">No special requests on active stays.</p>}
+          </div>
+        </Card>
+        <Card className="p-5">
+          <PanelHeader title="Room availability" copy="Sellable rooms and current house status." icon={BedDouble} />
+          <div className="mt-5 grid grid-cols-2 gap-3">
+            <div className="rounded-xl bg-[var(--success-soft)] p-3 text-center text-[var(--success)]"><strong className="text-lg">{availableRooms.length}</strong><p className="mt-1 text-[10px]">Available</p></div>
+            <div className="rounded-xl bg-[var(--warning-soft)] p-3 text-center text-[var(--warning)]"><strong className="text-lg">{rooms.filter((room) => room.status === "reserved").length}</strong><p className="mt-1 text-[10px]">Reserved</p></div>
+            <div className="rounded-xl bg-[var(--info-soft)] p-3 text-center text-[var(--info)]"><strong className="text-lg">{rooms.filter((room) => room.status === "cleaning").length}</strong><p className="mt-1 text-[10px]">Cleaning</p></div>
+            <div className="rounded-xl bg-[var(--danger-soft)] p-3 text-center text-[var(--danger)]"><strong className="text-lg">{rooms.filter((room) => ["maintenance", "out-of-order"].includes(room.status)).length}</strong><p className="mt-1 text-[10px]">Offline</p></div>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {availableRooms.slice(0, 8).map((room) => (
+              <span key={room.id} className="rounded-lg border border-[var(--line)] bg-[var(--surface)]/50 px-2.5 py-1.5 text-[11px] font-semibold">{room.number}</span>
+            ))}
+            {!availableRooms.length && <p className="text-xs text-[var(--faint)]">No rooms are currently available.</p>}
+          </div>
+          <p className="mt-4 text-[11px] text-[var(--faint)]">Outstanding guest balance: <strong className="text-[var(--text)]">{formatCurrency(outstanding)}</strong></p>
+        </Card>
+      </div>
+    </AdminPageShell>
+  );
+}
+
+function AccountantDashboard() {
+  const { payments, invoices, expenses, reservations, dashboard, actorName } = useHotel();
+  const summary = dashboard;
+  const revenue = summary?.reservations.revenue ?? reservations.reduce((sum, item) => sum + item.total, 0);
+  const received = payments.filter((payment) => payment.status === "completed").reduce((sum, payment) => sum + payment.amount, 0);
+  const refunded = payments.filter((payment) => payment.status === "refunded").reduce((sum, payment) => sum + payment.amount, 0);
+  const outstanding = summary?.reservations.outstanding ?? reservations.reduce((sum, item) => sum + item.total - item.paidAmount, 0);
+  const approvedExpenses = expenses.filter((expense) => expense.status === "approved").reduce((sum, expense) => sum + expense.amount, 0);
+  const pendingExpenses = expenses.filter((expense) => expense.status === "pending");
+  const invoiceDue = invoices.reduce((sum, invoice) => sum + (invoice.status === "paid" ? 0 : invoice.dueAmount), 0);
+  const categoryTotals = new Map<string, number>();
+  for (const expense of expenses.filter((item) => item.status === "approved")) {
+    categoryTotals.set(expense.category, (categoryTotals.get(expense.category) ?? 0) + expense.amount);
+  }
+  const expenseRows = [...categoryTotals.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const maxExpense = Math.max(1, ...expenseRows.map(([, value]) => value));
+  return (
+    <AdminPageShell
+      eyebrow="Finance desk"
+      title={`Good morning, ${actorName.split(" ")[0] || "team"}.`}
+      description="Revenue, collections, refunds, expenses, and invoice exposure at a glance."
+    >
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <MetricCard label="Revenue" value={formatCurrency(revenue)} detail="Non-cancelled stay value" icon={IndianRupee} tone="blue" />
+        <MetricCard label="Payments received" value={formatCurrency(received)} detail={`${payments.filter((payment) => payment.status === "completed").length} completed payments`} icon={CreditCard} />
+        <MetricCard label="Outstanding" value={formatCurrency(outstanding)} detail="Guest balances to collect" icon={WalletCards} tone="rose" />
+        <MetricCard label="Refunds" value={formatCurrency(refunded)} detail={`${payments.filter((payment) => payment.status === "refunded").length} refunded payments`} icon={ReceiptText} tone="gold" />
+        <MetricCard label="Approved expenses" value={formatCurrency(approvedExpenses)} detail={`${pendingExpenses.length} awaiting approval`} icon={ReceiptText} tone="gold" />
+        <MetricCard label="Invoice balance" value={formatCurrency(invoiceDue)} detail={`${invoices.filter((invoice) => invoice.status !== "paid").length} open invoices`} icon={FileDown} tone="rose" />
+        <MetricCard label="Invoices issued" value={String(invoices.length)} detail="All invoice records" icon={FileDown} tone="blue" />
+        <MetricCard label="Payment records" value={String(payments.length)} detail="Recorded settlements" icon={CreditCard} />
+      </div>
+      <div className="mt-6 grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
+        <Card className="p-5">
+          <PanelHeader title="Revenue trend" copy="Booking value over the last 12 periods." icon={BarChart3} />
+          <RevenueSpark series={summary?.revenueSeries ?? []} />
+        </Card>
+        <Card className="p-5">
+          <PanelHeader title="Expense mix" copy="Approved spend by category." icon={ReceiptText} />
+          <div className="mt-5 grid gap-4">
+            {expenseRows.map(([category, value]) => (
+              <BarRow key={category} label={category} value={value} max={maxExpense} />
+            ))}
+            {!expenseRows.length && <p className="rounded-xl border border-dashed border-[var(--line-2)] p-5 text-center text-xs text-[var(--faint)]">No approved expenses yet.</p>}
+          </div>
+        </Card>
+      </div>
+      <div className="mt-6 grid gap-5 xl:grid-cols-2">
+        <Card className="p-5">
+          <PanelHeader title="Recent payments" copy="Latest recorded guest settlements." action={<Link to="/admin/payments" className="text-xs font-semibold text-[var(--violet)]">Open payments</Link>} />
+          <div className="mt-4 grid gap-2">
+            {payments.slice(0, 6).map((payment) => (
+              <div key={payment.id} className="flex items-center gap-3 rounded-xl border border-[var(--line)] bg-[var(--surface)]/40 p-3">
+                <span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--success-soft)] text-[var(--success)]"><CreditCard className="h-4 w-4" /></span>
+                <div className="min-w-0 flex-1"><p className="text-xs font-semibold capitalize">{payment.method.replaceAll("-", " ")}</p><p className="mt-0.5 text-[10px] text-[var(--faint)]">{formatDateTime(payment.paidAt)} · {payment.note || "Guest payment"}</p></div>
+                <strong className="text-sm">{formatCurrency(payment.amount)}</strong>
+                <StatusBadge status={payment.status} />
+              </div>
+            ))}
+            {!payments.length && <p className="rounded-xl border border-dashed border-[var(--line-2)] p-5 text-center text-xs text-[var(--faint)]">No payments recorded yet.</p>}
+          </div>
+        </Card>
+        <Card className="p-5">
+          <PanelHeader title="Invoice exposure" copy="Issued invoices and outstanding balances." action={<Link to="/admin/payments" className="text-xs font-semibold text-[var(--violet)]">Open invoices</Link>} />
+          <div className="mt-4 grid gap-2">
+            {invoices.slice(0, 6).map((invoice) => (
+              <div key={invoice.id} className="flex items-center gap-3 rounded-xl border border-[var(--line)] bg-[var(--surface)]/40 p-3">
+                <span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--violet-soft)] text-[var(--violet)]"><FileDown className="h-4 w-4" /></span>
+                <div className="min-w-0 flex-1"><p className="text-xs font-semibold">{invoice.number}</p><p className="mt-0.5 text-[10px] text-[var(--faint)]">Issued {formatDate(invoice.issuedAt)}</p></div>
+                <strong className="text-sm">{formatCurrency(invoice.dueAmount)}</strong>
+                <StatusBadge status={invoice.status} />
+              </div>
+            ))}
+            {!invoices.length && <p className="rounded-xl border border-dashed border-[var(--line-2)] p-5 text-center text-xs text-[var(--faint)]">No invoices issued yet.</p>}
+          </div>
+        </Card>
+      </div>
+    </AdminPageShell>
+  );
+}
+
+function HousekeepingDashboard() {
+  const { tasks, rooms, actorName, can } = useHotel();
+  const dirty = tasks.filter((task) => task.status === "dirty");
+  const inProgress = tasks.filter((task) => ["assigned", "in-progress"].includes(task.status));
+  const inspection = tasks.filter((task) => task.status === "cleaned");
+  const completed = tasks.filter((task) => task.status === "inspected" && task.updatedAt.slice(0, 10) === today);
+  const highPriority = tasks.filter((task) => task.priority === "high" && task.status !== "inspected");
+  return (
+    <AdminPageShell
+      eyebrow="Housekeeping"
+      title={`Good morning, ${actorName.split(" ")[0] || "team"}.`}
+      description="Cleaning priorities, inspection queue, and room readiness for the shift."
+    >
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <MetricCard label="Needs cleaning" value={String(dirty.length)} detail="Dirty rooms waiting" icon={BedDouble} tone="rose" />
+        <MetricCard label="In progress" value={String(inProgress.length)} detail="Assigned or being cleaned" icon={ClipboardCheck} tone="blue" />
+        <MetricCard label="Inspection pending" value={String(inspection.length)} detail="Cleaned, awaiting sign-off" icon={Check} tone="gold" />
+        <MetricCard label="Completed today" value={String(completed.length)} detail={`${highPriority.length} high-priority tasks`} icon={Star} />
+      </div>
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <QuickAction to="/admin/housekeeping" label="Housekeeping board" detail="Update task status and inspect rooms" icon={ClipboardCheck} tone="violet" />
+        <QuickAction to="/admin/rooms" label="Room status" detail="Review room availability and blocks" icon={BedDouble} tone="blue" />
+        <QuickAction to="/admin/inventory" label="Inventory" detail="Check linen and supply levels" icon={Package} tone="teal" />
+        <QuickAction to="/admin/front-desk" label="Front desk" detail="Coordinate departures and arrivals" icon={Hotel} tone="gold" />
+      </div>
+      <div className="mt-6 grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
+        <Card className="p-5">
+          <PanelHeader
+            title="Active cleaning queue"
+            copy="Tasks that need attention during this shift."
+            action={can(["super-admin", "admin", "manager", "housekeeping"]) ? <Link to="/admin/housekeeping" className="text-xs font-semibold text-[var(--violet)]">Open board</Link> : undefined}
+          />
+          <TaskQueue tasks={tasks} rooms={rooms} limit={8} />
+        </Card>
+        <Card className="p-5">
+          <PanelHeader title="Room readiness" copy="Current house status across the property." icon={Hotel} />
+          <div className="mt-5 grid grid-cols-2 gap-3">
+            <div className="rounded-xl bg-[var(--success-soft)] p-4 text-center text-[var(--success)]"><strong className="text-xl">{rooms.filter((room) => room.status === "available").length}</strong><p className="mt-1 text-[10px]">Available</p></div>
+            <div className="rounded-xl bg-[var(--warning-soft)] p-4 text-center text-[var(--warning)]"><strong className="text-xl">{rooms.filter((room) => room.status === "cleaning").length}</strong><p className="mt-1 text-[10px]">Cleaning</p></div>
+            <div className="rounded-xl bg-[var(--info-soft)] p-4 text-center text-[var(--info)]"><strong className="text-xl">{rooms.filter((room) => room.status === "occupied").length}</strong><p className="mt-1 text-[10px]">Occupied</p></div>
+            <div className="rounded-xl bg-[var(--danger-soft)] p-4 text-center text-[var(--danger)]"><strong className="text-xl">{rooms.filter((room) => ["maintenance", "out-of-order"].includes(room.status)).length}</strong><p className="mt-1 text-[10px]">Offline</p></div>
+          </div>
+          <div className="mt-5">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--faint)]">High priority</p>
+            <div className="mt-3 grid gap-2">
+              {highPriority.slice(0, 5).map((task) => {
+                const room = rooms.find((item) => item.id === task.roomId);
+                return (
+                  <div key={task.id} className="flex items-center gap-3 rounded-xl border border-[var(--danger)]/20 bg-[var(--danger-soft)]/45 p-3">
+                    <span className="grid h-8 w-8 place-items-center rounded-lg bg-[var(--danger-soft)] text-[var(--danger)]"><Star className="h-4 w-4" /></span>
+                    <div className="min-w-0 flex-1"><p className="text-xs font-semibold">Room {room?.number ?? "—"}</p><p className="mt-0.5 truncate text-[10px] text-[var(--muted)]">{task.issue || "Priority housekeeping service"}</p></div>
+                    <StatusBadge status={task.status} />
+                  </div>
+                );
+              })}
+              {!highPriority.length && <p className="rounded-xl border border-dashed border-[var(--line-2)] p-4 text-center text-xs text-[var(--faint)]">No high-priority tasks.</p>}
+            </div>
+          </div>
+        </Card>
+      </div>
+    </AdminPageShell>
+  );
+}
+
+function RestaurantDashboard() {
+  const { orders, inventory, actorName, can } = useHotel();
+  const newOrders = orders.filter((order) => order.status === "new");
+  const preparing = orders.filter((order) => order.status === "preparing");
+  const servedToday = orders.filter((order) => order.status === "served" && order.createdAt.slice(0, 10) === today);
+  const lowStock = inventory.filter((item) => item.quantity <= item.minimumStock);
+  const activeOrders = [...newOrders, ...preparing].slice(0, 8);
+  return (
+    <AdminPageShell
+      eyebrow="Restaurant & services"
+      title={`Good morning, ${actorName.split(" ")[0] || "team"}.`}
+      description="Orders, service pace, and supply alerts for the restaurant operation."
+    >
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <MetricCard label="New orders" value={String(newOrders.length)} detail="Waiting to be accepted" icon={Utensils} tone="rose" />
+        <MetricCard label="Preparing" value={String(preparing.length)} detail="In the kitchen queue" icon={Clock3} tone="gold" />
+        <MetricCard label="Served today" value={String(servedToday.length)} detail="Completed service today" icon={Check} tone="blue" />
+        <MetricCard label="Low stock" value={String(lowStock.length)} detail="At or below minimum level" icon={Package} />
+      </div>
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <QuickAction to="/admin/restaurant" label="Order board" detail="Accept, prepare and serve orders" icon={Utensils} tone="violet" />
+        <QuickAction to="/admin/inventory" label="Inventory" detail="Review stock and adjust levels" icon={Package} tone="blue" />
+        <QuickAction to="/admin/rooms" label="Rooms" detail="Check in-room service context" icon={BedDouble} tone="teal" />
+        <QuickAction to="/admin/front-desk" label="Front desk" detail="Coordinate guest requests" icon={Hotel} tone="gold" />
+      </div>
+      <div className="mt-6 grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
+        <Card className="p-5">
+          <PanelHeader title="Active order queue" copy="Orders that need service attention." action={can(["super-admin", "admin", "manager", "restaurant", "receptionist"]) ? <Link to="/admin/restaurant" className="text-xs font-semibold text-[var(--violet)]">Open board</Link> : undefined} />
+          <div className="mt-4 grid gap-2">
+            {activeOrders.map((order) => (
+              <div key={order.id} className="flex items-center gap-3 rounded-xl border border-[var(--line)] bg-[var(--surface)]/40 p-3">
+                <span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--warning-soft)] text-[var(--warning)]"><Utensils className="h-4 w-4" /></span>
+                <div className="min-w-0 flex-1"><p className="truncate text-xs font-semibold">{order.guestName} · {order.roomNumber ? `Room ${order.roomNumber}` : "Walk-in"}</p><p className="mt-0.5 truncate text-[10px] text-[var(--faint)]">{order.items}</p></div>
+                <strong className="text-sm">{formatCurrency(order.amount)}</strong>
+                <StatusBadge status={order.status} />
+              </div>
+            ))}
+            {!activeOrders.length && <p className="rounded-xl border border-dashed border-[var(--line-2)] p-5 text-center text-xs text-[var(--faint)]">No active restaurant orders.</p>}
+          </div>
+        </Card>
+        <Card className="p-5">
+          <PanelHeader title="Supply alerts" copy="Inventory items at or below minimum." icon={Package} />
+          <div className="mt-4 grid gap-2">
+            {lowStock.slice(0, 8).map((item) => (
+              <div key={item.id} className="flex items-center gap-3 rounded-xl border border-[var(--danger)]/20 bg-[var(--danger-soft)]/45 p-3">
+                <span className="grid h-8 w-8 place-items-center rounded-lg bg-[var(--danger-soft)] text-[var(--danger)]"><Package className="h-4 w-4" /></span>
+                <div className="min-w-0 flex-1"><p className="text-xs font-semibold">{item.name}</p><p className="mt-0.5 text-[10px] text-[var(--muted)]">{item.quantity} {item.unit} remaining · minimum {item.minimumStock}</p></div>
+              </div>
+            ))}
+            {!lowStock.length && <p className="rounded-xl border border-dashed border-[var(--line-2)] p-5 text-center text-xs text-[var(--faint)]">All inventory levels are healthy.</p>}
+          </div>
+        </Card>
+      </div>
+    </AdminPageShell>
   );
 }
 
@@ -2150,8 +3024,8 @@ export function AdminStaffPage() {
                       : createAttendance(person.id, {
                           date: today,
                           status,
-                          clockIn: status === "present" ? "09:00" : null,
-                          clockOut: null,
+                          clockIn: status === "present" ? "09:00" : undefined,
+                          clockOut: undefined,
                         });
                     void action.then((result) => {
                       if (result.error) setError(result.error);
@@ -3597,15 +4471,16 @@ function AdminPageShell({
 }) {
   return (
     <div className="animate-rise-in">
-      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
-        <div>
+      <div className="glass-card mb-6 flex flex-col justify-between gap-4 rounded-[1.6rem] px-5 py-5 md:flex-row md:items-end md:px-6 md:py-6">
+        <span className="pointer-events-none absolute -left-10 -top-16 h-44 w-44 rounded-full bg-[radial-gradient(circle,rgba(109,94,252,0.22),transparent_68%)] blur-2xl" />
+        <div className="relative">
           <SectionEyebrow>{eyebrow}</SectionEyebrow>
-          <h2 className="mt-3 font-display text-3xl font-semibold tracking-[-0.02em] text-[var(--text)] md:text-4xl">
+          <h2 className="mt-3 font-display text-3xl font-semibold tracking-[-0.02em] text-[var(--text)] md:text-[2.6rem] md:leading-[1.05]">
             {title}
           </h2>
-          <p className="mt-2 text-sm text-[var(--faint)]">{description}</p>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--faint)]">{description}</p>
         </div>
-        {action}
+        {action && <div className="relative shrink-0">{action}</div>}
       </div>
       {children}
     </div>

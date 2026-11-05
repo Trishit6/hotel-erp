@@ -113,7 +113,7 @@ export function FeatureLine({ children }: { children: ReactNode }) {
 }
 export function EmptyState({ title, copy }: { title: string; copy: string }) {
   return (
-    <div className="rounded-2xl border border-dashed border-[var(--line-strong)] bg-[var(--surface)] p-10 text-center">
+    <div className="glass-card rounded-[1.4rem] border-dashed p-10 text-center">
       <CircleAlert className="mx-auto mb-3 h-7 w-7 text-[var(--faint)]" />
       <h3 className="text-base font-semibold text-[var(--text)]">{title}</h3>
       <p className="mt-1 text-sm text-[var(--faint)]">{copy}</p>
@@ -171,9 +171,7 @@ export function Card({
   className?: string;
 }) {
   return (
-    <section
-      className={`rounded-[1.15rem] border border-[var(--line)] bg-[var(--surface)] shadow-[0_8px_28px_rgba(31,43,60,0.04)] ${className}`}
-    >
+    <section className={`glass-card rounded-[1.4rem] ${className}`}>
       {children}
     </section>
   );
@@ -198,14 +196,20 @@ export function MetricCard({
     rose: "bg-[var(--danger-soft)] text-[var(--danger)]",
   };
   return (
-    <Card className="p-4">
-      <div
-        className={`grid h-9 w-9 place-items-center rounded-xl ${tones[tone]}`}
-      >
-        <Icon className="h-4 w-4" />
+    <Card className="metric-card p-4 md:p-5">
+      <span className="metric-glow" />
+      <div className="flex items-start justify-between gap-3">
+        <div
+          className={`grid h-10 w-10 place-items-center rounded-xl ring-1 ring-white/40 ${tones[tone]}`}
+        >
+          <Icon className="h-4 w-4" />
+        </div>
+        <span className="rounded-full border border-[var(--line)] bg-[var(--surface-2)] px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.14em] text-[var(--faint)]">
+          Live
+        </span>
       </div>
-      <p className="mt-5 text-xs text-[var(--faint)]">{label}</p>
-      <p className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-[var(--text)]">
+      <p className="mt-5 text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--faint)]">{label}</p>
+      <p className="mt-1.5 text-[1.65rem] font-bold tracking-[-0.05em] text-[var(--text)]">
         {value}
       </p>
       <p className="mt-1 text-[11px] text-[var(--faint)]">{detail}</p>

@@ -219,6 +219,14 @@ export function AdminLayout() {
   const pending = reservations.filter(
     (reservation) => reservation.status === "pending",
   ).length;
+  const alertTo =
+    role === "housekeeping"
+      ? "/admin/housekeeping"
+      : role === "accountant"
+        ? "/admin/payments"
+        : role === "restaurant"
+          ? "/admin/restaurant"
+          : "/admin/front-desk";
   const restricted = adminNav.find(
     (item) =>
       location.pathname.startsWith(item.to) &&
@@ -232,7 +240,7 @@ export function AdminLayout() {
         onClick={() => setOpen(false)}
       />
       <aside
-        className={`no-print fixed inset-y-0 left-0 z-50 flex w-[278px] -translate-x-full flex-col bg-[var(--deep)] px-5 py-6 text-white shadow-2xl transition-transform lg:static lg:translate-x-0 lg:shadow-none ${open ? "translate-x-0" : ""}`}
+        className={`glass-sidebar no-print fixed inset-y-0 left-0 z-50 flex w-[288px] -translate-x-full flex-col px-5 py-6 text-white transition-transform lg:static lg:translate-x-0 ${open ? "translate-x-0" : ""}`}
       >
         <div className="flex items-center justify-between">
           <BrandMark dark />
@@ -284,16 +292,16 @@ export function AdminLayout() {
             </div>
           ))}
         </nav>
-        <div className="mt-5 rounded-2xl bg-[var(--sage-soft-2)] p-4 text-[var(--ink)]">
-          <Gauge className="mb-4 h-5 w-5" />
+        <div className="mt-5 rounded-2xl border border-white/10 bg-[linear-gradient(145deg,rgba(201,169,106,0.2),rgba(109,94,252,0.14))] p-4 text-white shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
+          <Gauge className="mb-4 h-5 w-5 text-[var(--accent)]" />
           <p className="text-sm font-semibold">A clear day ahead.</p>
-          <p className="mt-1 text-[11px] leading-4 text-[var(--sage-deep)]">
+          <p className="mt-1 text-[11px] leading-4 text-white/62">
             Keep arrivals, rooms, and people moving together.
           </p>
         </div>
       </aside>
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="no-print sticky top-0 z-30 flex items-center justify-between gap-4 border-b border-[var(--line)] bg-[var(--canvas)]/95 px-5 py-4 backdrop-blur-xl md:px-8 lg:px-10">
+        <header className="glass-header no-print sticky top-0 z-30 flex items-center justify-between gap-4 px-5 py-4 md:px-8 lg:px-10">
           <div className="flex min-w-0 items-center gap-3">
             <button
               type="button"
@@ -321,15 +329,22 @@ export function AdminLayout() {
             </div>
           </div>
           <div className="flex items-center gap-2 md:gap-3">
-            <label className="hidden items-center gap-2 rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3 py-2 md:flex">
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                navigate({ to: "/admin/reservations", search: { q: query } });
+              }}
+              className="hidden items-center gap-2 rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3 py-2 shadow-sm md:flex"
+            >
               <Search className="h-4 w-4 text-[var(--faint)]" />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search reservations..."
+                aria-label="Search reservations"
                 className="w-40 bg-transparent text-xs outline-none placeholder:text-[var(--faint)]"
               />
-            </label>
+            </form>
             <Link
               to="/admin/reservations"
               search={{ q: query }}
@@ -337,16 +352,21 @@ export function AdminLayout() {
             >
               Quick action
             </Link>
-            <button
-              type="button"
-              className="relative grid h-9 w-9 place-items-center rounded-xl border border-[var(--line-2)] bg-[var(--surface)] text-[var(--muted)]"
-              aria-label="Notifications"
+            <Link
+              to={alertTo}
+              className="relative grid h-9 w-9 place-items-center rounded-xl border border-[var(--line-2)] bg-[var(--surface)] text-[var(--muted)] transition-colors hover:border-[var(--violet)] hover:text-[var(--ink)]"
+              aria-label={
+                pending > 0
+                  ? `${pending} pending reservations — open alerts`
+                  : "Open operational alerts"
+              }
+              title="Operational alerts"
             >
               <Bell className="h-4 w-4" />
               {pending > 0 && (
                 <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-[var(--danger)]" />
               )}
-            </button>
+            </Link>
             <ThemeToggle />
             <div className="hidden h-8 w-px bg-[var(--line)] sm:block" />
             <div className="grid h-9 w-9 place-items-center rounded-full bg-[var(--info-soft)] text-xs font-bold text-[var(--info)]">
@@ -362,7 +382,7 @@ export function AdminLayout() {
             </button>
           </div>
         </header>
-        <main className="flex-1 px-5 py-6 md:px-8 md:py-8 lg:px-10">
+        <main className="admin-main flex-1 px-5 py-6 md:px-8 md:py-8 lg:px-10">
           {error && (
             <div
               role="alert"
