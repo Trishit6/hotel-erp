@@ -106,7 +106,7 @@ export default function HomePage() {
           ref={heroRef}
           className="mx-auto max-w-[1440px] px-4 pt-4 md:px-7 md:pt-6"
         >
-          <div className="relative grid overflow-hidden rounded-[1.9rem] bg-[var(--surface-2)] lg:min-h-[660px] lg:grid-cols-[1.02fr_0.98fr]">
+          <div className="relative grid overflow-hidden rounded-[1.9rem] bg-[var(--surface-2)] pb-14 md:pb-16 lg:min-h-[660px] lg:grid-cols-[1.02fr_0.98fr]">
             <div className="relative z-10 flex flex-col justify-center px-7 pb-10 pt-12 sm:px-12 lg:px-14 lg:pb-32 lg:pt-20 xl:px-20">
               <motion.div
                 initial={reduceMotion ? false : { opacity: 0, y: 14 }}
@@ -258,7 +258,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="relative z-20 mx-auto -mt-11 max-w-[1180px] px-2 md:-mt-12">
+          <div className="relative z-20 mx-auto -mt-10 max-w-[1180px] px-2 md:-mt-12">
             <BookingSearch
               initialCheckIn={featuredSearch.checkIn}
               initialCheckOut={featuredSearch.checkOut}
