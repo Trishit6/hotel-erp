@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { env } from "../config/env";
+import { STAFF_ROLES } from "../constants";
 import type { Permission } from "../services/permissions";
 import { hasPermission } from "../services/permissions";
 import { findSession } from "../services/session";
@@ -37,13 +38,26 @@ export function requireAuth(req: Request, res: Response, next: NextFunction): vo
   next();
 }
 
+/** Customer accounts may never reach staff endpoints, even read-only ones. */
+export function requireStaff(req: Request, _res: Response, next: NextFunction): void {
+  if (!req.user) {
+    next(unauthorized());
+    return;
+  }
+  if (!(STAFF_ROLES as readonly string[]).includes(req.user.role)) {
+    next(forbidden("This area is for hotel staff only."));
+    return;
+  }
+  next();
+}
+
 export function requirePermission(permission: Permission) {
   return (req: Request, _res: Response, next: NextFunction): void => {
     if (!req.user) {
       next(unauthorized());
       return;
     }
-    if (!hasPermission(req.user.role, permission)) {
+    if (!(STAFF_ROLES as readonly string[]).includes(req.user.role) || !hasPermission(req.user.role as never, permission)) {
       next(forbidden());
       return;
     }

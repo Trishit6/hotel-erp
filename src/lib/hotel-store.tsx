@@ -26,6 +26,8 @@ import {
   type PublicSettings,
   type Reservation,
   type ReservationStatus,
+  type RestaurantMenuCategory,
+  type RestaurantMenuItem,
   type RestaurantOrder,
   type Room,
   type RoomStatus,
@@ -33,6 +35,8 @@ import {
   type StaffMember,
   type StaffRole,
   type SystemSettings,
+  type UserRole,
+  roleHome,
 } from "./hotel-data";
 import { ApiError, api } from "./api";
 
@@ -98,6 +102,7 @@ export type RoomTypeInput = {
 
 export type InventoryInput = {
   name: string;
+  sku: string;
   category: string;
   quantity: number;
   unit: string;
@@ -110,7 +115,7 @@ export interface SessionUser {
   id: string;
   name: string;
   email: string;
-  role: StaffRole;
+  role: UserRole;
   staffId?: string | null;
   isActive?: boolean;
   lastLoginAt?: string | null;
@@ -125,7 +130,14 @@ export interface BusyRange {
 
 export type StoreStatus = "loading" | "ready" | "error";
 
-type MutationResult = { error?: string };
+export interface RegisterInput {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+}
+
+type MutationResult = { error?: string; redirect?: string };
 type ReservationResult = { reservation?: Reservation; error?: string };
 type GuestResult = { guest?: Guest; error?: string };
 
@@ -145,6 +157,8 @@ type BootstrapResponse = {
   staff?: StaffMember[];
   inventory?: InventoryItem[];
   orders?: RestaurantOrder[];
+  menuCategories?: RestaurantMenuCategory[];
+  menuItems?: RestaurantMenuItem[];
   guests?: Guest[];
   payments?: Payment[];
   invoices?: Invoice[];
@@ -185,6 +199,8 @@ export interface HotelStore {
   inventory: InventoryItem[];
   expenses: Expense[];
   orders: RestaurantOrder[];
+  menuCategories: RestaurantMenuCategory[];
+  menuItems: RestaurantMenuItem[];
   activities: ActivityLog[];
   users: SessionUser[];
   busyRanges: BusyRange[];
@@ -192,12 +208,13 @@ export interface HotelStore {
   systemSettings: SystemSettings | null;
   dashboard: DashboardSummary | null;
   user: SessionUser | null;
-  role: StaffRole | null;
+  role: UserRole | null;
   actorName: string;
   status: StoreStatus;
   error: string | null;
   clearError: () => void;
   login: (email: string, password: string) => Promise<MutationResult>;
+  register: (input: RegisterInput) => Promise<MutationResult>;
   logout: () => Promise<void>;
   can: (allowed: StaffRole[]) => boolean;
   refresh: () => Promise<void>;
@@ -328,6 +345,8 @@ export function HotelProvider({ children }: { children: ReactNode }) {
   const [inventory, setInventory] = useState<InventoryItem[]>([]);
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [orders, setOrders] = useState<RestaurantOrder[]>([]);
+  const [menuCategories, setMenuCategories] = useState<RestaurantMenuCategory[]>([]);
+  const [menuItems, setMenuItems] = useState<RestaurantMenuItem[]>([]);
   const [activities, setActivities] = useState<ActivityLog[]>([]);
   const [users, setUsers] = useState<SessionUser[]>([]);
   const [busyRanges, setBusyRanges] = useState<BusyRange[]>([]);
@@ -337,7 +356,7 @@ export function HotelProvider({ children }: { children: ReactNode }) {
   );
   const [dashboard, setDashboard] = useState<DashboardSummary | null>(null);
   const [user, setUser] = useState<SessionUser | null>(null);
-  const [role, setRole] = useState<StaffRole | null>(null);
+  const [role, setRole] = useState<UserRole | null>(null);
   const [actorName, setActorName] = useState("RIVR team");
   const [status, setStatus] = useState<StoreStatus>("loading");
   const [error, setError] = useState<string | null>(null);
@@ -350,10 +369,14 @@ export function HotelProvider({ children }: { children: ReactNode }) {
     if (catalog.settings) setSettings(catalog.settings);
   };
 
-  const loadAdminData = async () => {
+  const loadAdminData = async (withDashboard = true) => {
     const [bootstrap, dashboardSummary] = await Promise.all([
       api.get<BootstrapResponse>("/admin/bootstrap"),
-      api.get<DashboardSummary>("/admin/reports/dashboard"),
+      // The general staff role holds no dashboard:read permission; requesting
+      // the financial summary would fail the whole workspace load.
+      withDashboard
+        ? api.get<DashboardSummary>("/admin/reports/dashboard")
+        : Promise.resolve(null),
     ]);
     setRoomTypes(bootstrap.roomTypes ?? []);
     setRooms(bootstrap.rooms ?? []);
@@ -362,6 +385,8 @@ export function HotelProvider({ children }: { children: ReactNode }) {
     setStaff(bootstrap.staff ?? []);
     setInventory(bootstrap.inventory ?? []);
     setOrders(bootstrap.orders ?? []);
+    setMenuCategories(bootstrap.menuCategories ?? []);
+    setMenuItems(bootstrap.menuItems ?? []);
     setGuests(bootstrap.guests ?? []);
     setPayments(bootstrap.payments ?? []);
     setInvoices(bootstrap.invoices ?? []);
@@ -399,7 +424,10 @@ export function HotelProvider({ children }: { children: ReactNode }) {
           setUser(session);
           setRole(session.role);
           setActorName(session.name);
-          await loadAdminData();
+          // Customers have no staff workspace; loading it would leak other
+          // guests' records through the bootstrap query.
+          if (session.role !== "customer")
+            await loadAdminData(session.role !== "staff");
         }
         if (!cancelled) setStatus("ready");
       } catch (initialError) {
@@ -456,7 +484,7 @@ export function HotelProvider({ children }: { children: ReactNode }) {
 
     const refresh = async () => {
       try {
-        if (user) await loadAdminData();
+        if (user) await loadAdminData(role !== "staff");
         else await loadPublicData();
         setStatus("ready");
       } catch (caught) {
@@ -497,22 +525,45 @@ export function HotelProvider({ children }: { children: ReactNode }) {
         );
       });
 
+    const applySessionUser = (sessionUser: SessionUser) => {
+      setUser(sessionUser);
+      setRole(sessionUser.role);
+      setActorName(sessionUser.name);
+    };
+
+    const finishSignIn = async (
+      withDashboard = true,
+    ): Promise<MutationResult> => {
+      setError(null);
+      setStatus("ready");
+      try {
+        await loadAdminData(withDashboard);
+        return {};
+      } catch (caught) {
+        return handleError(caught);
+      }
+    };
+
     const login = async (
       email: string,
       password: string,
     ): Promise<MutationResult> => {
       try {
-        const result = await api.post<{ user: SessionUser }>("/auth/login", {
-          email,
-          password,
-        });
-        setUser(result.user);
-        setRole(result.user.role);
-        setActorName(result.user.name);
-        setError(null);
-        await loadAdminData();
-        setStatus("ready");
-        return {};
+        const result = await api.post<{
+          user: SessionUser;
+          redirect?: string;
+        }>("/auth/login", { email, password });
+        applySessionUser(result.user);
+        const redirect = result.redirect ?? roleHome(result.user.role);
+        if (result.user.role === "customer") {
+          setError(null);
+          setStatus("ready");
+          return { redirect };
+        }
+        return {
+          ...(await finishSignIn(result.user.role !== "staff")),
+          redirect,
+        };
       } catch (caught) {
         setUser(null);
         setRole(null);
@@ -521,6 +572,28 @@ export function HotelProvider({ children }: { children: ReactNode }) {
           caught instanceof ApiError
             ? caught.message
             : "Sign in failed. Please try again.";
+        setError(message);
+        return { error: message };
+      }
+    };
+
+    const register = async (
+      input: RegisterInput,
+    ): Promise<MutationResult> => {
+      try {
+        const result = await api.post<{
+          user: SessionUser;
+          redirect?: string;
+        }>("/auth/register", input);
+        applySessionUser(result.user);
+        setError(null);
+        setStatus("ready");
+        return { redirect: result.redirect ?? roleHome(result.user.role) };
+      } catch (caught) {
+        const message =
+          caught instanceof ApiError
+            ? caught.message
+            : "Account creation failed. Please try again.";
         setError(message);
         return { error: message };
       }
@@ -545,6 +618,8 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       setInventory([]);
       setExpenses([]);
       setOrders([]);
+      setMenuCategories([]);
+      setMenuItems([]);
       setActivities([]);
       setUsers([]);
       try {
@@ -593,10 +668,12 @@ export function HotelProvider({ children }: { children: ReactNode }) {
           city: data.city ?? "",
           state: data.state ?? "",
           postalCode: data.postalCode ?? "",
-          ...(user ? { discount: data.discount } : {}),
+          ...(role && role !== "customer" ? { discount: data.discount } : {}),
         };
         const result = await api.post<{ reservation: Reservation }>(
-          user ? "/admin/reservations" : "/public/reservations",
+          role && role !== "customer"
+            ? "/admin/reservations"
+            : "/public/reservations",
           body,
         );
         await refresh();
@@ -1118,6 +1195,8 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       setInventory([]);
       setExpenses([]);
       setOrders([]);
+      setMenuCategories([]);
+      setMenuItems([]);
       setActivities([]);
       setUsers([]);
       try {
@@ -1142,6 +1221,8 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       inventory,
       expenses,
       orders,
+      menuCategories,
+      menuItems,
       activities,
       users,
       busyRanges,
@@ -1155,8 +1236,10 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       error,
       clearError: () => setError(null),
       login,
+      register,
       logout,
-      can: (allowed: StaffRole[]) => Boolean(role && allowed.includes(role)),
+      can: (allowed: StaffRole[]) =>
+        Boolean(role && (allowed as readonly string[]).includes(role)),
       refresh,
       getRoom,
       getRoomType,
@@ -1213,6 +1296,8 @@ export function HotelProvider({ children }: { children: ReactNode }) {
     guests,
     inventory,
     invoices,
+    menuCategories,
+    menuItems,
     orders,
     payments,
     reservations,

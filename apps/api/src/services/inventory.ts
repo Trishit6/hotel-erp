@@ -39,6 +39,7 @@ export async function listInventory(filters: InventoryFilters) {
 export async function createInventoryItem(
   input: {
     name: string;
+    sku: string;
     category: string;
     quantity: number;
     unit: string;
@@ -54,6 +55,7 @@ export async function createInventoryItem(
   await db.insert(inventory).values({
     id,
     name: input.name,
+    sku: input.sku,
     category: input.category,
     quantity: input.quantity,
     unit: input.unit,
@@ -97,6 +99,7 @@ export async function updateInventoryItem(
   id: string,
   input: Partial<{
     name: string;
+    sku: string;
     category: string;
     quantity: number;
     unit: string;
@@ -116,6 +119,7 @@ export async function updateInventoryItem(
     .update(inventory)
     .set({
       ...(input.name !== undefined ? { name: input.name } : {}),
+      ...(input.sku !== undefined ? { sku: input.sku } : {}),
       ...(input.category !== undefined ? { category: input.category } : {}),
       ...(input.quantity !== undefined ? { quantity: input.quantity } : {}),
       ...(input.unit !== undefined ? { unit: input.unit } : {}),

@@ -2,7 +2,7 @@ import { Router } from "express";
 import { desc } from "drizzle-orm";
 import { db } from "../../database/client";
 import * as schema from "../../database/schema";
-import { requireAuth, requirePermission } from "../../middleware/auth";
+import { requireAuth, requirePermission, requireStaff } from "../../middleware/auth";
 import { validate } from "../../middleware/validate";
 import { asyncHandler, forbidden } from "../../utils/http";
 import { activityQuerySchema } from "../shared/query";
@@ -14,6 +14,8 @@ import {
   mapGuest,
   mapInventory,
   mapInvoice,
+  mapMenuCategory,
+  mapMenuItem,
   mapOrder,
   mapPayment,
   mapReservation,
@@ -27,6 +29,7 @@ import {
 import { env } from "../../config/env";
 import { seedDatabase } from "../../database/seed";
 import { reservationsRouter } from "./reservations.routes";
+import { suppliersRouter } from "./suppliers.routes";
 import { roomsRouter } from "./rooms.routes";
 import { guestsRouter } from "./guests.routes";
 import { paymentsRouter } from "./payments.routes";
@@ -41,23 +44,28 @@ import { settingsRouter } from "./settings.routes";
 
 export const adminRouter = Router();
 
-adminRouter.use(requireAuth);
+adminRouter.use(requireAuth, requireStaff);
 
 adminRouter.get(
   "/bootstrap",
   asyncHandler(async (req, res) => {
     const role = req.user!.role;
-    const can = (permission: Parameters<typeof hasPermission>[1]) => hasPermission(role, permission);
+    // The router is already behind `requireStaff`, so customer is impossible here.
+    const can = (permission: Parameters<typeof hasPermission>[1]) =>
+      hasPermission(role as Parameters<typeof hasPermission>[0], permission);
 
-    const [roomTypeRows, roomRows, reservationRows, taskRows, staffRows, inventoryRows, orderRows] = await Promise.all([
-      db.select().from(schema.roomTypes),
-      db.select().from(schema.rooms),
-      db.select().from(schema.reservations).orderBy(desc(schema.reservations.createdAt)).limit(500),
-      db.select().from(schema.housekeepingTasks).orderBy(desc(schema.housekeepingTasks.updatedAt)).limit(500),
-      db.select().from(schema.staff),
-      db.select().from(schema.inventory),
-      db.select().from(schema.restaurantOrders).orderBy(desc(schema.restaurantOrders.createdAt)).limit(500),
-    ]);
+    const [roomTypeRows, roomRows, reservationRows, taskRows, staffRows, inventoryRows, orderRows, menuCategoryRows, menuItemRows] =
+      await Promise.all([
+        db.select().from(schema.roomTypes),
+        db.select().from(schema.rooms),
+        db.select().from(schema.reservations).orderBy(desc(schema.reservations.createdAt)).limit(500),
+        db.select().from(schema.housekeepingTasks).orderBy(desc(schema.housekeepingTasks.updatedAt)).limit(500),
+        db.select().from(schema.staff),
+        db.select().from(schema.inventory),
+        db.select().from(schema.restaurantOrders).orderBy(desc(schema.restaurantOrders.createdAt)).limit(500),
+        db.select().from(schema.restaurantMenuCategories).orderBy(schema.restaurantMenuCategories.sortOrder),
+        db.select().from(schema.restaurantMenuItems).orderBy(schema.restaurantMenuItems.sortOrder),
+      ]);
 
     const [amenityRows, guestRows, paymentRows, invoiceRows, expenseRows, attendanceRows, activityRows, userRows, settingsRows] =
       await Promise.all([
@@ -90,6 +98,8 @@ adminRouter.get(
       staff: staffRows.map(mapStaff),
       inventory: inventoryRows.map(mapInventory),
       orders: orderRows.map(mapOrder),
+      menuCategories: menuCategoryRows.map(mapMenuCategory),
+      menuItems: menuItemRows.map(mapMenuItem),
       guests: guestRows.map(mapGuest),
       payments: paymentRows.map(mapPayment),
       invoices: invoiceRows.map(mapInvoice),
@@ -137,6 +147,7 @@ adminRouter.use("/payments", paymentsRouter);
 adminRouter.use("/housekeeping", housekeepingRouter);
 adminRouter.use("/staff", staffRouter);
 adminRouter.use("/inventory", inventoryRouter);
+adminRouter.use("/suppliers", suppliersRouter);
 adminRouter.use("/expenses", expensesRouter);
 adminRouter.use("/restaurant", restaurantRouter);
 adminRouter.use("/reports", reportsRouter);

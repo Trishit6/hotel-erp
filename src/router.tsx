@@ -35,7 +35,6 @@ import {
   AdminHousekeepingPage,
   AdminIndexPage,
   AdminInventoryPage,
-  AdminLoginPage,
   AdminPaymentsPage,
   AdminReportsPage,
   AdminReservationsPage,
@@ -44,6 +43,13 @@ import {
   AdminSettingsPage,
   AdminStaffPage,
 } from "./pages/AdminPages";
+import {
+  HousekeepingDashboardPage,
+  ManagerDashboardPage,
+  ReceptionDashboardPage,
+  StaffDashboardPage,
+} from "./pages/RoleDashboards";
+import { GuestDashboardPage } from "./pages/GuestDashboardPage";
 import { normalizeStaySearch } from "./lib/hotel-data";
 
 const staySearch = (search: Record<string, unknown>) =>
@@ -179,10 +185,30 @@ const verifyEmailRoute = createRoute({
   path: "/verify-email",
   component: VerifyEmailPage,
 });
-const adminLoginRoute = createRoute({
+const managerDashboardRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/admin/login",
-  component: AdminLoginPage,
+  path: "/manager/dashboard",
+  component: ManagerDashboardPage,
+});
+const receptionDashboardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/reception/dashboard",
+  component: ReceptionDashboardPage,
+});
+const housekeepingDashboardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/housekeeping/dashboard",
+  component: HousekeepingDashboardPage,
+});
+const staffDashboardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/staff/dashboard",
+  component: StaffDashboardPage,
+});
+const guestDashboardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/guest/dashboard",
+  component: GuestDashboardPage,
 });
 const adminRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -308,7 +334,11 @@ const routeTree = rootRoute.addChildren([
   forgotPasswordRoute,
   resetPasswordRoute,
   verifyEmailRoute,
-  adminLoginRoute,
+  managerDashboardRoute,
+  receptionDashboardRoute,
+  housekeepingDashboardRoute,
+  staffDashboardRoute,
+  guestDashboardRoute,
   adminRoute.addChildren([
     adminIndexRoute,
     adminDashboardRoute,

@@ -355,8 +355,8 @@ export function PublicHeader() {
               </Link>
               <Link
                 onClick={close}
-                to="/admin/login"
-                className={`rounded-xl px-3 py-3 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--ink)] ${path === "/admin/login" ? "bg-[var(--surface-2)] text-[var(--ink)]" : "text-[var(--muted)]"}`}
+                to="/login"
+                className={`rounded-xl px-3 py-3 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--ink)] ${path === "/login" ? "bg-[var(--surface-2)] text-[var(--ink)]" : "text-[var(--muted)]"}`}
               >
                 Staff portal
               </Link>

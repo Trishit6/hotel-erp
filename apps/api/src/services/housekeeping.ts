@@ -1,6 +1,6 @@
 import { and, desc, eq, sql, type SQL } from "drizzle-orm";
 import { db } from "../database/client";
-import { housekeepingTasks, rooms, staff } from "../database/schema";
+import { housekeepingTaskHistory, housekeepingTasks, rooms, staff } from "../database/schema";
 import type { HousekeepingStatus } from "../constants";
 import { badRequest, notFound } from "../utils/http";
 import { newId } from "../utils/id";
@@ -35,7 +35,14 @@ export async function listTasks(filters: TaskFilters) {
 }
 
 export async function createTask(
-  input: { roomId: string; assignedTo?: string | null; priority?: "low" | "normal" | "high"; issue?: string },
+  input: {
+    roomId: string;
+    assignedTo?: string | null;
+    priority?: "low" | "normal" | "high";
+    taskType?: string;
+    issue?: string;
+    dueDate?: string;
+  },
   actor: { id: string; name: string },
 ) {
   const [room] = await db.select().from(rooms).where(eq(rooms.id, input.roomId)).limit(1);
@@ -51,7 +58,9 @@ export async function createTask(
     assignedTo: input.assignedTo ?? null,
     status: input.assignedTo ? "assigned" : "dirty",
     priority: input.priority ?? "normal",
+    taskType: input.taskType ?? "Room service",
     issue: input.issue ?? "Room cleaning",
+    dueDate: input.dueDate ?? null,
     updatedAt: new Date(),
   });
   await logActivity(db, {
@@ -67,7 +76,15 @@ export async function createTask(
 
 export async function updateTask(
   id: string,
-  input: { assignedTo?: string | null; status?: HousekeepingStatus; priority?: "low" | "normal" | "high"; issue?: string },
+  input: {
+    assignedTo?: string | null;
+    status?: HousekeepingStatus;
+    priority?: "low" | "normal" | "high";
+    taskType?: string;
+    issue?: string;
+    dueDate?: string | null;
+    completionNotes?: string;
+  },
   actor: { id: string; name: string },
 ) {
   const [task] = await db.select().from(housekeepingTasks).where(eq(housekeepingTasks.id, id)).limit(1);
@@ -84,10 +101,23 @@ export async function updateTask(
       ...(input.assignedTo !== undefined ? { assignedTo: input.assignedTo } : {}),
       ...(input.status !== undefined ? { status: input.status } : {}),
       ...(input.priority !== undefined ? { priority: input.priority } : {}),
+      ...(input.taskType !== undefined ? { taskType: input.taskType } : {}),
       ...(input.issue !== undefined ? { issue: input.issue } : {}),
+      ...(input.dueDate !== undefined ? { dueDate: input.dueDate } : {}),
+      ...(input.completionNotes !== undefined ? { completionNotes: input.completionNotes } : {}),
       updatedAt: now,
     })
     .where(eq(housekeepingTasks.id, id));
+
+  if (input.status && input.status !== task.status) {
+    await db.insert(housekeepingTaskHistory).values({
+      id: newId("hkhist"),
+      taskId: id,
+      status: input.status,
+      note: input.completionNotes ?? "",
+      changedBy: actor.id,
+    });
+  }
 
   if (input.status === "inspected") {
     await db.update(rooms).set({ status: "available", updatedAt: now }).where(eq(rooms.id, task.roomId));

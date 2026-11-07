@@ -1,10 +1,10 @@
-import type { StaffRole } from "../constants";
+import type { UserRole } from "../constants";
 
 export interface SessionUser {
   id: string;
   name: string;
   email: string;
-  role: StaffRole;
+  role: UserRole;
   staffId: string | null;
 }
 

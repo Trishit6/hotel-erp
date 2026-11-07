@@ -1,4 +1,4 @@
-import type { StaffRole } from "../constants";
+import type { StaffRole, UserRole } from "../constants";
 import * as schema from "../database/schema";
 
 type RoomTypeRow = typeof schema.roomTypes.$inferSelect;
@@ -13,6 +13,8 @@ type AttendanceRow = typeof schema.attendance.$inferSelect;
 type InventoryRow = typeof schema.inventory.$inferSelect;
 type ExpenseRow = typeof schema.expenses.$inferSelect;
 type OrderRow = typeof schema.restaurantOrders.$inferSelect;
+type MenuCategoryRow = typeof schema.restaurantMenuCategories.$inferSelect;
+type MenuItemRow = typeof schema.restaurantMenuItems.$inferSelect;
 type ActivityRow = typeof schema.activityLogs.$inferSelect;
 type UserRow = typeof schema.users.$inferSelect;
 type SettingsRow = typeof schema.systemSettings.$inferSelect;
@@ -115,7 +117,10 @@ export function mapTask(row: TaskRow) {
     assignedTo: row.assignedTo ?? undefined,
     status: row.status,
     priority: row.priority,
+    taskType: row.taskType,
     issue: row.issue,
+    dueDate: row.dueDate ?? undefined,
+    completionNotes: row.completionNotes,
     updatedAt: row.updatedAt.toISOString(),
   };
 }
@@ -127,7 +132,7 @@ export function mapStaff(row: StaffRow) {
     email: row.email,
     phone: row.phone,
     department: row.department,
-    role: row.role as StaffRole,
+    role: row.role as UserRole,
     shift: row.shift,
     status: row.status,
     joinedAt: row.joinedAt,
@@ -149,6 +154,7 @@ export function mapInventory(row: InventoryRow) {
   return {
     id: row.id,
     name: row.name,
+    sku: row.sku,
     category: row.category,
     quantity: row.quantity,
     unit: row.unit,
@@ -183,6 +189,28 @@ export function mapOrder(row: OrderRow) {
   };
 }
 
+export function mapMenuCategory(row: MenuCategoryRow) {
+  return {
+    id: row.id,
+    name: row.name,
+    description: row.description,
+    sortOrder: row.sortOrder,
+  };
+}
+
+export function mapMenuItem(row: MenuItemRow) {
+  return {
+    id: row.id,
+    categoryId: row.categoryId,
+    name: row.name,
+    description: row.description,
+    price: number(row.price),
+    isVegetarian: row.isVegetarian,
+    isAvailable: row.isAvailable,
+    sortOrder: row.sortOrder,
+  };
+}
+
 export function mapActivity(row: ActivityRow) {
   return {
     id: row.id,
@@ -199,7 +227,7 @@ export function mapUser(row: UserRow) {
     id: row.id,
     name: row.name,
     email: row.email,
-    role: row.role as StaffRole,
+    role: row.role as UserRole,
     staffId: row.staffId,
     isActive: row.isActive,
     lastLoginAt: iso(row.lastLoginAt),
@@ -237,6 +265,10 @@ export function mapSettings(row: SettingsRow) {
     checkInTime: row.checkInTime,
     checkOutTime: row.checkOutTime,
     invoicePrefix: row.invoicePrefix,
+    invoiceFooter: row.invoiceFooter,
+    cancellationPolicy: row.cancellationPolicy,
+    cancellationCutoffHours: row.cancellationCutoffHours,
+    reservationHoldHours: row.reservationHoldHours,
     logoUrl: row.logoUrl,
     updatedAt: row.updatedAt.toISOString(),
   };

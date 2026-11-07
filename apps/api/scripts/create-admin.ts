@@ -1,7 +1,8 @@
 import "dotenv/config";
 import { hashPassword } from "../src/services/password";
 import { closeDatabase, pool } from "../src/database/client";
-import { ensureDatabaseExists, resetDatabase } from "../src/database/reset";
+import { ensureDatabaseExists } from "../src/database/reset";
+import { migrate } from "../src/database/migrate";
 import { seedRolesOnly } from "../src/database/seed";
 
 function arg(name: string): string | undefined {
@@ -9,6 +10,13 @@ function arg(name: string): string | undefined {
   return index >= 0 ? process.argv[index + 1] : undefined;
 }
 
+/**
+ * One-time local bootstrap for the initial super administrator.
+ *
+ * There is no public setup endpoint. This command only creates the first
+ * administrator, never drops existing data, and refuses to run once an active
+ * super administrator exists.
+ */
 async function main() {
   const email = (arg("email") ?? process.env.SEED_ADMIN_EMAIL ?? "").trim().toLowerCase();
   const password = arg("password") ?? process.env.SEED_ADMIN_PASSWORD ?? "";
@@ -22,13 +30,21 @@ async function main() {
   }
 
   await ensureDatabaseExists();
-  await resetDatabase();
+  await migrate();
   await seedRolesOnly();
+
+  const [rows] = await pool.query("SELECT COUNT(*) AS count FROM users WHERE role = 'super-admin' AND is_active = 1");
+  const existing = Number((rows as { count: number }[])[0]?.count ?? 0);
+  if (existing > 0) {
+    throw new Error(
+      "An active super administrator already exists. Sign in and create further accounts from Settings, or deactivate the existing administrator first.",
+    );
+  }
 
   const passwordHash = await hashPassword(password);
   const id = `user-${Date.now()}`;
   await pool.query(
-    "INSERT INTO users (id, name, email, password_hash, role, is_active, updated_at) VALUES (?, ?, ?, ?, 'super-admin', 1, UTC_TIMESTAMP()) ON DUPLICATE KEY UPDATE password_hash = VALUES(password_hash), name = VALUES(name), role = 'super-admin', is_active = 1, updated_at = UTC_TIMESTAMP()",
+    "INSERT INTO users (id, name, email, password_hash, role, is_active, updated_at) VALUES (?, ?, ?, ?, 'super-admin', 1, UTC_TIMESTAMP())",
     [id, name, email, passwordHash],
   );
   console.log(`Super admin created for ${email}.`);

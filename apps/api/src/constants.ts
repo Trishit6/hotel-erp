@@ -6,8 +6,30 @@ export const STAFF_ROLES = [
   "housekeeping",
   "accountant",
   "restaurant",
+  "staff",
 ] as const;
 export type StaffRole = (typeof STAFF_ROLES)[number];
+
+/** Every account role, including public customers who can never hold staff permissions. */
+export const USER_ROLES = [...STAFF_ROLES, "customer"] as const;
+export type UserRole = (typeof USER_ROLES)[number];
+
+/** The single public signup role. Employee roles are assigned by an administrator. */
+export const CUSTOMER_ROLE = "customer" as const;
+export type CustomerRole = typeof CUSTOMER_ROLE;
+
+/** Where each role lands after sign-in. Mirrors `roleHome` in the frontend. */
+export const ROLE_HOME: Record<UserRole, string> = {
+  "super-admin": "/admin/dashboard",
+  admin: "/admin/dashboard",
+  manager: "/manager/dashboard",
+  receptionist: "/reception/dashboard",
+  housekeeping: "/housekeeping/dashboard",
+  accountant: "/admin/reports",
+  restaurant: "/admin/restaurant",
+  staff: "/staff/dashboard",
+  customer: "/guest/dashboard",
+};
 
 export const ROOM_STATUSES = [
   "available",

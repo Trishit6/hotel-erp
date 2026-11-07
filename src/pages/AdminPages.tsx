@@ -64,6 +64,7 @@ import {
   type RoomType,
   type StaffMember,
   type StaffRole,
+  type UserRole,
 } from "../lib/hotel-data";
 import {
   useHotel,
@@ -74,7 +75,7 @@ import {
 } from "../lib/hotel-store";
 import { ThemeToggle } from "../components/hotel/ThemeToggle";
 
-const roleLabels: Record<StaffRole, string> = {
+const roleLabels: Record<UserRole, string> = {
   "super-admin": "Super Admin",
   admin: "Administrator",
   manager: "Hotel Manager",
@@ -82,6 +83,8 @@ const roleLabels: Record<StaffRole, string> = {
   housekeeping: "Housekeeping",
   accountant: "Accountant",
   restaurant: "Restaurant Staff",
+  staff: "Staff",
+  customer: "Customer",
 };
 const today = dateAt(0);
 function downloadCsv(filename: string, rows: string[][]) {
@@ -99,140 +102,6 @@ function downloadCsv(filename: string, rows: string[][]) {
   URL.revokeObjectURL(url);
 }
 
-export function AdminLoginPage() {
-  const { login, role } = useHotel();
-  const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-
-  useEffect(() => {
-    if (role) navigate({ to: "/admin/dashboard" });
-  }, [navigate, role]);
-
-  const enter = async (event: React.FormEvent) => {
-    event.preventDefault();
-    setError("");
-    setSubmitting(true);
-    const result = await login(email.trim(), password);
-    setSubmitting(false);
-    if (result.error) setError(result.error);
-    else navigate({ to: "/admin/dashboard" });
-  };
-
-  return (
-    <div className="min-h-screen bg-[var(--canvas)] text-[var(--text)]">
-      <header className="flex justify-between px-5 py-5 md:px-10">
-        <Link to="/">
-          <span className="flex items-center gap-2.5">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--primary)]">
-              <span className="h-3 w-3 rounded-full border-2 border-[var(--accent)]" />
-            </span>
-            <span className="text-sm font-semibold tracking-[0.18em]">
-              RIVR
-            </span>
-          </span>
-        </Link>
-        <div className="flex items-center gap-4">
-          <Link to="/" className="text-xs text-[var(--muted)]">
-            Guest website
-          </Link>
-          <ThemeToggle />
-        </div>
-      </header>
-      <main className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-12 md:px-10 md:py-20 lg:grid-cols-[1fr_0.85fr]">
-        <div>
-          <SectionEyebrow>RIVR operations</SectionEyebrow>
-          <h1 className="mt-5 max-w-xl font-display text-5xl font-normal leading-[0.98] tracking-[-0.03em] md:text-7xl">
-            Run a better
-            <br />
-            <span className="text-[var(--sage)]">hotel day.</span>
-          </h1>
-          <p className="mt-6 max-w-md text-sm leading-6 text-[var(--muted)]">
-            A clear control room for the people who keep every arrival, room,
-            and guest experience moving.
-          </p>
-          <div className="mt-8 grid max-w-md gap-3 sm:grid-cols-3">
-            <div>
-              <p className="text-2xl font-semibold text-[var(--ink)]">24/7</p>
-              <p className="text-[11px] text-[var(--faint)]">Front desk view</p>
-            </div>
-            <div>
-              <p className="text-2xl font-semibold text-[var(--ink)]">Live</p>
-              <p className="text-[11px] text-[var(--faint)]">Room status</p>
-            </div>
-            <div>
-              <p className="text-2xl font-semibold text-[var(--ink)]">Secure</p>
-              <p className="text-[11px] text-[var(--faint)]">
-                Role-based access
-              </p>
-            </div>
-          </div>
-        </div>
-        <form
-          onSubmit={enter}
-          className="rounded-[1.4rem] border border-[var(--line)] bg-[var(--surface)] p-6 shadow-[0_18px_55px_rgba(23,43,73,0.08)] md:p-8"
-        >
-          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--faint)]">
-            Staff sign in
-          </p>
-          <h2 className="mt-2 font-display text-3xl text-[var(--ink)]">
-            Welcome back.
-          </h2>
-          <p className="mt-2 text-xs leading-5 text-[var(--muted)]">
-            Use the email and password issued by your hotel administrator.
-          </p>
-          <label className="mt-6 grid gap-1.5 text-xs font-semibold text-[var(--muted-strong)]">
-            Email
-            <input
-              required
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              autoComplete="username"
-              placeholder="you@rivr.example"
-              className="rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm font-normal outline-none focus:border-[var(--sage)]"
-            />
-          </label>
-          <label className="mt-4 grid gap-1.5 text-xs font-semibold text-[var(--muted-strong)]">
-            Password
-            <input
-              required
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              autoComplete="current-password"
-              placeholder="Enter your password"
-              className="rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm font-normal outline-none focus:border-[var(--sage)]"
-            />
-          </label>
-          {error && (
-            <p
-              role="alert"
-              className="mt-4 rounded-xl border border-[var(--danger)]/25 bg-[var(--danger-soft)] px-3 py-2.5 text-xs text-[var(--danger)]"
-            >
-              {error}
-            </p>
-          )}
-          <button
-            type="submit"
-            disabled={submitting}
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] py-3.5 text-sm font-semibold text-[var(--on-primary)] transition-colors hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-            {submitting ? "Signing in..." : "Sign in"}
-          </button>
-          <p className="mt-4 text-center text-[11px] leading-5 text-[var(--faint)]">
-            Sessions are managed by the RIVR API. Contact your administrator if
-            you need access.
-          </p>
-        </form>
-      </main>
-    </div>
-  );
-}
-
 export function AdminIndexPage() {
   const navigate = useNavigate();
   useEffect(() => {
@@ -243,12 +112,39 @@ export function AdminIndexPage() {
 
 export function AdminDashboardPage() {
   const { role } = useHotel();
+  if (role === "staff") return <StaffWorkspaceNotice />;
   if (role === "housekeeping") return <HousekeepingDashboard />;
   if (role === "accountant") return <AccountantDashboard />;
   if (role === "receptionist") return <ReceptionistDashboard />;
   if (role === "restaurant") return <RestaurantDashboard />;
   if (role === "manager") return <ManagerDashboard />;
   return <ExecutiveDashboard />;
+}
+
+function StaffWorkspaceNotice() {
+  return (
+    <div className="grid min-h-[55vh] place-items-center text-center">
+      <div className="max-w-md">
+        <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-[var(--info-soft)] text-[var(--info)]">
+          <ShieldCheck className="h-5 w-5" />
+        </div>
+        <h2 className="mt-4 text-xl font-semibold text-[var(--ink)]">
+          Your staff workspace
+        </h2>
+        <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
+          The financial overview is reserved for roles with reporting
+          permission. Your own dashboard shows the operational information you
+          can act on.
+        </p>
+        <Link
+          to="/staff/dashboard"
+          className="mt-5 inline-flex rounded-lg bg-[var(--primary)] px-4 py-2.5 text-xs font-semibold text-[var(--on-primary)]"
+        >
+          Open your dashboard
+        </Link>
+      </div>
+    </div>
+  );
 }
 
 function ExecutiveDashboard() {
@@ -259,6 +155,7 @@ function ExecutiveDashboard() {
     activities,
     dashboard,
     actorName,
+    guests,
     getGuest,
     getRoom,
     getRoomType,
@@ -349,6 +246,12 @@ function ExecutiveDashboard() {
           detail={`${pendingReservations} pending review`}
           icon={ClipboardCheck}
         />
+        <MetricCard
+          label="Guest profiles"
+          value={String(summary?.guests.total ?? guests.length)}
+          detail={`${summary?.guests.returning ?? 0} returning guests`}
+          icon={UsersRound}
+          />
         <MetricCard
           label="Revenue this month"
           value={formatCurrency(currentMonthRevenue)}
@@ -2866,11 +2769,17 @@ export function AdminHousekeepingPage() {
                     ? `Floor ${getRoom(task.roomId)?.floor}`
                     : "Unassigned"}
                 </h3>
+                <p className="mt-1 text-[11px] font-medium text-[var(--muted)]">
+                  {task.taskType}
+                </p>
               </div>
               <StatusBadge status={task.priority} />
             </div>
             <p className="mt-4 text-xs leading-5 text-[var(--muted)]">
               {task.issue}
+            </p>
+            <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--faint)]">
+              Due {task.dueDate ?? "not set"}
             </p>
             <label className="mt-5 grid gap-1.5 text-[11px] font-semibold text-[var(--muted-strong)]">
               Assigned employee
@@ -2921,6 +2830,24 @@ export function AdminHousekeepingPage() {
                   </option>
                 ))}
               </select>
+            </label>
+            <label className="mt-3 grid gap-1.5 text-[11px] font-semibold text-[var(--muted-strong)]">
+              Completion notes
+              <textarea
+                defaultValue={task.completionNotes}
+                disabled={!canWrite}
+                rows={2}
+                placeholder="What was completed or found?"
+                onBlur={(event) => {
+                  if (event.target.value === task.completionNotes) return;
+                  void updateTask(task.id, {
+                    completionNotes: event.target.value,
+                  }).then((result) => {
+                    if (result.error) setError(result.error);
+                  });
+                }}
+                className="rounded-lg border border-[var(--line-2)] bg-[var(--surface)] px-2 py-2 text-xs font-normal outline-none disabled:opacity-50"
+              />
             </label>
           </Card>
         ))}
@@ -3529,7 +3456,7 @@ export function AdminInventoryPage() {
                 <div>
                   <p className="text-sm font-semibold">{item.name}</p>
                   <p className="mt-1 text-[11px] text-[var(--faint)]">
-                    {formatCurrency(item.purchasePrice)} / {item.unit}
+                    {item.sku || "No SKU"} · {formatCurrency(item.purchasePrice)} / {item.unit}
                   </p>
                 </div>
               </div>
@@ -3580,7 +3507,7 @@ export function AdminInventoryPage() {
 }
 
 export function AdminRestaurantPage() {
-  const { orders, addOrder, updateOrder } = useHotel();
+  const { orders, menuCategories, menuItems, addOrder, updateOrder } = useHotel();
   const [guestName, setGuestName] = useState("");
   const [items, setItems] = useState("");
   const [amount, setAmount] = useState(0);
@@ -3647,6 +3574,90 @@ export function AdminRestaurantPage() {
             Add order
           </button>
         </form>
+      </Card>
+      <Card className="mt-5 p-5">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h3 className="text-base font-semibold">Menu &amp; pricing</h3>
+            <p className="mt-1 text-xs text-[var(--faint)]">
+              Select a dish to add it to the order form, or use the menu as the
+              restaurant price list.
+            </p>
+          </div>
+          <span className="rounded-full border border-[var(--line-2)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--faint)]">
+            {menuItems.length} items
+          </span>
+        </div>
+        {menuCategories.length === 0 ? (
+          <p className="mt-5 rounded-xl border border-dashed border-[var(--line-2)] p-4 text-xs text-[var(--faint)]">
+            No menu has been configured yet. Run the demo initializer or add menu
+            categories and items through the API.
+          </p>
+        ) : (
+          <div className="mt-5 grid gap-4 lg:grid-cols-2">
+            {menuCategories.map((category) => {
+              const categoryItems = menuItems
+                .filter((item) => item.categoryId === category.id)
+                .sort((a, b) => a.sortOrder - b.sortOrder);
+              return (
+                <div
+                  key={category.id}
+                  className="rounded-xl border border-[var(--line)] bg-[var(--surface)]/45 p-4"
+                >
+                  <div className="flex items-baseline justify-between gap-3">
+                    <h4 className="text-sm font-semibold">{category.name}</h4>
+                    <span className="text-[10px] text-[var(--faint)]">
+                      {categoryItems.length} items
+                    </span>
+                  </div>
+                  {category.description && (
+                    <p className="mt-1 text-[11px] text-[var(--faint)]">
+                      {category.description}
+                    </p>
+                  )}
+                  <div className="mt-3 divide-y divide-[var(--line)]">
+                    {categoryItems.map((item) => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => {
+                          setItems((current) =>
+                            current
+                              ? `${current}, 1x ${item.name}`
+                              : `1x ${item.name}`,
+                          );
+                          setAmount((current) => current + item.price);
+                        }}
+                        className="flex w-full items-center justify-between gap-3 py-2 text-left transition hover:text-[var(--violet)]"
+                      >
+                        <span className="min-w-0">
+                          <span className="flex items-center gap-2 text-xs font-semibold">
+                            <span
+                              className={`h-1.5 w-1.5 shrink-0 rounded-full ${
+                                item.isVegetarian
+                                  ? "bg-[var(--success)]"
+                                  : "bg-[var(--danger)]"
+                              }`}
+                            />
+                            {item.name}
+                          </span>
+                          {item.description && (
+                            <span className="mt-0.5 block truncate text-[10px] text-[var(--faint)]">
+                              {item.description}
+                            </span>
+                          )}
+                        </span>
+                        <span className="shrink-0 text-xs font-semibold">
+                          {formatCurrency(item.price)}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </Card>
       <Card className="mt-5 overflow-hidden">
         <div className="divide-y divide-[var(--line)]">
@@ -3938,6 +3949,10 @@ export function AdminSettingsPage() {
     checkInTime: "14:00",
     checkOutTime: "11:00",
     invoicePrefix: "INV",
+    invoiceFooter: "",
+    cancellationPolicy: "",
+    cancellationCutoffHours: "24",
+    reservationHoldHours: "2",
     logoUrl: "",
   });
   useEffect(() => {
@@ -3960,6 +3975,10 @@ export function AdminSettingsPage() {
       checkInTime: systemSettings.checkInTime,
       checkOutTime: systemSettings.checkOutTime,
       invoicePrefix: systemSettings.invoicePrefix,
+      invoiceFooter: systemSettings.invoiceFooter,
+      cancellationPolicy: systemSettings.cancellationPolicy,
+      cancellationCutoffHours: String(systemSettings.cancellationCutoffHours),
+      reservationHoldHours: String(systemSettings.reservationHoldHours),
       logoUrl: systemSettings.logoUrl,
     });
   }, [systemSettings]);
@@ -4007,6 +4026,10 @@ export function AdminSettingsPage() {
       checkInTime: settingsForm.checkInTime,
       checkOutTime: settingsForm.checkOutTime,
       invoicePrefix: settingsForm.invoicePrefix,
+      invoiceFooter: settingsForm.invoiceFooter,
+      cancellationPolicy: settingsForm.cancellationPolicy,
+      cancellationCutoffHours: Number(settingsForm.cancellationCutoffHours) || 0,
+      reservationHoldHours: Number(settingsForm.reservationHoldHours) || 0,
       logoUrl: settingsForm.logoUrl,
     });
     setSettingsSubmitting(false);
@@ -4235,6 +4258,53 @@ export function AdminSettingsPage() {
                   setSettingsForm((current) => ({ ...current, logoUrl: value }))
                 }
               />
+              <Field
+                label="Cancellation cut-off (hours)"
+                type="number"
+                value={settingsForm.cancellationCutoffHours}
+                onChange={(value) =>
+                  setSettingsForm((current) => ({
+                    ...current,
+                    cancellationCutoffHours: value,
+                  }))
+                }
+              />
+              <Field
+                label="Reservation hold (hours)"
+                type="number"
+                value={settingsForm.reservationHoldHours}
+                onChange={(value) =>
+                  setSettingsForm((current) => ({
+                    ...current,
+                    reservationHoldHours: value,
+                  }))
+                }
+              />
+              <Field
+                label="Invoice footer"
+                value={settingsForm.invoiceFooter}
+                onChange={(value) =>
+                  setSettingsForm((current) => ({
+                    ...current,
+                    invoiceFooter: value,
+                  }))
+                }
+              />
+              <label className="grid gap-1.5 text-xs font-semibold text-[var(--muted-strong)] md:col-span-2 xl:col-span-3">
+                Cancellation policy
+                <textarea
+                  value={settingsForm.cancellationPolicy}
+                  onChange={(event) =>
+                    setSettingsForm((current) => ({
+                      ...current,
+                      cancellationPolicy: event.target.value,
+                    }))
+                  }
+                  rows={3}
+                  placeholder="Explain the cancellation window and any charges."
+                  className="rounded-lg border border-[var(--line-2)] bg-[var(--surface)] px-3 py-2.5 text-sm font-normal outline-none focus:border-[var(--sage)]"
+                />
+              </label>
             </div>
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="text-[11px] text-[var(--faint)]">

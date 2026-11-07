@@ -1,13 +1,14 @@
 import { asc, eq, sql } from "drizzle-orm";
 import { db } from "../database/client";
-import { staff, users } from "../database/schema";
-import type { StaffRole } from "../constants";
+import { guests, staff, users } from "../database/schema";
+import { CUSTOMER_ROLE, type StaffRole, type UserRole } from "../constants";
 import { badRequest, conflict, forbidden, notFound, unauthorized } from "../utils/http";
 import { newId } from "../utils/id";
 import { hashPassword, verifyPassword } from "./password";
 import { destroyUserSessions } from "./session";
 import { logActivity } from "./activity";
 import { mapUser } from "./mappers";
+import { ensureRoles } from "./roles";
 
 export async function findUserByEmail(email: string) {
   const [user] = await db.select().from(users).where(eq(users.email, email.toLowerCase())).limit(1);
@@ -35,7 +36,7 @@ export async function userCount(): Promise<number> {
 }
 
 export async function createUser(
-  input: { name: string; email: string; password: string; role: StaffRole; staffId?: string | null },
+  input: { name: string; email: string; password: string; role: UserRole; staffId?: string | null },
   actor?: { id: string; name: string },
 ) {
   const existing = await findUserByEmail(input.email);
@@ -66,6 +67,74 @@ export async function createUser(
   }
   const [created] = await db.select().from(users).where(eq(users.id, id)).limit(1);
   return mapUser(created);
+}
+
+/**
+ * Public signup. The role is hard-coded to `customer`; callers cannot choose a
+ * staff role. The matching guest record is linked by email so a customer sees
+ * the reservations they already made through the public booking flow.
+ */
+export async function registerCustomer(input: {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+}) {
+  const email = input.email.trim().toLowerCase();
+  if (await findUserByEmail(email)) {
+    throw conflict("An account with that email already exists. Sign in instead.");
+  }
+  await ensureRoles();
+  const passwordHash = await hashPassword(input.password);
+  const now = new Date();
+
+  return db.transaction(async (tx) => {
+    const [existingGuest] = await tx.select().from(guests).where(eq(guests.email, email)).limit(1);
+    if (existingGuest) {
+      await tx
+        .update(guests)
+        .set({ name: input.name, phone: input.phone, updatedAt: now })
+        .where(eq(guests.id, existingGuest.id));
+    } else {
+      await tx.insert(guests).values({
+        id: newId("guest"),
+        name: input.name,
+        email,
+        phone: input.phone,
+        address: "",
+        city: "",
+        state: "",
+        postalCode: "",
+        idType: "Pending",
+        idLastFour: "",
+        preferences: "",
+        totalStays: 0,
+        totalSpent: "0.00",
+        updatedAt: now,
+      });
+    }
+
+    const id = newId("user");
+    await tx.insert(users).values({
+      id,
+      name: input.name,
+      email,
+      passwordHash,
+      role: CUSTOMER_ROLE,
+      staffId: null,
+      isActive: true,
+      updatedAt: now,
+    });
+    await logActivity(tx, {
+      actor: input.name,
+      action: "Created customer account",
+      detail: email,
+      tone: "success",
+      userId: id,
+    });
+    const [created] = await tx.select().from(users).where(eq(users.id, id)).limit(1);
+    return mapUser(created);
+  });
 }
 
 export async function listUsers() {

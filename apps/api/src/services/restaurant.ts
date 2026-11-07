@@ -1,13 +1,19 @@
 import { and, desc, eq, sql, type SQL } from "drizzle-orm";
 import { db } from "../database/client";
-import { reservations, restaurantOrders, rooms } from "../database/schema";
+import {
+  reservations,
+  restaurantMenuCategories,
+  restaurantMenuItems,
+  restaurantOrders,
+  rooms,
+} from "../database/schema";
 import type { OrderStatus } from "../constants";
 import { badRequest, notFound } from "../utils/http";
 import { fromPaise, toPaise } from "../utils/money";
 import { newId } from "../utils/id";
 import { paginated } from "../utils/pagination";
 import { logActivity } from "./activity";
-import { mapOrder } from "./mappers";
+import { mapMenuCategory, mapMenuItem, mapOrder } from "./mappers";
 
 interface OrderFilters {
   status?: OrderStatus;
@@ -31,6 +37,17 @@ export async function listOrders(filters: OrderFilters) {
     .offset((page - 1) * pageSize);
   const [countRow] = await db.select({ count: sql<number>`count(*)` }).from(restaurantOrders).where(where);
   return paginated(rows.map(mapOrder), Number(countRow?.count ?? 0), page, pageSize);
+}
+
+export async function listMenu() {
+  const [categories, items] = await Promise.all([
+    db.select().from(restaurantMenuCategories).orderBy(restaurantMenuCategories.sortOrder),
+    db.select().from(restaurantMenuItems).orderBy(restaurantMenuItems.sortOrder),
+  ]);
+  return {
+    categories: categories.map(mapMenuCategory),
+    items: items.map(mapMenuItem),
+  };
 }
 
 export async function createOrder(

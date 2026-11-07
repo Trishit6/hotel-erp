@@ -13,6 +13,7 @@ import { pingDatabase } from "./database/client";
 import { authRouter } from "./modules/auth/routes";
 import { publicRouter } from "./modules/public/routes";
 import { adminRouter } from "./modules/admin";
+import { accountRouter } from "./modules/account/routes";
 
 export function createApp() {
   const app = express();
@@ -62,6 +63,7 @@ export function createApp() {
   app.use("/api/auth", authRouter);
   app.use("/api/public", publicRouter);
   app.use("/api/admin", adminRouter);
+  app.use("/api/account", accountRouter);
 
   app.use(notFoundHandler);
   app.use(errorHandler);

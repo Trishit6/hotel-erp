@@ -6,7 +6,9 @@ import { STAFF_ROLES } from "../constants";
  * navigation hints, but these lists are the authoritative enforcement point.
  */
 export const PERMISSIONS = {
-  "dashboard:read": STAFF_ROLES,
+  // The dashboard summary includes revenue and outstanding balances, so the
+  // general `staff` role is deliberately excluded.
+  "dashboard:read": ["super-admin", "admin", "manager", "receptionist", "housekeeping", "accountant", "restaurant"],
   "reservations:read": STAFF_ROLES,
   "reservations:write": ["super-admin", "admin", "manager", "receptionist"],
   "reservations:cancel": ["super-admin", "admin", "manager", "receptionist"],

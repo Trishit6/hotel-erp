@@ -16,6 +16,33 @@ export const seedRoles = [
   { code: "housekeeping", name: "Housekeeping", description: "Room readiness and housekeeping tasks." },
   { code: "accountant", name: "Accountant", description: "Payments, invoices, expenses and reports." },
   { code: "restaurant", name: "Restaurant Staff", description: "Restaurant orders and service." },
+  { code: "staff", name: "Staff", description: "General employee access limited to permitted modules." },
+  { code: "customer", name: "Customer", description: "Public guest account. Can never hold staff permissions." },
+] as const;
+
+export const seedDepartments = [
+  { id: "dept-reception", name: "Reception", description: "Front desk arrivals, departures and guest requests." },
+  { id: "dept-housekeeping", name: "Housekeeping", description: "Room readiness and linen." },
+  { id: "dept-restaurant", name: "Restaurant", description: "Food and beverage service." },
+  { id: "dept-maintenance", name: "Maintenance", description: "Repairs and facilities." },
+  { id: "dept-security", name: "Security", description: "Property security." },
+  { id: "dept-management", name: "Management", description: "Operations leadership." },
+  { id: "dept-finance", name: "Finance", description: "Accounts and purchasing." },
+] as const;
+
+export const seedShifts = [
+  { id: "shift-morning", name: "Morning", startTime: "07:00", endTime: "15:00" },
+  { id: "shift-evening", name: "Evening", startTime: "15:00", endTime: "23:00" },
+  { id: "shift-night", name: "Night", startTime: "23:00", endTime: "07:00" },
+  { id: "shift-general", name: "General", startTime: "09:00", endTime: "18:00" },
+] as const;
+
+export const seedHousekeepingStatuses = [
+  { code: "dirty", label: "Dirty", sortOrder: 1 },
+  { code: "assigned", label: "Assigned", sortOrder: 2 },
+  { code: "in-progress", label: "In progress", sortOrder: 3 },
+  { code: "cleaned", label: "Cleaned", sortOrder: 4 },
+  { code: "inspected", label: "Inspected", sortOrder: 5 },
 ] as const;
 
 export const seedSettings = {
@@ -37,6 +64,10 @@ export const seedSettings = {
   checkInTime: "14:00",
   checkOutTime: "11:00",
   invoicePrefix: "INV",
+  invoiceFooter: "",
+  cancellationPolicy: "",
+  cancellationCutoffHours: 24,
+  reservationHoldHours: 2,
   logoUrl: "",
 } as const;
 
@@ -141,10 +172,10 @@ export const seedInvoices = [
 ] as const;
 
 export const seedHousekeepingTasks = [
-  { id: "hk-001", roomId: "room-303", assignedTo: "staff-003", status: "in-progress", priority: "high", issue: "Post-checkout deep clean", updatedAt: iso(0) },
-  { id: "hk-002", roomId: "room-102", assignedTo: "staff-003", status: "inspected", priority: "normal", issue: "Daily service", updatedAt: iso(0) },
-  { id: "hk-003", roomId: "room-205", assignedTo: null, status: "dirty", priority: "normal", issue: "Pre-arrival clean", updatedAt: iso(0) },
-  { id: "hk-004", roomId: "room-101", assignedTo: "staff-003", status: "cleaned", priority: "low", issue: "Amenity refresh", updatedAt: iso(0) },
+  { id: "hk-001", roomId: "room-303", assignedTo: "staff-003", status: "in-progress", priority: "high", taskType: "Post-checkout deep clean", issue: "Post-checkout deep clean", dueDate: dateAt(0), completionNotes: "", updatedAt: iso(0) },
+  { id: "hk-002", roomId: "room-102", assignedTo: "staff-003", status: "inspected", priority: "normal", taskType: "Daily service", issue: "Daily service", dueDate: dateAt(0), completionNotes: "Room inspected and amenities replenished.", updatedAt: iso(0) },
+  { id: "hk-003", roomId: "room-205", assignedTo: null, status: "dirty", priority: "normal", taskType: "Pre-arrival clean", issue: "Pre-arrival clean", dueDate: dateAt(1), completionNotes: "", updatedAt: iso(0) },
+  { id: "hk-004", roomId: "room-101", assignedTo: "staff-003", status: "cleaned", priority: "low", taskType: "Amenity refresh", issue: "Amenity refresh", dueDate: dateAt(0), completionNotes: "Amenities refreshed; awaiting inspection.", updatedAt: iso(0) },
 ] as const;
 
 export const seedAttendance = seedStaff.map((person, index) => ({
@@ -157,10 +188,10 @@ export const seedAttendance = seedStaff.map((person, index) => ({
 }));
 
 export const seedInventory = [
-  { id: "stock-001", name: "Bath towels", category: "Linen", quantity: 86, unit: "pieces", purchasePrice: money(180), supplier: "Sahyadri Linen Co.", minimumStock: 40 },
-  { id: "stock-002", name: "Shampoo bottles", category: "Toiletries", quantity: 24, unit: "boxes", purchasePrice: money(420), supplier: "Lotus Supply", minimumStock: 30 },
-  { id: "stock-003", name: "Coffee beans", category: "Restaurant", quantity: 18, unit: "kg", purchasePrice: money(240), supplier: "Deccan Roasters", minimumStock: 10 },
-  { id: "stock-004", name: "Bed sheets", category: "Linen", quantity: 60, unit: "pieces", purchasePrice: money(320), supplier: "Sahyadri Linen Co.", minimumStock: 30 },
+  { id: "stock-001", name: "Bath towels", sku: "LIN-TWL-001", category: "Linen", quantity: 86, unit: "pieces", purchasePrice: money(180), supplier: "Sahyadri Linen Co.", minimumStock: 40 },
+  { id: "stock-002", name: "Shampoo bottles", sku: "BTH-SHP-004", category: "Toiletries", quantity: 24, unit: "boxes", purchasePrice: money(420), supplier: "Lotus Supply", minimumStock: 30 },
+  { id: "stock-003", name: "Coffee beans", sku: "REST-COF-009", category: "Restaurant", quantity: 18, unit: "kg", purchasePrice: money(240), supplier: "Deccan Roasters", minimumStock: 10 },
+  { id: "stock-004", name: "Bed sheets", sku: "LIN-SHT-002", category: "Linen", quantity: 60, unit: "pieces", purchasePrice: money(320), supplier: "Sahyadri Linen Co.", minimumStock: 30 },
 ] as const;
 
 export const seedExpenses = [
@@ -172,6 +203,36 @@ export const seedExpenses = [
 export const seedRestaurantOrders = [
   { id: "ord-001", reservationId: "res-002", roomNumber: "102", guestName: "Ananya Iyer", items: "Breakfast for one", amount: money(240), status: "served", createdAt: iso(-1) },
   { id: "ord-002", reservationId: "res-001", roomNumber: "204", guestName: "Aarav Mehta", items: "Sparkling water, club sandwich", amount: money(460), status: "preparing", createdAt: iso(0) },
+] as const;
+
+export const seedMenuCategories = [
+  { id: "menu-cat-breakfast", name: "Breakfast", description: "Served from 07:00 to 10:30.", sortOrder: 1 },
+  { id: "menu-cat-starters", name: "Starters", description: "Small plates for sharing.", sortOrder: 2 },
+  { id: "menu-cat-main", name: "Main Course", description: "Comfort classics and house favourites.", sortOrder: 3 },
+  { id: "menu-cat-biryani", name: "Rice & Biryani", description: "Slow-cooked rice dishes.", sortOrder: 4 },
+  { id: "menu-cat-desserts", name: "Desserts", description: "Sweet finishes.", sortOrder: 5 },
+  { id: "menu-cat-beverages", name: "Beverages", description: "Coffee, tea, and refreshments.", sortOrder: 6 },
+] as const;
+
+export const seedMenuItems = [
+  { id: "menu-item-english-breakfast", categoryId: "menu-cat-breakfast", name: "English Breakfast", description: "Eggs, sausage, grilled tomato, toast and coffee.", price: money(450), isVegetarian: false, isAvailable: true, sortOrder: 1 },
+  { id: "menu-item-masala-dosa", categoryId: "menu-cat-breakfast", name: "Masala Dosa", description: "Crisp dosa with spiced potato, sambar and chutney.", price: money(320), isVegetarian: true, isAvailable: true, sortOrder: 2 },
+  { id: "menu-item-aloo-paratha", categoryId: "menu-cat-breakfast", name: "Aloo Paratha", description: "Whole-wheat paratha, curd and pickle.", price: money(280), isVegetarian: true, isAvailable: true, sortOrder: 3 },
+  { id: "menu-item-paneer-tikka", categoryId: "menu-cat-starters", name: "Paneer Tikka", description: "Char-grilled paneer with peppers and mint chutney.", price: money(380), isVegetarian: true, isAvailable: true, sortOrder: 1 },
+  { id: "menu-item-chicken-tikka", categoryId: "menu-cat-starters", name: "Chicken Tikka", description: "Yoghurt-marinated chicken from the tandoor.", price: money(460), isVegetarian: false, isAvailable: true, sortOrder: 2 },
+  { id: "menu-item-spring-rolls", categoryId: "menu-cat-starters", name: "Vegetable Spring Rolls", description: "Crisp rolls with a sweet chilli dip.", price: money(260), isVegetarian: true, isAvailable: true, sortOrder: 3 },
+  { id: "menu-item-dal-makhani", categoryId: "menu-cat-main", name: "Dal Makhani", description: "Black lentils simmered overnight with butter and cream.", price: money(340), isVegetarian: true, isAvailable: true, sortOrder: 1 },
+  { id: "menu-item-paneer-butter-masala", categoryId: "menu-cat-main", name: "Paneer Butter Masala", description: "Paneer in a silky tomato and cashew gravy.", price: money(420), isVegetarian: true, isAvailable: true, sortOrder: 2 },
+  { id: "menu-item-butter-chicken", categoryId: "menu-cat-main", name: "Butter Chicken", description: "Tandoori chicken in a rich tomato-butter gravy.", price: money(520), isVegetarian: false, isAvailable: true, sortOrder: 3 },
+  { id: "menu-item-grilled-fish", categoryId: "menu-cat-main", name: "Grilled Fish", description: "Bengali-style grilled fish with lemon and herbs.", price: money(620), isVegetarian: false, isAvailable: true, sortOrder: 4 },
+  { id: "menu-item-vegetable-biryani", categoryId: "menu-cat-biryani", name: "Vegetable Biryani", description: "Fragrant basmati rice with seasonal vegetables and raita.", price: money(380), isVegetarian: true, isAvailable: true, sortOrder: 1 },
+  { id: "menu-item-chicken-biryani", categoryId: "menu-cat-biryani", name: "Chicken Biryani", description: "Hyderabadi-style chicken biryani with raita.", price: money(520), isVegetarian: false, isAvailable: true, sortOrder: 2 },
+  { id: "menu-item-gulab-jamun", categoryId: "menu-cat-desserts", name: "Gulab Jamun", description: "Warm milk dumplings in cardamom syrup.", price: money(180), isVegetarian: true, isAvailable: true, sortOrder: 1 },
+  { id: "menu-item-brownie", categoryId: "menu-cat-desserts", name: "Chocolate Brownie", description: "Fudgy brownie with vanilla ice cream.", price: money(240), isVegetarian: true, isAvailable: true, sortOrder: 2 },
+  { id: "menu-item-filter-coffee", categoryId: "menu-cat-beverages", name: "Filter Coffee", description: "South Indian filter coffee with steamed milk.", price: money(120), isVegetarian: true, isAvailable: true, sortOrder: 1 },
+  { id: "menu-item-masala-chai", categoryId: "menu-cat-beverages", name: "Masala Chai", description: "Spiced tea brewed with milk.", price: money(90), isVegetarian: true, isAvailable: true, sortOrder: 2 },
+  { id: "menu-item-lime-soda", categoryId: "menu-cat-beverages", name: "Fresh Lime Soda", description: "Sweet or salted lime soda.", price: money(150), isVegetarian: true, isAvailable: true, sortOrder: 3 },
+  { id: "menu-item-sparkling-water", categoryId: "menu-cat-beverages", name: "Sparkling Water", description: "Chilled sparkling mineral water.", price: money(110), isVegetarian: true, isAvailable: true, sortOrder: 4 },
 ] as const;
 
 export const seedActivities = [

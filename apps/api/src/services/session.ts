@@ -2,7 +2,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 import type { Request, Response } from "express";
 import { and, eq, gt } from "drizzle-orm";
 import { env } from "../config/env";
-import type { StaffRole } from "../constants";
+import type { UserRole } from "../constants";
 import { db } from "../database/client";
 import { sessions, users } from "../database/schema";
 import { newSessionId, newSessionToken } from "../utils/id";
@@ -62,7 +62,7 @@ export interface AuthenticatedSession {
     id: string;
     name: string;
     email: string;
-    role: StaffRole;
+    role: UserRole;
     staffId: string | null;
   };
 }
@@ -98,7 +98,7 @@ export async function findSession(token: string): Promise<AuthenticatedSession |
       id: row.userId,
       name: row.name,
       email: row.email,
-      role: row.role as StaffRole,
+      role: row.role as UserRole,
       staffId: row.staffId,
     },
   };

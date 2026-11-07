@@ -46,12 +46,32 @@ export const loginSchema = z.object({
   password: z.string().min(1, "Enter your password.").max(200),
 });
 
-export const setupSchema = z.object({
-  name: z.string().trim().min(2).max(120),
+export const registerSchema = z.object({
+  name: z.string().trim().min(2, "Enter your full name.").max(120),
   email,
-  password: z.string().min(12, "Use at least 12 characters.").max(200),
-  setupToken: z.string().min(1, "A setup token is required."),
+  phone: indianPhone,
+  password: z.string().min(8, "Use at least 8 characters.").max(200),
 });
+
+export const forgotPasswordSchema = z.object({ email });
+
+export const resetPasswordSchema = z.object({
+  token: z.string().min(20, "This reset link is invalid.").max(200),
+  password: z.string().min(8, "Use at least 8 characters.").max(200),
+});
+
+export const accountProfileSchema = z
+  .object({
+    name: z.string().trim().min(2).max(120),
+    phone: indianPhone,
+    address: z.string().max(300),
+    city: z.string().max(80),
+    state: z.string().max(80),
+    postalCode: optionalIndianPin,
+    preferences: z.string().max(500),
+  })
+  .partial()
+  .refine((value) => Object.keys(value).length > 0, "Provide at least one field to update.");
 
 export const changePasswordSchema = z.object({
   currentPassword: z.string().min(1).max(200),
@@ -116,14 +136,19 @@ export const taskCreateSchema = z.object({
   roomId: z.string().min(1).max(64),
   assignedTo: z.string().max(64).nullable().optional(),
   priority: z.enum(HOUSEKEEPING_PRIORITIES).default("normal"),
+  taskType: z.string().trim().max(80).default("Room service"),
   issue: z.string().max(300).default(""),
+  dueDate: dateOnly.optional(),
 });
 
 export const taskUpdateSchema = z.object({
   assignedTo: z.string().max(64).nullable().optional(),
   status: z.enum(HOUSEKEEPING_STATUSES).optional(),
   priority: z.enum(HOUSEKEEPING_PRIORITIES).optional(),
+  taskType: z.string().trim().max(80).optional(),
   issue: z.string().max(300).optional(),
+  dueDate: dateOnly.nullable().optional(),
+  completionNotes: z.string().max(300).optional(),
 });
 
 export const staffSchema = z.object({
@@ -145,6 +170,7 @@ export const attendanceUpdateSchema = z.object({
 
 export const inventorySchema = z.object({
   name: z.string().trim().min(2).max(120),
+  sku: z.string().trim().max(48).default(""),
   category: z.string().trim().min(2).max(80),
   quantity: z.coerce.number().int().min(0),
   unit: z.string().trim().min(1).max(24),
@@ -239,6 +265,10 @@ export const settingsUpdateSchema = z
     checkInTime: timeOfDay,
     checkOutTime: timeOfDay,
     invoicePrefix: z.string().trim().min(1).max(16),
+    invoiceFooter: z.string().trim().max(300),
+    cancellationPolicy: z.string().trim().max(2000),
+    cancellationCutoffHours: z.coerce.number().int().min(0).max(720),
+    reservationHoldHours: z.coerce.number().int().min(0).max(720),
     logoUrl: z.string().trim().max(500),
   })
   .partial()

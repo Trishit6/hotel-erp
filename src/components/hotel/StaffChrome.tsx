@@ -26,7 +26,7 @@ import {
   X,
 } from "lucide-react";
 import { Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useHotel } from "../../lib/hotel-store";
 import type { StaffRole } from "../../lib/hotel-data";
 import { BrandMark } from "./HotelUi";
@@ -141,13 +141,13 @@ const navGroups: { label: string; items: NavItem[] }[] = [
         to: "/admin/settings",
         label: "Settings",
         icon: Settings2,
-        roles: ["super-admin", "admin", "manager"],
+        roles: ["super-admin", "admin"],
       },
     ],
   },
 ];
 
-export function AdminLayout() {
+export function AdminLayout({ children }: { children?: ReactNode }) {
   const {
     role,
     actorName,
@@ -164,7 +164,9 @@ export function AdminLayout() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   useEffect(() => {
-    if (status === "ready" && !role) navigate({ to: "/admin/login" });
+    if (status === "ready" && !role) navigate({ to: "/login" });
+    if (status === "ready" && role === "customer")
+      navigate({ to: "/guest/dashboard" });
   }, [navigate, role, status]);
   const links = useMemo(
     () =>
@@ -211,10 +213,10 @@ export function AdminLayout() {
         </div>
       </div>
     );
-  if (!role) return null;
+  if (!role || role === "customer") return null;
   const logoutNow = () => {
     void logout();
-    navigate({ to: "/admin/login" });
+    navigate({ to: "/login" });
   };
   const pending = reservations.filter(
     (reservation) => reservation.status === "pending",
@@ -420,7 +422,7 @@ export function AdminLayout() {
               </div>
             </div>
           ) : (
-            <Outlet />
+            (children ?? <Outlet />)
           )}
         </main>
       </div>

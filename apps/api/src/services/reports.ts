@@ -1,6 +1,17 @@
 import { and, eq, gte, lte, ne, sql } from "drizzle-orm";
 import { db } from "../database/client";
-import { activityLogs, expenses, housekeepingTasks, inventory, payments, reservations, rooms, staff } from "../database/schema";
+import {
+  activityLogs,
+  expenses,
+  guests,
+  housekeepingTasks,
+  inventory,
+  invoices,
+  payments,
+  reservations,
+  rooms,
+  staff,
+} from "../database/schema";
 import { RELEASED_RESERVATION_STATUSES } from "../constants";
 import { todayIst } from "../utils/date";
 import { mapActivity } from "./mappers";
@@ -41,6 +52,15 @@ export async function getDashboard() {
   const [inventorySummary] = await db
     .select({ low: sql<number>`sum(case when ${inventory.quantity} <= ${inventory.minimumStock} then 1 else 0 end)` })
     .from(inventory);
+  const [guestSummary] = await db
+    .select({
+      total: sql<number>`count(*)`,
+      returning: sql<number>`sum(case when ${guests.totalStays} > 1 then 1 else 0 end)`,
+    })
+    .from(guests);
+  const [paymentSummary] = await db
+    .select({ pending: sql<number>`sum(case when ${invoices.dueAmount} > 0 then 1 else 0 end)` })
+    .from(invoices);
 
   const recentActivities = await db.select().from(activityLogs).orderBy(sql`${activityLogs.createdAt} desc`).limit(8);
 
@@ -96,6 +116,11 @@ export async function getDashboard() {
       revenue: num(reservationSummary?.revenue),
       outstanding: num(reservationSummary?.outstanding),
     },
+    guests: {
+      total: num(guestSummary?.total),
+      returning: num(guestSummary?.returning),
+    },
+    payments: { pending: num(paymentSummary?.pending) },
     revenueSeries,
     housekeeping: { open: num(taskSummary?.open) },
     inventory: { lowStock: num(inventorySummary?.low) },

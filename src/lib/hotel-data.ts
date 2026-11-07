@@ -2,7 +2,40 @@ export type RoomStatus = "available" | "occupied" | "reserved" | "cleaning" | "m
 export type ReservationStatus = "pending" | "confirmed" | "checked-in" | "checked-out" | "cancelled" | "no-show";
 export type PaymentStatus = "pending" | "partial" | "paid" | "refunded";
 export type PaymentMethod = "cash" | "upi" | "card" | "bank-transfer" | "online";
-export type StaffRole = "super-admin" | "admin" | "manager" | "receptionist" | "housekeeping" | "accountant" | "restaurant";
+export type StaffRole =
+  | "super-admin"
+  | "admin"
+  | "manager"
+  | "receptionist"
+  | "housekeeping"
+  | "accountant"
+  | "restaurant"
+  | "staff";
+export type CustomerRole = "customer";
+export type UserRole = StaffRole | CustomerRole;
+
+/** The landing route for each role after sign-in. */
+export const roleHome = (role: UserRole): string => {
+  switch (role) {
+    case "super-admin":
+    case "admin":
+      return "/admin/dashboard";
+    case "manager":
+      return "/manager/dashboard";
+    case "receptionist":
+      return "/reception/dashboard";
+    case "housekeeping":
+      return "/housekeeping/dashboard";
+    case "accountant":
+      return "/admin/reports";
+    case "restaurant":
+      return "/admin/restaurant";
+    case "staff":
+      return "/staff/dashboard";
+    case "customer":
+      return "/guest/dashboard";
+  }
+};
 export type Department = "Reception" | "Housekeeping" | "Restaurant" | "Maintenance" | "Security" | "Management" | "Finance";
 export type HousekeepingStatus = "dirty" | "assigned" | "in-progress" | "cleaned" | "inspected";
 
@@ -97,7 +130,10 @@ export interface HousekeepingTask {
   assignedTo?: string;
   status: HousekeepingStatus;
   priority: "low" | "normal" | "high";
+  taskType: string;
   issue: string;
+  dueDate?: string;
+  completionNotes: string;
   updatedAt: string;
 }
 
@@ -125,6 +161,7 @@ export interface Attendance {
 export interface InventoryItem {
   id: string;
   name: string;
+  sku: string;
   category: string;
   quantity: number;
   unit: string;
@@ -152,6 +189,24 @@ export interface RestaurantOrder {
   amount: number;
   status: "new" | "preparing" | "served" | "cancelled";
   createdAt: string;
+}
+
+export interface RestaurantMenuCategory {
+  id: string;
+  name: string;
+  description: string;
+  sortOrder: number;
+}
+
+export interface RestaurantMenuItem {
+  id: string;
+  categoryId: string;
+  name: string;
+  description: string;
+  price: number;
+  isVegetarian: boolean;
+  isAvailable: boolean;
+  sortOrder: number;
 }
 
 export interface ActivityLog {
@@ -195,6 +250,10 @@ export interface PublicSettings {
   taxRatePercent: number;
   checkInTime: string;
   checkOutTime: string;
+  invoiceFooter: string;
+  cancellationPolicy: string;
+  cancellationCutoffHours: number;
+  reservationHoldHours: number;
   logoUrl: string;
 }
 
@@ -235,6 +294,8 @@ export interface DashboardSummary {
     revenue: number;
     outstanding: number;
   };
+  guests: { total: number; returning: number };
+  payments: { pending: number };
   revenueSeries: RevenuePoint[];
   housekeeping: { open: number };
   inventory: { lowStock: number };
@@ -401,17 +462,17 @@ export const staff: StaffMember[] = [
 export const attendance: Attendance[] = staff.map((person, index) => ({ id: `att-${index + 1}`, staffId: person.id, date: dateAt(0), status: person.status === "on-leave" ? "leave" : "present", clockIn: person.status === "on-leave" ? undefined : "08:57" }));
 
 export const housekeepingTasks: HousekeepingTask[] = [
-  { id: "hk-001", roomId: "room-303", assignedTo: "staff-003", status: "in-progress", priority: "high", issue: "Post-checkout deep clean", updatedAt: new Date().toISOString() },
-  { id: "hk-002", roomId: "room-102", assignedTo: "staff-003", status: "inspected", priority: "normal", issue: "Daily service", updatedAt: new Date().toISOString() },
-  { id: "hk-003", roomId: "room-205", status: "dirty", priority: "normal", issue: "Pre-arrival clean", updatedAt: new Date().toISOString() },
-  { id: "hk-004", roomId: "room-101", assignedTo: "staff-003", status: "cleaned", priority: "low", issue: "Amenity refresh", updatedAt: new Date().toISOString() },
+  { id: "hk-001", roomId: "room-303", assignedTo: "staff-003", status: "in-progress", priority: "high", taskType: "Post-checkout deep clean", issue: "Post-checkout deep clean", dueDate: dateAt(0), completionNotes: "", updatedAt: new Date().toISOString() },
+  { id: "hk-002", roomId: "room-102", assignedTo: "staff-003", status: "inspected", priority: "normal", taskType: "Daily service", issue: "Daily service", dueDate: dateAt(0), completionNotes: "Room inspected and amenities replenished.", updatedAt: new Date().toISOString() },
+  { id: "hk-003", roomId: "room-205", status: "dirty", priority: "normal", taskType: "Pre-arrival clean", issue: "Pre-arrival clean", dueDate: dateAt(1), completionNotes: "", updatedAt: new Date().toISOString() },
+  { id: "hk-004", roomId: "room-101", assignedTo: "staff-003", status: "cleaned", priority: "low", taskType: "Amenity refresh", issue: "Amenity refresh", dueDate: dateAt(0), completionNotes: "Amenities refreshed; awaiting inspection.", updatedAt: new Date().toISOString() },
 ];
 
 export const inventory: InventoryItem[] = [
-  { id: "stock-001", name: "Bath towels", category: "Linen", quantity: 86, unit: "pieces", purchasePrice: 180, supplier: "Sahyadri Linen Co.", minimumStock: 40 },
-  { id: "stock-002", name: "Shampoo bottles", category: "Toiletries", quantity: 24, unit: "boxes", purchasePrice: 420, supplier: "Lotus Supply", minimumStock: 30 },
-  { id: "stock-003", name: "Coffee beans", category: "Restaurant", quantity: 18, unit: "kg", purchasePrice: 240, supplier: "Deccan Roasters", minimumStock: 10 },
-  { id: "stock-004", name: "Bed sheets", category: "Linen", quantity: 60, unit: "pieces", purchasePrice: 320, supplier: "Sahyadri Linen Co.", minimumStock: 30 },
+  { id: "stock-001", name: "Bath towels", sku: "LIN-TWL-001", category: "Linen", quantity: 86, unit: "pieces", purchasePrice: 180, supplier: "Sahyadri Linen Co.", minimumStock: 40 },
+  { id: "stock-002", name: "Shampoo bottles", sku: "BTH-SHP-004", category: "Toiletries", quantity: 24, unit: "boxes", purchasePrice: 420, supplier: "Lotus Supply", minimumStock: 30 },
+  { id: "stock-003", name: "Coffee beans", sku: "REST-COF-009", category: "Restaurant", quantity: 18, unit: "kg", purchasePrice: 240, supplier: "Deccan Roasters", minimumStock: 10 },
+  { id: "stock-004", name: "Bed sheets", sku: "LIN-SHT-002", category: "Linen", quantity: 60, unit: "pieces", purchasePrice: 320, supplier: "Sahyadri Linen Co.", minimumStock: 30 },
 ];
 
 export const expenses: Expense[] = [

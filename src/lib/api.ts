@@ -26,6 +26,9 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
     response = await fetch(`${API_BASE}${path}`, {
       method: options.method ?? "GET",
       credentials: "include",
+      // Session and admin data must never be served from the browser cache;
+      // a stale /auth/me or bootstrap response would resurrect an old session.
+      cache: "no-store",
       headers:
         options.body === undefined
           ? { Accept: "application/json" }

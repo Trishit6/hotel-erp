@@ -4,7 +4,12 @@ import {
   guests,
   housekeepingTasks,
   invoices,
+  checkIns,
+  checkOuts,
+  invoiceItems,
+  reservationGuests,
   reservations,
+  reservationStatusHistory,
   roomTypeAmenities,
   roomTypes,
   rooms,
@@ -17,7 +22,7 @@ import {
   TAX_BASIS_POINTS,
   UNAVAILABLE_ROOM_STATUSES,
   type ReservationStatus,
-  type StaffRole,
+  type UserRole,
 } from "../constants";
 import { addDays, calculateNights, isDateRangeValid, todayIst } from "../utils/date";
 import { badRequest, conflict, notFound } from "../utils/http";
@@ -47,7 +52,7 @@ export interface ReservationCreateInput {
 export interface Actor {
   id: string;
   name: string;
-  role: StaffRole;
+  role: UserRole;
 }
 
 interface ReservationFilters {
@@ -234,6 +239,43 @@ export async function createReservation(input: ReservationCreateInput, actor?: A
       issuedAt: new Date(),
       dueAmount: fromPaise(totalPaise),
     });
+    await tx.insert(invoiceItems).values([
+      {
+        id: newId("invitem"),
+        invoiceId,
+        description: `${type.name} - ${nights} night${nights === 1 ? "" : "s"}`,
+        quantity: nights,
+        unitPrice: type.rate,
+        amount: fromPaise(roomChargesPaise),
+      },
+      ...(taxPaise > 0
+        ? [
+            {
+              id: newId("invitem"),
+              invoiceId,
+              description: "Tax",
+              quantity: 1,
+              unitPrice: fromPaise(taxPaise),
+              amount: fromPaise(taxPaise),
+            },
+          ]
+        : []),
+    ]);
+
+    await tx.insert(reservationGuests).values({
+      id: newId("resguest"),
+      reservationId,
+      guestId: guest.id,
+      isPrimary: true,
+    });
+    await tx.insert(reservationStatusHistory).values({
+      id: newId("reshist"),
+      reservationId,
+      fromStatus: null,
+      toStatus: "confirmed",
+      note: "Reservation created",
+      changedBy: actor?.id ?? null,
+    });
 
     await logActivity(tx, {
       actor: actor?.name ?? "Guest website",
@@ -380,6 +422,15 @@ export async function updateReservationStatus(id: string, status: ReservationSta
       await tx.update(rooms).set({ status: "reserved", updatedAt: now }).where(eq(rooms.id, room.id));
     }
 
+    await tx.insert(reservationStatusHistory).values({
+      id: newId("reshist"),
+      reservationId: id,
+      fromStatus: reservation.status,
+      toStatus: status,
+      note: "Status updated by staff",
+      changedBy: actor.id,
+    });
+
     await logActivity(tx, {
       actor: actor.name,
       action: `Updated reservation to ${status}`,
@@ -476,6 +527,20 @@ export async function checkInReservation(id: string, actor: Actor) {
       .set({ status: "checked-in", checkedInAt: now, updatedAt: now })
       .where(eq(reservations.id, id));
     await tx.update(rooms).set({ status: "occupied", updatedAt: now }).where(eq(rooms.id, room.id));
+    await tx.insert(checkIns).values({
+      id: newId("checkin"),
+      reservationId: id,
+      roomId: room.id,
+      checkedInAt: now,
+      checkedInBy: actor.id,
+    });
+    await tx.insert(reservationStatusHistory).values({
+      id: newId("reshist"),
+      reservationId: id,
+      fromStatus: reservation.status,
+      toStatus: "checked-in",
+      changedBy: actor.id,
+    });
 
     await logActivity(tx, {
       actor: actor.name,
@@ -506,6 +571,20 @@ export async function checkOutReservation(id: string, actor: Actor) {
       .set({ status: "checked-out", checkedOutAt: now, updatedAt: now })
       .where(eq(reservations.id, id));
     await tx.update(rooms).set({ status: "cleaning", updatedAt: now }).where(eq(rooms.id, room.id));
+    await tx.insert(checkOuts).values({
+      id: newId("checkout"),
+      reservationId: id,
+      roomId: room.id,
+      checkedOutAt: now,
+      checkedOutBy: actor.id,
+    });
+    await tx.insert(reservationStatusHistory).values({
+      id: newId("reshist"),
+      reservationId: id,
+      fromStatus: reservation.status,
+      toStatus: "checked-out",
+      changedBy: actor.id,
+    });
     await tx.insert(housekeepingTasks).values({
       id: newId("hk"),
       roomId: room.id,

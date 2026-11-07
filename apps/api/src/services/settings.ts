@@ -25,6 +25,10 @@ export type SettingsInput = Partial<{
   checkInTime: string;
   checkOutTime: string;
   invoicePrefix: string;
+  invoiceFooter: string;
+  cancellationPolicy: string;
+  cancellationCutoffHours: number;
+  reservationHoldHours: number;
   logoUrl: string;
 }>;
 
@@ -69,6 +73,10 @@ export async function getPublicSettings() {
     taxRatePercent: settings.taxRatePercent,
     checkInTime: settings.checkInTime,
     checkOutTime: settings.checkOutTime,
+    invoiceFooter: settings.invoiceFooter,
+    cancellationPolicy: settings.cancellationPolicy,
+    cancellationCutoffHours: settings.cancellationCutoffHours,
+    reservationHoldHours: settings.reservationHoldHours,
     logoUrl: settings.logoUrl,
   };
 }

@@ -7,6 +7,7 @@ import {
   int,
   mysqlEnum,
   mysqlTable,
+  primaryKey,
   text,
   timestamp,
   uniqueIndex,
@@ -264,7 +265,10 @@ export const housekeepingTasks = mysqlTable(
     assignedTo: id("assigned_to").references(() => staff.id, { onDelete: "set null", onUpdate: "cascade" }),
     status: mysqlEnum("status", HOUSEKEEPING_STATUSES).notNull().default("dirty"),
     priority: mysqlEnum("priority", HOUSEKEEPING_PRIORITIES).notNull().default("normal"),
+    taskType: varchar("task_type", { length: 80 }).notNull().default("Room service"),
     issue: varchar("issue", { length: 300 }).notNull().default(""),
+    dueDate: date("due_date", { mode: "string" }),
+    completionNotes: varchar("completion_notes", { length: 300 }).notNull().default(""),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
   },
@@ -297,6 +301,7 @@ export const inventory = mysqlTable(
   {
     id: id().primaryKey(),
     name: varchar("name", { length: 120 }).notNull(),
+    sku: varchar("sku", { length: 48 }).notNull().default(""),
     category: varchar("category", { length: 80 }).notNull(),
     quantity: int("quantity").notNull().default(0),
     unit: varchar("unit", { length: 24 }).notNull().default("unit"),
@@ -306,7 +311,11 @@ export const inventory = mysqlTable(
     createdAt: createdAt(),
     updatedAt: updatedAt(),
   },
-  (table) => [index("inventory_category_idx").on(table.category), uniqueIndex("inventory_name_unique").on(table.name)],
+  (table) => [
+    index("inventory_category_idx").on(table.category),
+    index("inventory_sku_idx").on(table.sku),
+    uniqueIndex("inventory_name_unique").on(table.name),
+  ],
 );
 
 export const expenses = mysqlTable(
@@ -344,6 +353,44 @@ export const restaurantOrders = mysqlTable(
     updatedAt: updatedAt(),
   },
   (table) => [index("restaurant_orders_status_idx").on(table.status), index("restaurant_orders_created_idx").on(table.createdAt)],
+);
+
+export const restaurantMenuCategories = mysqlTable(
+  "restaurant_menu_categories",
+  {
+    id: id().primaryKey(),
+    name: varchar("name", { length: 80 }).notNull(),
+    description: varchar("description", { length: 255 }).notNull().default(""),
+    sortOrder: int("sort_order").notNull().default(0),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("restaurant_menu_categories_name_unique").on(table.name),
+    index("restaurant_menu_categories_sort_idx").on(table.sortOrder),
+  ],
+);
+
+export const restaurantMenuItems = mysqlTable(
+  "restaurant_menu_items",
+  {
+    id: id().primaryKey(),
+    categoryId: id("category_id")
+      .notNull()
+      .references(() => restaurantMenuCategories.id, { onDelete: "restrict", onUpdate: "cascade" }),
+    name: varchar("name", { length: 120 }).notNull(),
+    description: varchar("description", { length: 300 }).notNull().default(""),
+    price: money("price").notNull(),
+    isVegetarian: boolean("is_vegetarian").notNull().default(false),
+    isAvailable: boolean("is_available").notNull().default(true),
+    sortOrder: int("sort_order").notNull().default(0),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("restaurant_menu_items_name_unique").on(table.name),
+    index("restaurant_menu_items_category_idx").on(table.categoryId),
+  ],
 );
 
 export const activityLogs = mysqlTable(
@@ -384,8 +431,379 @@ export const systemSettings = mysqlTable("system_settings", {
   checkInTime: varchar("check_in_time", { length: 8 }).notNull().default("14:00"),
   checkOutTime: varchar("check_out_time", { length: 8 }).notNull().default("11:00"),
   invoicePrefix: varchar("invoice_prefix", { length: 16 }).notNull().default("INV"),
+  invoiceFooter: varchar("invoice_footer", { length: 300 }).notNull().default(""),
+  cancellationPolicy: text("cancellation_policy").notNull().default(""),
+  cancellationCutoffHours: int("cancellation_cutoff_hours").notNull().default(24),
+  reservationHoldHours: int("reservation_hold_hours").notNull().default(2),
   logoUrl: varchar("logo_url", { length: 500 }).notNull().default(""),
   updatedBy: id("updated_by").references(() => users.id, { onDelete: "set null", onUpdate: "cascade" }),
   createdAt: createdAt(),
   updatedAt: updatedAt(),
 });
+
+/* ------------------------------------------------------------------------- */
+/* Access control additions                                                   */
+/* ------------------------------------------------------------------------- */
+
+export const permissions = mysqlTable("permissions", {
+  code: varchar("code", { length: 64 }).primaryKey(),
+  description: varchar("description", { length: 255 }).notNull().default(""),
+});
+
+export const rolePermissions = mysqlTable(
+  "role_permissions",
+  {
+    roleCode: varchar("role_code", { length: 32 })
+      .notNull()
+      .references(() => roles.code, { onDelete: "cascade", onUpdate: "cascade" }),
+    permissionCode: varchar("permission_code", { length: 64 })
+      .notNull()
+      .references(() => permissions.code, { onDelete: "cascade", onUpdate: "cascade" }),
+  },
+  (table) => [primaryKey({ columns: [table.roleCode, table.permissionCode] })],
+);
+
+export const passwordResetTokens = mysqlTable(
+  "password_reset_tokens",
+  {
+    id: id().primaryKey(),
+    userId: id("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    tokenHash: varchar("token_hash", { length: 64 }).notNull(),
+    expiresAt: datetime("expires_at", { mode: "date" }).notNull(),
+    usedAt: datetime("used_at", { mode: "date" }),
+    createdAt: createdAt(),
+  },
+  (table) => [
+    uniqueIndex("password_reset_tokens_hash_unique").on(table.tokenHash),
+    index("password_reset_tokens_user_idx").on(table.userId),
+  ],
+);
+
+export const invitations = mysqlTable(
+  "invitations",
+  {
+    id: id().primaryKey(),
+    email: varchar("email", { length: 191 }).notNull(),
+    role: varchar("role", { length: 32 })
+      .notNull()
+      .references(() => roles.code, { onDelete: "restrict", onUpdate: "cascade" }),
+    tokenHash: varchar("token_hash", { length: 64 }).notNull(),
+    invitedBy: id("invited_by").references(() => users.id, { onDelete: "set null", onUpdate: "cascade" }),
+    expiresAt: datetime("expires_at", { mode: "date" }).notNull(),
+    acceptedAt: datetime("accepted_at", { mode: "date" }),
+    createdAt: createdAt(),
+  },
+  (table) => [
+    uniqueIndex("invitations_email_unique").on(table.email),
+    uniqueIndex("invitations_token_unique").on(table.tokenHash),
+  ],
+);
+
+/* ------------------------------------------------------------------------- */
+/* Property structure                                                         */
+/* ------------------------------------------------------------------------- */
+
+export const hotels = mysqlTable("hotels", {
+  id: id().primaryKey(),
+  name: varchar("name", { length: 120 }).notNull(),
+  legalName: varchar("legal_name", { length: 160 }).notNull().default(""),
+  email: varchar("email", { length: 191 }).notNull().default(""),
+  phone: varchar("phone", { length: 32 }).notNull().default(""),
+  website: varchar("website", { length: 200 }).notNull().default(""),
+  addressLine1: varchar("address_line_1", { length: 200 }).notNull().default(""),
+  city: varchar("city", { length: 80 }).notNull().default(""),
+  state: varchar("state", { length: 80 }).notNull().default(""),
+  postalCode: varchar("postal_code", { length: 10 }).notNull().default(""),
+  country: varchar("country", { length: 80 }).notNull().default("India"),
+  createdAt: createdAt(),
+  updatedAt: updatedAt(),
+});
+
+export const branches = mysqlTable(
+  "branches",
+  {
+    id: id().primaryKey(),
+    hotelId: id("hotel_id")
+      .notNull()
+      .references(() => hotels.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    name: varchar("name", { length: 120 }).notNull(),
+    code: varchar("code", { length: 24 }).notNull(),
+    addressLine1: varchar("address_line_1", { length: 200 }).notNull().default(""),
+    city: varchar("city", { length: 80 }).notNull().default(""),
+    state: varchar("state", { length: 80 }).notNull().default(""),
+    postalCode: varchar("postal_code", { length: 10 }).notNull().default(""),
+    phone: varchar("phone", { length: 32 }).notNull().default(""),
+    isActive: boolean("is_active").notNull().default(true),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("branches_code_unique").on(table.code),
+    index("branches_hotel_idx").on(table.hotelId),
+  ],
+);
+
+export const roomAmenities = mysqlTable(
+  "room_amenities",
+  {
+    id: id().primaryKey(),
+    roomId: id("room_id")
+      .notNull()
+      .references(() => rooms.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    amenity: varchar("amenity", { length: 120 }).notNull(),
+    sortOrder: int("sort_order").notNull().default(0),
+  },
+  (table) => [uniqueIndex("room_amenities_room_name_unique").on(table.roomId, table.amenity)],
+);
+
+/* ------------------------------------------------------------------------- */
+/* Reservations, check-in/out and history                                     */
+/* ------------------------------------------------------------------------- */
+
+export const reservationGuests = mysqlTable(
+  "reservation_guests",
+  {
+    id: id().primaryKey(),
+    reservationId: id("reservation_id")
+      .notNull()
+      .references(() => reservations.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    guestId: id("guest_id")
+      .notNull()
+      .references(() => guests.id, { onDelete: "restrict", onUpdate: "cascade" }),
+    isPrimary: boolean("is_primary").notNull().default(false),
+    createdAt: createdAt(),
+  },
+  (table) => [uniqueIndex("reservation_guests_unique").on(table.reservationId, table.guestId)],
+);
+
+export const reservationStatusHistory = mysqlTable(
+  "reservation_status_history",
+  {
+    id: id().primaryKey(),
+    reservationId: id("reservation_id")
+      .notNull()
+      .references(() => reservations.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    fromStatus: varchar("from_status", { length: 32 }),
+    toStatus: varchar("to_status", { length: 32 }).notNull(),
+    note: varchar("note", { length: 300 }).notNull().default(""),
+    changedBy: id("changed_by").references(() => users.id, { onDelete: "set null", onUpdate: "cascade" }),
+    createdAt: createdAt(),
+  },
+  (table) => [index("reservation_status_history_res_idx").on(table.reservationId)],
+);
+
+export const checkIns = mysqlTable(
+  "check_ins",
+  {
+    id: id().primaryKey(),
+    reservationId: id("reservation_id")
+      .notNull()
+      .references(() => reservations.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    roomId: id("room_id")
+      .notNull()
+      .references(() => rooms.id, { onDelete: "restrict", onUpdate: "cascade" }),
+    checkedInAt: datetime("checked_in_at", { mode: "date" }).notNull(),
+    checkedInBy: id("checked_in_by").references(() => users.id, { onDelete: "set null", onUpdate: "cascade" }),
+    notes: varchar("notes", { length: 300 }).notNull().default(""),
+  },
+  (table) => [uniqueIndex("check_ins_reservation_unique").on(table.reservationId)],
+);
+
+export const checkOuts = mysqlTable(
+  "check_outs",
+  {
+    id: id().primaryKey(),
+    reservationId: id("reservation_id")
+      .notNull()
+      .references(() => reservations.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    roomId: id("room_id")
+      .notNull()
+      .references(() => rooms.id, { onDelete: "restrict", onUpdate: "cascade" }),
+    checkedOutAt: datetime("checked_out_at", { mode: "date" }).notNull(),
+    checkedOutBy: id("checked_out_by").references(() => users.id, { onDelete: "set null", onUpdate: "cascade" }),
+    notes: varchar("notes", { length: 300 }).notNull().default(""),
+  },
+  (table) => [uniqueIndex("check_outs_reservation_unique").on(table.reservationId)],
+);
+
+/* ------------------------------------------------------------------------- */
+/* Billing                                                                    */
+/* ------------------------------------------------------------------------- */
+
+export const invoiceItems = mysqlTable(
+  "invoice_items",
+  {
+    id: id().primaryKey(),
+    invoiceId: id("invoice_id")
+      .notNull()
+      .references(() => invoices.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    description: varchar("description", { length: 200 }).notNull(),
+    quantity: int("quantity").notNull().default(1),
+    unitPrice: money("unit_price").notNull().default("0.00"),
+    amount: money("amount").notNull().default("0.00"),
+    createdAt: createdAt(),
+  },
+  (table) => [index("invoice_items_invoice_idx").on(table.invoiceId)],
+);
+
+export const refunds = mysqlTable(
+  "refunds",
+  {
+    id: id().primaryKey(),
+    paymentId: id("payment_id")
+      .notNull()
+      .references(() => payments.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    amount: money("amount").notNull(),
+    reason: varchar("reason", { length: 300 }).notNull().default(""),
+    status: mysqlEnum("status", ["pending", "approved", "processed", "rejected"] as const)
+      .notNull()
+      .default("pending"),
+    processedBy: id("processed_by").references(() => users.id, { onDelete: "set null", onUpdate: "cascade" }),
+    processedAt: datetime("processed_at", { mode: "date" }),
+    createdAt: createdAt(),
+  },
+  (table) => [index("refunds_payment_idx").on(table.paymentId)],
+);
+
+/* ------------------------------------------------------------------------- */
+/* People, shifts and leave                                                   */
+/* ------------------------------------------------------------------------- */
+
+export const departments = mysqlTable(
+  "departments",
+  {
+    id: id().primaryKey(),
+    name: varchar("name", { length: 80 }).notNull(),
+    description: varchar("description", { length: 255 }).notNull().default(""),
+    createdAt: createdAt(),
+  },
+  (table) => [uniqueIndex("departments_name_unique").on(table.name)],
+);
+
+export const shifts = mysqlTable(
+  "shifts",
+  {
+    id: id().primaryKey(),
+    name: varchar("name", { length: 64 }).notNull(),
+    startTime: varchar("start_time", { length: 8 }).notNull(),
+    endTime: varchar("end_time", { length: 8 }).notNull(),
+    createdAt: createdAt(),
+  },
+  (table) => [uniqueIndex("shifts_name_unique").on(table.name)],
+);
+
+export const leaveRequests = mysqlTable(
+  "leave_requests",
+  {
+    id: id().primaryKey(),
+    staffId: id("staff_id")
+      .notNull()
+      .references(() => staff.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    startDate: date("start_date", { mode: "string" }).notNull(),
+    endDate: date("end_date", { mode: "string" }).notNull(),
+    type: varchar("type", { length: 40 }).notNull().default("casual"),
+    status: mysqlEnum("status", ["pending", "approved", "rejected"] as const).notNull().default("pending"),
+    reason: varchar("reason", { length: 300 }).notNull().default(""),
+    decidedBy: id("decided_by").references(() => users.id, { onDelete: "set null", onUpdate: "cascade" }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [index("leave_requests_staff_idx").on(table.staffId), index("leave_requests_status_idx").on(table.status)],
+);
+
+/* ------------------------------------------------------------------------- */
+/* Housekeeping                                                               */
+/* ------------------------------------------------------------------------- */
+
+export const housekeepingStatuses = mysqlTable("housekeeping_status", {
+  code: varchar("code", { length: 32 }).primaryKey(),
+  label: varchar("label", { length: 64 }).notNull(),
+  sortOrder: int("sort_order").notNull().default(0),
+});
+
+export const housekeepingTaskHistory = mysqlTable(
+  "housekeeping_task_history",
+  {
+    id: id().primaryKey(),
+    taskId: id("task_id")
+      .notNull()
+      .references(() => housekeepingTasks.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    status: mysqlEnum("status", HOUSEKEEPING_STATUSES).notNull(),
+    note: varchar("note", { length: 300 }).notNull().default(""),
+    changedBy: id("changed_by").references(() => users.id, { onDelete: "set null", onUpdate: "cascade" }),
+    createdAt: createdAt(),
+  },
+  (table) => [index("housekeeping_task_history_task_idx").on(table.taskId)],
+);
+
+/* ------------------------------------------------------------------------- */
+/* Restaurant and inventory                                                   */
+/* ------------------------------------------------------------------------- */
+
+export const restaurantOrderItems = mysqlTable(
+  "restaurant_order_items",
+  {
+    id: id().primaryKey(),
+    orderId: id("order_id")
+      .notNull()
+      .references(() => restaurantOrders.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    menuItemId: id("menu_item_id").references(() => restaurantMenuItems.id, {
+      onDelete: "set null",
+      onUpdate: "cascade",
+    }),
+    name: varchar("name", { length: 120 }).notNull(),
+    quantity: int("quantity").notNull().default(1),
+    unitPrice: money("unit_price").notNull().default("0.00"),
+    amount: money("amount").notNull().default("0.00"),
+  },
+  (table) => [index("restaurant_order_items_order_idx").on(table.orderId)],
+);
+
+export const inventoryTransactions = mysqlTable(
+  "inventory_transactions",
+  {
+    id: id().primaryKey(),
+    inventoryId: id("inventory_id")
+      .notNull()
+      .references(() => inventory.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    type: mysqlEnum("type", ["in", "out", "adjustment"] as const).notNull(),
+    quantity: int("quantity").notNull(),
+    note: varchar("note", { length: 300 }).notNull().default(""),
+    createdBy: id("created_by").references(() => users.id, { onDelete: "set null", onUpdate: "cascade" }),
+    createdAt: createdAt(),
+  },
+  (table) => [index("inventory_transactions_item_idx").on(table.inventoryId)],
+);
+
+export const suppliers = mysqlTable(
+  "suppliers",
+  {
+    id: id().primaryKey(),
+    name: varchar("name", { length: 120 }).notNull(),
+    contactName: varchar("contact_name", { length: 120 }).notNull().default(""),
+    email: varchar("email", { length: 191 }).notNull().default(""),
+    phone: varchar("phone", { length: 32 }).notNull().default(""),
+    address: varchar("address", { length: 300 }).notNull().default(""),
+    createdAt: createdAt(),
+  },
+  (table) => [uniqueIndex("suppliers_name_unique").on(table.name)],
+);
+
+/* ------------------------------------------------------------------------- */
+/* Notifications                                                              */
+/* ------------------------------------------------------------------------- */
+
+export const notifications = mysqlTable(
+  "notifications",
+  {
+    id: id().primaryKey(),
+    userId: id("user_id").references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    title: varchar("title", { length: 160 }).notNull(),
+    body: varchar("body", { length: 500 }).notNull().default(""),
+    readAt: datetime("read_at", { mode: "date" }),
+    createdAt: createdAt(),
+  },
+  (table) => [index("notifications_user_idx").on(table.userId)],
+);

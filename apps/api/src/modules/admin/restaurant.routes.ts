@@ -5,9 +5,17 @@ import { asyncHandler } from "../../utils/http";
 import { idParam, orderSchema, orderStatusSchema } from "../shared/schemas";
 import { orderQuerySchema } from "../shared/query";
 import { actorFrom } from "../shared/actor";
-import { createOrder, listOrders, updateOrderStatus } from "../../services/restaurant";
+import { createOrder, listMenu, listOrders, updateOrderStatus } from "../../services/restaurant";
 
 export const restaurantRouter = Router();
+
+restaurantRouter.get(
+  "/menu",
+  requirePermission("restaurant:read"),
+  asyncHandler(async (_req, res) => {
+    res.json(await listMenu());
+  }),
+);
 
 restaurantRouter.get(
   "/orders",

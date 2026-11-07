@@ -4,18 +4,23 @@ import * as schema from "./schema";
 import { ensureDatabaseExists } from "./ensure";
 import { migrate } from "./migrate";
 import { createAdminFromEnv } from "./reset";
+import { ensureRoles } from "../services/roles";
 import {
   seedActivities,
   seedAttendance,
+  seedDepartments,
+  seedHousekeepingStatuses,
+  seedShifts,
   seedExpenses,
   seedGuests,
   seedHousekeepingTasks,
   seedInventory,
   seedInvoices,
+  seedMenuCategories,
+  seedMenuItems,
   seedPayments,
   seedReservations,
   seedRestaurantOrders,
-  seedRoles,
   seedRoomTypes,
   seedRooms,
   seedSettings,
@@ -23,7 +28,22 @@ import {
 } from "./seed-data";
 
 const BUSINESS_TABLES = [
+  "notifications",
+  "inventory_transactions",
+  "restaurant_order_items",
+  "housekeeping_task_history",
+  "check_outs",
+  "check_ins",
+  "reservation_status_history",
+  "reservation_guests",
+  "refunds",
+  "invoice_items",
+  "leave_requests",
+  "invitations",
+  "password_reset_tokens",
   "activity_logs",
+  "restaurant_menu_items",
+  "restaurant_menu_categories",
   "restaurant_orders",
   "expenses",
   "inventory",
@@ -54,12 +74,7 @@ export async function clearBusinessData(): Promise<void> {
 }
 
 export async function seedRolesOnly(): Promise<void> {
-  await db
-    .insert(schema.roles)
-    .values([...seedRoles])
-    .onDuplicateKeyUpdate({
-      set: { name: sql`values(name)`, description: sql`values(description)` },
-    });
+  await ensureRoles();
 }
 
 export async function seedDatabase(): Promise<void> {
@@ -67,6 +82,30 @@ export async function seedDatabase(): Promise<void> {
   await migrate();
   await clearBusinessData();
   await seedRolesOnly();
+
+  // Reference data is inserted idempotently so reseeding keeps the same rows.
+  for (const department of seedDepartments) {
+    await pool.query("INSERT IGNORE INTO departments (id, name, description) VALUES (?, ?, ?)", [
+      department.id,
+      department.name,
+      department.description,
+    ]);
+  }
+  for (const shift of seedShifts) {
+    await pool.query("INSERT IGNORE INTO shifts (id, name, start_time, end_time) VALUES (?, ?, ?, ?)", [
+      shift.id,
+      shift.name,
+      shift.startTime,
+      shift.endTime,
+    ]);
+  }
+  for (const status of seedHousekeepingStatuses) {
+    await pool.query("INSERT IGNORE INTO housekeeping_status (code, label, sort_order) VALUES (?, ?, ?)", [
+      status.code,
+      status.label,
+      status.sortOrder,
+    ]);
+  }
 
   const now = new Date();
 
@@ -91,6 +130,10 @@ export async function seedDatabase(): Promise<void> {
         checkInTime: sql`values(check_in_time)`,
         checkOutTime: sql`values(check_out_time)`,
         invoicePrefix: sql`values(invoice_prefix)`,
+        invoiceFooter: sql`values(invoice_footer)`,
+        cancellationPolicy: sql`values(cancellation_policy)`,
+        cancellationCutoffHours: sql`values(cancellation_cutoff_hours)`,
+        reservationHoldHours: sql`values(reservation_hold_hours)`,
         updatedAt: now,
       },
     });
@@ -116,6 +159,12 @@ export async function seedDatabase(): Promise<void> {
   await db.insert(schema.attendance).values(seedAttendance.map((record) => ({ ...record, updatedAt: now })));
   await db.insert(schema.inventory).values(seedInventory.map((item) => ({ ...item, updatedAt: now })));
   await db.insert(schema.expenses).values(seedExpenses.map((item) => ({ ...item, updatedAt: now })));
+  await db
+    .insert(schema.restaurantMenuCategories)
+    .values(seedMenuCategories.map((category) => ({ ...category, updatedAt: now })));
+  await db
+    .insert(schema.restaurantMenuItems)
+    .values(seedMenuItems.map((item) => ({ ...item, updatedAt: now })));
   await db
     .insert(schema.restaurantOrders)
     .values(seedRestaurantOrders.map((order) => ({ ...order, updatedAt: now })));

@@ -15,6 +15,20 @@
       "when": 1793860725728,
       "tag": "0001_solid_black_panther",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1794039828173,
+      "tag": "0002_giant_phantom_reporter",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1794057974830,
+      "tag": "0003_worried_shinko_yamashiro",
+      "breakpoints": true
     }
   ]
 }
