@@ -14,6 +14,9 @@ export class ApiError extends Error {
 
 const API_BASE = (import.meta.env.VITE_API_URL ?? "/api").replace(/\/$/, "");
 
+// Vite (and most reverse proxies) return these when the API process is down.
+const GATEWAY_STATUSES = new Set([502, 503, 504]);
+
 type RequestOptions = {
   method?: "GET" | "POST" | "PATCH" | "DELETE";
   body?: unknown;
@@ -54,6 +57,13 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
   }
 
   if (!response.ok) {
+    if (GATEWAY_STATUSES.has(response.status)) {
+      throw new ApiError(
+        "Cannot reach the RIVR API. Check that the API server is running.",
+        response.status,
+        "network_error",
+      );
+    }
     const body = payload as { error?: { message?: string; code?: string; details?: unknown } } | null;
     throw new ApiError(
       body?.error?.message ?? `The request failed with status ${response.status}.`,

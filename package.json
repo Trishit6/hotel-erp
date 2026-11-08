@@ -5,7 +5,8 @@
   "type": "module",
   "packageManager": "pnpm@12.16.1",
   "scripts": {
-    "dev": "vite",
+    "dev": "node scripts/dev.mjs",
+    "dev:web": "vite",
     "build": "tsc -b && vite build",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",

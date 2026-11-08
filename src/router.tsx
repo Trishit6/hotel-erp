@@ -51,13 +51,49 @@ import {
 } from "./pages/RoleDashboards";
 import { GuestDashboardPage } from "./pages/GuestDashboardPage";
 import { normalizeStaySearch } from "./lib/hotel-data";
+import { useHotel } from "./lib/hotel-store";
 
 const staySearch = (search: Record<string, unknown>) =>
   normalizeStaySearch(search);
+
+function ApiOfflineBanner() {
+  const { status, error, refresh } = useHotel();
+
+  if (status !== "error") return null;
+
+  return (
+    <div
+      role="alert"
+      className="fixed inset-x-3 bottom-3 z-[100] mx-auto flex max-w-2xl items-center justify-between gap-3 rounded-2xl border border-[var(--danger)]/30 bg-[var(--surface)] px-4 py-3 text-xs text-[var(--danger)] shadow-[0_14px_45px_rgba(23,43,73,0.18)] sm:inset-x-auto sm:right-5 sm:bottom-5"
+    >
+      <span className="leading-5">
+        {error ?? "The RIVR API is not reachable."}
+      </span>
+      <button
+        type="button"
+        onClick={() => void refresh()}
+        className="shrink-0 rounded-full border border-[var(--danger)]/40 px-3 py-1.5 font-semibold transition-colors hover:bg-[var(--danger-soft)]"
+      >
+        Retry
+      </button>
+    </div>
+  );
+}
+
 function RootComponent() {
   const location = useLocation();
   const reduceMotion = useReducedMotion();
   const controls = useAnimationControls();
+  const isStaffWorkspace = [
+    "/admin",
+    "/manager",
+    "/reception",
+    "/housekeeping",
+    "/staff",
+  ].some(
+    (path) =>
+      location.pathname === path || location.pathname.startsWith(`${path}/`),
+  );
 
   useLayoutEffect(() => {
     if (reduceMotion) {
@@ -77,6 +113,7 @@ function RootComponent() {
       animate={controls}
     >
       <Outlet />
+      {!isStaffWorkspace && <ApiOfflineBanner />}
     </motion.div>
   );
 }

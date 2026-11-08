@@ -113,9 +113,8 @@ Important variables:
 | `SESSION_TTL_HOURS` | Session lifetime in hours |
 | `COOKIE_NAME` | Session cookie name |
 | `COOKIE_SECURE` | Set `true` when served over HTTPS |
-| `SETUP_TOKEN` | One-time token for `POST /api/auth/setup`; leave empty to disable |
 | `ALLOW_DEMO_RESET` | Enables the super-admin-only dev reset endpoint |
-| `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` | Optional first admin created by `pnpm db:seed` |
+| `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` | Optional extra admin created by `pnpm db:seed`; the demo seed also creates `admin@admin.com` / `password` |
 
 Never commit `.env` files. The repository `.gitignore` excludes them.
 
@@ -144,30 +143,27 @@ Optional demo data:
 pnpm db:seed
 ```
 
-Seed data is mapped from the original `src/lib/hotel-data.ts` demo catalogue (room types, rooms, guests, reservations, tasks, inventory, staff, expenses, restaurant orders, activity). It does **not** import browser `localStorage` data. There is no automatic localStorage-to-database migration.
+`pnpm db:seed` is destructive: it clears the business tables (including users and sessions) and inserts a large demo dataset across rooms, guests, staff, reservations, payments, invoices, housekeeping, attendance, inventory, suppliers, expenses, restaurant orders, activity, notifications, and settings. The demo seed creates the super-admin `admin@admin.com` with password `password`, plus role demo accounts (`manager@rivrhotel.in`, `reception@rivrhotel.in`, `housekeeping@rivrhotel.in`, `accountant@rivrhotel.in`, `restaurant@rivrhotel.in`, `staff@rivrhotel.in`) and customer accounts whose password is also `password`. These well-known credentials are for local development only; never run the demo seed against production data.
+
+Seed data is generated in `apps/api/src/database/seed-data.ts`. It does **not** import browser `localStorage` data. There is no automatic localStorage-to-database migration.
 
 ### Create the first administrator
 
-Option A — interactive CLI:
+The CLI is non-interactive:
 
 ```bash
-pnpm create-admin
+pnpm create-admin --email admin@example.com --password "a-12-plus-character-password"
 ```
 
-Option B — one-time setup endpoint:
+It migrates, seeds roles, and refuses if an active super-admin already exists. It requires a password of at least 12 characters.
 
-1. Set `SETUP_TOKEN` in `apps/api/.env` to a random value.
-2. Start the API.
-3. Call `POST /api/auth/setup` with `{ "name", "email", "password", "setupToken" }`.
-4. Remove or rotate `SETUP_TOKEN` afterwards.
+Alternatively, set `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` before `pnpm db:seed` to create an additional admin. Both must be set. The demo seed's built-in `admin@admin.com` / `password` account is separate and is intended only for local demo data.
 
-Option C — seed-time admin: set `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` before `pnpm db:seed`. Both must be set; there is no default password.
-
-Passwords must be at least 12 characters. They are hashed with Argon2id.
+There is no `/api/auth/setup` endpoint.
 
 ### Reset demo data
 
-`pnpm db:reset` drops and recreates the database schema. This is destructive.
+`pnpm db:reset` is currently a no-op: `reset.ts` has no CLI entrypoint. Use the exported `resetDatabase()` / `dropAllTables()` helpers if a real reset is needed.
 
 The super-admin-only API endpoint `POST /api/admin/dev/reset` re-seeds demo data when `ALLOW_DEMO_RESET=true`. The Settings page exposes this only to a super administrator.
 
@@ -175,21 +171,23 @@ The super-admin-only API endpoint `POST /api/admin/dev/reset` re-seeds demo data
 
 ## Development
 
-Run the API and the frontend in separate terminals.
-
-Terminal 1 — API:
-
-```bash
-pnpm dev:api
-```
-
-Terminal 2 — frontend:
+Start both the API and the frontend with one command:
 
 ```bash
 pnpm dev
 ```
 
-Open `http://localhost:5173`.
+The script starts the API, waits for `http://localhost:4000/api/health` (or `API_PROXY_TARGET`), then starts Vite. Open `http://localhost:5173`.
+
+To run them separately:
+
+```bash
+# terminal 1
+pnpm dev:api
+
+# terminal 2
+pnpm dev:web
+```
 
 Vite proxies `/api` to `http://localhost:4000` by default. Override the proxy target with `API_PROXY_TARGET` if the API runs elsewhere:
 
@@ -207,9 +205,9 @@ The frontend API base can also be set at build time with `VITE_API_URL`. Leave i
 
 ### Staff sign-in
 
-Open `http://localhost:5173/admin/login` and use the email/password created during setup. The old demo role picker has been removed. The API sets an HTTP-only session cookie; the browser never chooses a privileged role.
+Open `http://localhost:5173/login` and use a seeded or created account. For the local demo seed, use `admin@admin.com` / `password`. The old demo role picker has been removed. The API sets an HTTP-only session cookie; the browser never chooses a privileged role.
 
-Guest sign-in, guest registration, and guest password reset remain intentionally unavailable in this build. Booking lookup by reference, email, or phone works without an account.
+Guest sign-in, guest registration, the guest dashboard, my-bookings, and guest password reset are implemented under `/api/account` and the guest pages. Booking lookup by reference, email, or phone also works without an account.
 
 ---
 
@@ -273,7 +271,6 @@ Base URL in development: `http://localhost:4000/api`
 
 | Method | Path | Purpose |
 | --- | --- | --- |
-| `POST` | `/auth/setup` | One-time initial super-admin creation (requires `SETUP_TOKEN`) |
 | `POST` | `/auth/login` | Email/password sign-in; creates a server session |
 | `POST` | `/auth/logout` | Destroys the current session |
 | `GET` | `/auth/me` | Current session user |
@@ -310,14 +307,14 @@ Money is stored as `DECIMAL(12,2)` and calculated in integer paise on the server
 - Sessions are server-side rows. The browser receives a random token in an HTTP-only cookie; only an HMAC-SHA256 hash of the token is stored in the database.
 - Cookies are `SameSite=Lax`, `HttpOnly`, and `Secure` when `COOKIE_SECURE=true` or `NODE_ENV=production`.
 - The session token is never exposed to JavaScript.
-- Login and setup are rate-limited; all API traffic has a global limit.
+- Login is rate-limited; all API traffic has a global limit.
 - Helmet sets security headers.
 - CORS uses an explicit allow-list from `WEB_ORIGIN`; credentials are enabled.
 - Every mutation validates its body with Zod and enforces a server-side permission from the permission catalogue.
 - The client cannot choose its role. Roles come from the authenticated user row.
 - User deactivation and password changes destroy the affected user's other sessions.
 - The last active super administrator cannot be demoted or deactivated.
-- The initial admin is created through `SETUP_TOKEN`, the CLI, or `SEED_ADMIN_*`; no default password is committed.
+- The initial admin is created through the CLI or `SEED_ADMIN_*`; the demo seed also creates `admin@admin.com` / `password` for local development only.
 
 ### Roles
 
@@ -403,7 +400,7 @@ Foreign keys, unique constraints, indexes, timestamps, and decimal money columns
 5. Serve the frontend `dist/` directory with SPA fallback to `index.html`.
 6. Put the frontend and API behind the same origin and reverse-proxy `/api` to the API process. This keeps the session cookie same-site and avoids CORS complexity. If they are on different origins, set `WEB_ORIGIN` explicitly and configure `VITE_API_URL`.
 7. Use HTTPS. Keep `COOKIE_SECURE=true` in production.
-8. Disable `ALLOW_DEMO_RESET` and remove `SETUP_TOKEN` after initial setup.
+8. Disable `ALLOW_DEMO_RESET` and remove any `SEED_ADMIN_*` credentials after initial setup.
 
 The API applies pending migrations on startup in development only (`apps/api/src/server.ts`). In production, run `pnpm db:migrate` as a release step before starting the server.
 
@@ -412,7 +409,7 @@ The API applies pending migrations on startup in development only (`apps/api/src
 ## Limitations
 
 - No online payment gateway. Payments are recorded manually by staff; the UI does not claim otherwise.
-- Guest accounts, guest registration, and guest password reset are not enabled. Staff authentication and RBAC are fully implemented.
+- Guest accounts, guest registration, the guest dashboard, my-bookings, and guest password reset are implemented. Staff authentication and RBAC are fully implemented.
 - No email, SMS, or calendar delivery service is integrated. The booking confirmation page and downloadable calendar file are generated locally.
 - Single-property configuration. `hotelInfo` is placeholder data and must be replaced before launch.
 - Seed data is demo data derived from the original frontend catalogue. It is not a production data import tool.
@@ -429,16 +426,13 @@ cp apps/api/.env.example apps/api/.env
 # edit apps/api/.env with your database password and a SESSION_SECRET
 pnpm db:migrate
 pnpm db:seed
-pnpm create-admin
-pnpm dev:api
-# in a second terminal
 pnpm dev
 ```
 
-Then open:
+Then open the guest site at `http://localhost:5173` or the admin site at `http://localhost:5173/login` and sign in with the demo super-admin `admin@admin.com` / `password`. Change or remove the demo accounts before using real data.
 
 - Guest site: `http://localhost:5173`
-- Staff portal: `http://localhost:5173/admin/login`
+- Staff portal: `http://localhost:5173/login`
 - API health: `http://localhost:4000/api/health`
 
 ---
@@ -447,17 +441,18 @@ Then open:
 
 | Command | Description |
 | --- | --- |
-| `pnpm dev` | Start the Vite frontend |
-| `pnpm dev:api` | Start the API with `tsx watch` |
+| `pnpm dev` | Start the API and the Vite frontend together |
+| `pnpm dev:web` | Start only the Vite frontend |
+| `pnpm dev:api` | Start only the API with `tsx watch` |
 | `pnpm build` | Typecheck and build the frontend |
 | `pnpm build:api` | Compile the API |
 | `pnpm exec tsc -b` | Real frontend typecheck |
 | `pnpm typecheck:api` | API typecheck |
 | `pnpm test:api` | Run API integration tests |
 | `pnpm db:migrate` | Apply pending SQL migrations |
-| `pnpm db:seed` | Seed demo data and optional first admin |
-| `pnpm db:reset` | Drop and recreate the schema (destructive) |
-| `pnpm create-admin` | Interactive first-admin creation |
+| `pnpm db:seed` | Seed the large demo dataset (destructive; creates `admin@admin.com` / `password`) |
+| `pnpm db:reset` | Currently a no-op; use the exported reset helpers |
+| `pnpm create-admin` | Non-interactive first-admin creation (`--email`, `--password` 12+ chars) |
 
 ---
 

@@ -3,15 +3,15 @@ import { test, expect } from '@playwright/test';
 // Base URL for the running app
 const BASE_URL = 'http://127.0.0.1:5173';
 
-// Credentials loaded from apps/api/.env SEED_ADMIN_* values
-// Other role credentials are created by db:seed and have predictable passwords
+// Demo accounts created by `pnpm db:seed`.
+// All demo accounts use the password `password`.
 const CREDENTIALS = {
-  super_admin: { email: 'admin@rivr.local', password: 'Rivr@aODvCV6aE7U_' },
-  manager: { email: 'manager@rivr.local', password: 'manager123' },
-  receptionist: { email: 'reception@rivr.local', password: 'reception123' },
-  housekeeping: { email: 'housekeeping@rivr.local', password: 'hk123' },
-  staff: { email: 'staff@rivr.local', password: 'staff123' },
-  customer: { email: 'customer@example.com', password: 'customer123' },
+  super_admin: { email: 'admin@admin.com', password: 'password' },
+  manager: { email: 'manager@rivrhotel.in', password: 'password' },
+  receptionist: { email: 'reception@rivrhotel.in', password: 'password' },
+  housekeeping: { email: 'housekeeping@rivrhotel.in', password: 'password' },
+  staff: { email: 'staff@rivrhotel.in', password: 'password' },
+  customer: { email: 'aarav.nair5@example.com', password: 'password' },
 };
 
 // ---------------------------------------------------------------------------

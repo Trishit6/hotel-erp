@@ -2,6 +2,8 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
+const apiTarget = process.env.API_PROXY_TARGET ?? "http://localhost:4000";
+
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   // node_modules is committed with pnpm's Windows junctions materialised as real
@@ -13,8 +15,15 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: process.env.API_PROXY_TARGET ?? "http://localhost:4000",
+        target: apiTarget,
         changeOrigin: true,
+        configure(proxy) {
+          proxy.on("error", (error) => {
+            console.error(
+              `[vite] /api proxy could not reach ${apiTarget}: ${error.message}. Start the API with "pnpm dev:api" or run "pnpm dev" to start both.`,
+            );
+          });
+        },
       },
     },
   },

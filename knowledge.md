@@ -19,25 +19,26 @@ Full-stack hotel management + ERP app: React 19/Vite guest site and staff portal
 | Task | Command |
 | --- | --- |
 | Install | `pnpm install` |
-| Frontend dev (5173) | `pnpm dev` (proxies `/api` → `:4000`; override `API_PROXY_TARGET`) |
-| API dev (4000) | `pnpm dev:api` (`tsx watch src/server.ts`) |
+| Dev (frontend + API) | `pnpm dev` (starts the API, waits for `/api/health`, then Vite) |
+| Frontend only (5173) | `pnpm dev:web` (proxies `/api` → `:4000`; override `API_PROXY_TARGET`) |
+| API only (4000) | `pnpm dev:api` (`tsx watch src/server.ts`) |
 | Frontend typecheck | `pnpm exec tsc -b` — root `pnpm typecheck` is a no-op (`tsconfig.json` has `files: []`) |
 | Frontend build | `pnpm build` (`tsc -b && vite build`) |
 | API typecheck | `pnpm typecheck:api` (only covers `src/**/*.ts`) |
 | API build | `pnpm build:api` → CommonJS in `apps/api/dist` |
-| API tests | `pnpm test:api` — one file: `pnpm --filter @rivr/api exec vitest run tests/auth.test.ts`; one case: add `-t "..."` |
+| API tests | `pnpm test:api` — one file: `pnpm --filter @rivr/api exec vitest run tests/auth.test.ts`; one case: add `-t "..."`. `tests/seed-auth.test.ts` covers the full demo seed, auth, sessions, and role permissions; Playwright suites under `tests/playwright/` are excluded from Vitest. |
 | Generate migration | `pnpm --filter @rivr/api db:generate` |
 | Apply migrations | `pnpm db:migrate` |
-| Seed demo data | `pnpm db:seed` (destructive) |
+| Seed demo data | `pnpm db:seed` (destructive; creates `admin@admin.com` / `password`) |
 
 No lint, formatter, or frontend test suite is configured — do not invent commands for them. Full gate: `pnpm exec tsc -b`, `pnpm build`, `pnpm typecheck:api`, `pnpm test:api`.
 
 ## Setup
 
 - `apps/api/.env` is required and untracked; template at `apps/api/.env.example`. Loaded by `config/env.ts` (cwd `.env`, then `apps/api/.env`) and Zod-validated. Production requires `SESSION_SECRET` ≥ 32 chars.
-- Key vars: `DB_HOST/PORT/USER/PASSWORD/NAME`, `DB_TEST_NAME`, `SESSION_SECRET`, `SESSION_TTL_HOURS`, `COOKIE_NAME`, `COOKIE_SECURE`, `WEB_ORIGIN` (comma-separated CORS allow-list), `SETUP_TOKEN`, `ALLOW_DEMO_RESET`, `SEED_ADMIN_*`.
+- Key vars: `DB_HOST/PORT/USER/PASSWORD/NAME`, `DB_TEST_NAME`, `SESSION_SECRET`, `SESSION_TTL_HOURS`, `COOKIE_NAME`, `COOKIE_SECURE`, `WEB_ORIGIN` (comma-separated CORS allow-list), `ALLOW_DEMO_RESET`, `SEED_ADMIN_*`.
 - The DB user needs `CREATE DATABASE`/`DROP` because dev boot and tests create/drop schemas.
-- First admin: `pnpm create-admin` (flags/`SEED_ADMIN_*`, non-interactive), `POST /api/auth/setup` with `SETUP_TOKEN`, or `SEED_ADMIN_*` before seeding. Passwords ≥ 12 chars, Argon2id.
+- First admin: `pnpm create-admin --email <email> --password <12+ chars>` (or `SEED_ADMIN_*`, non-interactive). The demo seed separately creates `admin@admin.com` / `password` plus role/customer demo accounts with password `password`. There is no `/api/auth/setup` endpoint; `SETUP_TOKEN` is vestigial.
 
 ## Conventions & domain rules
 
@@ -45,16 +46,16 @@ No lint, formatter, or frontend test suite is configured — do not invent comma
 - Dates: date-only `YYYY-MM-DD`, compared lexicographically; "today" is Asia/Kolkata (`utils/date.ts`); pooled DB connections are pinned to UTC.
 - Throw `HttpError` helpers (`utils/http.ts`); `middleware/error.ts` renders `{ error: { code, message, details? } }`.
 - All `/api/admin` routes sit behind `requireAuth`; each handler adds `requirePermission(...)`. Permission catalogue: `services/permissions.ts` (`settings:manage`, `restaurant:read/write`, etc.). Role/status literals are duplicated across `apps/api/src/constants.ts`, DB enums, `src/lib/hotel-data.ts`, and nav role lists in `src/components/hotel/StaffChrome.tsx` — change them together.
-- Roles: `super-admin`, `admin`, `manager`, `receptionist`, `housekeeping`, `accountant`, `restaurant`.
+- Roles: `super-admin`, `admin`, `manager`, `receptionist`, `housekeeping`, `accountant`, `restaurant`, `staff`, plus `customer`.
 - Reservation/room transitions live in services, not routes/UI: booking locks the room row with `.for("update")` and rejects overlaps; cancel/no-show frees the room if no other stay is active; check-in → `occupied`; checkout → `cleaning` + housekeeping task; inspected task → `available`.
-- Scope is single-property. No online payments, email/SMS, or guest accounts (guest auth pages intentionally never call the API). `hotelInfo` in `src/lib/hotel-data.ts` is placeholder data, not verified property details.
+- Scope is single-property. No payment gateway or email/SMS delivery is wired up; `forgot-password` returns a reset token outside production. Guest dashboard, my-bookings, and password reset are implemented. `hotelInfo` in `src/lib/hotel-data.ts` is placeholder data, not verified property details.
 
 ## Gotchas
 
 - Schema changes: edit `schema.ts` → `pnpm --filter @rivr/api db:generate` → commit the generated SQL → `pnpm db:migrate`. Never edit an applied migration. The runner splits files on `--> statement-breakpoint` and records filenames in `schema_migrations`.
 - New tables must be added to `TABLES` in `database/reset.ts` and `BUSINESS_TABLES` in `database/seed.ts` (plus seed inserts), else resets/seeds silently skip them.
-- `pnpm db:seed` deletes all business rows (including `users` and `sessions`) then reseeds; it is not additive.
-- `pnpm create-admin` calls `resetDatabase()` and drops every table first, despite what the README implies.
+- `pnpm db:seed` deletes all business rows (including `users` and `sessions`) then reseeds a large demo dataset with demo accounts (`admin@admin.com` / `password`); it is not additive.
+- `pnpm create-admin` does **not** reset the database; it creates the first super-admin and refuses if one already exists.
 - `pnpm db:reset` is currently a no-op: `database/reset.ts` has no CLI entrypoint. Use its exported `resetDatabase()`/`dropAllTables()`.
 - `POST /api/admin/dev/reset` reseeds only with `ALLOW_DEMO_RESET=true` and a super-admin caller; it clears users/sessions.
 - The root package is the frontend; add backend deps to `apps/api/package.json`. The API is Express 4 + CommonJS (`"type": "commonjs"`) even though the root declares Express 5 and `"type": "module"`.
