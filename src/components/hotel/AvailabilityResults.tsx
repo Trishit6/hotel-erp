@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { ArrowRight, CalendarDays, Loader2, SlidersHorizontal, Users } from "lucide-react";
+import { ArrowRight, CalendarDays, SlidersHorizontal, Users } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { BookingSearch } from "./BookingSearch";
 import { PageAtmosphere } from "./Cinematic";
@@ -64,8 +64,31 @@ export function AvailabilityResults({ search }: { search: StaySearch }) {
         </div>
 
         {status === "loading" ? (
-          <div className="mt-8 flex items-center justify-center gap-3 rounded-[1.4rem] border border-[var(--line)] bg-[var(--surface)] p-12 text-sm text-[var(--muted)]">
-            <Loader2 className="h-5 w-5 animate-spin text-[var(--sage)]" /> Loading live availability…
+          // Reserve the result grid's height so the footer and page below do not
+          // jump when the room records arrive.
+          <div
+            className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3"
+            aria-busy="true"
+          >
+            {[0, 1, 2].map((index) => (
+              <div
+                key={index}
+                className="lux-card min-h-[420px] overflow-hidden rounded-[1.45rem]"
+              >
+                <div className="h-52 animate-pulse bg-[var(--surface-3)] sm:h-60" />
+                <div className="space-y-3 p-6">
+                  <div className="h-2.5 w-24 animate-pulse rounded-full bg-[var(--surface-3)]" />
+                  <div className="h-7 w-40 animate-pulse rounded-full bg-[var(--surface-3)]" />
+                  <div className="h-2.5 w-full animate-pulse rounded-full bg-[var(--surface-3)]" />
+                  <div className="h-2.5 w-4/5 animate-pulse rounded-full bg-[var(--surface-3)]" />
+                  <div className="mt-6 flex items-center justify-between gap-3 border-t border-[var(--line)] pt-5">
+                    <div className="h-8 w-28 animate-pulse rounded-full bg-[var(--surface-3)]" />
+                    <div className="h-9 w-24 animate-pulse rounded-full bg-[var(--surface-3)]" />
+                  </div>
+                </div>
+              </div>
+            ))}
+            <span className="sr-only">Loading live availability…</span>
           </div>
         ) : status === "error" ? (
           <div className="mt-8 rounded-[1.4rem] border border-[var(--danger)]/25 bg-[var(--danger-soft)] p-8 text-center text-sm text-[var(--danger)]">{error ?? "Live availability could not be loaded. Please try again."}</div>

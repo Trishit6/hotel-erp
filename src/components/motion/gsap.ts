@@ -30,9 +30,13 @@ export function useGsap(
 
     const context = gsap.context(setup, element);
     const refresh = window.setTimeout(() => ScrollTrigger.refresh(), 220);
+    const onLoad = () => ScrollTrigger.refresh();
+    window.addEventListener("load", onLoad, { once: true });
+    document.fonts?.ready.then(() => ScrollTrigger.refresh()).catch(() => undefined);
 
     return () => {
       window.clearTimeout(refresh);
+      window.removeEventListener("load", onLoad);
       context.revert();
     };
     // The caller owns the dependency list; this hook intentionally forwards it.

@@ -210,7 +210,7 @@ export function AdminLayout({ children }: { children?: ReactNode }) {
 
   if (status === "loading")
     return (
-      <div className="grid min-h-screen place-items-center bg-[var(--canvas)] text-[var(--muted)]">
+      <div className="admin-shell grid min-h-screen place-items-center bg-[var(--canvas)] text-[var(--muted)]">
         <div className="flex items-center gap-3 rounded-full border border-[var(--line)] bg-[var(--surface)] px-5 py-3 text-sm shadow-[var(--shadow-soft)]">
           <Loader2 className="h-5 w-5 animate-spin text-[var(--sage)]" /> Loading the RIVR workspace…
         </div>
@@ -219,7 +219,7 @@ export function AdminLayout({ children }: { children?: ReactNode }) {
 
   if (status === "error")
     return (
-      <div className="grid min-h-screen place-items-center bg-[var(--canvas)] px-5 text-center text-[var(--text)]">
+      <div className="admin-shell grid min-h-screen place-items-center bg-[var(--canvas)] px-5 text-center text-[var(--text)]">
         <div className="glass-card max-w-md rounded-[1.5rem] p-8">
           <span className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-[var(--danger-soft)] text-[var(--danger)]">
             <ShieldCheck className="h-5 w-5" />
@@ -288,7 +288,8 @@ export function AdminLayout({ children }: { children?: ReactNode }) {
     .toUpperCase();
 
   return (
-    <div className="min-h-screen bg-[var(--canvas)] text-[var(--text)] lg:flex">
+    <div className="admin-shell min-h-screen bg-[var(--canvas)] text-[var(--text)] lg:flex">
+      <div className="admin-atmosphere no-print" aria-hidden="true" />
       <a
         href="#admin-main"
         className="sr-only z-[100] rounded-lg bg-[var(--primary)] px-4 py-2 text-xs font-semibold text-[var(--on-primary)] focus:not-sr-only focus:fixed focus:left-4 focus:top-4"

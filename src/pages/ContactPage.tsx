@@ -52,6 +52,7 @@ export default function ContactPage() {
       <main>
         <PageHero
           eyebrow="Contact"
+          reverse
           title="We are here"
           accent="when you need us."
           intro="Questions about a stay, an arrival, or something a little more particular? Speak with the team directly. We will help you find the right room and the right way to arrive."

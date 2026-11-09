@@ -180,7 +180,9 @@ function RootComponent() {
       controls.set({ opacity: 1 });
       return;
     }
-    controls.set({ opacity: 0.001 });
+    // Start nearly opaque: fading up from 0.001 blanked the page against the
+    // ivory canvas during lazy-route loading and read as a white flash.
+    controls.set({ opacity: 0.9 });
     controls.start({
       opacity: 1,
       transition: { duration: 0.28, ease: [0.22, 1, 0.36, 1] },
@@ -189,14 +191,25 @@ function RootComponent() {
 
   return (
     <motion.div
-      initial={reduceMotion ? false : { opacity: 0.001 }}
+      initial={reduceMotion ? false : { opacity: 0.9 }}
       animate={controls}
     >
-      <ScrollProgress />
+      {!isStaffWorkspace && <ScrollProgress />}
       <CustomCursor />
       <Outlet />
       {!isStaffWorkspace && <ApiOfflineBanner />}
     </motion.div>
+  );
+}
+
+function RoutePending() {
+  return (
+    <div className="grid min-h-[60vh] place-items-center px-5">
+      <div className="flex items-center gap-3 rounded-full border border-[var(--line)] bg-[var(--surface)] px-5 py-3 text-xs text-[var(--muted)] shadow-[var(--shadow-soft)]">
+        <span className="h-4 w-4 animate-spin rounded-full border-2 border-[var(--line-2)] border-t-[var(--accent)]" />
+        Preparing your page…
+      </div>
+    </div>
   );
 }
 
@@ -488,6 +501,9 @@ export const router = createRouter({
   routeTree,
   defaultPreload: "intent",
   scrollRestoration: true,
+  defaultPendingMs: 140,
+  defaultPendingMinMs: 300,
+  defaultPendingComponent: RoutePending,
 });
 declare module "@tanstack/react-router" {
   interface Register {

@@ -44,8 +44,8 @@ export default function StayPage() {
           </div>
         </PageHero>
 
-        <section className="relative z-20 mx-auto -mt-8 max-w-[1180px] px-2 md:-mt-10">
-          <BookingSearch initialCheckIn={defaultStaySearch.checkIn} initialCheckOut={defaultStaySearch.checkOut} initialAdults={defaultStaySearch.adults} initialChildren={defaultStaySearch.children} initialRooms={defaultStaySearch.rooms} />
+        <section className="relative z-20 mx-auto -mt-8 max-w-[1180px] px-2 md:-mt-12">
+          <BookingSearch />
           <p className="mt-2 px-3 text-center text-[11px] text-[var(--faint)] md:text-left">Rates are per room, per night. Each reservation secures one room.</p>
         </section>
 

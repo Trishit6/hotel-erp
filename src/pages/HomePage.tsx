@@ -91,9 +91,16 @@ export default function HomePage() {
       if (!frame || !image) return;
 
       gsap.set(frame, { clipPath: "inset(0 0 100% 0)" });
-      gsap.set(image, { scale: 1.18 });
+      gsap.set(image, { scale: 1.2 });
 
-      const timeline = gsap.timeline({ defaults: { ease: "power3.out" } });
+      const timeline = gsap.timeline({
+        defaults: { ease: "power3.out" },
+        onComplete: () =>
+          gsap.set(
+            ".hero-title-line, .hero-eyebrow, .hero-copy, .hero-cta, .hero-trust, .hero-note",
+            { clearProps: "transform,opacity" },
+          ),
+      });
       timeline
         .from(".hero-eyebrow", { opacity: 0, y: 16, duration: 0.6 })
         .from(
@@ -114,14 +121,30 @@ export default function HomePage() {
           "-=0.55",
         )
         .to(frame, { clipPath: "inset(0 0 0% 0)", duration: 1.4 }, 0.12)
-        .to(image, { scale: 1.1, duration: 1.8, ease: "power2.out" }, 0.12);
+        .to(image, { scale: 1.04, duration: 2, ease: "power2.out" }, 0.12)
+        .fromTo(
+          ".hero-sweep",
+          { xPercent: -135, opacity: 0 },
+          { xPercent: 135, opacity: 0.6, duration: 2.1, ease: "power2.inOut" },
+          0.5,
+        );
+
+      // Continuous, very slow room-light drift so the hero never freezes.
+      gsap.to(image, {
+        scale: 1.08,
+        duration: 19,
+        ease: "sine.inOut",
+        repeat: -1,
+        yoyo: true,
+        delay: 2.2,
+      });
 
       if (window.matchMedia("(min-width: 1024px)").matches) {
         gsap.fromTo(
           image,
-          { yPercent: -3 },
+          { yPercent: -5 },
           {
-            yPercent: 3,
+            yPercent: 5,
             ease: "none",
             scrollTrigger: {
               trigger: heroRef.current,
@@ -158,11 +181,12 @@ export default function HomePage() {
       <main>
         <section
           ref={heroRef}
-          className="mx-auto max-w-[1440px] px-4 pt-4 md:px-7 md:pt-6"
+          className="home-hero mx-auto max-w-[1440px] px-4 pt-4 md:px-7 md:pt-6"
         >
           <div className="relative grid overflow-hidden rounded-[2rem] border border-[var(--line)] bg-[var(--surface-2)] pb-14 shadow-[0_34px_100px_rgba(24,31,42,0.14)] md:pb-16 lg:min-h-[680px] lg:grid-cols-[1.02fr_0.98fr]">
             <div className="hero-ambient" aria-hidden="true" />
             <div className="hero-lines" aria-hidden="true" />
+            <div className="home-wash" aria-hidden="true" />
             <span className="corner-mark corner-mark--tl" aria-hidden="true" />
             <div className="relative z-10 flex flex-col justify-center px-7 pb-10 pt-12 sm:px-12 lg:px-14 lg:pb-32 lg:pt-20 xl:px-20">
               <div className="hero-eyebrow flex flex-wrap items-center gap-3">
@@ -193,6 +217,7 @@ export default function HomePage() {
                 <Link
                   to="/rooms"
                   data-cursor="Explore"
+                  data-magnetic
                   className="hero-cta btn-sheen group inline-flex items-center gap-2 rounded-full bg-[var(--primary)] px-5 py-3.5 text-xs font-semibold text-[var(--on-primary)] transition-colors hover:bg-[var(--primary-hover)]"
                 >
                   Explore rooms{" "}
@@ -239,8 +264,10 @@ export default function HomePage() {
                   className="h-full w-full object-cover object-center"
                 />
               </div>
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--deep)]/80 via-[var(--deep)]/10 to-transparent" />
+              <div className="hero-cinema" aria-hidden="true" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--deep)]/72 via-[var(--deep)]/8 to-transparent" />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[var(--deep)]/30 via-transparent to-transparent" />
+              <span className="hero-sheen hero-sweep" aria-hidden="true" />
               <span className="corner-mark corner-mark--br" aria-hidden="true" />
 
               <div className="hero-note glass absolute left-5 top-5 max-w-[225px] rounded-2xl p-4 text-[var(--on-glass)] sm:left-7 sm:top-7">
@@ -284,13 +311,7 @@ export default function HomePage() {
           </div>
 
           <div className="relative z-20 mx-auto -mt-10 max-w-[1180px] px-2 md:-mt-12">
-            <BookingSearch
-              initialCheckIn={featuredSearch.checkIn}
-              initialCheckOut={featuredSearch.checkOut}
-              initialAdults={featuredSearch.adults}
-              initialChildren={featuredSearch.children}
-              initialRooms={featuredSearch.rooms}
-            />
+            <BookingSearch />
             <p className="mt-2 px-3 text-center text-[11px] text-[var(--faint)] md:text-left">
               Rates are per room, per night. Each reservation secures one room.
             </p>

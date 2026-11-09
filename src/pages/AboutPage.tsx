@@ -25,6 +25,7 @@ export default function AboutPage() {
       <main>
         <PageHero
           eyebrow="About RIVR"
+          reverse
           title="A house built around"
           accent="the way you like to stay."
           intro="RIVR is a boutique hotel and residences in India, made for travellers who want a quieter kind of luxury — close to the city, close to the water, and easy to return to."

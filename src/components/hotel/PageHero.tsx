@@ -11,12 +11,17 @@ interface PageHeroProps {
   image: string;
   imageAlt: string;
   imagePosition?: string;
+  /** Flip the copy/image columns so consecutive pages do not read identically. */
+  reverse?: boolean;
   children?: ReactNode;
 }
 
 /**
- * Editorial page opener used by every guest page. GSAP owns the entrance and
- * the image drift; no other library touches these properties.
+ * Editorial page opener used by every guest page.
+ *
+ * GSAP owns the entrance and the image drift. Every animated line is cleared
+ * back to its natural state when the timeline completes, so an interrupted or
+ * re-mounted route can never leave a heading partially clipped.
  */
 export function PageHero({
   eyebrow,
@@ -26,58 +31,122 @@ export function PageHero({
   image,
   imageAlt,
   imagePosition = "center",
+  reverse = false,
   children,
 }: PageHeroProps) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const frameRef = useRef<HTMLDivElement | null>(null);
+  const parallaxRef = useRef<HTMLDivElement | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
 
   useGsap(
     () => {
+      const section = sectionRef.current;
       const frame = frameRef.current;
       const image = imageRef.current;
-      if (!frame || !image) return;
+      const parallax = parallaxRef.current;
+      if (!section || !frame || !image || !parallax) return;
+
+      const lines = section.querySelectorAll<HTMLElement>(".pagehero-line");
 
       gsap.set(frame, { clipPath: "inset(0 0 100% 0)" });
-      gsap.set(image, { scale: 1.14 });
+      gsap.set(image, { scale: 1.2 });
 
-      const timeline = gsap.timeline({ defaults: { ease: "power3.out" } });
+      const timeline = gsap.timeline({
+        defaults: { ease: "power3.out" },
+        onComplete: () => {
+          // Natural layout wins once the entrance is done.
+          gsap.set(lines, { clearProps: "transform,opacity" });
+        },
+      });
+
       timeline
-        .from(".pagehero-eyebrow", { opacity: 0, y: 12, duration: 0.5 })
-        .from(
-          ".pagehero-line",
-          { yPercent: 112, opacity: 0, duration: 0.95, stagger: 0.08 },
-          "-=0.24",
+        .fromTo(
+          section.querySelectorAll(".pagehero-eyebrow"),
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.6 },
+          0,
         )
-        .from(".pagehero-intro", { opacity: 0, y: 14, duration: 0.6 }, "-=0.62")
-        .from(".pagehero-cta", { opacity: 0, y: 12, duration: 0.55 }, "-=0.42")
-        .to(frame, { clipPath: "inset(0 0 0% 0)", duration: 1.25 }, 0.15)
-        .to(image, { scale: 1, duration: 1.6 }, 0.15);
+        .fromTo(
+          lines,
+          { yPercent: 112, opacity: 0 },
+          { yPercent: 0, opacity: 1, duration: 1.02, stagger: 0.09, ease: "power4.out" },
+          0.14,
+        )
+        .fromTo(
+          section.querySelectorAll(".pagehero-intro"),
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.65 },
+          0.62,
+        )
+        .fromTo(
+          section.querySelectorAll(".pagehero-cta"),
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.6 },
+          0.8,
+        )
+        .fromTo(
+          section.querySelectorAll(".pagehero-scroll"),
+          { opacity: 0 },
+          { opacity: 1, duration: 0.6 },
+          1,
+        )
+        .to(frame, { clipPath: "inset(0 0 0% 0)", duration: 1.4, ease: "power3.inOut" }, 0.08)
+        .to(image, { scale: 1.03, duration: 1.95, ease: "power2.out" }, 0.08)
+        .fromTo(
+          section.querySelectorAll(".pagehero-sweep"),
+          { xPercent: -135, opacity: 0 },
+          { xPercent: 135, opacity: 0.62, duration: 2.2, ease: "power2.inOut" },
+          0.55,
+        );
+
+      // Slow, continuous room-light settle. Transform only, so it stays on the
+      // compositor and remains perceptible after the entrance finishes.
+      gsap.to(image, {
+        scale: 1.065,
+        duration: 18,
+        ease: "sine.inOut",
+        repeat: -1,
+        yoyo: true,
+        delay: 2.2,
+      });
 
       if (window.matchMedia("(min-width: 1024px)").matches) {
-        gsap.to(image, {
-          yPercent: 8,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top top",
-            end: "bottom top",
-            scrub: true,
+        gsap.fromTo(
+          parallax,
+          { yPercent: -4 },
+          {
+            yPercent: 4,
+            ease: "none",
+            scrollTrigger: {
+              trigger: section,
+              start: "top top",
+              end: "bottom top",
+              scrub: true,
+            },
           },
-        });
+        );
       }
     },
-    [title, image],
+    [title, image, reverse],
     sectionRef,
   );
 
   return (
     <section ref={sectionRef} className="mx-auto max-w-[1440px] px-4 pt-4 md:px-7 md:pt-6">
-      <div className="relative grid overflow-hidden rounded-[2rem] border border-[var(--line)] bg-[var(--surface-2)] shadow-[0_30px_90px_rgba(24,31,42,0.12)] lg:min-h-[600px] lg:grid-cols-[1.02fr_0.98fr]">
+      <div
+        className={`hero-frame-shadow relative grid overflow-hidden rounded-[2rem] border border-[var(--line)] bg-[var(--surface-2)] lg:min-h-[600px] ${
+          reverse ? "lg:grid-cols-[0.98fr_1.02fr]" : "lg:grid-cols-[1.02fr_0.98fr]"
+        }`}
+      >
         <div className="hero-ambient" aria-hidden="true" />
         <div className="hero-lines" aria-hidden="true" />
         <span className="corner-mark corner-mark--tl" aria-hidden="true" />
-        <div className="relative z-10 flex flex-col justify-center px-7 pb-12 pt-14 sm:px-12 lg:px-14 lg:py-16 xl:px-20">
+        <div
+          className={`relative z-10 flex flex-col justify-center px-7 pb-12 pt-14 sm:px-12 lg:px-14 lg:py-16 xl:px-20 ${
+            reverse ? "lg:order-2" : ""
+          }`}
+        >
           <div className="pagehero-eyebrow">
             <SectionEyebrow>{eyebrow}</SectionEyebrow>
           </div>
@@ -102,22 +171,29 @@ export function PageHero({
             Scroll to discover
           </div>
         </div>
-        <div className="relative min-h-[340px] overflow-hidden bg-[var(--deep)] sm:min-h-[440px] lg:min-h-0">
+        <div
+          className={`relative min-h-[340px] overflow-hidden bg-[var(--deep)] sm:min-h-[440px] lg:min-h-0 ${
+            reverse ? "lg:order-1" : ""
+          }`}
+        >
           <div ref={frameRef} className="image-frame absolute inset-0" data-cursor="RIVR">
-            <img
-              ref={imageRef}
-              src={image}
-              alt={imageAlt}
-              loading="eager"
-              decoding="async"
-              fetchPriority="high"
-              className="h-full w-full object-cover"
-              style={{ objectPosition: imagePosition }}
-            />
+            <div ref={parallaxRef} className="absolute inset-0">
+              <img
+                ref={imageRef}
+                src={image}
+                alt={imageAlt}
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
+                className="h-full w-full object-cover"
+                style={{ objectPosition: imagePosition }}
+              />
+            </div>
+            <span className="hero-sheen pagehero-sweep" aria-hidden="true" />
           </div>
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--deep)]/78 via-[var(--deep)]/10 to-transparent" />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[var(--deep)]/28 via-transparent to-transparent" />
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[var(--deep)]/30 to-transparent" />
+          <div className="hero-cinema" aria-hidden="true" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--deep)]/72 via-[var(--deep)]/8 to-transparent" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[var(--deep)]/26 via-transparent to-transparent" />
           <span className="corner-mark corner-mark--br" aria-hidden="true" />
           <div className="pointer-events-none absolute right-6 top-6 hidden items-center gap-2 rounded-full border border-white/15 bg-black/20 px-3 py-2 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/80 backdrop-blur md:flex">
             <span className="h-1 w-1 rounded-full bg-[var(--accent)]" />

@@ -1,0 +1,700 @@
+{
+  "label": "before",
+  "base": "http://localhost:5173",
+  "generatedAt": "2026-11-09T16:07:36.010Z",
+  "routes": [
+    {
+      "viewport": "desktop",
+      "route": "/",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "bodyHeight": 7662,
+        "brokenImages": [],
+        "imageCount": 10,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-home-desktop.png",
+      "fullScreenshot": "reports\\screenshots\\premium-audit\\before-home-desktop-full.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "/stay",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/stay",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "bodyHeight": 5128,
+        "brokenImages": [],
+        "imageCount": 11,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-stay-desktop.png",
+      "fullScreenshot": "reports\\screenshots\\premium-audit\\before-stay-desktop-full.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "/rooms",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/rooms",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "bodyHeight": 3953,
+        "brokenImages": [],
+        "imageCount": 9,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-rooms-desktop.png",
+      "fullScreenshot": "reports\\screenshots\\premium-audit\\before-rooms-desktop-full.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "/amenities",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/amenities",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "bodyHeight": 3500,
+        "brokenImages": [],
+        "imageCount": 3,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-amenities-desktop.png",
+      "fullScreenshot": "reports\\screenshots\\premium-audit\\before-amenities-desktop-full.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "/about",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/about",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "bodyHeight": 3791,
+        "brokenImages": [],
+        "imageCount": 4,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-about-desktop.png",
+      "fullScreenshot": "reports\\screenshots\\premium-audit\\before-about-desktop-full.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "/contact",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/contact",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "bodyHeight": 2571,
+        "brokenImages": [],
+        "imageCount": 1,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-contact-desktop.png",
+      "fullScreenshot": "reports\\screenshots\\premium-audit\\before-contact-desktop-full.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "/booking",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/booking?checkIn=2026-11-10&checkOut=2026-11-12&adults=2&children=0&rooms=1&guests=2",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "bodyHeight": 3086,
+        "brokenImages": [],
+        "imageCount": 9,
+        "hasHero": false,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-booking-desktop.png",
+      "fullScreenshot": "reports\\screenshots\\premium-audit\\before-booking-desktop-full.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "/login",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/login",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "bodyHeight": 900,
+        "brokenImages": [],
+        "imageCount": 1,
+        "hasHero": false,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-login-desktop.png",
+      "fullScreenshot": "reports\\screenshots\\premium-audit\\before-login-desktop-full.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "/admin/dashboard",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/admin/dashboard",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "bodyHeight": 2593,
+        "brokenImages": [],
+        "imageCount": 0,
+        "hasHero": false,
+        "atmosphere": false,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-admin-dashboard-desktop.png",
+      "fullScreenshot": "reports\\screenshots\\premium-audit\\before-admin-dashboard-desktop-full.png"
+    },
+    {
+      "viewport": "tablet",
+      "route": "/",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/",
+        "scrollWidth": 1024,
+        "innerWidth": 1024,
+        "bodyHeight": 7478,
+        "brokenImages": [],
+        "imageCount": 10,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-home-tablet.png"
+    },
+    {
+      "viewport": "tablet",
+      "route": "/stay",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/stay",
+        "scrollWidth": 1024,
+        "innerWidth": 1024,
+        "bodyHeight": 5166,
+        "brokenImages": [],
+        "imageCount": 11,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-stay-tablet.png"
+    },
+    {
+      "viewport": "tablet",
+      "route": "/rooms",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/rooms",
+        "scrollWidth": 1024,
+        "innerWidth": 1024,
+        "bodyHeight": 4041,
+        "brokenImages": [],
+        "imageCount": 9,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-rooms-tablet.png"
+    },
+    {
+      "viewport": "tablet",
+      "route": "/amenities",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/amenities",
+        "scrollWidth": 1024,
+        "innerWidth": 1024,
+        "bodyHeight": 3343,
+        "brokenImages": [],
+        "imageCount": 3,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-amenities-tablet.png"
+    },
+    {
+      "viewport": "tablet",
+      "route": "/about",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/about",
+        "scrollWidth": 1024,
+        "innerWidth": 1024,
+        "bodyHeight": 3551,
+        "brokenImages": [],
+        "imageCount": 4,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-about-tablet.png"
+    },
+    {
+      "viewport": "tablet",
+      "route": "/contact",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/contact",
+        "scrollWidth": 1024,
+        "innerWidth": 1024,
+        "bodyHeight": 2505,
+        "brokenImages": [],
+        "imageCount": 1,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-contact-tablet.png"
+    },
+    {
+      "viewport": "tablet",
+      "route": "/booking",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/booking?checkIn=2026-11-10&checkOut=2026-11-12&adults=2&children=0&rooms=1&guests=2",
+        "scrollWidth": 1024,
+        "innerWidth": 1024,
+        "bodyHeight": 3139,
+        "brokenImages": [],
+        "imageCount": 9,
+        "hasHero": false,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-booking-tablet.png"
+    },
+    {
+      "viewport": "tablet",
+      "route": "/login",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/login",
+        "scrollWidth": 1024,
+        "innerWidth": 1024,
+        "bodyHeight": 780,
+        "brokenImages": [],
+        "imageCount": 1,
+        "hasHero": false,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-login-tablet.png"
+    },
+    {
+      "viewport": "tablet",
+      "route": "/admin/dashboard",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/admin/dashboard",
+        "scrollWidth": 1024,
+        "innerWidth": 1024,
+        "bodyHeight": 4307,
+        "brokenImages": [],
+        "imageCount": 0,
+        "hasHero": false,
+        "atmosphere": false,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-admin-dashboard-tablet.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/",
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "bodyHeight": 11958,
+        "brokenImages": [],
+        "imageCount": 10,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-home-mobile.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/stay",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/stay",
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "bodyHeight": 9891,
+        "brokenImages": [],
+        "imageCount": 11,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-stay-mobile.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/rooms",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/rooms",
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "bodyHeight": 7853,
+        "brokenImages": [],
+        "imageCount": 9,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-rooms-mobile.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/amenities",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/amenities",
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "bodyHeight": 6136,
+        "brokenImages": [],
+        "imageCount": 3,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-amenities-mobile.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/about",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/about",
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "bodyHeight": 5773,
+        "brokenImages": [],
+        "imageCount": 4,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-about-mobile.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/contact",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/contact",
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "bodyHeight": 4049,
+        "brokenImages": [],
+        "imageCount": 1,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-contact-mobile.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/booking",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/booking?checkIn=2026-11-10&checkOut=2026-11-12&adults=2&children=0&rooms=1&guests=2",
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "bodyHeight": 7335,
+        "brokenImages": [],
+        "imageCount": 9,
+        "hasHero": false,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-booking-mobile.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/login",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/login",
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "bodyHeight": 844,
+        "brokenImages": [],
+        "imageCount": 1,
+        "hasHero": false,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-login-mobile.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/admin/dashboard",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/admin/dashboard",
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "bodyHeight": 4968,
+        "brokenImages": [],
+        "imageCount": 0,
+        "hasHero": false,
+        "atmosphere": false,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-admin-dashboard-mobile.png"
+    },
+    {
+      "viewport": "reduced",
+      "route": "/",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "bodyHeight": 7633,
+        "brokenImages": [],
+        "imageCount": 10,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-home-reduced.png"
+    },
+    {
+      "viewport": "reduced",
+      "route": "/stay",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/stay",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "bodyHeight": 5128,
+        "brokenImages": [],
+        "imageCount": 11,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-stay-reduced.png"
+    },
+    {
+      "viewport": "reduced",
+      "route": "/rooms",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/rooms",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "bodyHeight": 3953,
+        "brokenImages": [],
+        "imageCount": 9,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-rooms-reduced.png"
+    },
+    {
+      "viewport": "reduced",
+      "route": "/amenities",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/amenities",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "bodyHeight": 3500,
+        "brokenImages": [],
+        "imageCount": 3,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-amenities-reduced.png"
+    },
+    {
+      "viewport": "reduced",
+      "route": "/about",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/about",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "bodyHeight": 3791,
+        "brokenImages": [],
+        "imageCount": 4,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-about-reduced.png"
+    },
+    {
+      "viewport": "reduced",
+      "route": "/contact",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/contact",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "bodyHeight": 2571,
+        "brokenImages": [],
+        "imageCount": 1,
+        "hasHero": true,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-contact-reduced.png"
+    },
+    {
+      "viewport": "reduced",
+      "route": "/booking",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/booking?checkIn=2026-11-10&checkOut=2026-11-12&adults=2&children=0&rooms=1&guests=2",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "bodyHeight": 3086,
+        "brokenImages": [],
+        "imageCount": 9,
+        "hasHero": false,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-booking-reduced.png"
+    },
+    {
+      "viewport": "reduced",
+      "route": "/login",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/login",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "bodyHeight": 900,
+        "brokenImages": [],
+        "imageCount": 1,
+        "hasHero": false,
+        "atmosphere": true,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-login-reduced.png"
+    },
+    {
+      "viewport": "reduced",
+      "route": "/admin/dashboard",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "metrics": {
+        "title": "RIVR — Hotel & Residences | India",
+        "url": "/admin/dashboard",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "bodyHeight": 2593,
+        "brokenImages": [],
+        "imageCount": 0,
+        "hasHero": false,
+        "atmosphere": false,
+        "opacityRoot": "1"
+      },
+      "screenshot": "reports\\screenshots\\premium-audit\\before-admin-dashboard-reduced.png"
+    }
+  ]
+}

@@ -47,8 +47,8 @@ export default function RoomsPage() {
           </div>
         </PageHero>
 
-        <section className="relative z-20 mx-auto -mt-8 max-w-[1180px] px-2 md:-mt-10">
-          <BookingSearch compact initialCheckIn={defaultStaySearch.checkIn} initialCheckOut={defaultStaySearch.checkOut} initialAdults={defaultStaySearch.adults} initialChildren={defaultStaySearch.children} initialRooms={defaultStaySearch.rooms} />
+        <section className="relative z-20 mx-auto -mt-8 max-w-[1180px] px-2 md:-mt-12">
+          <BookingSearch compact />
           <p className="mt-2 px-3 text-center text-[11px] text-[var(--faint)] md:text-left">Search dates above to see which specific rooms are available.</p>
         </section>
 

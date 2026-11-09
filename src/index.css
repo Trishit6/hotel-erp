@@ -1023,3 +1023,571 @@ html.theme-transition *::after {
     display: none;
   }
 }
+
+/* ================================================================== */
+/* Contemporary Luxury — design system v2                              */
+/* Editorial ivory + champagne + sage on the public site; midnight     */
+/* glass in the operations workspace.                                  */
+/* ================================================================== */
+
+:root {
+  --champagne: #c2a36b;
+  --champagne-soft: #e6d5b6;
+  --brass: #8f6c34;
+  --stone: #e6dfd3;
+  --stone-deep: #d9d0c0;
+  --ivory: #f7f4ed;
+  --ink-soft: #1b2430;
+  --hero-ink: #080c14;
+  --focus-ring: 0 0 0 3px color-mix(in srgb, var(--accent) 32%, transparent);
+  --ease-lux: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Warmer, more visible room light behind the editorial pages. */
+.page-atmosphere__base {
+  background:
+    radial-gradient(1280px 820px at 7% -8%, color-mix(in srgb, var(--sage) 23%, transparent), transparent 60%),
+    radial-gradient(1080px 760px at 96% -2%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 58%),
+    radial-gradient(980px 680px at 50% 110%, color-mix(in srgb, var(--sage) 16%, transparent), transparent 62%),
+    linear-gradient(180deg, #fbf8f2 0%, var(--canvas) 46%, #efe9dd 100%);
+}
+
+.page-atmosphere__orb {
+  width: min(56vw, 760px);
+  opacity: 0.6;
+}
+
+.page-atmosphere__orb--gold {
+  right: -14%;
+  top: -18%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 38%, transparent) 0%, transparent 66%);
+}
+
+.page-atmosphere__orb--sage {
+  left: -18%;
+  bottom: -24%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--sage) 31%, transparent) 0%, transparent 68%);
+}
+
+/* Slow architectural light beams. Transform/opacity only. */
+.page-atmosphere__beam {
+  position: absolute;
+  top: -30%;
+  height: 130%;
+  width: 40%;
+  pointer-events: none;
+  transform: rotate(11deg);
+  filter: blur(42px);
+  opacity: 0.55;
+  background: linear-gradient(90deg, transparent, rgba(255, 249, 235, 0.9), transparent);
+  animation: beam-drift 28s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.page-atmosphere__beam--a {
+  left: 2%;
+}
+
+.page-atmosphere__beam--b {
+  right: -8%;
+  opacity: 0.4;
+  background: linear-gradient(90deg, transparent, rgba(63, 107, 91, 0.2), transparent);
+  animation-duration: 36s;
+  animation-direction: alternate-reverse;
+}
+
+[data-theme="dark"] .page-atmosphere__beam--a {
+  opacity: 0.16;
+  background: linear-gradient(90deg, transparent, rgba(255, 225, 168, 0.16), transparent);
+}
+
+[data-theme="dark"] .page-atmosphere__beam--b {
+  opacity: 0.2;
+}
+
+@keyframes beam-drift {
+  from { transform: rotate(11deg) translate3d(-3%, 0, 0); }
+  to { transform: rotate(7deg) translate3d(4%, 2%, 0); }
+}
+
+/* Route enter. Opacity-only so fixed atmosphere layers never jump and the
+   page never disappears against the canvas (the old white-flash cause). */
+.route-stage {
+  animation: route-in 420ms var(--ease-lux) both;
+}
+
+@keyframes route-in {
+  from { opacity: 0.84; }
+  to { opacity: 1; }
+}
+
+/* Cinematic image lighting. */
+.hero-sheen {
+  position: absolute;
+  inset: -25% -45%;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(100deg, transparent 36%, rgba(255, 248, 232, 0.26) 50%, transparent 64%);
+  mix-blend-mode: screen;
+  will-change: transform, opacity;
+}
+
+.hero-cinema {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(58% 70% at 76% 16%, rgba(255, 246, 224, 0.14), transparent 62%),
+    linear-gradient(180deg, rgba(8, 12, 20, 0.16) 0%, transparent 28%, rgba(8, 12, 20, 0.52) 100%);
+}
+
+.hero-frame-shadow {
+  box-shadow:
+    0 40px 120px rgba(24, 31, 42, 0.16),
+    0 2px 0 rgba(255, 255, 255, 0.5) inset;
+}
+
+/* Editorial image frame gets a warmer, less sterile ring. */
+.image-frame::after {
+  border-color: rgba(255, 248, 235, 0.34);
+}
+
+.section-divider i {
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+/* Stronger editorial room-light so large flat surfaces still read as layered. */
+.section-atmosphere::before {
+  background:
+    radial-gradient(70% 60% at 8% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 72%),
+    radial-gradient(60% 60% at 92% 100%, color-mix(in srgb, var(--sage) 12%, transparent), transparent 74%);
+}
+
+[data-theme="dark"] .section-atmosphere::before {
+  background:
+    radial-gradient(70% 60% at 8% 0%, color-mix(in srgb, var(--accent) 11%, transparent), transparent 72%),
+    radial-gradient(60% 60% at 92% 100%, color-mix(in srgb, var(--sage) 10%, transparent), transparent 74%);
+}
+
+.page-atmosphere__vignette {
+  background: radial-gradient(circle at 50% 38%, transparent 54%, color-mix(in srgb, var(--canvas) 34%, transparent) 100%);
+}
+
+.admin-atmosphere::before {
+  opacity: 0.7;
+}
+
+/* ================================================================== */
+/* Operations workspace — midnight glass                              */
+/* ================================================================== */
+
+.admin-shell {
+  position: relative;
+  isolation: isolate;
+  color-scheme: dark;
+  background: var(--canvas);
+  --canvas: #070b12;
+  --surface: rgba(18, 27, 40, 0.62);
+  --surface-2: rgba(24, 35, 50, 0.72);
+  --surface-3: rgba(31, 45, 62, 0.8);
+  --elevated: #101a28;
+  --deep: #04080f;
+  --ink: #f3efe6;
+  --text: #d9dee7;
+  --muted: #a5b0c0;
+  --muted-strong: #c9d2df;
+  --faint: #8492a6;
+  --line: rgba(170, 190, 215, 0.14);
+  --line-2: rgba(170, 190, 215, 0.22);
+  --line-strong: rgba(170, 190, 215, 0.34);
+  --primary: #27405f;
+  --primary-hover: #33506f;
+  --on-primary: #f8f5ee;
+  --sage: #8fc9b4;
+  --sage-deep: #a9d6c4;
+  --sage-on-dark: #a9d6c4;
+  --sage-soft: rgba(63, 107, 91, 0.24);
+  --sage-soft-2: rgba(63, 107, 91, 0.36);
+  --accent: #d8bb82;
+  --accent-strong: #e7cf9f;
+  --accent-muted: #a58a5d;
+  --accent-ink: #121a26;
+  --success: #74d3a8;
+  --success-soft: rgba(47, 125, 91, 0.2);
+  --success-line: rgba(116, 211, 168, 0.32);
+  --danger: #f898ab;
+  --danger-soft: rgba(180, 71, 92, 0.2);
+  --danger-line: rgba(248, 152, 171, 0.32);
+  --warning: #e8c079;
+  --warning-soft: rgba(143, 101, 22, 0.22);
+  --info: #94b8e6;
+  --info-soft: rgba(47, 95, 143, 0.22);
+  --neutral: #adb8c6;
+  --neutral-soft: rgba(95, 106, 120, 0.22);
+  --violet: #9fc3c9;
+  --violet-soft: rgba(79, 109, 116, 0.22);
+  --glass: rgba(16, 26, 39, 0.56);
+  --glass-strong: rgba(18, 30, 44, 0.84);
+  --glass-border: rgba(190, 210, 240, 0.14);
+  --glass-highlight: rgba(255, 255, 255, 0.06);
+  --on-glass: #e8edfa;
+  --overlay: rgba(2, 5, 14, 0.74);
+  --shadow: 0 30px 90px rgba(0, 0, 0, 0.5);
+  --shadow-soft: 0 16px 44px rgba(0, 0, 0, 0.32);
+  --gradient-primary: linear-gradient(135deg, #375878 0%, #27405f 55%, #1b2f49 100%);
+  --gradient-card: linear-gradient(155deg, rgba(32, 47, 66, 0.66), rgba(9, 15, 24, 0.52));
+  --gradient-sidebar: linear-gradient(168deg, #04080f 0%, #0a1320 52%, #101c2e 100%);
+}
+
+.admin-atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(1050px 720px at 82% -12%, rgba(216, 187, 130, 0.2), transparent 58%),
+    radial-gradient(920px 760px at 4% 112%, rgba(63, 107, 91, 0.28), transparent 62%),
+    radial-gradient(760px 560px at 46% 44%, rgba(39, 64, 95, 0.18), transparent 66%),
+    linear-gradient(180deg, #070b12 0%, #060a11 55%, #04070c 100%);
+}
+
+.admin-atmosphere::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  background-image:
+    linear-gradient(rgba(170, 190, 215, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(170, 190, 215, 0.05) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(circle at 60% 24%, black, transparent 72%);
+  -webkit-mask-image: radial-gradient(circle at 60% 24%, black, transparent 72%);
+}
+
+.admin-atmosphere::after {
+  content: "";
+  position: absolute;
+  right: -12%;
+  top: -22%;
+  width: min(52vw, 720px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(216, 187, 130, 0.16), transparent 66%);
+  animation: atmo-drift-gold 44s ease-in-out infinite alternate;
+}
+
+.admin-shell .glass-sidebar {
+  background:
+    linear-gradient(168deg, rgba(4, 8, 15, 0.96) 0%, rgba(10, 19, 32, 0.94) 52%, rgba(16, 28, 46, 0.92) 100%);
+  border-right: 1px solid rgba(190, 210, 240, 0.1);
+  box-shadow: 30px 0 90px rgba(0, 0, 0, 0.42), inset -1px 0 0 rgba(255, 255, 255, 0.03);
+}
+
+.admin-shell .glass-header {
+  background: rgba(7, 12, 19, 0.74);
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.28);
+}
+
+.admin-shell .glass-card {
+  background: var(--gradient-card);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+}
+
+.admin-shell .glass-card::before {
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.07), transparent 38%);
+  opacity: 0.8;
+}
+
+.admin-shell .metric-card {
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(216, 187, 130, 0.1), transparent 58%),
+    var(--gradient-card);
+}
+
+.admin-shell .metric-card:hover {
+  border-color: rgba(216, 187, 130, 0.4);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(216, 187, 130, 0.12);
+}
+
+.admin-shell .metric-glow {
+  background: radial-gradient(circle, rgba(216, 187, 130, 0.28), transparent 68%);
+  filter: blur(10px);
+}
+
+.admin-shell .admin-main table {
+  color: var(--text);
+}
+
+.admin-shell .admin-main thead th {
+  color: var(--muted-strong);
+  background: rgba(9, 15, 24, 0.55);
+  border-bottom: 1px solid var(--line-2);
+}
+
+.admin-shell .admin-main tbody td {
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-shell .admin-main tbody tr:hover {
+  background: rgba(216, 187, 130, 0.07);
+}
+
+.admin-shell .admin-main input:not([type="checkbox"]):not([type="radio"]),
+.admin-shell .admin-main select,
+.admin-shell .admin-main textarea {
+  background: rgba(9, 15, 24, 0.6);
+  border-color: var(--line-2);
+  color: var(--text);
+}
+
+.admin-shell .admin-main input::placeholder,
+.admin-shell .admin-main textarea::placeholder {
+  color: var(--faint);
+}
+
+.admin-shell .admin-main select option {
+  background: #101a28;
+  color: var(--text);
+}
+
+.admin-shell .admin-main input[type="date"] {
+  color-scheme: dark;
+}
+
+.admin-shell .admin-main button[type="submit"] {
+  background: var(--gradient-primary);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.36);
+}
+
+.admin-shell .chart-bar {
+  background: linear-gradient(180deg, var(--accent-strong), color-mix(in srgb, var(--accent) 48%, var(--sage)));
+  box-shadow: 0 10px 26px rgba(216, 187, 130, 0.18);
+}
+
+.admin-shell .chart-grid {
+  background-image: linear-gradient(rgba(170, 190, 215, 0.1) 1px, transparent 1px);
+}
+
+.admin-shell .admin-main .divide-y > div {
+  border-color: var(--line);
+}
+
+.admin-shell .admin-main .divide-y > div:hover {
+  background: rgba(216, 187, 130, 0.05);
+}
+
+.admin-shell .modal-panel {
+  background: linear-gradient(160deg, rgba(22, 34, 50, 0.98), rgba(9, 15, 24, 0.98));
+  border-color: var(--glass-border);
+}
+
+.admin-shell .modal-backdrop {
+  background: rgba(2, 5, 14, 0.66);
+}
+
+.admin-shell ::selection {
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+  color: var(--ink);
+}
+
+/* Without backdrop filters the panels stay readable as solid glass. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .admin-shell .glass-card,
+  .admin-shell .glass-header,
+  .admin-shell .glass-strong,
+  .admin-shell .glass {
+    background: #101a28;
+  }
+}
+
+/* ================================================================== */
+/* Cursor v2 — refined follower                                        */
+/* ================================================================== */
+
+.cursor-dot {
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 60%, transparent);
+  transition: width 180ms var(--ease-lux), height 180ms var(--ease-lux), margin 180ms var(--ease-lux), opacity 200ms ease;
+}
+
+.cursor-ring {
+  width: 30px;
+  height: 30px;
+  margin: -15px 0 0 -15px;
+  border-color: color-mix(in srgb, var(--accent) 62%, transparent);
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+  box-shadow: 0 6px 24px rgba(8, 12, 20, 0.12);
+  transition:
+    width 240ms var(--ease-lux),
+    height 240ms var(--ease-lux),
+    margin 240ms var(--ease-lux),
+    background-color 220ms ease,
+    border-color 220ms ease,
+    opacity 160ms ease;
+}
+
+.cursor-ring[data-mode="link"] {
+  width: 46px;
+  height: 46px;
+  margin: -23px 0 0 -23px;
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 82%, transparent);
+}
+
+.cursor-ring[data-mode="media"] {
+  width: 74px;
+  height: 74px;
+  margin: -37px 0 0 -37px;
+  background: rgba(10, 16, 24, 0.24);
+  border-color: rgba(255, 248, 235, 0.55);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.cursor-ring[data-mode="media"] .cursor-label {
+  color: rgba(255, 252, 245, 0.95);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+}
+
+.cursor-ring[data-mode="field"] {
+  opacity: 0 !important;
+}
+
+.cursor-dot[data-pressed="true"] {
+  width: 11px;
+  height: 11px;
+  margin: -5.5px 0 0 -5.5px;
+  background: var(--accent-strong);
+}
+
+.cursor-ring[data-pressed="true"] {
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+}
+
+.cursor-label {
+  opacity: 0;
+  transform: scale(0.86);
+  transition: opacity 180ms ease 60ms, transform 220ms var(--ease-lux);
+}
+
+.cursor-ring[data-mode="link"] .cursor-label,
+.cursor-ring[data-mode="media"] .cursor-label {
+  opacity: 1;
+  transform: scale(1);
+}
+
+[data-magnetic] {
+  transition: translate 280ms var(--ease-lux);
+  will-change: translate;
+}
+
+/* Home-only living light. The catalog pages keep the calmer shared hero. */
+.home-hero .hero-ambient::before {
+  animation: home-orb-a 26s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.home-hero .hero-ambient::after {
+  animation: home-orb-b 34s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.home-hero .hero-lines {
+  animation: home-grid-drift 40s ease-in-out infinite alternate;
+}
+
+.home-wash {
+  position: absolute;
+  inset: -24% -12%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.68;
+  background: linear-gradient(
+    103deg,
+    transparent 30%,
+    color-mix(in srgb, var(--accent) 30%, transparent) 46%,
+    transparent 60%
+  );
+  transform: translate3d(-18%, 0, 0);
+  animation: home-wash-drift 26s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  will-change: transform;
+}
+
+.home-wash::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    72deg,
+    transparent 42%,
+    color-mix(in srgb, var(--sage) 24%, transparent) 55%,
+    transparent 70%
+  );
+  opacity: 0.55;
+  animation: home-wash-drift-reverse 34s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  will-change: transform;
+}
+
+@keyframes home-orb-a {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(6%, 4%, 0) scale(1.08); }
+}
+
+@keyframes home-orb-b {
+  from { transform: translate3d(0, 0, 0) scale(1.03); }
+  to { transform: translate3d(-5%, -4%, 0) scale(1); }
+}
+
+@keyframes home-grid-drift {
+  from { transform: translate3d(0, 0, 0); opacity: 0.42; }
+  to { transform: translate3d(-2.5%, 1.4%, 0); opacity: 0.56; }
+}
+
+@keyframes home-wash-drift {
+  0% { transform: translate3d(-22%, 0, 0) rotate(1.5deg); }
+  50% { transform: translate3d(10%, -2%, 0) rotate(0deg); }
+  100% { transform: translate3d(-22%, 0, 0) rotate(1.5deg); }
+}
+
+@keyframes home-wash-drift-reverse {
+  0% { transform: translate3d(7%, -1%, 0); }
+  50% { transform: translate3d(-11%, 1.5%, 0); }
+  100% { transform: translate3d(7%, -1%, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-stage {
+    animation: none !important;
+  }
+
+  .home-hero .hero-ambient::before,
+  .home-hero .hero-ambient::after,
+  .home-hero .hero-lines,
+  .home-wash,
+  .home-wash::after {
+    animation: none !important;
+  }
+
+  .page-atmosphere__beam,
+  .admin-atmosphere::after {
+    animation: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .page-atmosphere__beam {
+    opacity: 0.22;
+  }
+}

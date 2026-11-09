@@ -4,14 +4,16 @@ import { GsapImage } from "../motion/GsapImage";
 /**
  * Public-only atmospheric layer.
  *
- * It is deliberately mounted per public page instead of globally so the
- * internal ERP workspaces keep their existing enterprise background. The
- * layers are fixed, transform-only, and cost nothing on the compositor.
+ * Mounted per public page instead of globally so the internal ERP keeps its
+ * own dark glass shell. All motion here is transform/opacity only, and the
+ * layer sits behind the page content.
  */
 export function PageAtmosphere() {
   return (
     <div className="page-atmosphere no-print" aria-hidden="true">
       <div className="page-atmosphere__base" />
+      <div className="page-atmosphere__beam page-atmosphere__beam--a" />
+      <div className="page-atmosphere__beam page-atmosphere__beam--b" />
       <div className="page-atmosphere__orb page-atmosphere__orb--gold" />
       <div className="page-atmosphere__orb page-atmosphere__orb--sage" />
       <svg
@@ -94,6 +96,7 @@ export function CinematicBand({
           alt={alt}
           position={position}
           className="h-full w-full"
+          imgClassName="scale-[1.02]"
         />
       </div>
       <div className="cinematic-band__scrim" aria-hidden="true" />

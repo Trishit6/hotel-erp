@@ -1,0 +1,1922 @@
+{
+  "mode": "after",
+  "generatedAt": "2026-11-09T16:57:47.916Z",
+  "viewports": {
+    "desktop": {},
+    "tablet": {},
+    "mobile": {}
+  },
+  "routes": [
+    {
+      "viewport": "desktop",
+      "route": "/",
+      "widget": {
+        "present": true,
+        "rect": {
+          "x": 138,
+          "y": 955,
+          "width": 1164,
+          "height": 83,
+          "bottom": 1038
+        },
+        "fullyInViewport": false,
+        "partlyInViewport": false,
+        "docOverflow": false,
+        "formOverflow": false,
+        "labelOverlaps": 0,
+        "clippedLabels": 0,
+        "background": "rgb(255, 253, 250)",
+        "opaque": true,
+        "overlapsImagePx2": 0,
+        "dates": [
+          "2026-11-10",
+          "2026-11-12"
+        ],
+        "counts": [
+          2,
+          0,
+          1
+        ],
+        "countOptions": [
+          8,
+          7,
+          4
+        ],
+        "buttonVisible": true,
+        "buttonText": "Search availability",
+        "error": ""
+      },
+      "perf": {
+        "cls": 0.0001,
+        "longTasks": 8,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1600&q=90",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1600&q=90",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=900&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1600&q=80",
+            "loaded": true
+          },
+          {
+            "src": "",
+            "loaded": false
+          },
+          {
+            "src": "",
+            "loaded": false
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "/stay",
+      "widget": {
+        "present": true,
+        "rect": {
+          "x": 138,
+          "y": 726,
+          "width": 1164,
+          "height": 83,
+          "bottom": 809
+        },
+        "fullyInViewport": true,
+        "partlyInViewport": true,
+        "docOverflow": false,
+        "formOverflow": false,
+        "labelOverlaps": 0,
+        "clippedLabels": 0,
+        "background": "rgb(255, 253, 250)",
+        "opaque": true,
+        "overlapsImagePx2": 17539,
+        "dates": [
+          "2026-11-10",
+          "2026-11-12"
+        ],
+        "counts": [
+          2,
+          0,
+          1
+        ],
+        "countOptions": [
+          8,
+          7,
+          4
+        ],
+        "buttonVisible": true,
+        "buttonText": "Search availability",
+        "error": ""
+      },
+      "perf": {
+        "cls": 0,
+        "longTasks": 3,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1600&q=90",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1400&q=88",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1000&q=88",
+            "loaded": true
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "/rooms",
+      "widget": {
+        "present": true,
+        "rect": {
+          "x": 138,
+          "y": 657,
+          "width": 1164,
+          "height": 79,
+          "bottom": 736
+        },
+        "fullyInViewport": true,
+        "partlyInViewport": true,
+        "docOverflow": false,
+        "formOverflow": false,
+        "labelOverlaps": 0,
+        "clippedLabels": 0,
+        "background": "rgb(255, 253, 250)",
+        "opaque": true,
+        "overlapsImagePx2": 18536,
+        "dates": [
+          "2026-11-10",
+          "2026-11-12"
+        ],
+        "counts": [
+          2,
+          0,
+          1
+        ],
+        "countOptions": [
+          8,
+          7,
+          4
+        ],
+        "buttonVisible": true,
+        "buttonText": "Search availability",
+        "error": ""
+      },
+      "perf": {
+        "cls": 0,
+        "longTasks": 4,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1600&q=90",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "/booking",
+      "widget": {
+        "present": true,
+        "rect": {
+          "x": 120,
+          "y": 295,
+          "width": 1200,
+          "height": 79,
+          "bottom": 374
+        },
+        "fullyInViewport": true,
+        "partlyInViewport": true,
+        "docOverflow": false,
+        "formOverflow": false,
+        "labelOverlaps": 0,
+        "clippedLabels": 0,
+        "background": "rgb(255, 253, 250)",
+        "opaque": true,
+        "overlapsImagePx2": 0,
+        "dates": [
+          "2026-11-10",
+          "2026-11-12"
+        ],
+        "counts": [
+          2,
+          0,
+          1
+        ],
+        "countOptions": [
+          8,
+          7,
+          4
+        ],
+        "buttonVisible": true,
+        "buttonText": "Search availability",
+        "error": ""
+      },
+      "perf": {
+        "cls": 0.0022,
+        "longTasks": 4,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "/search",
+      "widget": {
+        "present": true,
+        "rect": {
+          "x": 120,
+          "y": 295,
+          "width": 1200,
+          "height": 79,
+          "bottom": 374
+        },
+        "fullyInViewport": true,
+        "partlyInViewport": true,
+        "docOverflow": false,
+        "formOverflow": false,
+        "labelOverlaps": 0,
+        "clippedLabels": 0,
+        "background": "rgb(255, 253, 250)",
+        "opaque": true,
+        "overlapsImagePx2": 0,
+        "dates": [
+          "2026-11-10",
+          "2026-11-12"
+        ],
+        "counts": [
+          2,
+          0,
+          1
+        ],
+        "countOptions": [
+          8,
+          7,
+          4
+        ],
+        "buttonVisible": true,
+        "buttonText": "Search availability",
+        "error": ""
+      },
+      "perf": {
+        "cls": 0.0022,
+        "longTasks": 3,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "/amenities",
+      "widget": {
+        "present": false
+      },
+      "perf": {
+        "cls": 0,
+        "longTasks": 1,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1600&q=90",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1100&q=88",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1100&q=88",
+            "loaded": true
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "/about",
+      "widget": {
+        "present": false
+      },
+      "perf": {
+        "cls": 0,
+        "longTasks": 4,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1600&q=90",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1100&q=88",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1100&q=88",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1400&q=88",
+            "loaded": true
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "/contact",
+      "widget": {
+        "present": false
+      },
+      "perf": {
+        "cls": 0,
+        "longTasks": 2,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1600&q=90",
+            "loaded": true
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "tablet",
+      "route": "/",
+      "widget": {
+        "present": true,
+        "rect": {
+          "x": 36,
+          "y": 940,
+          "width": 952,
+          "height": 83,
+          "bottom": 1023
+        },
+        "fullyInViewport": false,
+        "partlyInViewport": false,
+        "docOverflow": false,
+        "formOverflow": false,
+        "labelOverlaps": 0,
+        "clippedLabels": 0,
+        "background": "rgb(255, 253, 250)",
+        "opaque": true,
+        "overlapsImagePx2": 0,
+        "dates": [
+          "2026-11-10",
+          "2026-11-12"
+        ],
+        "counts": [
+          2,
+          0,
+          1
+        ],
+        "countOptions": [
+          8,
+          7,
+          4
+        ],
+        "buttonVisible": true,
+        "buttonText": "Search",
+        "error": ""
+      },
+      "perf": {
+        "cls": 0.0008,
+        "longTasks": 6,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1600&q=90",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1600&q=90",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=900&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1600&q=80",
+            "loaded": true
+          },
+          {
+            "src": "",
+            "loaded": false
+          },
+          {
+            "src": "",
+            "loaded": false
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "tablet",
+      "route": "/stay",
+      "widget": {
+        "present": true,
+        "rect": {
+          "x": 8,
+          "y": 685,
+          "width": 1008,
+          "height": 83,
+          "bottom": 768
+        },
+        "fullyInViewport": false,
+        "partlyInViewport": true,
+        "docOverflow": false,
+        "formOverflow": false,
+        "labelOverlaps": 0,
+        "clippedLabels": 0,
+        "background": "rgb(255, 253, 250)",
+        "opaque": true,
+        "overlapsImagePx2": 15282,
+        "dates": [
+          "2026-11-10",
+          "2026-11-12"
+        ],
+        "counts": [
+          2,
+          0,
+          1
+        ],
+        "countOptions": [
+          8,
+          7,
+          4
+        ],
+        "buttonVisible": true,
+        "buttonText": "Search",
+        "error": ""
+      },
+      "perf": {
+        "cls": 0,
+        "longTasks": 4,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1600&q=90",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1400&q=88",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1000&q=88",
+            "loaded": true
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "tablet",
+      "route": "/rooms",
+      "widget": {
+        "present": true,
+        "rect": {
+          "x": 8,
+          "y": 657,
+          "width": 1008,
+          "height": 79,
+          "bottom": 736
+        },
+        "fullyInViewport": true,
+        "partlyInViewport": true,
+        "docOverflow": false,
+        "formOverflow": false,
+        "labelOverlaps": 0,
+        "clippedLabels": 0,
+        "background": "rgb(255, 253, 250)",
+        "opaque": true,
+        "overlapsImagePx2": 15626,
+        "dates": [
+          "2026-11-10",
+          "2026-11-12"
+        ],
+        "counts": [
+          2,
+          0,
+          1
+        ],
+        "countOptions": [
+          8,
+          7,
+          4
+        ],
+        "buttonVisible": true,
+        "buttonText": "Search",
+        "error": ""
+      },
+      "perf": {
+        "cls": 0.0011,
+        "longTasks": 4,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1600&q=90",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "tablet",
+      "route": "/booking",
+      "widget": {
+        "present": true,
+        "rect": {
+          "x": 40,
+          "y": 274,
+          "width": 944,
+          "height": 79,
+          "bottom": 353
+        },
+        "fullyInViewport": true,
+        "partlyInViewport": true,
+        "docOverflow": false,
+        "formOverflow": false,
+        "labelOverlaps": 0,
+        "clippedLabels": 0,
+        "background": "rgb(255, 253, 250)",
+        "opaque": true,
+        "overlapsImagePx2": 0,
+        "dates": [
+          "2026-11-10",
+          "2026-11-12"
+        ],
+        "counts": [
+          2,
+          0,
+          1
+        ],
+        "countOptions": [
+          8,
+          7,
+          4
+        ],
+        "buttonVisible": true,
+        "buttonText": "Search",
+        "error": ""
+      },
+      "perf": {
+        "cls": 0.0029,
+        "longTasks": 3,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "tablet",
+      "route": "/search",
+      "widget": {
+        "present": true,
+        "rect": {
+          "x": 40,
+          "y": 274,
+          "width": 944,
+          "height": 79,
+          "bottom": 353
+        },
+        "fullyInViewport": true,
+        "partlyInViewport": true,
+        "docOverflow": false,
+        "formOverflow": false,
+        "labelOverlaps": 0,
+        "clippedLabels": 0,
+        "background": "rgb(255, 253, 250)",
+        "opaque": true,
+        "overlapsImagePx2": 0,
+        "dates": [
+          "2026-11-10",
+          "2026-11-12"
+        ],
+        "counts": [
+          2,
+          0,
+          1
+        ],
+        "countOptions": [
+          8,
+          7,
+          4
+        ],
+        "buttonVisible": true,
+        "buttonText": "Search",
+        "error": ""
+      },
+      "perf": {
+        "cls": 0.0029,
+        "longTasks": 3,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "tablet",
+      "route": "/amenities",
+      "widget": {
+        "present": false
+      },
+      "perf": {
+        "cls": 0,
+        "longTasks": 1,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1600&q=90",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1100&q=88",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1100&q=88",
+            "loaded": true
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "tablet",
+      "route": "/about",
+      "widget": {
+        "present": false
+      },
+      "perf": {
+        "cls": 0,
+        "longTasks": 1,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1600&q=90",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1100&q=88",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1100&q=88",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1400&q=88",
+            "loaded": true
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "tablet",
+      "route": "/contact",
+      "widget": {
+        "present": false
+      },
+      "perf": {
+        "cls": 0,
+        "longTasks": 2,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1600&q=90",
+            "loaded": true
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "mobile",
+      "route": "/",
+      "widget": {
+        "present": true,
+        "rect": {
+          "x": 24,
+          "y": 1152,
+          "width": 342,
+          "height": 267,
+          "bottom": 1419
+        },
+        "fullyInViewport": false,
+        "partlyInViewport": false,
+        "docOverflow": false,
+        "formOverflow": false,
+        "labelOverlaps": 0,
+        "clippedLabels": 0,
+        "background": "rgb(255, 253, 250)",
+        "opaque": true,
+        "overlapsImagePx2": 0,
+        "dates": [
+          "2026-11-10",
+          "2026-11-12"
+        ],
+        "counts": [
+          2,
+          0,
+          1
+        ],
+        "countOptions": [
+          8,
+          7,
+          4
+        ],
+        "buttonVisible": true,
+        "buttonText": "Search",
+        "error": ""
+      },
+      "perf": {
+        "cls": 0.0533,
+        "longTasks": 7,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1600&q=90",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1600&q=90",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": false
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "",
+            "loaded": false
+          },
+          {
+            "src": "",
+            "loaded": false
+          },
+          {
+            "src": "",
+            "loaded": false
+          },
+          {
+            "src": "",
+            "loaded": false
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "mobile",
+      "route": "/stay",
+      "widget": {
+        "present": true,
+        "rect": {
+          "x": 8,
+          "y": 945,
+          "width": 374,
+          "height": 267,
+          "bottom": 1212
+        },
+        "fullyInViewport": false,
+        "partlyInViewport": false,
+        "docOverflow": false,
+        "formOverflow": false,
+        "labelOverlaps": 0,
+        "clippedLabels": 0,
+        "background": "rgb(255, 253, 250)",
+        "opaque": true,
+        "overlapsImagePx2": 13245,
+        "dates": [
+          "2026-11-10",
+          "2026-11-12"
+        ],
+        "counts": [
+          2,
+          0,
+          1
+        ],
+        "countOptions": [
+          8,
+          7,
+          4
+        ],
+        "buttonVisible": true,
+        "buttonText": "Search",
+        "error": ""
+      },
+      "perf": {
+        "cls": 0,
+        "longTasks": 6,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1600&q=90",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "",
+            "loaded": false
+          },
+          {
+            "src": "",
+            "loaded": false
+          },
+          {
+            "src": "",
+            "loaded": false
+          },
+          {
+            "src": "",
+            "loaded": false
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1400&q=88",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1000&q=88",
+            "loaded": true
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "mobile",
+      "route": "/rooms",
+      "widget": {
+        "present": true,
+        "rect": {
+          "x": 8,
+          "y": 841,
+          "width": 374,
+          "height": 267,
+          "bottom": 1108
+        },
+        "fullyInViewport": false,
+        "partlyInViewport": true,
+        "docOverflow": false,
+        "formOverflow": false,
+        "labelOverlaps": 0,
+        "clippedLabels": 0,
+        "background": "rgb(255, 253, 250)",
+        "opaque": true,
+        "overlapsImagePx2": 13237,
+        "dates": [
+          "2026-11-10",
+          "2026-11-12"
+        ],
+        "counts": [
+          2,
+          0,
+          1
+        ],
+        "countOptions": [
+          8,
+          7,
+          4
+        ],
+        "buttonVisible": true,
+        "buttonText": "Search",
+        "error": ""
+      },
+      "perf": {
+        "cls": 0,
+        "longTasks": 5,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1600&q=90",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "",
+            "loaded": false
+          },
+          {
+            "src": "",
+            "loaded": false
+          },
+          {
+            "src": "",
+            "loaded": false
+          },
+          {
+            "src": "",
+            "loaded": false
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "mobile",
+      "route": "/booking",
+      "widget": {
+        "present": true,
+        "rect": {
+          "x": 20,
+          "y": 399,
+          "width": 350,
+          "height": 267,
+          "bottom": 666
+        },
+        "fullyInViewport": true,
+        "partlyInViewport": true,
+        "docOverflow": false,
+        "formOverflow": false,
+        "labelOverlaps": 0,
+        "clippedLabels": 0,
+        "background": "rgb(255, 253, 250)",
+        "opaque": true,
+        "overlapsImagePx2": 0,
+        "dates": [
+          "2026-11-10",
+          "2026-11-12"
+        ],
+        "counts": [
+          2,
+          0,
+          1
+        ],
+        "countOptions": [
+          8,
+          7,
+          4
+        ],
+        "buttonVisible": true,
+        "buttonText": "Search",
+        "error": ""
+      },
+      "perf": {
+        "cls": 0.0005,
+        "longTasks": 4,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "",
+            "loaded": false
+          },
+          {
+            "src": "",
+            "loaded": false
+          },
+          {
+            "src": "",
+            "loaded": false
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "mobile",
+      "route": "/search",
+      "widget": {
+        "present": true,
+        "rect": {
+          "x": 20,
+          "y": 399,
+          "width": 350,
+          "height": 267,
+          "bottom": 666
+        },
+        "fullyInViewport": true,
+        "partlyInViewport": true,
+        "docOverflow": false,
+        "formOverflow": false,
+        "labelOverlaps": 0,
+        "clippedLabels": 0,
+        "background": "rgb(255, 253, 250)",
+        "opaque": true,
+        "overlapsImagePx2": 0,
+        "dates": [
+          "2026-11-10",
+          "2026-11-12"
+        ],
+        "counts": [
+          2,
+          0,
+          1
+        ],
+        "countOptions": [
+          8,
+          7,
+          4
+        ],
+        "buttonVisible": true,
+        "buttonText": "Search",
+        "error": ""
+      },
+      "perf": {
+        "cls": 0.0005,
+        "longTasks": 4,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=1200&q=85",
+            "loaded": true
+          },
+          {
+            "src": "",
+            "loaded": false
+          },
+          {
+            "src": "",
+            "loaded": false
+          },
+          {
+            "src": "",
+            "loaded": false
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "mobile",
+      "route": "/amenities",
+      "widget": {
+        "present": false
+      },
+      "perf": {
+        "cls": 0,
+        "longTasks": 2,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1600&q=90",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1100&q=88",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1100&q=88",
+            "loaded": true
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "mobile",
+      "route": "/about",
+      "widget": {
+        "present": false
+      },
+      "perf": {
+        "cls": 0,
+        "longTasks": 2,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1600&q=90",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1100&q=88",
+            "loaded": true
+          },
+          {
+            "src": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1100&q=88",
+            "loaded": true
+          },
+          {
+            "src": "",
+            "loaded": false
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "mobile",
+      "route": "/contact",
+      "widget": {
+        "present": false
+      },
+      "perf": {
+        "cls": 0,
+        "longTasks": 2,
+        "images": [
+          {
+            "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1600&q=90",
+            "loaded": true
+          }
+        ]
+      }
+    }
+  ],
+  "functional": {
+    "initial": {
+      "dates": [
+        "2026-11-10",
+        "2026-11-12"
+      ],
+      "counts": [
+        2,
+        0,
+        1
+      ],
+      "error": ""
+    },
+    "edited": {
+      "dates": [
+        "2026-11-15",
+        "2026-11-18"
+      ],
+      "counts": [
+        3,
+        1,
+        2
+      ],
+      "error": ""
+    },
+    "afterShift": {
+      "dates": [
+        "2026-11-19",
+        "2026-11-20"
+      ],
+      "counts": [
+        3,
+        1,
+        2
+      ],
+      "error": ""
+    },
+    "expectedShift": {
+      "checkIn": "2026-11-19",
+      "checkOut": "2026-11-20"
+    },
+    "resultsUrl": "http://localhost:5173/search?checkIn=2026-11-15&checkOut=2026-11-18&adults=3&children=1&rooms=2&guests=4",
+    "resultsState": {
+      "dates": [
+        "2026-11-15",
+        "2026-11-18"
+      ],
+      "counts": [
+        3,
+        1,
+        2
+      ],
+      "error": ""
+    },
+    "resultsHeading": "Your next stay starts here.",
+    "afterBack": {
+      "dates": [
+        "2026-11-15",
+        "2026-11-18"
+      ],
+      "counts": [
+        3,
+        1,
+        2
+      ],
+      "error": ""
+    },
+    "afterCrossPage": {
+      "dates": [
+        "2026-11-15",
+        "2026-11-18"
+      ],
+      "counts": [
+        4,
+        1,
+        2
+      ],
+      "error": ""
+    },
+    "directUrlState": {
+      "dates": [
+        "2026-11-15",
+        "2026-11-18"
+      ],
+      "counts": [
+        4,
+        2,
+        3
+      ],
+      "error": ""
+    },
+    "directUrlHeading": "Your next stay starts here.",
+    "normalizedState": {
+      "dates": [
+        "2026-11-10",
+        "2026-11-12"
+      ],
+      "counts": [
+        8,
+        0,
+        4
+      ],
+      "error": ""
+    },
+    "invalidState": {
+      "dates": [
+        "2026-11-10",
+        "2026-11-10"
+      ],
+      "counts": [
+        8,
+        0,
+        4
+      ],
+      "error": "Choose a checkout date after your check-in date."
+    },
+    "invalidUrl": "http://localhost:5173/stay"
+  },
+  "navigation": {
+    "visits": [
+      {
+        "label": "Stay With Us",
+        "path": "/stay",
+        "bodyChars": 4209,
+        "rootOpacity": "1"
+      },
+      {
+        "label": "Explore Rooms",
+        "path": "/rooms",
+        "bodyChars": 3444,
+        "rootOpacity": "1"
+      },
+      {
+        "label": "Amenities",
+        "path": "/amenities",
+        "bodyChars": 2679,
+        "rootOpacity": "1"
+      },
+      {
+        "label": "About Us",
+        "path": "/about",
+        "bodyChars": 2634,
+        "rootOpacity": "1"
+      },
+      {
+        "label": "Contact",
+        "path": "/contact",
+        "bodyChars": 2018,
+        "rootOpacity": "1"
+      },
+      {
+        "label": "Home",
+        "path": "/",
+        "bodyChars": 4818,
+        "rootOpacity": "1"
+      },
+      {
+        "label": "browser-back",
+        "path": "/contact",
+        "bodyChars": 2018
+      },
+      {
+        "label": "browser-forward",
+        "path": "/",
+        "bodyChars": 4818
+      },
+      {
+        "label": "refresh",
+        "path": "/",
+        "bodyChars": 4818
+      }
+    ],
+    "uniqueRoutes": [
+      "/stay",
+      "/rooms",
+      "/amenities",
+      "/about",
+      "/contact",
+      "/"
+    ]
+  },
+  "console": [
+    {
+      "url": "http://localhost:5173/",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/stay",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/stay",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/rooms",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/rooms",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/booking?checkIn=2026-11-10&checkOut=2026-11-12&adults=2&children=0&rooms=1&guests=2",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/booking?checkIn=2026-11-10&checkOut=2026-11-12&adults=2&children=0&rooms=1&guests=2",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/search?checkIn=2026-11-10&checkOut=2026-11-12&adults=2&children=0&rooms=1&guests=2",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/search?checkIn=2026-11-10&checkOut=2026-11-12&adults=2&children=0&rooms=1&guests=2",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/amenities",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/amenities",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/about",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/about",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/contact",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/contact",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/stay",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/stay",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/rooms",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/rooms",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/booking?checkIn=2026-11-10&checkOut=2026-11-12&adults=2&children=0&rooms=1&guests=2",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/booking?checkIn=2026-11-10&checkOut=2026-11-12&adults=2&children=0&rooms=1&guests=2",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/search?checkIn=2026-11-10&checkOut=2026-11-12&adults=2&children=0&rooms=1&guests=2",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/search?checkIn=2026-11-10&checkOut=2026-11-12&adults=2&children=0&rooms=1&guests=2",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/amenities",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/amenities",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/about",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/about",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/contact",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/contact",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/stay",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/stay",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/rooms",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/rooms",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/booking?checkIn=2026-11-10&checkOut=2026-11-12&adults=2&children=0&rooms=1&guests=2",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/booking?checkIn=2026-11-10&checkOut=2026-11-12&adults=2&children=0&rooms=1&guests=2",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/search?checkIn=2026-11-10&checkOut=2026-11-12&adults=2&children=0&rooms=1&guests=2",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/search?checkIn=2026-11-10&checkOut=2026-11-12&adults=2&children=0&rooms=1&guests=2",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/amenities",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/amenities",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/about",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/about",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/contact",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/contact",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/stay",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/stay",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/search?checkIn=2026-11-15&checkOut=2026-11-18&adults=4&children=2&rooms=3&guests=6",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/search?checkIn=2026-11-15&checkOut=2026-11-18&adults=4&children=2&rooms=3&guests=6",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/search?checkIn=2026-11-10&checkOut=2026-11-12&adults=8&children=0&rooms=4&guests=8",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/search?checkIn=2026-11-10&checkOut=2026-11-12&adults=8&children=0&rooms=4&guests=8",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/stay",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/stay",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "url": "http://localhost:5173/",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    }
+  ],
+  "network": []
+}

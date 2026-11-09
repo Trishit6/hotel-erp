@@ -1,0 +1,655 @@
+{
+  "generatedAt": "2026-11-09T16:22:31.980Z",
+  "base": "http://localhost:5173",
+  "checks": {
+    "login": 200,
+    "heroMotion": {
+      "early": {
+        "imageTransform": "matrix(1.1547, 0, 0, 1.1547, 0, -41.6078)",
+        "lineOpacity": "0.1773",
+        "frameClip": null
+      },
+      "mid": "matrix(1.0401, 0, 0, 1.0401, 0, -41.6078)",
+      "drift": "matrix(1.0427, 0, 0, 1.0427, 0, -41.6078)",
+      "late": {
+        "imageTransform": "matrix(1.0427, 0, 0, 1.0427, 0, -41.6078)",
+        "lineOpacity": "1",
+        "frameClip": null,
+        "drift": 0
+      }
+    },
+    "transition": {
+      "early": {
+        "opacity": "0.997364",
+        "heading": "Find your room, then make it yours.",
+        "bodyText": 3486,
+        "pending": false
+      },
+      "late": {
+        "opacity": "1",
+        "heading": "Find your room, then make it yours."
+      }
+    },
+    "cursor": {
+      "idle": {
+        "mode": "idle",
+        "opacity": "0"
+      },
+      "magnet": {
+        "mode": "link",
+        "label": "Explore",
+        "translate": "6.47px -0.93px"
+      }
+    },
+    "cursorField": {
+      "mode": "field",
+      "ringOpacity": "0"
+    }
+  },
+  "routes": [
+    {
+      "route": "/",
+      "viewport": "desktop",
+      "metrics": {
+        "path": "/",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "brokenImages": [],
+        "atmosphere": true,
+        "beams": 2,
+        "adminShell": false,
+        "adminBg": null,
+        "adminCardBg": null,
+        "adminCardBlur": null
+      },
+      "hero": [
+        {
+          "text": "A quieter kind of luxury,",
+          "opacity": "1",
+          "transform": "none",
+          "height": 162,
+          "parentHeight": 166,
+          "parentOverflow": "hidden"
+        },
+        {
+          "text": "by the water.",
+          "opacity": "1",
+          "transform": "none",
+          "height": 81,
+          "parentHeight": 89,
+          "parentOverflow": "hidden"
+        }
+      ],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/stay",
+      "viewport": "desktop",
+      "metrics": {
+        "path": "/stay",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "brokenImages": [],
+        "atmosphere": true,
+        "beams": 2,
+        "adminShell": false,
+        "adminBg": null,
+        "adminCardBg": null,
+        "adminCardBlur": null
+      },
+      "hero": [
+        {
+          "text": "A slower stay,",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "height": 79,
+          "parentHeight": 83,
+          "parentOverflow": "hidden"
+        },
+        {
+          "text": "with more room to breathe.",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "height": 159,
+          "parentHeight": 167,
+          "parentOverflow": "hidden"
+        }
+      ],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/rooms",
+      "viewport": "desktop",
+      "metrics": {
+        "path": "/rooms",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "brokenImages": [],
+        "atmosphere": true,
+        "beams": 2,
+        "adminShell": false,
+        "adminBg": null,
+        "adminCardBg": null,
+        "adminCardBlur": null
+      },
+      "hero": [
+        {
+          "text": "Find your room,",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "height": 79,
+          "parentHeight": 83,
+          "parentOverflow": "hidden"
+        },
+        {
+          "text": "then make it yours.",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "height": 79,
+          "parentHeight": 87,
+          "parentOverflow": "hidden"
+        }
+      ],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/amenities",
+      "viewport": "desktop",
+      "metrics": {
+        "path": "/amenities",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "brokenImages": [],
+        "atmosphere": true,
+        "beams": 2,
+        "adminShell": false,
+        "adminBg": null,
+        "adminCardBg": null,
+        "adminCardBlur": null
+      },
+      "hero": [
+        {
+          "text": "Everything you need,",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "height": 159,
+          "parentHeight": 163,
+          "parentOverflow": "hidden"
+        },
+        {
+          "text": "nothing you don't.",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "height": 79,
+          "parentHeight": 87,
+          "parentOverflow": "hidden"
+        }
+      ],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/about",
+      "viewport": "desktop",
+      "metrics": {
+        "path": "/about",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "brokenImages": [],
+        "atmosphere": true,
+        "beams": 2,
+        "adminShell": false,
+        "adminBg": null,
+        "adminCardBg": null,
+        "adminCardBlur": null
+      },
+      "hero": [
+        {
+          "text": "A house built around",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "height": 159,
+          "parentHeight": 163,
+          "parentOverflow": "hidden"
+        },
+        {
+          "text": "the way you like to stay.",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "height": 159,
+          "parentHeight": 167,
+          "parentOverflow": "hidden"
+        }
+      ],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/contact",
+      "viewport": "desktop",
+      "metrics": {
+        "path": "/contact",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "brokenImages": [],
+        "atmosphere": true,
+        "beams": 2,
+        "adminShell": false,
+        "adminBg": null,
+        "adminCardBg": null,
+        "adminCardBlur": null
+      },
+      "hero": [
+        {
+          "text": "We are here",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "height": 79,
+          "parentHeight": 83,
+          "parentOverflow": "hidden"
+        },
+        {
+          "text": "when you need us.",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "height": 79,
+          "parentHeight": 87,
+          "parentOverflow": "hidden"
+        }
+      ],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/booking",
+      "viewport": "desktop",
+      "metrics": {
+        "path": "/booking?checkIn=2026-11-10&checkOut=2026-11-12&adults=2&children=0&rooms=1&guests=2",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "brokenImages": [],
+        "atmosphere": true,
+        "beams": 2,
+        "adminShell": false,
+        "adminBg": null,
+        "adminCardBg": null,
+        "adminCardBlur": null
+      },
+      "hero": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/login",
+      "viewport": "desktop",
+      "metrics": {
+        "path": "/login",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "brokenImages": [],
+        "atmosphere": true,
+        "beams": 2,
+        "adminShell": false,
+        "adminBg": null,
+        "adminCardBg": null,
+        "adminCardBlur": null
+      },
+      "hero": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/admin/dashboard",
+      "viewport": "desktop",
+      "metrics": {
+        "path": "/admin/dashboard",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "brokenImages": [],
+        "atmosphere": false,
+        "beams": 0,
+        "adminShell": true,
+        "adminBg": "rgb(7, 11, 18)",
+        "adminCardBg": "rgba(0, 0, 0, 0)",
+        "adminCardBlur": "blur(22px) saturate(1.4)"
+      },
+      "hero": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "viewport": "reduced",
+      "hero": [
+        {
+          "text": "A quieter kind of luxury,",
+          "opacity": "1",
+          "transform": "none",
+          "height": 162,
+          "parentHeight": 166,
+          "parentOverflow": "hidden"
+        },
+        {
+          "text": "by the water.",
+          "opacity": "1",
+          "transform": "none",
+          "height": 81,
+          "parentHeight": 89,
+          "parentOverflow": "hidden"
+        }
+      ],
+      "metrics": {
+        "path": "/",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "brokenImages": [],
+        "atmosphere": true,
+        "beams": 2,
+        "adminShell": false,
+        "adminBg": null,
+        "adminCardBg": null,
+        "adminCardBlur": null
+      }
+    },
+    {
+      "route": "/contact",
+      "viewport": "reduced",
+      "hero": [
+        {
+          "text": "We are here",
+          "opacity": "1",
+          "transform": "none",
+          "height": 79,
+          "parentHeight": 83,
+          "parentOverflow": "hidden"
+        },
+        {
+          "text": "when you need us.",
+          "opacity": "1",
+          "transform": "none",
+          "height": 79,
+          "parentHeight": 87,
+          "parentOverflow": "hidden"
+        }
+      ],
+      "metrics": {
+        "path": "/contact",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "brokenImages": [],
+        "atmosphere": true,
+        "beams": 2,
+        "adminShell": false,
+        "adminBg": null,
+        "adminCardBg": null,
+        "adminCardBlur": null
+      }
+    },
+    {
+      "route": "/admin/dashboard",
+      "viewport": "reduced",
+      "hero": [],
+      "metrics": {
+        "path": "/admin/dashboard",
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "brokenImages": [],
+        "atmosphere": false,
+        "beams": 0,
+        "adminShell": true,
+        "adminBg": "rgb(7, 11, 18)",
+        "adminCardBg": "rgba(0, 0, 0, 0)",
+        "adminCardBlur": "blur(22px) saturate(1.4)"
+      }
+    },
+    {
+      "route": "/",
+      "viewport": "mobile",
+      "metrics": {
+        "path": "/",
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "brokenImages": [],
+        "atmosphere": true,
+        "beams": 2,
+        "adminShell": false,
+        "adminBg": null,
+        "adminCardBg": null,
+        "adminCardBlur": null
+      },
+      "hero": [
+        {
+          "text": "A quieter kind of luxury,",
+          "opacity": "1",
+          "transform": "none",
+          "height": 96,
+          "parentHeight": 100,
+          "parentOverflow": "hidden"
+        },
+        {
+          "text": "by the water.",
+          "opacity": "1",
+          "transform": "none",
+          "height": 48,
+          "parentHeight": 56,
+          "parentOverflow": "hidden"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "route": "/rooms",
+      "viewport": "mobile",
+      "metrics": {
+        "path": "/rooms",
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "brokenImages": [],
+        "atmosphere": true,
+        "beams": 2,
+        "adminShell": false,
+        "adminBg": null,
+        "adminCardBg": null,
+        "adminCardBlur": null
+      },
+      "hero": [
+        {
+          "text": "Find your room,",
+          "opacity": "1",
+          "transform": "none",
+          "height": 46,
+          "parentHeight": 50,
+          "parentOverflow": "hidden"
+        },
+        {
+          "text": "then make it yours.",
+          "opacity": "1",
+          "transform": "none",
+          "height": 46,
+          "parentHeight": 54,
+          "parentOverflow": "hidden"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "route": "/contact",
+      "viewport": "mobile",
+      "metrics": {
+        "path": "/contact",
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "brokenImages": [],
+        "atmosphere": true,
+        "beams": 2,
+        "adminShell": false,
+        "adminBg": null,
+        "adminCardBg": null,
+        "adminCardBlur": null
+      },
+      "hero": [
+        {
+          "text": "We are here",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "height": 46,
+          "parentHeight": 50,
+          "parentOverflow": "hidden"
+        },
+        {
+          "text": "when you need us.",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "height": 46,
+          "parentHeight": 54,
+          "parentOverflow": "hidden"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "route": "/admin/dashboard",
+      "viewport": "mobile",
+      "metrics": {
+        "path": "/admin/dashboard",
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "brokenImages": [],
+        "atmosphere": false,
+        "beams": 0,
+        "adminShell": true,
+        "adminBg": "rgb(7, 11, 18)",
+        "adminCardBg": "rgba(0, 0, 0, 0)",
+        "adminCardBlur": "blur(22px) saturate(1.4)"
+      },
+      "hero": [],
+      "consoleErrors": []
+    },
+    {
+      "route": "/",
+      "viewport": "tablet",
+      "metrics": {
+        "path": "/",
+        "scrollWidth": 1024,
+        "innerWidth": 1024,
+        "brokenImages": [],
+        "atmosphere": true,
+        "beams": 2,
+        "adminShell": false,
+        "adminBg": null,
+        "adminCardBg": null,
+        "adminCardBlur": null
+      },
+      "hero": [
+        {
+          "text": "A quieter kind of luxury,",
+          "opacity": "1",
+          "transform": "none",
+          "height": 116,
+          "parentHeight": 120,
+          "parentOverflow": "hidden"
+        },
+        {
+          "text": "by the water.",
+          "opacity": "1",
+          "transform": "none",
+          "height": 58,
+          "parentHeight": 66,
+          "parentOverflow": "hidden"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "route": "/rooms",
+      "viewport": "tablet",
+      "metrics": {
+        "path": "/rooms",
+        "scrollWidth": 1024,
+        "innerWidth": 1024,
+        "brokenImages": [],
+        "atmosphere": true,
+        "beams": 2,
+        "adminShell": false,
+        "adminBg": null,
+        "adminCardBg": null,
+        "adminCardBlur": null
+      },
+      "hero": [
+        {
+          "text": "Find your room,",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "height": 56,
+          "parentHeight": 60,
+          "parentOverflow": "hidden"
+        },
+        {
+          "text": "then make it yours.",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "height": 56,
+          "parentHeight": 64,
+          "parentOverflow": "hidden"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "route": "/contact",
+      "viewport": "tablet",
+      "metrics": {
+        "path": "/contact",
+        "scrollWidth": 1024,
+        "innerWidth": 1024,
+        "brokenImages": [],
+        "atmosphere": true,
+        "beams": 2,
+        "adminShell": false,
+        "adminBg": null,
+        "adminCardBg": null,
+        "adminCardBlur": null
+      },
+      "hero": [
+        {
+          "text": "We are here",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "height": 56,
+          "parentHeight": 60,
+          "parentOverflow": "hidden"
+        },
+        {
+          "text": "when you need us.",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "height": 56,
+          "parentHeight": 64,
+          "parentOverflow": "hidden"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "route": "/admin/dashboard",
+      "viewport": "tablet",
+      "metrics": {
+        "path": "/admin/dashboard",
+        "scrollWidth": 1024,
+        "innerWidth": 1024,
+        "brokenImages": [],
+        "atmosphere": false,
+        "beams": 0,
+        "adminShell": true,
+        "adminBg": "rgb(7, 11, 18)",
+        "adminCardBg": "rgba(0, 0, 0, 0)",
+        "adminCardBlur": "blur(22px) saturate(1.4)"
+      },
+      "hero": [],
+      "consoleErrors": []
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RIVR — Direction A · Cinematic Luxury</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0a0c0f; --surface:rgba(23,26,31,.72); --elevated:#15181d;
+    --ink:#f3ede1; --text:#ddd6c9; --muted:#a09a8e; --line:rgba(232,214,178,.14);
+    --accent:#c8ab74; --accent-soft:#e2c894; --on-accent:#12100b;
+  }
+  *{box-sizing:border-box} html,body{margin:0}
+  body{background:var(--bg);color:var(--text);font-family:Manrope,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .serif{font-family:"Cormorant Garamond",Georgia,serif}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:22px 44px;border-bottom:1px solid var(--line);position:relative;z-index:5}
+  .brand{display:flex;align-items:center;gap:12px;color:var(--ink);letter-spacing:.24em;font-size:13px;font-weight:600}
+  .brand i{width:30px;height:30px;border-radius:50%;border:1px solid var(--accent);display:grid;place-items:center}
+  .brand i::after{content:"";width:11px;height:11px;border-radius:50%;border:1px solid var(--accent)}
+  .nav ul{display:flex;gap:28px;list-style:none;margin:0;padding:0;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .nav .cta{border:1px solid var(--accent);color:var(--accent);padding:10px 18px;border-radius:999px;font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+  .hero{position:relative;min-height:560px;overflow:hidden;display:grid;align-items:end}
+  .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.9) contrast(1.05)}
+  .hero .scrim{position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,10,13,.92) 0%,rgba(8,10,13,.52) 46%,rgba(8,10,13,.06) 78%),linear-gradient(0deg,rgba(8,10,13,.85),transparent 55%)}
+  .beam{position:absolute;inset:-20% auto -20% -30%;width:46%;background:linear-gradient(100deg,transparent,rgba(226,200,148,.16),transparent);transform:rotate(8deg);filter:blur(20px)}
+  .hero .inner{position:relative;z-index:2;padding:0 44px 56px;max-width:760px}
+  .eyebrow{display:flex;align-items:center;gap:10px;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent)}
+  .eyebrow::before{content:"";width:28px;height:1px;background:var(--accent)}
+  h1{font-size:72px;line-height:.94;letter-spacing:-.03em;margin:20px 0 0;color:var(--ink);font-weight:400}
+  h1 em{color:var(--accent-soft);font-style:italic}
+  .hero p{max-width:430px;font-size:14px;line-height:1.8;color:rgba(243,237,225,.66);margin:18px 0 0}
+  .actions{display:flex;gap:12px;margin-top:26px}
+  .btn{display:inline-flex;align-items:center;gap:9px;border-radius:999px;padding:14px 22px;font-size:11px;font-weight:600;letter-spacing:.04em}
+  .btn.primary{background:var(--accent);color:var(--on-accent)}
+  .btn.ghost{border:1px solid rgba(232,214,178,.32);color:var(--ink)}
+  .rail{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding:26px 44px 40px;background:var(--bg)}
+  .card{position:relative;overflow:hidden;border-radius:16px;border:1px solid var(--line);background:var(--surface);backdrop-filter:blur(14px)}
+  .card .photo{height:150px;overflow:hidden}
+  .card .photo img{width:100%;height:100%;object-fit:cover}
+  .card .body{padding:16px 18px 20px}
+  .card .kicker{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+  .card h3{font-size:24px;margin:8px 0 4px;color:var(--ink);font-weight:500}
+  .card p{margin:0;font-size:11px;color:var(--muted)}
+  .meta{display:flex;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:10px;color:var(--muted)}
+  .meta strong{color:var(--ink);font-weight:600}
+  .swatches{display:flex;gap:8px;padding:0 44px 40px}
+  .sw{height:40px;flex:1;border-radius:8px;border:1px solid rgba(255,255,255,.08)}
+</style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="brand"><i></i>RIVR</div>
+    <ul><li>Stay</li><li>Rooms</li><li>Amenities</li><li>About</li><li>Contact</li></ul>
+    <span class="cta">Reserve</span>
+  </nav>
+  <section class="hero">
+    <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1600&q=85" alt="Suite at dusk" />
+    <div class="scrim"></div><div class="beam"></div>
+    <div class="inner">
+      <div class="eyebrow">Mumbai · By the water</div>
+      <h1 class="serif">A quieter kind<br />of luxury, <em>by the water.</em></h1>
+      <p>Considered rooms, generous service, and a little more room to breathe. Arrive, settle, and let the evening take its time.</p>
+      <div class="actions"><span class="btn primary">Explore rooms →</span><span class="btn ghost">Discover RIVR</span></div>
+    </div>
+  </section>
+  <div class="rail">
+    <article class="card"><div class="photo"><img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=800&q=80" alt="Harbour room" /></div><div class="body"><div class="kicker">Room 101</div><h3 class="serif">Harbour Room</h3><p>Garden view · King bed</p><div class="meta"><span>from <strong>₹6,500</strong></span><span>Available</span></div></div></article>
+    <article class="card"><div class="photo"><img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80" alt="Terrace suite" /></div><div class="body"><div class="kicker">Room 204</div><h3 class="serif">Terrace Suite</h3><p>Private terrace · Sea view</p><div class="meta"><span>from <strong>₹9,800</strong></span><span>2 left</span></div></div></article>
+    <article class="card"><div class="photo"><img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80" alt="Residence" /></div><div class="body"><div class="kicker">Residence</div><h3 class="serif">The Residence</h3><p>Two bedrooms · Living room</p><div class="meta"><span>from <strong>₹14,000</strong></span><span>Enquire</span></div></div></article>
+  </div>
+  <div class="swatches">
+    <div class="sw" style="background:#0a0c0f"></div><div class="sw" style="background:#15181d"></div><div class="sw" style="background:#c8ab74"></div><div class="sw" style="background:#e2c894"></div><div class="sw" style="background:#f3ede1"></div>
+  </div>
+</body>
+</html>
