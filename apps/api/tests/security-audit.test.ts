@@ -3,7 +3,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { createApp } from "../src/app";
 import { createUser } from "../src/services/users";
 import { dateAt } from "../src/utils/date";
-import { resetTestDatabase, seedTestCatalog, setupAdmin } from "./helpers";
+import { registerCustomerAgent, resetTestDatabase, seedTestCatalog, setupAdmin } from "./helpers";
 
 const app = createApp();
 
@@ -51,9 +51,12 @@ describe("security audit regression checks", () => {
     });
     expect(staffResponse.status).toBe(201);
 
-    const bookingResponse = await request(app).post("/api/public/reservations").send({
-      guestName: "Victim Guest",
+    const bookingCustomer = await registerCustomerAgent(app, {
+      name: "Victim Guest",
       email: "victim@example.com",
+      phone: "9876500001",
+    });
+    const bookingResponse = await bookingCustomer.agent.post("/api/account/reservations").send({
       phone: "9876500001",
       roomId: "room-test",
       checkIn: dateAt(10),

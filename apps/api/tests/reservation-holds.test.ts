@@ -12,25 +12,42 @@ import {
 } from "../src/database/schema";
 import { expirePublicReservationHolds, MAX_ACTIVE_PUBLIC_HOLDS } from "../src/services/reservationHolds";
 import { dateAt } from "../src/utils/date";
-import { resetTestDatabase, seedTestCatalog, setupAdmin } from "./helpers";
+import { registerCustomerAgent, resetTestDatabase, seedTestCatalog, setupAdmin, type CustomerFixture } from "./helpers";
 
 const app = createApp();
+
+const customers = new Map<string, CustomerFixture>();
+
+async function customerFor(email: string, phone: string): Promise<CustomerFixture> {
+  const key = email.trim().toLowerCase();
+  const existing = customers.get(key);
+  if (existing) return existing;
+  const customer = await registerCustomerAgent(app, {
+    name: `Hold Guest ${customers.size + 1}`,
+    email: key,
+    phone: phone.trim(),
+  });
+  customers.set(key, customer);
+  return customer;
+}
 
 async function createHold(
   overrides: Record<string, unknown> = {},
   expectedStatus = 201,
 ) {
-  const response = await request(app).post("/api/public/reservations").send({
-    guestName: "Hold Guest",
-    email: "hold.guest@example.com",
-    phone: "9876500500",
+  const email = typeof overrides.email === "string" ? overrides.email : "hold.guest@example.com";
+  const phone = typeof overrides.phone === "string" ? overrides.phone : "9876500500";
+  const customer = await customerFor(email, phone);
+  const { guestName: _guestName, email: _email, phone: _phone, ...body } = overrides;
+  const response = await customer.agent.post("/api/account/reservations").send({
+    phone,
     roomId: "room-hold-1",
     checkIn: dateAt(200),
     checkOut: dateAt(202),
     adults: 2,
     children: 0,
     specialRequests: "",
-    ...overrides,
+    ...body,
   });
   expect(response.status).toBe(expectedStatus);
   return response;

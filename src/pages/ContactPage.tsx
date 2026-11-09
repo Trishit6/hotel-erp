@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ArrowUpRight, CheckCircle2, Mail, MapPin, Phone, Send } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { PageAtmosphere, SectionDivider } from "../components/hotel/Cinematic";
 import { PageHero } from "../components/hotel/PageHero";
 import { PublicFooter, PublicHeader } from "../components/hotel/PublicChrome";
 import { Reveal } from "../components/hotel/Reveal";
@@ -45,7 +46,8 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--canvas)] text-[var(--text)]">
+    <div className="relative min-h-screen text-[var(--text)]">
+      <PageAtmosphere />
       <PublicHeader />
       <main>
         <PageHero
@@ -66,7 +68,7 @@ export default function ContactPage() {
           </div>
         </PageHero>
 
-        <section className="mx-auto grid max-w-7xl gap-10 px-5 py-20 md:px-10 md:py-28 lg:grid-cols-[0.85fr_1.15fr]">
+        <section className="section-atmosphere mx-auto grid max-w-7xl gap-10 px-5 py-20 md:px-10 md:py-28 lg:grid-cols-[0.85fr_1.15fr]">
           <Reveal>
             <SectionEyebrow>Reach us</SectionEyebrow>
             <h2 className="mt-5 max-w-md font-display text-[clamp(2.6rem,4.8vw,4.4rem)] leading-[1.02] tracking-[-0.03em] text-[var(--ink)]">A real person, on the other end.</h2>
@@ -156,7 +158,9 @@ export default function ContactPage() {
           </Reveal>
         </section>
 
-        <section className="border-t border-[var(--line)] bg-[var(--surface-2)] px-5 py-14 md:px-10 md:py-16">
+        <SectionDivider className="py-5" />
+
+        <section className="section-atmosphere border-t border-[var(--line)] bg-[var(--surface-2)] px-5 py-14 md:px-10 md:py-16">
           <div className="mx-auto flex max-w-7xl flex-col justify-between gap-5 md:flex-row md:items-center">
             <div>
               <SectionEyebrow>Ready to book?</SectionEyebrow>

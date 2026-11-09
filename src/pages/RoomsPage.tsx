@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ArrowUpRight, BedDouble, SlidersHorizontal } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { BookingSearch } from "../components/hotel/BookingSearch";
+import { PageAtmosphere, SectionDivider } from "../components/hotel/Cinematic";
 import { PageHero } from "../components/hotel/PageHero";
 import { PublicFooter, PublicHeader } from "../components/hotel/PublicChrome";
 import { Reveal } from "../components/hotel/Reveal";
@@ -24,7 +25,8 @@ export default function RoomsPage() {
   const filtered = roomTypes.filter((type) => (filter === "all" ? true : filter === "two" ? type.capacity <= 2 : type.capacity >= 3));
 
   return (
-    <div className="min-h-screen bg-[var(--canvas)] text-[var(--text)]">
+    <div className="relative min-h-screen text-[var(--text)]">
+      <PageAtmosphere />
       <PublicHeader />
       <main>
         <PageHero
@@ -50,7 +52,7 @@ export default function RoomsPage() {
           <p className="mt-2 px-3 text-center text-[11px] text-[var(--faint)] md:text-left">Search dates above to see which specific rooms are available.</p>
         </section>
 
-        <section className="mx-auto max-w-7xl px-5 py-20 md:px-10 md:py-24">
+        <section className="section-atmosphere mx-auto max-w-7xl px-5 py-20 md:px-10 md:py-24">
           <Reveal className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
             <div>
               <SectionEyebrow>The collection</SectionEyebrow>
@@ -82,7 +84,9 @@ export default function RoomsPage() {
           </div>
         </section>
 
-        <section className="border-t border-[var(--line)] bg-[var(--surface-2)] px-5 py-16 md:px-10 md:py-20">
+        <SectionDivider className="py-5" />
+
+        <section className="section-atmosphere border-t border-[var(--line)] bg-[var(--surface-2)] px-5 py-16 md:px-10 md:py-20">
           <div className="mx-auto flex max-w-7xl flex-col justify-between gap-6 md:flex-row md:items-center">
             <div>
               <SectionEyebrow>Live inventory</SectionEyebrow>

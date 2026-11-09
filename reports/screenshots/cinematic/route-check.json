@@ -1,0 +1,156 @@
+{
+  "results": [
+    {
+      "name": "home",
+      "route": "/",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "h1": "A quieter kind of luxury, by the water.",
+      "atmosphere": true,
+      "header": true,
+      "footer": true
+    },
+    {
+      "name": "stay",
+      "route": "/stay",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "h1": "A slower stay, with more room to breathe.",
+      "atmosphere": true,
+      "header": true,
+      "footer": true
+    },
+    {
+      "name": "rooms",
+      "route": "/rooms",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "h1": "Find your room, then make it yours.",
+      "atmosphere": true,
+      "header": true,
+      "footer": true
+    },
+    {
+      "name": "amenities",
+      "route": "/amenities",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "h1": "Everything you need, nothing you don't.",
+      "atmosphere": true,
+      "header": true,
+      "footer": true
+    },
+    {
+      "name": "about",
+      "route": "/about",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "h1": "A house built around the way you like to stay.",
+      "atmosphere": true,
+      "header": true,
+      "footer": true
+    },
+    {
+      "name": "contact",
+      "route": "/contact",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "h1": "We are here when you need us.",
+      "atmosphere": true,
+      "header": true,
+      "footer": true
+    },
+    {
+      "name": "booking",
+      "route": "/booking",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "h1": "Your next stay starts here.",
+      "atmosphere": true,
+      "header": true,
+      "footer": true
+    },
+    {
+      "name": "my-bookings",
+      "route": "/my-bookings",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "h1": "Your bookings.",
+      "atmosphere": true,
+      "header": true,
+      "footer": true
+    },
+    {
+      "name": "login",
+      "route": "/login",
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "h1": "A quieter kind of arrival.",
+      "atmosphere": true,
+      "header": true,
+      "footer": false
+    },
+    {
+      "name": "home-mobile",
+      "route": "/",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "cursor": false
+    },
+    {
+      "name": "stay-mobile",
+      "route": "/stay",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "cursor": false
+    },
+    {
+      "name": "rooms-mobile",
+      "route": "/rooms",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "cursor": false
+    },
+    {
+      "name": "amenities-mobile",
+      "route": "/amenities",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "cursor": false
+    },
+    {
+      "name": "about-mobile",
+      "route": "/about",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "cursor": false
+    },
+    {
+      "name": "contact-mobile",
+      "route": "/contact",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "cursor": false
+    }
+  ],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+  ]
+}

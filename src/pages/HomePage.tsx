@@ -22,6 +22,11 @@ import {
 } from "lucide-react";
 import { BookingSearch } from "../components/hotel/BookingSearch";
 import {
+  CinematicBand,
+  PageAtmosphere,
+  SectionDivider,
+} from "../components/hotel/Cinematic";
+import {
   BookingPill,
   PublicFooter,
   PublicHeader,
@@ -111,20 +116,22 @@ export default function HomePage() {
         .to(frame, { clipPath: "inset(0 0 0% 0)", duration: 1.4 }, 0.12)
         .to(image, { scale: 1.1, duration: 1.8, ease: "power2.out" }, 0.12);
 
-      gsap.fromTo(
-        image,
-        { yPercent: -3 },
-        {
-          yPercent: 3,
-          ease: "none",
-          scrollTrigger: {
-            trigger: heroRef.current,
-            start: "top top",
-            end: "bottom top",
-            scrub: true,
+      if (window.matchMedia("(min-width: 1024px)").matches) {
+        gsap.fromTo(
+          image,
+          { yPercent: -3 },
+          {
+            yPercent: 3,
+            ease: "none",
+            scrollTrigger: {
+              trigger: heroRef.current,
+              start: "top top",
+              end: "bottom top",
+              scrub: true,
+            },
           },
-        },
-      );
+        );
+      }
     },
     [],
     heroRef,
@@ -145,14 +152,17 @@ export default function HomePage() {
   }, [location.hash, reduceMotion]);
 
   return (
-    <div className="min-h-screen bg-[var(--canvas)] text-[var(--text)]">
+    <div className="relative min-h-screen text-[var(--text)]">
+      <PageAtmosphere />
       <PublicHeader />
       <main>
         <section
           ref={heroRef}
           className="mx-auto max-w-[1440px] px-4 pt-4 md:px-7 md:pt-6"
         >
-          <div className="relative grid overflow-hidden rounded-[2rem] border border-[var(--line)] bg-[var(--surface-2)] pb-14 md:pb-16 lg:min-h-[680px] lg:grid-cols-[1.02fr_0.98fr]">
+          <div className="relative grid overflow-hidden rounded-[2rem] border border-[var(--line)] bg-[var(--surface-2)] pb-14 shadow-[0_34px_100px_rgba(24,31,42,0.14)] md:pb-16 lg:min-h-[680px] lg:grid-cols-[1.02fr_0.98fr]">
+            <div className="hero-ambient" aria-hidden="true" />
+            <div className="hero-lines" aria-hidden="true" />
             <span className="corner-mark corner-mark--tl" aria-hidden="true" />
             <div className="relative z-10 flex flex-col justify-center px-7 pb-10 pt-12 sm:px-12 lg:px-14 lg:pb-32 lg:pt-20 xl:px-20">
               <div className="hero-eyebrow flex flex-wrap items-center gap-3">
@@ -289,7 +299,7 @@ export default function HomePage() {
 
         <section
           id="about"
-          className="section-anchor mx-auto grid max-w-7xl gap-10 px-5 py-20 md:px-10 md:py-28 lg:grid-cols-[0.88fr_1.12fr] lg:items-center"
+          className="section-anchor section-atmosphere mx-auto grid max-w-7xl gap-10 px-5 py-20 md:px-10 md:py-28 lg:grid-cols-[0.88fr_1.12fr] lg:items-center"
         >
           <Reveal>
             <SectionEyebrow>Welcome to RIVR</SectionEyebrow>
@@ -359,9 +369,11 @@ export default function HomePage() {
           </Reveal>
         </section>
 
+        <SectionDivider className="py-2" />
+
         <section
           id="stay"
-          className="section-anchor bg-[var(--surface)] px-5 py-20 md:px-10 md:py-28"
+          className="section-anchor section-atmosphere bg-[var(--surface)] px-5 py-20 md:px-10 md:py-28"
         >
           <div className="mx-auto max-w-7xl">
             <Reveal className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
@@ -416,7 +428,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-5 py-20 md:px-10 md:py-28">
+        <section className="section-atmosphere mx-auto max-w-7xl px-5 py-20 md:px-10 md:py-28">
           <div className="grid gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
             <Reveal>
               <SectionEyebrow>The experience</SectionEyebrow>
@@ -439,12 +451,11 @@ export default function HomePage() {
               delay={0.08}
               className="grid gap-4 sm:grid-cols-[1.25fr_0.75fr] sm:items-end"
             >
-              <div className="group relative h-[350px] rounded-[1.5rem] sm:h-[430px]">
+              <div className="group relative h-[350px] overflow-hidden rounded-[1.5rem] sm:h-[430px]">
                 <GsapImage
                   src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1200&q=85"
                   alt="The RIVR dining room set for service"
-                  className="h-full w-full rounded-[1.5rem]"
-                  imgClassName="transition-transform duration-700 group-hover:scale-105"
+                  className="h-full w-full rounded-[1.5rem] transition-transform duration-[1100ms] ease-out group-hover:scale-[1.03]"
                 >
                   <div className="absolute bottom-4 left-4 rounded-lg border border-white/10 bg-[var(--deep)]/80 px-3 py-2 text-xs text-white backdrop-blur">
                     Dining worth lingering over
@@ -452,12 +463,11 @@ export default function HomePage() {
                 </GsapImage>
               </div>
               <div className="grid gap-4">
-                <div className="group relative h-44 rounded-[1.5rem]">
+                <div className="group relative h-44 overflow-hidden rounded-[1.5rem]">
                   <GsapImage
                     src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=900&q=85"
                     alt="A quiet spa treatment room at RIVR"
-                    className="h-full w-full rounded-[1.5rem]"
-                    imgClassName="transition-transform duration-700 group-hover:scale-105"
+                    className="h-full w-full rounded-[1.5rem] transition-transform duration-[1100ms] ease-out group-hover:scale-[1.03]"
                   />
                 </div>
                 <div className="flex items-center gap-3 rounded-[1.5rem] border border-[var(--line)] bg-[var(--surface-3)] p-4">
@@ -471,9 +481,26 @@ export default function HomePage() {
           </div>
         </section>
 
+        <CinematicBand
+          image="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1600&q=80"
+          alt="The RIVR pool terrace at dusk, with the water and city lights beyond"
+          eyebrow="RIVR, in passing"
+          title="Mornings by the water. Evenings that take their time."
+          copy="A quiet swim before the city wakes, a long breakfast, and nowhere else to be. The rhythm here is yours to set."
+          position="center 55%"
+        >
+          <Link
+            to="/amenities"
+            data-cursor="The house"
+            className="btn-sheen inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3.5 text-xs font-semibold text-[var(--accent-ink)] transition-opacity hover:opacity-90"
+          >
+            Explore the house <ArrowUpRight className="h-4 w-4" />
+          </Link>
+        </CinematicBand>
+
         <section
           id="amenities"
-          className="section-anchor border-y border-[var(--line)] bg-[var(--surface-2)] px-5 py-20 md:px-10 md:py-24"
+          className="section-anchor section-atmosphere border-y border-[var(--line)] bg-[var(--surface-2)] px-5 py-20 md:px-10 md:py-24"
         >
           <div className="mx-auto max-w-7xl">
             <Reveal className="text-center">
@@ -537,7 +564,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="bg-[var(--surface-3)] px-5 py-20 md:px-10 md:py-24">
+        <SectionDivider className="bg-[var(--canvas)] py-8" />
+
+        <section className="section-atmosphere bg-[var(--surface-3)] px-5 py-20 md:px-10 md:py-24">
           <div className="mx-auto max-w-7xl">
             <Reveal className="flex items-end justify-between">
               <div>
@@ -556,9 +585,8 @@ export default function HomePage() {
                       <GsapImage
                         src={offer.image}
                         alt={offer.title}
-                        className="h-full w-full"
-                        imgClassName="transition-transform duration-700 group-hover:scale-105"
-                        parallax={false}
+                        className="h-full w-full transition-transform duration-[1100ms] ease-out group-hover:scale-[1.04]"
+                        parallax={index === 0}
                       />
                     </div>
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--deep)]/88 via-[var(--deep)]/12 to-transparent" />
@@ -587,7 +615,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-5 py-20 md:px-10 md:py-28">
+        <section className="section-atmosphere mx-auto max-w-7xl px-5 py-20 md:px-10 md:py-28">
           <Reveal className="max-w-xl">
             <SectionEyebrow>Guest notes</SectionEyebrow>
             <h2 className="mt-5 font-display text-[clamp(2.6rem,4.8vw,4.4rem)] leading-[1.02] tracking-[-0.03em] text-[var(--ink)]">
@@ -631,7 +659,7 @@ export default function HomePage() {
 
         <section
           id="contact"
-          className="section-anchor border-t border-[var(--line)] bg-[var(--surface-2)] px-5 py-16 md:px-10 md:py-20"
+          className="section-anchor section-atmosphere border-t border-[var(--line)] bg-[var(--surface-2)] px-5 py-16 md:px-10 md:py-20"
         >
           <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-[1.1fr_0.9fr] md:items-center">
             <Reveal>

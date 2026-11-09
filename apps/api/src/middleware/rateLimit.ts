@@ -19,7 +19,7 @@ export const authLimiter = rateLimit({
   message: jsonMessage("Too many authentication attempts. Please try again later."),
 });
 
-export const publicWriteLimiter = rateLimit({
+export const bookingWriteLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 40,
   standardHeaders: "draft-8",

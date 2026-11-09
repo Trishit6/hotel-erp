@@ -1,3 +1,4 @@
+import request from "supertest";
 import type TestAgent from "supertest/lib/agent";
 import { db } from "../src/database/client";
 import { roomTypes, rooms } from "../src/database/schema";
@@ -52,6 +53,39 @@ export async function seedTestCatalog(): Promise<void> {
  * Bootstrap the first super administrator the way production does: create the
  * account through the service, then sign in through the unified login route.
  */
+export interface CustomerFixture {
+  agent: TestAgent;
+  user: { id: string; name: string; email: string; role: string };
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+}
+
+let customerSequence = 0;
+
+/**
+ * Register a real customer through the public signup route and return its
+ * session agent. Tests use this instead of creating reservations anonymously,
+ * because customer-facing booking now requires that session.
+ */
+export async function registerCustomerAgent(
+  app: Parameters<typeof request>[0],
+  options: { name?: string; email?: string; phone?: string; password?: string } = {},
+): Promise<CustomerFixture> {
+  customerSequence += 1;
+  const name = options.name ?? `Test Customer ${customerSequence}`;
+  const email = options.email?.trim().toLowerCase() ?? `customer.${customerSequence}@test.local`;
+  const phone = options.phone ?? `98765${String(10_000 + customerSequence).slice(-5)}`;
+  const password = options.password ?? "Customer@123456";
+  const agent = request.agent(app);
+  const response = await agent.post("/api/auth/register").send({ name, email, phone, password });
+  if (response.status !== 201) {
+    throw new Error(`Customer registration failed: ${response.status} ${JSON.stringify(response.body)}`);
+  }
+  return { agent, user: response.body.user, name, email, phone, password };
+}
+
 export async function setupAdmin(agent: TestAgent): Promise<{ email: string; password: string }> {
   const email = "admin@test.local";
   const password = "Admin@12345678";

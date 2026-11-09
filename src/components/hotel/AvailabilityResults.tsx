@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { ArrowRight, CalendarDays, Loader2, SlidersHorizontal, Users } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { BookingSearch } from "./BookingSearch";
+import { PageAtmosphere } from "./Cinematic";
 import { PublicFooter, PublicHeader } from "./PublicChrome";
 import { Reveal } from "./Reveal";
 import { RoomCard } from "./RoomCard";
@@ -20,9 +21,12 @@ export function AvailabilityResults({ search }: { search: StaySearch }) {
   );
 
   return (
-    <div className="min-h-screen bg-[var(--canvas)] text-[var(--text)]">
+    <div className="relative min-h-screen text-[var(--text)]">
+      <PageAtmosphere />
       <PublicHeader />
-      <main className="mx-auto max-w-7xl px-5 pb-20 md:px-10">
+      <main className="relative mx-auto max-w-7xl px-5 pb-20 md:px-10">
+        <div className="hero-ambient pointer-events-none absolute inset-x-0 top-0 -z-10 h-80 opacity-60" aria-hidden="true" />
+        <div className="hero-lines pointer-events-none absolute inset-x-0 top-0 -z-10 h-72 opacity-30" aria-hidden="true" />
         <div className="mb-8 mt-10 flex flex-col justify-between gap-5 md:flex-row md:items-end">
           <div>
             <SectionEyebrow>Find your room</SectionEyebrow>

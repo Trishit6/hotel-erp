@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { z } from "zod";
 import { validate } from "../../middleware/validate";
-import { publicLookupLimiter, publicWriteLimiter } from "../../middleware/rateLimit";
+import { publicLookupLimiter } from "../../middleware/rateLimit";
 import { asyncHandler } from "../../utils/http";
-import { dateOnly, publicReservationSchema } from "../shared/schemas";
-import { createReservation, verifyPublicReservation } from "../../services/reservations";
+import { dateOnly } from "../shared/schemas";
+import { verifyPublicReservation } from "../../services/reservations";
 import { getAvailability, getPublicCatalog } from "../../services/rooms";
 
 export const publicRouter = Router();
@@ -58,15 +58,9 @@ publicRouter.get(
   }),
 );
 
-publicRouter.post(
-  "/reservations",
-  publicWriteLimiter,
-  validate(publicReservationSchema),
-  asyncHandler(async (req, res) => {
-    const result = await createReservation(req.body, { source: "public" });
-    res.status(201).json(result);
-  }),
-);
+// Customer reservation creation lives under /api/account and requires an
+// authenticated customer session. There is deliberately no unauthenticated
+// reservation-creation route here.
 
 // Contact details are sent in the body so they never appear in a URL, browser
 // history, or reverse-proxy access log. The limiter runs before validation and

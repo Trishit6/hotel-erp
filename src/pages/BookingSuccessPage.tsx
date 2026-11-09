@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ArrowRight, CalendarCheck2, CalendarPlus, Check, Copy, Mail, MapPin, Sparkles } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { PageAtmosphere } from "../components/hotel/Cinematic";
 import { PublicFooter, PublicHeader } from "../components/hotel/PublicChrome";
 import { SectionEyebrow, StatusBadge } from "../components/hotel/HotelUi";
 import { calculateNights, formatCurrency, formatDate, hotelInfo, type PublicReservation } from "../lib/hotel-data";
@@ -42,7 +43,8 @@ export default function BookingSuccessPage() {
 
   if (!reservation) {
     return (
-      <div className="min-h-screen bg-[var(--canvas)] text-[var(--text)]">
+      <div className="relative min-h-screen text-[var(--text)]">
+        <PageAtmosphere />
         <PublicHeader />
         <main className="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center px-5 text-center">
           <h1 className="font-display text-4xl text-[var(--ink)]">Reservation not found</h1>
@@ -70,7 +72,8 @@ export default function BookingSuccessPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--canvas)] text-[var(--text)]">
+    <div className="relative min-h-screen text-[var(--text)]">
+      <PageAtmosphere />
       <PublicHeader />
       <main className="mx-auto flex max-w-3xl flex-col items-center px-5 py-14 text-center md:py-20">
         <div className="grid h-16 w-16 place-items-center rounded-full bg-[var(--success-soft)] text-[var(--success)]">

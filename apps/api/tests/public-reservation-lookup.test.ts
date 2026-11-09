@@ -4,7 +4,7 @@ import { createApp } from "../src/app";
 import { db } from "../src/database/client";
 import { guests, reservations } from "../src/database/schema";
 import { dateAt } from "../src/utils/date";
-import { resetTestDatabase, seedTestCatalog, setupAdmin } from "./helpers";
+import { registerCustomerAgent, resetTestDatabase, seedTestCatalog, setupAdmin } from "./helpers";
 
 const app = createApp();
 
@@ -20,6 +20,11 @@ const booking = (overrides: Record<string, unknown> = {}) => ({
   specialRequests: "",
   ...overrides,
 });
+
+const accountBooking = (overrides: Record<string, unknown> = {}) => {
+  const { guestName: _guestName, email: _email, ...body } = booking(overrides);
+  return body;
+};
 
 let ipCounter = 1;
 function nextIp(): string {
@@ -44,20 +49,28 @@ describe("verified public reservation lookup", () => {
     await seedTestCatalog();
     await setupAdmin(request.agent(app));
 
-    const primary = await request(app)
-      .post("/api/public/reservations")
+    const primaryCustomer = await registerCustomerAgent(app, {
+      name: "Private Person",
+      email: "lookup.guest@example.com",
+      phone: "9876500100",
+    });
+    const primary = await primaryCustomer.agent
+      .post("/api/account/reservations")
       .set("X-Forwarded-For", nextIp())
-      .send(booking({ guestName: "Private Person" }));
+      .send(accountBooking({ checkIn: dateAt(70), checkOut: dateAt(72) }));
     expect(primary.status).toBe(201);
     reference = primary.body.reservation.reference;
 
-    const phoneGuest = await request(app)
-      .post("/api/public/reservations")
+    const phoneCustomer = await registerCustomerAgent(app, {
+      name: "Phone Person",
+      email: "phone.person@example.com",
+      phone: "+91 98765 00111",
+    });
+    const phoneGuest = await phoneCustomer.agent
+      .post("/api/account/reservations")
       .set("X-Forwarded-For", nextIp())
       .send(
-        booking({
-          guestName: "Phone Person",
-          email: "phone.person@example.com",
+        accountBooking({
           phone: "+91 98765 00111",
           checkIn: dateAt(80),
           checkOut: dateAt(82),

@@ -5,12 +5,12 @@ import { createApp } from "../src/app";
 import { db } from "../src/database/client";
 import { guests, reservations } from "../src/database/schema";
 import { dateAt } from "../src/utils/date";
-import { resetTestDatabase, seedTestCatalog, setupAdmin } from "./helpers";
+import { registerCustomerAgent, resetTestDatabase, seedTestCatalog, setupAdmin } from "./helpers";
 
 const app = createApp();
 
 const profile = {
-  guestName: "Original Guest",
+  name: "Original Guest",
   email: "profile.protection@example.com",
   phone: "9876500300",
   roomId: "room-test",
@@ -25,19 +25,41 @@ const profile = {
   postalCode: "700001",
 };
 
-describe("public reservation guest-profile protection", () => {
+function accountBody(overrides: Record<string, unknown> = {}) {
+  return {
+    phone: profile.phone,
+    roomId: profile.roomId,
+    checkIn: profile.checkIn,
+    checkOut: profile.checkOut,
+    adults: profile.adults,
+    children: profile.children,
+    specialRequests: profile.specialRequests,
+    address: profile.address,
+    city: profile.city,
+    state: profile.state,
+    postalCode: profile.postalCode,
+    ...overrides,
+  };
+}
+
+describe("customer reservation guest-profile ownership", () => {
   let admin: ReturnType<typeof request.agent>;
+  let customer: Awaited<ReturnType<typeof registerCustomerAgent>>;
   let originalGuestId = "";
   let firstReference = "";
-  let secondReference = "";
 
   beforeAll(async () => {
     await resetTestDatabase();
     await seedTestCatalog();
     admin = request.agent(app);
     await setupAdmin(admin);
+    customer = await registerCustomerAgent(app, {
+      name: profile.name,
+      email: profile.email,
+      phone: profile.phone,
+    });
 
-    const first = await request(app).post("/api/public/reservations").send(profile);
+    const first = await customer.agent.post("/api/account/reservations").send(accountBody());
     expect(first.status).toBe(201);
     firstReference = first.body.reservation.reference;
 
@@ -49,12 +71,9 @@ describe("public reservation guest-profile protection", () => {
     originalGuestId = firstReservation.guestId;
   });
 
-  it("does not change an existing guest's stored name or phone on a public booking", async () => {
-    const second = await request(app)
-      .post("/api/public/reservations")
-      .send({
-        ...profile,
-        guestName: "Impostor Name",
+  it("links bookings to the customer's own guest without trusting identity fields", async () => {
+    const second = await customer.agent.post("/api/account/reservations").send(
+      accountBody({
         phone: "9000000000",
         checkIn: dateAt(124),
         checkOut: dateAt(126),
@@ -62,40 +81,49 @@ describe("public reservation guest-profile protection", () => {
         city: "Mumbai",
         state: "Maharashtra",
         postalCode: "400001",
-      });
+      }),
+    );
     expect(second.status).toBe(201);
-    secondReference = second.body.reservation.reference;
 
     const [guest] = await db.select().from(guests).where(eq(guests.id, originalGuestId)).limit(1);
     expect(guest.name).toBe("Original Guest");
-    expect(guest.phone).toBe("9876500300");
-    expect(guest.address).toBe("1 Original Road");
-    expect(guest.city).toBe("Kolkata");
-    expect(guest.state).toBe("West Bengal");
-    expect(guest.postalCode).toBe("700001");
+    expect(guest.email).toBe(profile.email);
+    expect(guest.phone).toBe("9000000000");
+    expect(guest.address).toBe("999 Changed Street");
+    expect(guest.city).toBe("Mumbai");
 
     const [reservation] = await db
       .select()
       .from(reservations)
-      .where(eq(reservations.reference, secondReference))
+      .where(eq(reservations.reference, second.body.reservation.reference))
       .limit(1);
     expect(reservation.guestId).toBe(originalGuestId);
+  });
 
-    const verified = await request(app).post("/api/public/reservations/verify").send({
-      reference: secondReference,
-      email: profile.email,
+  it("rejects attempts to supply guest or account identity through the booking body", async () => {
+    const response = await customer.agent.post("/api/account/reservations").send({
+      ...accountBody({ checkIn: dateAt(132), checkOut: dateAt(134) }),
+      guestName: "Impostor Name",
+      email: "attacker@example.com",
     });
-    expect(verified.status).toBe(200);
-    expect(verified.body.reservation.guestFirstName).toBe("Original");
+    expect(response.status).toBe(400);
+
+    const [guest] = await db.select().from(guests).where(eq(guests.id, originalGuestId)).limit(1);
+    expect(guest.name).toBe("Original Guest");
+    expect(guest.email).toBe(profile.email);
   });
 
   it("still allows an authorized staff booking to update the guest profile", async () => {
     const staffBooking = await admin.post("/api/admin/reservations").send({
-      ...profile,
       guestName: "Updated by Staff",
+      email: profile.email,
       phone: "9876500399",
+      roomId: "room-test",
       checkIn: dateAt(128),
       checkOut: dateAt(130),
+      adults: 2,
+      children: 0,
+      specialRequests: "",
       address: "2 Staff Updated Road",
       city: "Pune",
       state: "Maharashtra",

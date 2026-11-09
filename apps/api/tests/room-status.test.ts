@@ -5,7 +5,7 @@ import { createApp } from "../src/app";
 import { db } from "../src/database/client";
 import { guests, reservations, rooms } from "../src/database/schema";
 import { dateAt } from "../src/utils/date";
-import { resetTestDatabase, seedTestCatalog, setupAdmin } from "./helpers";
+import { registerCustomerAgent, resetTestDatabase, seedTestCatalog, setupAdmin } from "./helpers";
 
 const app = createApp();
 
@@ -35,10 +35,14 @@ describe("room reserved-status handling", () => {
 
   async function publicBooking(roomId: string, checkIn: string, checkOut: string) {
     bookingSequence += 1;
-    const response = await request(app).post("/api/public/reservations").send({
-      guestName: `Status Guest ${bookingSequence}`,
+    const phone = `98765${String(10000 + bookingSequence).slice(-5)}`;
+    const customer = await registerCustomerAgent(app, {
+      name: `Status Guest ${bookingSequence}`,
       email: `status.${bookingSequence}@example.com`,
-      phone: `98765${String(10000 + bookingSequence).slice(-5)}`,
+      phone,
+    });
+    const response = await customer.agent.post("/api/account/reservations").send({
+      phone,
       roomId,
       checkIn,
       checkOut,

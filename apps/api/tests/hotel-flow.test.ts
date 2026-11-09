@@ -5,7 +5,7 @@ import { createApp } from "../src/app";
 import { db } from "../src/database/client";
 import { reservations } from "../src/database/schema";
 import { dateAt } from "../src/utils/date";
-import { resetTestDatabase, seedTestCatalog, setupAdmin } from "./helpers";
+import { registerCustomerAgent, resetTestDatabase, seedTestCatalog, setupAdmin } from "./helpers";
 
 const app = createApp();
 
@@ -21,6 +21,17 @@ const booking = (overrides: Record<string, unknown> = {}) => ({
   specialRequests: "Integration test",
   ...overrides,
 });
+
+async function submitBooking(overrides: Record<string, unknown> = {}) {
+  const email = typeof overrides.email === "string" ? overrides.email : "flow.guest@example.com";
+  const guestName = typeof overrides.guestName === "string" ? overrides.guestName : "Flow Guest";
+  const customer = await registerCustomerAgent(app, { email, name: guestName });
+  const { guestName: _guestName, email: _email, ...body } = overrides;
+  return customer.agent.post("/api/account/reservations").send({
+    ...body,
+    phone: typeof overrides.phone === "string" ? overrides.phone : customer.phone,
+  });
+}
 
 describe("reservations, availability, payments, and housekeeping", () => {
   let admin: ReturnType<typeof request.agent>;
@@ -42,7 +53,7 @@ describe("reservations, availability, payments, and housekeeping", () => {
     expect(availability.status).toBe(200);
     expect(availability.body.rooms.map((room: { id: string }) => room.id)).toContain("room-test");
 
-    const created = await request(app).post("/api/public/reservations").send(booking());
+    const created = await submitBooking(booking());
     expect(created.status).toBe(201);
     const publicReservation = created.body.reservation;
     expect(publicReservation.status).toBe("pending");
@@ -65,14 +76,12 @@ describe("reservations, availability, payments, and housekeeping", () => {
     expect(detail.body.reservation.tax).toBe(600);
     expect(detail.body.reservation.total).toBe(5600);
 
-    const overlap = await request(app)
-      .post("/api/public/reservations")
-      .send(booking({ email: "overlap@example.com", guestName: "Overlap Guest" }));
+    const overlap = await submitBooking(
+      booking({ email: "overlap@example.com", guestName: "Overlap Guest" }),
+    );
     expect(overlap.status).toBe(409);
 
-    const capacity = await request(app)
-      .post("/api/public/reservations")
-      .send(booking({ email: "capacity@example.com", adults: 3 }));
+    const capacity = await submitBooking(booking({ email: "capacity@example.com", adults: 3 }));
     expect(capacity.status).toBe(400);
 
     const partial = await admin.post("/api/admin/payments").send({
@@ -140,9 +149,9 @@ describe("reservations, availability, payments, and housekeeping", () => {
     const checkIn = dateAt(20);
     const checkOut = dateAt(22);
 
-    const first = await request(app)
-      .post("/api/public/reservations")
-      .send(booking({ roomId: "room-test-2", email: "cancel.one@example.com", checkIn, checkOut }));
+    const first = await submitBooking(
+      booking({ roomId: "room-test-2", email: "cancel.one@example.com", checkIn, checkOut }),
+    );
     expect(first.status).toBe(201);
 
     const [firstRow] = await db
@@ -156,36 +165,32 @@ describe("reservations, availability, payments, and housekeeping", () => {
       .send({ status: "cancelled" });
     expect(cancelled.status).toBe(200);
 
-    const second = await request(app)
-      .post("/api/public/reservations")
-      .send(booking({ roomId: "room-test-2", email: "cancel.two@example.com", checkIn, checkOut }));
+    const second = await submitBooking(
+      booking({ roomId: "room-test-2", email: "cancel.two@example.com", checkIn, checkOut }),
+    );
     expect(second.status).toBe(201);
 
     const concurrentCheckIn = dateAt(30);
     const concurrentCheckOut = dateAt(32);
     const [left, right] = await Promise.all([
-      request(app)
-        .post("/api/public/reservations")
-        .send(
-          booking({
-            roomId: "room-test-2",
-            email: "race.one@example.com",
-            guestName: "Race One",
-            checkIn: concurrentCheckIn,
-            checkOut: concurrentCheckOut,
-          }),
-        ),
-      request(app)
-        .post("/api/public/reservations")
-        .send(
-          booking({
-            roomId: "room-test-2",
-            email: "race.two@example.com",
-            guestName: "Race Two",
-            checkIn: concurrentCheckIn,
-            checkOut: concurrentCheckOut,
-          }),
-        ),
+      submitBooking(
+        booking({
+          roomId: "room-test-2",
+          email: "race.one@example.com",
+          guestName: "Race One",
+          checkIn: concurrentCheckIn,
+          checkOut: concurrentCheckOut,
+        }),
+      ),
+      submitBooking(
+        booking({
+          roomId: "room-test-2",
+          email: "race.two@example.com",
+          guestName: "Race Two",
+          checkIn: concurrentCheckIn,
+          checkOut: concurrentCheckOut,
+        }),
+      ),
     ]);
 
     expect([left.status, right.status].sort()).toEqual([201, 409]);
@@ -237,24 +242,34 @@ describe("reservations, availability, payments, and housekeeping", () => {
   });
 
   it("rejects invalid booking and payment input", async () => {
-    const invalidPhone = await request(app)
-      .post("/api/public/reservations")
-      .send(booking({ email: "bad.phone@example.com", phone: "12345" }));
+    const customer = await registerCustomerAgent(app);
+    const base = {
+      phone: customer.phone,
+      roomId: "room-test",
+      checkIn: dateAt(10),
+      checkOut: dateAt(12),
+      adults: 2,
+      children: 0,
+    };
+
+    const invalidPhone = await customer.agent
+      .post("/api/account/reservations")
+      .send({ ...base, phone: "12345" });
     expect(invalidPhone.status).toBe(400);
 
-    const invalidPin = await request(app)
-      .post("/api/public/reservations")
-      .send(booking({ email: "bad.pin@example.com", postalCode: "123" }));
+    const invalidPin = await customer.agent
+      .post("/api/account/reservations")
+      .send({ ...base, postalCode: "123" });
     expect(invalidPin.status).toBe(400);
 
-    const pastDate = await request(app)
-      .post("/api/public/reservations")
-      .send(booking({ email: "past@example.com", checkIn: "2020-01-01", checkOut: "2020-01-03" }));
+    const pastDate = await customer.agent
+      .post("/api/account/reservations")
+      .send({ ...base, checkIn: "2020-01-01", checkOut: "2020-01-03" });
     expect(pastDate.status).toBe(400);
 
-    const reversed = await request(app)
-      .post("/api/public/reservations")
-      .send(booking({ email: "reverse@example.com", checkIn: dateAt(10), checkOut: dateAt(9) }));
+    const reversed = await customer.agent
+      .post("/api/account/reservations")
+      .send({ ...base, checkIn: dateAt(10), checkOut: dateAt(9) });
     expect(reversed.status).toBe(400);
 
     const unauthorised = await request(app).get("/api/admin/bootstrap");

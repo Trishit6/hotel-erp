@@ -14,6 +14,7 @@ import {
   roomTypes,
   rooms,
   systemSettings,
+  users,
 } from "../database/schema";
 import {
   CHECKIN_BLOCKED_ROOM_STATUSES,
@@ -65,9 +66,18 @@ export interface Actor {
   role: UserRole;
 }
 
+export interface CustomerBookingIdentity {
+  id: string;
+  name: string;
+  email: string;
+}
+
 export interface ReservationCreateOptions {
-  source: "public" | "staff";
+  // Customer self-service bookings are rooted in an authenticated account.
+  // Staff bookings remain permission-gated through the admin routes.
+  source: "customer" | "staff";
   actor?: Actor;
+  customer?: CustomerBookingIdentity;
 }
 
 interface ReservationFilters {
@@ -104,24 +114,32 @@ async function upsertGuest(
   input: ReservationCreateInput,
   options: ReservationCreateOptions,
 ): Promise<typeof guests.$inferSelect> {
-  const email = input.email.trim().toLowerCase();
+  const customer = options.customer;
+  if (options.source === "customer" && !customer) {
+    throw new Error("Customer identity is required for a customer booking.");
+  }
+  const email = (customer?.email ?? input.email).trim().toLowerCase();
+  const guestName = customer?.name ?? input.guestName;
   const existing = await findGuestByEmail(tx, email);
   const now = new Date();
 
   if (existing) {
-    // A public booking may attach a reservation to an existing guest, but it
-    // must never rewrite that guest's stored identity or contact profile.
-    const canUpdateProfile =
+    // Authenticated customers may refresh their own contact details through a
+    // booking, but the account name/email remain authoritative. Public/guest
+    // callers cannot mutate an existing profile because only customer and
+    // permitted staff sources reach this service.
+    const canUpdateCustomerProfile = options.source === "customer";
+    const canUpdateStaffProfile =
       options.source === "staff" &&
       options.actor !== undefined &&
       (STAFF_ROLES as readonly string[]).includes(options.actor.role) &&
       hasPermission(options.actor.role as StaffRole, "guests:write");
-    if (!canUpdateProfile) return existing;
+    if (!canUpdateCustomerProfile && !canUpdateStaffProfile) return existing;
 
     await tx
       .update(guests)
       .set({
-        name: input.guestName,
+        name: guestName,
         phone: input.phone,
         address: input.address || existing.address,
         city: input.city || existing.city,
@@ -138,7 +156,7 @@ async function upsertGuest(
   try {
     await tx.insert(guests).values({
       id,
-      name: input.guestName,
+      name: guestName,
       email,
       phone: input.phone,
       address: input.address ?? "",
@@ -188,12 +206,30 @@ async function overlappingReservation(
 }
 
 export async function createReservation(input: ReservationCreateInput, options: ReservationCreateOptions) {
-  const { actor, source } = options;
+  const { actor, source, customer } = options;
+  if (source === "customer" && (!customer || !actor || actor.id !== customer.id)) {
+    throw forbidden("Only the authenticated customer may create this reservation.");
+  }
   const nights = assertStayDates(input.checkIn, input.checkOut);
   const discountPaise = toPaise(input.discount ?? 0);
   if (discountPaise < 0) throw badRequest("Discount cannot be negative.");
 
   return db.transaction(async (tx) => {
+    if (source === "customer") {
+      // Re-check the account inside the transaction. A session may have become
+      // inactive, or the role may have changed, between request authentication
+      // and booking creation.
+      const [account] = await tx
+        .select({ role: users.role, isActive: users.isActive })
+        .from(users)
+        .where(eq(users.id, customer!.id))
+        .limit(1)
+        .for("update");
+      if (!account || !account.isActive || account.role !== "customer") {
+        throw forbidden("Only an active customer account may create a reservation.");
+      }
+    }
+
     // Lock the room row first. Every booking for this room serialises here,
     // which prevents concurrent double bookings even when no reservation row
     // exists yet to lock.
@@ -224,11 +260,12 @@ export async function createReservation(input: ReservationCreateInput, options: 
     const totalPaise = taxablePaise + taxPaise;
 
     const guest = await upsertGuest(tx, input, options);
-    if (source === "public") {
-      await assertPublicHoldLimit(tx, guest.id, input.email, input.phone);
+    const selfServiceBooking = source === "customer";
+    if (selfServiceBooking) {
+      await assertPublicHoldLimit(tx, guest.id, guest.email, guest.phone);
     }
 
-    const initialStatus: ReservationStatus = source === "public" ? "pending" : "confirmed";
+    const initialStatus: ReservationStatus = selfServiceBooking ? "pending" : "confirmed";
 
     let reference: string;
     try {
@@ -267,10 +304,9 @@ export async function createReservation(input: ReservationCreateInput, options: 
       total: fromPaise(totalPaise),
       paidAmount: "0.00",
       specialRequests: input.specialRequests ?? "",
-      holdExpiresAt:
-        source === "public"
-          ? sql.raw(`DATE_ADD(UTC_TIMESTAMP(), INTERVAL ${PUBLIC_HOLD_HOURS} HOUR)`)
-          : null,
+      holdExpiresAt: selfServiceBooking
+        ? sql.raw(`DATE_ADD(UTC_TIMESTAMP(), INTERVAL ${PUBLIC_HOLD_HOURS} HOUR)`)
+        : null,
       updatedAt: new Date(),
     });
 
@@ -323,7 +359,7 @@ export async function createReservation(input: ReservationCreateInput, options: 
       reservationId,
       fromStatus: null,
       toStatus: initialStatus,
-      note: source === "public" ? "Public hold created" : "Reservation created",
+      note: selfServiceBooking ? "Customer hold created" : "Reservation created",
       changedBy: actor?.id ?? null,
     });
 
@@ -337,9 +373,9 @@ export async function createReservation(input: ReservationCreateInput, options: 
 
     const [created] = await tx.select().from(reservations).where(eq(reservations.id, reservationId)).limit(1);
 
-    // The public creation response belongs only to the guest who just submitted
-    // this booking, but it still uses the same strict allowlist as later lookup.
-    if (source === "public") {
+    // The customer creation response uses the same strict allowlist as later
+    // lookup, so a booking response never becomes a full guest-profile export.
+    if (selfServiceBooking) {
       return {
         reservation: mapPublicReservation({ reservation: created, guest, room, type }),
       };

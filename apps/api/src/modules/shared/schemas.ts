@@ -94,7 +94,9 @@ export const reservationBaseSchema = z.object({
   postalCode: optionalIndianPin,
 });
 
-export const publicReservationSchema = reservationBaseSchema;
+export const customerReservationSchema = reservationBaseSchema
+  .omit({ guestName: true, email: true })
+  .strict();
 
 export const adminReservationSchema = reservationBaseSchema.extend({
   discount: z.coerce.number().min(0).max(1_000_000).default(0),

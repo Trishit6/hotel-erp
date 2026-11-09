@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Link, useSearch } from "@tanstack/react-router";
 import { motion, useReducedMotion } from "motion/react";
+import { PageAtmosphere } from "../components/hotel/Cinematic";
 import { BrandMark } from "../components/hotel/HotelUi";
 import { ThemeToggle } from "../components/hotel/ThemeToggle";
 import { GsapImage } from "../components/motion/GsapImage";
@@ -44,7 +45,8 @@ function AuthShell({
 }) {
   const reduceMotion = useReducedMotion();
   return (
-    <div className="min-h-screen bg-[var(--canvas)] text-[var(--text)]">
+    <div className="relative min-h-screen text-[var(--text)]">
+      <PageAtmosphere />
       <header className="mx-auto flex max-w-[1440px] items-center justify-between px-5 py-5 md:px-10">
         <BrandMark />
         <div className="flex items-center gap-3">
@@ -196,6 +198,7 @@ function passwordScore(value: string) {
 
 export function LoginPage() {
   const { login } = useHotel();
+  const { returnTo } = useSearch({ from: "/login" });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
@@ -221,8 +224,13 @@ export function LoginPage() {
       setStatus(result.error);
       return;
     }
-    // Full navigation so every provider reloads against the new session.
-    window.location.assign(result.redirect ?? roleHome("customer"));
+    // Full navigation so every provider reloads against the new session. A
+    // staff login must not be sent to a customer-only booking return path.
+    const destination =
+      result.role === "customer" && returnTo
+        ? returnTo
+        : result.redirect ?? roleHome("customer");
+    window.location.assign(destination);
   };
 
   return (
@@ -237,6 +245,7 @@ export function LoginPage() {
           <span>New to RIVR? </span>
           <Link
             to="/register"
+            search={returnTo ? { returnTo } : {}}
             className="font-semibold text-[var(--ink)] underline underline-offset-4"
           >
             Create an account
@@ -245,6 +254,12 @@ export function LoginPage() {
       }
     >
       <form onSubmit={submit} noValidate className="grid gap-4">
+        {returnTo && (
+          <Status tone="info">
+            An account is required to complete a reservation. Sign in, or
+            create one, and we will return you to your selected room and dates.
+          </Status>
+        )}
         <label>
           <span className={labelClass}>Email address</span>
           <span className="flex items-center gap-2 rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 transition-colors focus-within:border-[var(--sage)]">
@@ -293,6 +308,7 @@ export function LoginPage() {
 
 export function RegisterPage() {
   const { register } = useHotel();
+  const { returnTo } = useSearch({ from: "/register" });
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -342,7 +358,7 @@ export function RegisterPage() {
       setStatus(result.error);
       return;
     }
-    window.location.assign(result.redirect ?? "/guest/dashboard");
+    window.location.assign(returnTo ?? result.redirect ?? "/guest/dashboard");
   };
 
   return (
@@ -357,6 +373,7 @@ export function RegisterPage() {
           <span>Already have an account? </span>
           <Link
             to="/login"
+            search={returnTo ? { returnTo } : {}}
             className="font-semibold text-[var(--ink)] underline underline-offset-4"
           >
             Sign in
@@ -365,6 +382,12 @@ export function RegisterPage() {
       }
     >
       <form onSubmit={submit} noValidate className="grid gap-4">
+        {returnTo && (
+          <Status tone="info">
+            Create a customer account to continue your reservation. Your room,
+            dates and guest count will be waiting after sign-up.
+          </Status>
+        )}
         <label>
           <span className={labelClass}>Full name</span>
           <span className="flex items-center gap-2 rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 transition-colors focus-within:border-[var(--sage)]">

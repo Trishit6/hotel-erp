@@ -1,0 +1,242 @@
+{
+  "results": [
+    {
+      "name": "home",
+      "route": "/",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "h1": "A quieter kind of luxury, by the water.",
+      "atmosphere": true,
+      "header": true,
+      "footer": true,
+      "images": [
+        {
+          "ok": true,
+          "src": "photo-1564501049412-61c2a3083791"
+        },
+        {
+          "ok": true,
+          "src": "photo-1542314831-068cd1dbfeeb"
+        },
+        {
+          "ok": true,
+          "src": "photo-1611892440504-42a792e24d32"
+        },
+        {
+          "ok": true,
+          "src": "photo-1595576508898-0ad5c879a061"
+        },
+        {
+          "ok": true,
+          "src": "photo-1611892440504-42a792e24d32"
+        },
+        {
+          "ok": true,
+          "src": "photo-1551882547-ff40c63fe5fa"
+        },
+        {
+          "ok": true,
+          "src": "photo-1540555700478-4be289fbecef"
+        },
+        {
+          "ok": true,
+          "src": "photo-1566073771259-6a8506099945"
+        },
+        {
+          "ok": true,
+          "src": "photo-1566073771259-6a8506099945"
+        },
+        {
+          "ok": true,
+          "src": "photo-1542314831-068cd1dbfeeb"
+        }
+      ]
+    },
+    {
+      "name": "stay",
+      "route": "/stay",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "h1": "A slower stay, with more room to breathe.",
+      "atmosphere": true,
+      "header": true,
+      "footer": true,
+      "images": [
+        {
+          "ok": true,
+          "src": "photo-1564501049412-61c2a3083791"
+        },
+        {
+          "ok": true,
+          "src": "photo-1590490360182-c33d57733427"
+        },
+        {
+          "ok": true,
+          "src": "photo-1600607687920-4e2a09cf159d"
+        },
+        {
+          "ok": true,
+          "src": "photo-1591088398332-8a7791972843"
+        },
+        {
+          "ok": true,
+          "src": "photo-1566073771259-6a8506099945"
+        },
+        {
+          "ok": true,
+          "src": "photo-1611892440504-42a792e24d32"
+        },
+        {
+          "ok": true,
+          "src": "photo-1600607687939-ce8a6c25118c"
+        },
+        {
+          "ok": true,
+          "src": "photo-1595576508898-0ad5c879a061"
+        },
+        {
+          "ok": true,
+          "src": "photo-1582719478250-c89cae4dc85b"
+        },
+        {
+          "ok": true,
+          "src": "photo-1551882547-ff40c63fe5fa"
+        },
+        {
+          "ok": true,
+          "src": "photo-1540555700478-4be289fbecef"
+        }
+      ]
+    },
+    {
+      "name": "rooms",
+      "route": "/rooms",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "h1": "Find your room, then make it yours.",
+      "atmosphere": true,
+      "header": true,
+      "footer": true,
+      "images": [
+        {
+          "ok": true,
+          "src": "photo-1611892440504-42a792e24d32"
+        },
+        {
+          "ok": true,
+          "src": "photo-1590490360182-c33d57733427"
+        },
+        {
+          "ok": true,
+          "src": "photo-1600607687920-4e2a09cf159d"
+        },
+        {
+          "ok": true,
+          "src": "photo-1591088398332-8a7791972843"
+        },
+        {
+          "ok": true,
+          "src": "photo-1566073771259-6a8506099945"
+        },
+        {
+          "ok": true,
+          "src": "photo-1611892440504-42a792e24d32"
+        },
+        {
+          "ok": true,
+          "src": "photo-1600607687939-ce8a6c25118c"
+        },
+        {
+          "ok": true,
+          "src": "photo-1595576508898-0ad5c879a061"
+        },
+        {
+          "ok": true,
+          "src": "photo-1582719478250-c89cae4dc85b"
+        }
+      ]
+    },
+    {
+      "name": "amenities",
+      "route": "/amenities",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "h1": "Everything you need, nothing you don't.",
+      "atmosphere": true,
+      "header": true,
+      "footer": true,
+      "images": [
+        {
+          "ok": true,
+          "src": "photo-1540555700478-4be289fbecef"
+        },
+        {
+          "ok": true,
+          "src": "photo-1551882547-ff40c63fe5fa"
+        },
+        {
+          "ok": true,
+          "src": "photo-1542314831-068cd1dbfeeb"
+        }
+      ]
+    },
+    {
+      "name": "about",
+      "route": "/about",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "h1": "A house built around the way you like to stay.",
+      "atmosphere": true,
+      "header": true,
+      "footer": true,
+      "images": [
+        {
+          "ok": true,
+          "src": "photo-1542314831-068cd1dbfeeb"
+        },
+        {
+          "ok": true,
+          "src": "photo-1564501049412-61c2a3083791"
+        },
+        {
+          "ok": true,
+          "src": "photo-1551882547-ff40c63fe5fa"
+        },
+        {
+          "ok": true,
+          "src": "photo-1566073771259-6a8506099945"
+        }
+      ]
+    },
+    {
+      "name": "contact",
+      "route": "/contact",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "h1": "We are here when you need us.",
+      "atmosphere": true,
+      "header": true,
+      "footer": true,
+      "images": [
+        {
+          "ok": true,
+          "src": "photo-1566073771259-6a8506099945"
+        }
+      ]
+    }
+  ],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+  ]
+}

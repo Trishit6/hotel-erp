@@ -96,6 +96,8 @@ export function RoomVisual({
       <img
         src={type?.image}
         alt={`${type?.name ?? "Room"} interior`}
+        loading="lazy"
+        decoding="async"
         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-[var(--deep)]/65 via-transparent to-transparent" />

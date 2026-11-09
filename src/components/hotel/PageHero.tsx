@@ -54,16 +54,18 @@ export function PageHero({
         .to(frame, { clipPath: "inset(0 0 0% 0)", duration: 1.25 }, 0.15)
         .to(image, { scale: 1, duration: 1.6 }, 0.15);
 
-      gsap.to(image, {
-        yPercent: 7,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
+      if (window.matchMedia("(min-width: 1024px)").matches) {
+        gsap.to(image, {
+          yPercent: 8,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }
     },
     [title, image],
     sectionRef,
@@ -71,7 +73,9 @@ export function PageHero({
 
   return (
     <section ref={sectionRef} className="mx-auto max-w-[1440px] px-4 pt-4 md:px-7 md:pt-6">
-      <div className="relative grid overflow-hidden rounded-[2rem] border border-[var(--line)] bg-[var(--surface-2)] lg:min-h-[580px] lg:grid-cols-[1.02fr_0.98fr]">
+      <div className="relative grid overflow-hidden rounded-[2rem] border border-[var(--line)] bg-[var(--surface-2)] shadow-[0_30px_90px_rgba(24,31,42,0.12)] lg:min-h-[600px] lg:grid-cols-[1.02fr_0.98fr]">
+        <div className="hero-ambient" aria-hidden="true" />
+        <div className="hero-lines" aria-hidden="true" />
         <span className="corner-mark corner-mark--tl" aria-hidden="true" />
         <div className="relative z-10 flex flex-col justify-center px-7 pb-12 pt-14 sm:px-12 lg:px-14 lg:py-16 xl:px-20">
           <div className="pagehero-eyebrow">
@@ -91,6 +95,12 @@ export function PageHero({
             {intro}
           </p>
           {children && <div className="pagehero-cta mt-8">{children}</div>}
+          <div className="pagehero-scroll mt-12 hidden items-center gap-3 text-[9px] font-semibold uppercase tracking-[0.3em] text-[var(--faint)] lg:flex" aria-hidden="true">
+            <span className="relative h-10 w-px overflow-hidden bg-[var(--line-2)]">
+              <span className="absolute inset-x-0 top-0 h-4 animate-[scroll-cue_2.8s_ease-in-out_infinite] bg-[var(--accent)] motion-reduce:animate-none" />
+            </span>
+            Scroll to discover
+          </div>
         </div>
         <div className="relative min-h-[340px] overflow-hidden bg-[var(--deep)] sm:min-h-[440px] lg:min-h-0">
           <div ref={frameRef} className="image-frame absolute inset-0" data-cursor="RIVR">
@@ -105,11 +115,19 @@ export function PageHero({
               style={{ objectPosition: imagePosition }}
             />
           </div>
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--deep)]/70 via-[var(--deep)]/5 to-transparent" />
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[var(--deep)]/25 to-transparent" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--deep)]/78 via-[var(--deep)]/10 to-transparent" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[var(--deep)]/28 via-transparent to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[var(--deep)]/30 to-transparent" />
+          <span className="corner-mark corner-mark--br" aria-hidden="true" />
           <div className="pointer-events-none absolute right-6 top-6 hidden items-center gap-2 rounded-full border border-white/15 bg-black/20 px-3 py-2 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/80 backdrop-blur md:flex">
             <span className="h-1 w-1 rounded-full bg-[var(--accent)]" />
             Hotel &amp; Residences
+          </div>
+          <div className="pointer-events-none absolute bottom-7 left-6 hidden max-w-[210px] border-l border-white/25 pl-4 text-white/80 md:block">
+            <p className="font-display text-xl leading-tight text-white">A considered arrival.</p>
+            <p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-white/55">
+              RIVR · {new Date().getFullYear()}
+            </p>
           </div>
         </div>
       </div>

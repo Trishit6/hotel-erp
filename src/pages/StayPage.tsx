@@ -1,7 +1,9 @@
 import { ArrowRight, ArrowUpRight, BedDouble, Coffee, Sparkles, Users } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { BookingSearch } from "../components/hotel/BookingSearch";
+import { PageAtmosphere, SectionDivider } from "../components/hotel/Cinematic";
 import { PageHero } from "../components/hotel/PageHero";
+import { GsapImage } from "../components/motion/GsapImage";
 import { PublicFooter, PublicHeader } from "../components/hotel/PublicChrome";
 import { Reveal } from "../components/hotel/Reveal";
 import { RoomTypeCard } from "../components/hotel/RoomTypeCard";
@@ -20,7 +22,8 @@ export default function StayPage() {
   const { roomTypes } = useHotel();
   const minRate = roomTypes.length ? Math.min(...roomTypes.map((type) => type.rate)) : 0;
   return (
-    <div className="min-h-screen bg-[var(--canvas)] text-[var(--text)]">
+    <div className="relative min-h-screen text-[var(--text)]">
+      <PageAtmosphere />
       <PublicHeader />
       <main>
         <PageHero
@@ -46,7 +49,7 @@ export default function StayPage() {
           <p className="mt-2 px-3 text-center text-[11px] text-[var(--faint)] md:text-left">Rates are per room, per night. Each reservation secures one room.</p>
         </section>
 
-        <section className="mx-auto max-w-7xl px-5 py-20 md:px-10 md:py-28">
+        <section className="section-atmosphere mx-auto max-w-7xl px-5 py-20 md:px-10 md:py-28">
           <Reveal className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
             <div>
               <SectionEyebrow>Ways to stay</SectionEyebrow>
@@ -70,7 +73,7 @@ export default function StayPage() {
           </div>
         </section>
 
-        <section className="border-y border-[var(--line)] bg-[var(--surface)] px-5 py-20 md:px-10 md:py-28">
+        <section className="section-atmosphere border-y border-[var(--line)] bg-[var(--surface)] px-5 py-20 md:px-10 md:py-28">
           <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
             <Reveal>
               <SectionEyebrow>The RIVR stay</SectionEyebrow>
@@ -83,15 +86,27 @@ export default function StayPage() {
               </ul>
             </Reveal>
             <Reveal delay={0.08} className="grid gap-4 sm:grid-cols-[1.2fr_0.8fr] sm:items-end">
-              <div className="relative h-[360px] overflow-hidden rounded-[1.5rem] sm:h-[470px]">
-                <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1200&q=85" alt="The RIVR dining room set for service" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 hover:scale-105" />
-                <div className="absolute bottom-4 left-4 rounded-lg bg-[var(--deep)]/85 px-3 py-2 text-xs text-white">Dining worth lingering over</div>
+              <div className="group relative h-[360px] overflow-hidden rounded-[1.5rem] sm:h-[470px]">
+                <GsapImage
+                  src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1400&q=88"
+                  alt="The RIVR dining room set for service"
+                  className="h-full w-full rounded-[1.5rem] transition-transform duration-[1100ms] ease-out group-hover:scale-[1.03]"
+                >
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--deep)]/70 via-transparent to-transparent" />
+                  <div className="absolute bottom-4 left-4 rounded-lg border border-white/10 bg-[var(--deep)]/75 px-3 py-2 text-xs text-white backdrop-blur">
+                    Dining worth lingering over
+                  </div>
+                </GsapImage>
               </div>
               <div className="grid gap-4">
-                <div className="relative h-44 overflow-hidden rounded-[1.5rem]">
-                  <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=900&q=85" alt="A quiet spa treatment room at RIVR" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 hover:scale-105" />
+                <div className="group relative h-44 overflow-hidden rounded-[1.5rem]">
+                  <GsapImage
+                    src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1000&q=88"
+                    alt="A quiet spa treatment room at RIVR"
+                    className="h-full w-full rounded-[1.5rem] transition-transform duration-[1100ms] ease-out group-hover:scale-[1.03]"
+                  />
                 </div>
-                <div className="flex items-center gap-3 rounded-[1.5rem] bg-[var(--surface-3)] p-4">
+                <div className="flex items-center gap-3 rounded-[1.5rem] border border-[var(--line)] bg-[var(--surface-3)] p-4">
                   <Sparkles className="h-5 w-5 text-[var(--accent-strong)]" />
                   <span className="text-sm font-semibold text-[var(--ink)]">Personal, not prescribed.</span>
                 </div>
@@ -100,7 +115,9 @@ export default function StayPage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-5 py-20 md:px-10 md:py-28">
+        <SectionDivider className="py-6" />
+
+        <section className="section-atmosphere mx-auto max-w-7xl px-5 py-20 md:px-10 md:py-28">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {stayFeatures.map(({ icon: Icon, title, copy }, index) => (
               <Reveal key={title} delay={index * 0.05}>

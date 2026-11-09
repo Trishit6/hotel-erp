@@ -49,7 +49,9 @@ export function GsapImage({
         });
       }
 
-      if (parallax) {
+      // Keep scroll-linked movement on larger screens; phones get the
+      // reveal only, which avoids extra scroll work while the page is moving.
+      if (parallax && window.matchMedia("(min-width: 768px)").matches) {
         gsap.fromTo(
           image,
           { yPercent: -4, scale: 1.1 },

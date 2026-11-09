@@ -12,15 +12,22 @@ import {
   REFERENCE_MAX_ATTEMPTS,
   REFERENCE_RANDOM_LENGTH,
 } from "../src/utils/id";
-import { resetTestDatabase, seedTestCatalog, setupAdmin } from "./helpers";
+import { registerCustomerAgent, resetTestDatabase, seedTestCatalog, setupAdmin } from "./helpers";
 
 const app = createApp();
 
 describe("reservation reference generation", () => {
+  let customer: Awaited<ReturnType<typeof registerCustomerAgent>>;
+
   beforeAll(async () => {
     await resetTestDatabase();
     await seedTestCatalog();
     await setupAdmin(request.agent(app));
+    customer = await registerCustomerAgent(app, {
+      name: "Reference Guest",
+      email: "reference.guest@example.com",
+      phone: "9876500400",
+    });
   });
 
   it("generates references with ten unambiguous random characters", () => {
@@ -63,9 +70,7 @@ describe("reservation reference generation", () => {
   });
 
   it("creates invoices from both new and legacy reference formats", async () => {
-    const created = await request(app).post("/api/public/reservations").send({
-      guestName: "Reference Guest",
-      email: "reference.guest@example.com",
+    const created = await customer.agent.post("/api/account/reservations").send({
       phone: "9876500400",
       roomId: "room-test",
       checkIn: dateAt(140),

@@ -138,7 +138,7 @@ export interface RegisterInput {
   password: string;
 }
 
-type MutationResult = { error?: string; redirect?: string };
+type MutationResult = { error?: string; redirect?: string; role?: UserRole };
 type ReservationResult = { reservation?: PublicReservation; error?: string };
 type GuestResult = { guest?: Guest; error?: string };
 
@@ -485,7 +485,7 @@ export function HotelProvider({ children }: { children: ReactNode }) {
 
     const refresh = async () => {
       try {
-        if (user) await loadAdminData(role !== "staff");
+        if (user && role !== "customer") await loadAdminData(role !== "staff");
         else await loadPublicData();
         setStatus("ready");
       } catch (caught) {
@@ -559,11 +559,12 @@ export function HotelProvider({ children }: { children: ReactNode }) {
         if (result.user.role === "customer") {
           setError(null);
           setStatus("ready");
-          return { redirect };
+          return { redirect, role: result.user.role };
         }
         return {
           ...(await finishSignIn(result.user.role !== "staff")),
           redirect,
+          role: result.user.role,
         };
       } catch (caught) {
         setUser(null);
@@ -589,7 +590,7 @@ export function HotelProvider({ children }: { children: ReactNode }) {
         applySessionUser(result.user);
         setError(null);
         setStatus("ready");
-        return { redirect: result.redirect ?? roleHome(result.user.role) };
+        return { redirect: result.redirect ?? roleHome(result.user.role), role: result.user.role };
       } catch (caught) {
         const message =
           caught instanceof ApiError
@@ -643,6 +644,9 @@ export function HotelProvider({ children }: { children: ReactNode }) {
         };
       }
       const data = parsed.data;
+      if (!user || !role) {
+        return { error: "Sign in to your customer account before booking." };
+      }
       const type = getRoomType(getRoom(data.roomId)?.typeId ?? "");
       const nights = calculateNights(data.checkIn, data.checkOut);
       if (!type || nights < 1)
@@ -655,9 +659,7 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       }
 
       try {
-        const body = {
-          guestName: data.guestName,
-          email: data.email,
+        const booking = {
           phone: data.phone,
           roomId: data.roomId,
           checkIn: data.checkIn,
@@ -669,14 +671,20 @@ export function HotelProvider({ children }: { children: ReactNode }) {
           city: data.city ?? "",
           state: data.state ?? "",
           postalCode: data.postalCode ?? "",
-          ...(role && role !== "customer" ? { discount: data.discount } : {}),
         };
+        const body =
+          role === "customer"
+            ? booking
+            : {
+                ...booking,
+                guestName: data.guestName,
+                email: data.email,
+                discount: data.discount,
+              };
         const result = await api.post<{
           reservation: PublicReservation | Reservation;
         }>(
-          role && role !== "customer"
-            ? "/admin/reservations"
-            : "/public/reservations",
+          role === "customer" ? "/account/reservations" : "/admin/reservations",
           body,
         );
         await refresh();

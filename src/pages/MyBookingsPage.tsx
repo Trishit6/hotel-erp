@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRight, CalendarDays, Loader2, Mail, Search, ShieldCheck } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { PageAtmosphere } from "../components/hotel/Cinematic";
 import { PublicFooter, PublicHeader } from "../components/hotel/PublicChrome";
 import { SectionEyebrow, StatusBadge } from "../components/hotel/HotelUi";
 import {
@@ -9,17 +10,45 @@ import {
   formatDate,
   hotelInfo,
   type PublicReservation,
+  type Reservation,
 } from "../lib/hotel-data";
 import { api } from "../lib/api";
 import { setBookingConfirmation } from "../lib/booking-handoff";
+import { useHotel } from "../lib/hotel-store";
 
 export default function MyBookingsPage() {
+  const { user, role } = useHotel();
   const [reference, setReference] = useState("");
   const [contact, setContact] = useState("");
   const [searched, setSearched] = useState(false);
   const [match, setMatch] = useState<PublicReservation | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [accountReservations, setAccountReservations] = useState<Reservation[]>([]);
+  const [accountLoading, setAccountLoading] = useState(false);
+
+  useEffect(() => {
+    if (role !== "customer") {
+      setAccountReservations([]);
+      return;
+    }
+    let cancelled = false;
+    setAccountLoading(true);
+    void api
+      .get<{ reservations: Reservation[] }>("/account/overview")
+      .then((overview) => {
+        if (!cancelled) setAccountReservations(overview.reservations);
+      })
+      .catch(() => {
+        if (!cancelled) setAccountReservations([]);
+      })
+      .finally(() => {
+        if (!cancelled) setAccountLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [role, user?.id]);
 
   const runLookup = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -54,7 +83,8 @@ export default function MyBookingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--canvas)] text-[var(--text)]">
+    <div className="relative min-h-screen text-[var(--text)]">
+      <PageAtmosphere />
       <PublicHeader />
       <main className="mx-auto max-w-3xl px-5 py-14 md:px-10 md:py-20">
         <div className="text-center">
@@ -63,11 +93,63 @@ export default function MyBookingsPage() {
             Your bookings.
           </h1>
           <p className="mx-auto mt-5 max-w-md text-sm leading-7 text-[var(--muted)]">
-            Enter your confirmation number together with the email or mobile
-            number used for the booking. Both must match. No sign-in is
-            required.
+            Signed-in customers see their account bookings below. Historical
+            bookings can still be verified with the confirmation number and the
+            matching email or mobile number.
           </p>
         </div>
+
+        {role === "customer" && (
+          <section className="mx-auto mt-8 max-w-xl rounded-[1.25rem] border border-[var(--line)] bg-[var(--surface)] p-5">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--faint)]">
+                  Your account
+                </p>
+                <h2 className="mt-1 font-display text-2xl text-[var(--ink)]">
+                  Bookings on this account
+                </h2>
+              </div>
+              <Link
+                to="/guest/dashboard"
+                className="text-[11px] font-semibold text-[var(--sage)] underline underline-offset-4"
+              >
+                Manage in dashboard
+              </Link>
+            </div>
+            {accountLoading ? (
+              <p className="mt-4 flex items-center gap-2 text-xs text-[var(--muted)]">
+                <Loader2 className="h-3.5 w-3.5 animate-spin" /> Loading your bookings…
+              </p>
+            ) : accountReservations.length === 0 ? (
+              <p className="mt-4 rounded-xl bg-[var(--surface-2)] px-4 py-4 text-xs text-[var(--muted)]">
+                No reservations are linked to this account yet.
+              </p>
+            ) : (
+              <div className="mt-4 grid gap-2">
+                {accountReservations.map((reservation) => (
+                  <div
+                    key={reservation.id}
+                    className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[var(--line)] bg-[var(--surface-2)] px-4 py-3 text-xs"
+                  >
+                    <div>
+                      <p className="font-semibold text-[var(--ink)]">{reservation.reference}</p>
+                      <p className="mt-1 text-[var(--muted)]">
+                        {formatDate(reservation.checkIn)} — {formatDate(reservation.checkOut)}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <StatusBadge status={reservation.status} />
+                      <span className="font-semibold text-[var(--ink)]">
+                        {formatCurrency(reservation.total)}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
 
         <form
           onSubmit={runLookup}
@@ -109,13 +191,17 @@ export default function MyBookingsPage() {
         </form>
 
         <div className="mt-4 flex flex-wrap items-center justify-center gap-3 text-[11px] text-[var(--faint)]">
-          <Link
-            to="/login"
-            className="inline-flex items-center gap-1.5 font-semibold text-[var(--ink)]"
-          >
-            Sign in for a guest dashboard <ArrowRight className="h-3 w-3" />
-          </Link>
-          <span>·</span>
+          {role !== "customer" && (
+            <>
+              <Link
+                to="/login"
+                className="inline-flex items-center gap-1.5 font-semibold text-[var(--ink)]"
+              >
+                Sign in for your account bookings <ArrowRight className="h-3 w-3" />
+              </Link>
+              <span>·</span>
+            </>
+          )}
           <Link
             to="/booking"
             search={defaultStaySearch}

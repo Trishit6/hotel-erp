@@ -20,8 +20,8 @@
   --surface-2: #efeae1;
   --surface-3: #e6dfd3;
   --elevated: #fffdfa;
-  --deep: #0a1220;
-  --ink: #111a2a;
+  --deep: #080c14;
+  --ink: #0d1117;
   --text: #26303f;
   --muted: #5d6674;
   --muted-strong: #424b58;
@@ -422,6 +422,12 @@ html.theme-transition *::after {
   50% { transform: translate3d(0, -8px, 0); }
 }
 
+@keyframes scroll-cue {
+  0% { transform: translateY(-120%); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(260%); opacity: 0; }
+}
+
 @keyframes soft-pulse {
   0%, 100% { opacity: 0.55; transform: scale(1); }
   50% { opacity: 1; transform: scale(1.12); }
@@ -713,6 +719,243 @@ html.theme-transition *::after {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Public cinematic atmosphere                                        */
+/* Mounted only by guest-facing pages; ERP workspaces keep their shell. */
+/* ------------------------------------------------------------------ */
+
+.page-atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.page-atmosphere__base {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1300px 860px at 5% -10%, color-mix(in srgb, var(--sage) 14%, transparent), transparent 58%),
+    radial-gradient(1100px 780px at 95% 2%, color-mix(in srgb, var(--accent) 17%, transparent), transparent 52%),
+    radial-gradient(960px 700px at 50% 115%, color-mix(in srgb, var(--sage) 10%, transparent), transparent 56%),
+    linear-gradient(180deg, color-mix(in srgb, var(--deep) 92%, transparent) 0%, var(--deep) 40%, color-mix(in srgb, var(--deep) 95%, var(--surface-2)) 100%);
+}
+
+[data-theme="dark"] .page-atmosphere__base {
+  background:
+    radial-gradient(1200px 820px at 6% -12%, color-mix(in srgb, var(--sage) 14%, transparent), transparent 62%),
+    radial-gradient(1000px 720px at 98% 0%, color-mix(in srgb, var(--accent) 13%, transparent), transparent 58%),
+    radial-gradient(920px 720px at 48% 110%, color-mix(in srgb, var(--sage) 10%, transparent), transparent 62%),
+    linear-gradient(180deg, #05080e 0%, var(--canvas) 46%, #04070c 100%);
+}
+
+.page-atmosphere__orb {
+  position: absolute;
+  width: min(48vw, 640px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  opacity: 0.42;
+  will-change: transform;
+}
+
+.page-atmosphere__orb--gold {
+  right: -12%;
+  top: -14%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 22%, transparent) 0%, transparent 68%);
+  animation: atmo-drift-gold 38s ease-in-out infinite alternate;
+}
+
+.page-atmosphere__orb--sage {
+  left: -16%;
+  bottom: -20%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--sage) 18%, transparent) 0%, transparent 70%);
+  animation: atmo-drift-sage 46s ease-in-out infinite alternate;
+}
+
+@keyframes atmo-drift-gold {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(-3%, 4%, 0) scale(1.08); }
+}
+
+@keyframes atmo-drift-sage {
+  from { transform: translate3d(0, 0, 0) scale(1.02); }
+  to { transform: translate3d(4%, -3%, 0) scale(1); }
+}
+
+.page-atmosphere__lines {
+  position: absolute;
+  inset: -6%;
+  width: 112%;
+  height: 112%;
+  color: var(--accent);
+  opacity: 0.2;
+  mask-image: radial-gradient(circle at 50% 30%, black, transparent 76%);
+  -webkit-mask-image: radial-gradient(circle at 50% 30%, black, transparent 76%);
+}
+
+[data-theme="dark"] .page-atmosphere__lines {
+  opacity: 0.16;
+}
+
+.page-atmosphere__grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.032;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.page-atmosphere__vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 38%, transparent 48%, color-mix(in srgb, var(--canvas) 46%, transparent) 100%);
+}
+
+/* Shared hero depth layers (Home hero and PageHero). */
+.hero-ambient {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-ambient::before,
+.hero-ambient::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  aspect-ratio: 1;
+}
+
+.hero-ambient::before {
+  left: -16%;
+  top: -24%;
+  width: min(58%, 560px);
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 20%, transparent), transparent 68%);
+  opacity: 0.7;
+}
+
+.hero-ambient::after {
+  right: -14%;
+  bottom: -30%;
+  width: min(52%, 500px);
+  background: radial-gradient(circle, color-mix(in srgb, var(--sage) 18%, transparent), transparent 70%);
+  opacity: 0.6;
+}
+
+.hero-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.42;
+  background-image: linear-gradient(90deg, color-mix(in srgb, var(--line-2) 70%, transparent) 1px, transparent 1px);
+  background-size: 25% 100%;
+  mask-image: linear-gradient(180deg, black, transparent 82%);
+  -webkit-mask-image: linear-gradient(180deg, black, transparent 82%);
+}
+
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.section-divider span {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 55%, transparent), transparent);
+}
+
+.section-divider i {
+  width: 5px;
+  height: 5px;
+  rotate: 45deg;
+  background: var(--accent);
+  opacity: 0.8;
+}
+
+/* A restrained section wash so flat surfaces still catch the room light. */
+.section-atmosphere {
+  position: relative;
+  isolation: isolate;
+}
+
+.section-atmosphere::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 60% at 8% 0%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 72%),
+    radial-gradient(60% 60% at 92% 100%, color-mix(in srgb, var(--sage) 8%, transparent), transparent 74%);
+}
+
+[data-theme="dark"] .section-atmosphere::before {
+  background:
+    radial-gradient(70% 60% at 8% 0%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 72%),
+    radial-gradient(60% 60% at 92% 100%, color-mix(in srgb, var(--sage) 7%, transparent), transparent 74%);
+}
+
+.cinematic-band {
+  isolation: isolate;
+}
+
+.cinematic-band__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--deep) 88%, transparent) 0%, color-mix(in srgb, var(--deep) 46%, transparent) 46%, transparent 78%),
+    linear-gradient(0deg, color-mix(in srgb, var(--deep) 82%, transparent) 0%, transparent 62%);
+}
+
+.cinematic-band__line {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 2;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 65%, transparent), transparent);
+}
+
+.cinematic-band a {
+  color: white;
+}
+
+@media (max-width: 767px) {
+  .page-atmosphere__orb {
+    opacity: 0.36;
+  }
+
+  .hero-ambient::before,
+  .hero-ambient::after {
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-atmosphere__orb {
+    animation: none !important;
+  }
+}
+
+@media print {
+  .page-atmosphere,
+  .section-divider,
+  .cinematic-band {
+    display: none !important;
+  }
+
+  .page-atmosphere {
+    display: none !important;
   }
 }
 

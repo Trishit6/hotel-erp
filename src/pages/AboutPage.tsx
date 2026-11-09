@@ -1,6 +1,8 @@
 import { ArrowUpRight, HeartHandshake, Leaf, MapPin, ShieldCheck, Sparkles } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { PageAtmosphere, SectionDivider } from "../components/hotel/Cinematic";
 import { PageHero } from "../components/hotel/PageHero";
+import { GsapImage } from "../components/motion/GsapImage";
 import { PublicFooter, PublicHeader } from "../components/hotel/PublicChrome";
 import { Reveal } from "../components/hotel/Reveal";
 import { FeatureLine, SectionEyebrow } from "../components/hotel/HotelUi";
@@ -17,7 +19,8 @@ const values = [
 export default function AboutPage() {
   const { roomTypes, rooms } = useHotel();
   return (
-    <div className="min-h-screen bg-[var(--canvas)] text-[var(--text)]">
+    <div className="relative min-h-screen text-[var(--text)]">
+      <PageAtmosphere />
       <PublicHeader />
       <main>
         <PageHero
@@ -33,7 +36,7 @@ export default function AboutPage() {
           </Link>
         </PageHero>
 
-        <section className="mx-auto grid max-w-7xl gap-10 px-5 py-20 md:px-10 md:py-28 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <section className="section-atmosphere mx-auto grid max-w-7xl gap-10 px-5 py-20 md:px-10 md:py-28 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <Reveal>
             <SectionEyebrow>Our story</SectionEyebrow>
             <h2 className="mt-5 max-w-xl font-display text-[clamp(2.6rem,4.8vw,4.4rem)] leading-[1.02] tracking-[-0.03em] text-[var(--ink)]">A place to slow down and feel at home.</h2>
@@ -62,16 +65,30 @@ export default function AboutPage() {
           </Reveal>
 
           <Reveal delay={0.08} className="grid gap-4 sm:grid-cols-2">
-            <div className="relative h-[340px] overflow-hidden rounded-[1.5rem] sm:h-[460px]">
-              <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1000&q=85" alt="A guest room at RIVR with warm lighting" loading="lazy" className="h-full w-full object-cover" />
+            <div className="group relative h-[340px] overflow-hidden rounded-[1.5rem] sm:h-[460px]">
+              <GsapImage
+                src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1100&q=88"
+                alt="A guest room at RIVR with warm lighting"
+                className="h-full w-full rounded-[1.5rem] transition-transform duration-[1100ms] ease-out group-hover:scale-[1.03]"
+              >
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--deep)]/55 via-transparent to-transparent" />
+              </GsapImage>
             </div>
-            <div className="relative h-[340px] overflow-hidden rounded-[1.5rem] sm:mt-14 sm:h-[460px]">
-              <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1000&q=85" alt="The RIVR dining room" loading="lazy" className="h-full w-full object-cover" />
+            <div className="group relative h-[340px] overflow-hidden rounded-[1.5rem] sm:mt-14 sm:h-[460px]">
+              <GsapImage
+                src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1100&q=88"
+                alt="The RIVR dining room"
+                className="h-full w-full rounded-[1.5rem] transition-transform duration-[1100ms] ease-out group-hover:scale-[1.03]"
+              >
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--deep)]/55 via-transparent to-transparent" />
+              </GsapImage>
             </div>
           </Reveal>
         </section>
 
-        <section className="border-y border-[var(--line)] bg-[var(--surface)] px-5 py-20 md:px-10 md:py-28">
+        <SectionDivider className="py-6" />
+
+        <section className="section-atmosphere border-y border-[var(--line)] bg-[var(--surface)] px-5 py-20 md:px-10 md:py-28">
           <div className="mx-auto max-w-7xl">
             <Reveal className="max-w-2xl">
               <SectionEyebrow>What we believe</SectionEyebrow>
@@ -92,7 +109,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="mx-auto grid max-w-7xl gap-10 px-5 py-20 md:px-10 md:py-28 lg:grid-cols-[1fr_0.9fr] lg:items-center">
+        <section className="section-atmosphere mx-auto grid max-w-7xl gap-10 px-5 py-20 md:px-10 md:py-28 lg:grid-cols-[1fr_0.9fr] lg:items-center">
           <Reveal>
             <SectionEyebrow>Find us</SectionEyebrow>
             <h2 className="mt-5 max-w-xl font-display text-[clamp(2.6rem,4.8vw,4.4rem)] leading-[1.02] tracking-[-0.03em] text-[var(--ink)]">In the city. By the water.</h2>
@@ -112,13 +129,18 @@ export default function AboutPage() {
             </div>
             {hotelInfo.isPlaceholder && <p className="mt-4 max-w-md text-[11px] leading-5 text-[var(--faint)]">{hotelInfo.notice}</p>}
           </Reveal>
-          <Reveal delay={0.08} className="relative h-[360px] overflow-hidden rounded-[1.5rem] sm:h-[480px]">
-            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85" alt="A calm poolside view at RIVR" loading="lazy" className="h-full w-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[var(--deep)]/55 via-transparent to-transparent" />
-            <div className="absolute bottom-5 left-5 rounded-xl bg-[var(--glass-strong)] px-4 py-3 text-[var(--on-glass)] backdrop-blur">
-              <p className="font-display text-2xl">{hotelInfo.city}</p>
-              <p className="text-[10px] uppercase tracking-[0.15em] opacity-70">{hotelInfo.state}, India</p>
-            </div>
+          <Reveal delay={0.08} className="group relative h-[360px] overflow-hidden rounded-[1.5rem] sm:h-[480px]">
+            <GsapImage
+              src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1400&q=88"
+              alt="A calm poolside view at RIVR"
+              className="h-full w-full rounded-[1.5rem] transition-transform duration-[1100ms] ease-out group-hover:scale-[1.03]"
+            >
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--deep)]/65 via-transparent to-transparent" />
+              <div className="absolute bottom-5 left-5 rounded-xl border border-white/15 bg-[var(--glass-strong)] px-4 py-3 text-[var(--on-glass)] backdrop-blur">
+                <p className="font-display text-2xl">{hotelInfo.city}</p>
+                <p className="text-[10px] uppercase tracking-[0.15em] opacity-70">{hotelInfo.state}, India</p>
+              </div>
+            </GsapImage>
           </Reveal>
         </section>
       </main>

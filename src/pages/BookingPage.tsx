@@ -1,4 +1,4 @@
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import {
   ArrowRight,
   CalendarDays,
@@ -15,10 +15,12 @@ import {
 } from "lucide-react";
 import {
   Link,
+  Navigate,
   useNavigate,
   useParams,
   useSearch,
 } from "@tanstack/react-router";
+import { PageAtmosphere } from "../components/hotel/Cinematic";
 import { PublicFooter, PublicHeader } from "../components/hotel/PublicChrome";
 import { RoomVisual, SectionEyebrow } from "../components/hotel/HotelUi";
 import {
@@ -33,6 +35,7 @@ import {
 } from "../lib/hotel-data";
 import { useHotel } from "../lib/hotel-store";
 import { setBookingConfirmation } from "../lib/booking-handoff";
+import { api } from "../lib/api";
 
 const emptyForm = {
   guestName: "",
@@ -56,6 +59,8 @@ export default function BookingPage() {
     isRoomAvailable,
     status,
     error: loadError,
+    user,
+    role,
   } = useHotel();
   const [form, setForm] = useState(emptyForm);
   const [error, setError] = useState("");
@@ -76,6 +81,51 @@ export default function BookingPage() {
     return { roomCharges, tax, total: roomCharges + tax };
   }, [nights, type]);
 
+  // The return path contains only non-sensitive selection data. Authentication
+  // state never goes into localStorage or the URL.
+  const returnTo = useMemo(() => {
+    const params = new URLSearchParams({
+      checkIn: search.checkIn,
+      checkOut: search.checkOut,
+      adults: String(search.adults),
+      children: String(search.children),
+    });
+    return `/book/${encodeURIComponent(roomId)}?${params.toString()}`;
+  }, [roomId, search.adults, search.checkIn, search.checkOut, search.children]);
+
+  useEffect(() => {
+    if (role !== "customer") return;
+    let cancelled = false;
+    void api
+      .get<{
+        user: { name: string; email: string };
+        guest: {
+          phone: string;
+          address: string;
+          city: string;
+          state: string;
+          postalCode: string;
+        } | null;
+      }>("/account/overview")
+      .then((account) => {
+        if (cancelled) return;
+        setForm((current) => ({
+          ...current,
+          guestName: account.user.name,
+          email: account.user.email,
+          phone: account.guest?.phone || current.phone,
+          address: account.guest?.address || current.address,
+          city: account.guest?.city || current.city,
+          state: account.guest?.state || current.state,
+          postalCode: account.guest?.postalCode || current.postalCode,
+        }));
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, [role]);
+
   if (status === "loading") {
     return (
       <div className="grid min-h-screen place-items-center bg-[var(--canvas)] px-5">
@@ -90,12 +140,16 @@ export default function BookingPage() {
   if (status === "error") {
     return (
       <div className="grid min-h-screen place-items-center bg-[var(--canvas)] px-5">
-        <div className="max-w-md rounded-[1.4rem] border border-[var(--danger)]/25 bg-[var(--danger-soft)] p-8 text-center text-sm text-[var(--danger)]">
+        <div className="max-w-[28rem] rounded-[1.4rem] border border-[var(--danger)]/25 bg-[var(--danger-soft)] p-8 text-center text-sm text-[var(--danger)]">
           {loadError ??
             "The booking service could not be reached. Please try again."}
         </div>
       </div>
     );
+  }
+
+  if (status === "ready" && (!user || role !== "customer")) {
+    return <Navigate to="/login" search={{ returnTo }} replace />;
   }
 
   if (!room || !type) {
@@ -187,9 +241,10 @@ export default function BookingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--canvas)] text-[var(--text)]">
+    <div className="relative min-h-screen text-[var(--text)]">
+      <PageAtmosphere />
       <PublicHeader />
-      <main className="mx-auto max-w-6xl px-5 pb-20 md:px-10">
+      <main className="relative mx-auto max-w-6xl px-5 pb-20 md:px-10">
         <div className="mb-7 mt-10">
           <Link
             to="/booking"
@@ -237,14 +292,14 @@ export default function BookingPage() {
             <div className="flex flex-col justify-between gap-3 border-b border-[var(--line)] pb-5 sm:flex-row sm:items-center">
               <div>
                 <h2 className="font-display text-2xl font-semibold text-[var(--ink)]">
-                  Guest details
+                  Booking details
                 </h2>
                 <p className="mt-1 text-xs text-[var(--muted)]">
-                  We use these details to confirm your stay.
+                  Booking as {user?.name}. Contact details come from your RIVR account.
                 </p>
               </div>
               <div className="flex items-center gap-1.5 text-[11px] text-[var(--success)]">
-                <LockKeyhole className="h-3.5 w-3.5" /> Instant confirmation
+                <LockKeyhole className="h-3.5 w-3.5" /> 2-hour hold
               </div>
             </div>
 
@@ -257,13 +312,11 @@ export default function BookingPage() {
                   <UserRound className="h-4 w-4 text-[var(--faint)]" />
                   <input
                     required
-                    value={form.guestName}
-                    onChange={(event) =>
-                      update("guestName", event.target.value)
-                    }
+                    readOnly
+                    value={form.guestName || user?.name || ""}
                     placeholder="Aarav Mehta"
                     autoComplete="name"
-                    className="w-full bg-transparent text-sm text-[var(--text)] outline-none placeholder:text-[var(--faint)]"
+                    className="w-full bg-transparent text-sm text-[var(--muted)] outline-none placeholder:text-[var(--faint)]"
                   />
                 </span>
               </label>
@@ -275,12 +328,12 @@ export default function BookingPage() {
                   <Mail className="h-4 w-4 text-[var(--faint)]" />
                   <input
                     required
+                    readOnly
                     type="email"
-                    value={form.email}
-                    onChange={(event) => update("email", event.target.value)}
+                    value={form.email || user?.email || ""}
                     placeholder="you@example.com"
                     autoComplete="email"
-                    className="w-full bg-transparent text-sm text-[var(--text)] outline-none placeholder:text-[var(--faint)]"
+                    className="w-full bg-transparent text-sm text-[var(--muted)] outline-none placeholder:text-[var(--faint)]"
                   />
                 </span>
               </label>
@@ -397,8 +450,8 @@ export default function BookingPage() {
             </div>
 
             <div className="mt-7 flex items-center gap-2 border-t border-[var(--line)] pt-5 text-xs text-[var(--muted)]">
-              <CreditCard className="h-4 w-4 text-[var(--sage)]" /> Instant
-              confirmation. No payment is collected online.
+              <CreditCard className="h-4 w-4 text-[var(--sage)]" /> Your room is
+              held for two hours. No payment is collected online.
             </div>
 
             {error && (
@@ -417,7 +470,7 @@ export default function BookingPage() {
               className="btn-sheen mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] py-3.5 text-sm font-semibold text-[var(--on-primary)] transition-colors hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-              {submitting ? "Confirming..." : "Confirm reservation"}{" "}
+              {submitting ? "Confirming..." : "Confirm booking"}{" "}
               {!submitting && <ArrowRight className="h-4 w-4" />}
             </button>
             <p className="mt-3 text-center text-[11px] leading-5 text-[var(--faint)]">

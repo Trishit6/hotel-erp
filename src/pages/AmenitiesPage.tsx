@@ -1,7 +1,9 @@
 import type { ComponentType } from "react";
 import { ArrowUpRight, CarFront, Coffee, Dumbbell, HeartHandshake, ParkingCircle, Sparkles, Utensils, Waves, Wifi } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { PageAtmosphere, SectionDivider } from "../components/hotel/Cinematic";
 import { PageHero } from "../components/hotel/PageHero";
+import { GsapImage } from "../components/motion/GsapImage";
 import { PublicFooter, PublicHeader } from "../components/hotel/PublicChrome";
 import { Reveal } from "../components/hotel/Reveal";
 import { FeatureLine, SectionEyebrow } from "../components/hotel/HotelUi";
@@ -20,7 +22,8 @@ const amenities: { icon: ComponentType<{ className?: string }>; label: string; d
 
 export default function AmenitiesPage() {
   return (
-    <div className="min-h-screen bg-[var(--canvas)] text-[var(--text)]">
+    <div className="relative min-h-screen text-[var(--text)]">
+      <PageAtmosphere />
       <PublicHeader />
       <main>
         <PageHero
@@ -36,7 +39,7 @@ export default function AmenitiesPage() {
           </Link>
         </PageHero>
 
-        <section className="mx-auto max-w-7xl px-5 py-20 md:px-10 md:py-28">
+        <section className="section-atmosphere mx-auto max-w-7xl px-5 py-20 md:px-10 md:py-28">
           <Reveal className="max-w-2xl">
             <SectionEyebrow>Around the house</SectionEyebrow>
             <h2 className="mt-5 font-display text-[clamp(2.6rem,4.8vw,4.4rem)] leading-[1.02] tracking-[-0.03em] text-[var(--ink)]">A little more of what makes a stay.</h2>
@@ -56,14 +59,26 @@ export default function AmenitiesPage() {
           </div>
         </section>
 
-        <section className="border-y border-[var(--line)] bg-[var(--surface)] px-5 py-20 md:px-10 md:py-28">
+        <section className="section-atmosphere border-y border-[var(--line)] bg-[var(--surface)] px-5 py-20 md:px-10 md:py-28">
           <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <Reveal className="grid gap-4 sm:grid-cols-2">
-              <div className="relative h-[320px] overflow-hidden rounded-[1.5rem] sm:h-[420px]">
-                <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1000&q=85" alt="The RIVR dining room" loading="lazy" className="h-full w-full object-cover" />
+              <div className="group relative h-[320px] overflow-hidden rounded-[1.5rem] sm:h-[420px]">
+                <GsapImage
+                  src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1100&q=88"
+                  alt="The RIVR dining room"
+                  className="h-full w-full rounded-[1.5rem] transition-transform duration-[1100ms] ease-out group-hover:scale-[1.03]"
+                >
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--deep)]/55 via-transparent to-transparent" />
+                </GsapImage>
               </div>
-              <div className="relative h-[320px] overflow-hidden rounded-[1.5rem] sm:mt-12 sm:h-[420px]">
-                <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1000&q=85" alt="The pool and terrace at RIVR" loading="lazy" className="h-full w-full object-cover" />
+              <div className="group relative h-[320px] overflow-hidden rounded-[1.5rem] sm:mt-12 sm:h-[420px]">
+                <GsapImage
+                  src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1100&q=88"
+                  alt="The pool and terrace at RIVR"
+                  className="h-full w-full rounded-[1.5rem] transition-transform duration-[1100ms] ease-out group-hover:scale-[1.03]"
+                >
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--deep)]/55 via-transparent to-transparent" />
+                </GsapImage>
               </div>
             </Reveal>
             <Reveal delay={0.08}>
@@ -83,7 +98,9 @@ export default function AmenitiesPage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-5 py-20 md:px-10 md:py-24">
+        <SectionDivider className="py-6" />
+
+        <section className="section-atmosphere mx-auto max-w-7xl px-5 py-20 md:px-10 md:py-24">
           <Reveal className="text-center">
             <SectionEyebrow>Good to know</SectionEyebrow>
             <h2 className="mx-auto mt-5 max-w-xl font-display text-[clamp(2.4rem,4vw,3.6rem)] leading-[1.02] tracking-[-0.03em] text-[var(--ink)]">Small things, taken care of.</h2>

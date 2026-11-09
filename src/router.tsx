@@ -130,6 +130,7 @@ const GuestDashboardPage = lazyRouteComponent(
   "GuestDashboardPage",
 );
 import { normalizeStaySearch } from "./lib/hotel-data";
+import { safeReturnTo } from "./lib/auth-redirect";
 import { useHotel } from "./lib/hotel-store";
 
 const staySearch = (search: Record<string, unknown>) =>
@@ -208,6 +209,9 @@ const reservationSearch = (
 const resetSearch = (search: Record<string, unknown>) => ({
   token: typeof search.token === "string" ? search.token : "",
 });
+const authSearch = (search: Record<string, unknown>): { returnTo?: string } => ({
+  returnTo: safeReturnTo(search.returnTo),
+});
 const rootRoute = createRootRoute({ component: RootComponent });
 const homeRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -278,11 +282,13 @@ const lookupRoute = createRoute({
 const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/login",
+  validateSearch: authSearch,
   component: LoginPage,
 });
 const registerRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/register",
+  validateSearch: authSearch,
   component: RegisterPage,
 });
 const forgotPasswordRoute = createRoute({
