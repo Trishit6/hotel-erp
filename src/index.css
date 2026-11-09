@@ -193,6 +193,49 @@ a {
   outline-offset: 3px;
 }
 
+/* Text controls get one rounded treatment below; the square browser outline
+   must not paint inside a rounded field shell. Toggles keep the outline. */
+:where(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]),
+  select,
+  textarea
+):focus-visible {
+  outline: none;
+}
+
+/* Fields that draw their own border: one champagne border + soft halo. */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]):not(.bg-transparent):focus,
+select:not(.bg-transparent):focus,
+textarea:not(.bg-transparent):focus {
+  border-color: var(--accent-strong);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+/* Transparent inputs sit inside a bordered shell: focus the shell once. */
+:where(label, span, form, div)[class*="rounded"]:has(
+  > input.bg-transparent:not([type="checkbox"]):not([type="radio"]):focus,
+  > select.bg-transparent:focus
+) {
+  border-color: var(--accent-strong);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+/* The shared availability widget nests the field inside a rounded label. */
+form[aria-label="Search room availability"] label:focus-within {
+  outline: 1px solid var(--accent-strong);
+  outline-offset: -1px;
+}
+
+/* Browsers without :has() get the outline back rather than losing focus. */
+@supports not selector(:has(*)) {
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--accent-strong);
+    outline-offset: 2px;
+  }
+}
+
 body::before {
   content: "";
   position: fixed;
@@ -298,9 +341,9 @@ html.theme-transition *::after {
   position: relative;
 }
 
-.admin-main input:not([type="checkbox"]):not([type="radio"]),
-.admin-main select,
-.admin-main textarea {
+.admin-main input:not([type="checkbox"]):not([type="radio"]):not(.bg-transparent),
+.admin-main select:not(.bg-transparent),
+.admin-main textarea:not(.bg-transparent) {
   border: 1px solid var(--line-2);
   border-radius: 0.72rem;
   background: color-mix(in srgb, var(--surface) 82%, transparent);
@@ -308,9 +351,9 @@ html.theme-transition *::after {
   transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
 }
 
-.admin-main input:not([type="checkbox"]):not([type="radio"]):focus,
-.admin-main select:focus,
-.admin-main textarea:focus {
+.admin-main input:not([type="checkbox"]):not([type="radio"]):not(.bg-transparent):focus,
+.admin-main select:not(.bg-transparent):focus,
+.admin-main textarea:not(.bg-transparent):focus {
   border-color: var(--accent-strong);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
   outline: none;
