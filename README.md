@@ -1,467 +1,507 @@
-# RIVR Hotel ERP
+# RIVR — Hotel Management & ERP System
 
-RIVR is a full-stack hotel management and ERP application. The guest-facing React site and the staff operations workspace are backed by an Express + TypeScript REST API, MariaDB, and Drizzle ORM.
+<p align="center">
+  <strong>A unified digital platform for hotel operations, guest management and hospitality administration.</strong>
+</p>
 
-The existing guest pages, admin pages, routes, styling, and workflows are preserved. The difference is that business data now comes from the API and database instead of browser storage.
+<p align="center">
+  <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white" alt="React 19" />
+  <img src="https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/Express-4-000000?logo=express&logoColor=white" alt="Express" />
+  <img src="https://img.shields.io/badge/MariaDB-Database-003545?logo=mariadb&logoColor=white" alt="MariaDB" />
+  <img src="https://img.shields.io/badge/License-Not%20Specified-lightgrey" alt="License not specified" />
+</p>
 
 ---
 
-## Stack
+## Overview
+
+**RIVR Hotel ERP** is a full-stack hotel management and enterprise resource planning application designed to bring guest-facing experiences and internal hotel operations together in one platform.
+
+The system combines a public hotel website and reservation experience with a role-based staff management workspace. It uses a React frontend, a TypeScript-based REST API, MariaDB and Drizzle ORM to manage operational data.
+
+RIVR aims to simplify hotel workflows, improve operational visibility, centralize business records and provide a consistent digital experience for guests and hotel staff.
+
+## Key Capabilities
+
+### Guest Experience & Reservations
+- Public hotel website and accommodation catalogue.
+- Room and room-type information.
+- Availability search based on stay dates.
+- Guest registration and authentication.
+- Reservation creation and booking confirmation.
+- Reservation verification using a booking reference and matching contact information.
+- Guest dashboard and booking history.
+- Guest password reset functionality.
+
+### Hotel Operations
+- Reservation management.
+- Room and room-type management.
+- Guest records management.
+- Check-in and check-out workflows.
+- Room status tracking.
+- Housekeeping task management.
+- Staff management and attendance.
+- Inventory management.
+- Expense tracking and approval.
+- Restaurant order management.
+- Payment and invoice records.
+- Operational activity logs.
+
+### Role-Based Access Control
+
+The application supports role-based access for different hotel operations.
+
+| Role | Access purpose |
+|---|---|
+| Super Administrator | Overall system administration |
+| Administrator | Authorized hotel administration |
+| Manager | Management and operational oversight |
+| Receptionist | Front-desk and reservation operations |
+| Housekeeping | Housekeeping operations |
+| Accountant | Financial records and reporting |
+| Restaurant | Restaurant order operations |
+| Staff | Assigned staff operations |
+| Customer | Guest account and booking experience |
+
+Access is enforced by the backend through authenticated sessions and server-side permissions.
+
+## Technology Stack
 
 | Layer | Technology |
-| --- | --- |
-| Frontend | React 19, TypeScript, Vite 8, TanStack Router, Tailwind CSS 4, Motion |
-| API | Node.js, Express 4, TypeScript, Zod |
-| Database | MariaDB 10.6+ / MySQL 5.7+ compatible, Drizzle ORM, mysql2 |
-| Auth | Argon2id (`@node-rs/argon2`), server-managed sessions, HTTP-only cookies |
-| Security | Helmet, explicit-origin CORS, rate limiting, RBAC, Zod validation |
-| Tests | Vitest, Supertest, real database integration tests |
-| Package manager | pnpm 12 |
+|---|---|
+| Frontend | React 19, TypeScript |
+| Build Tool | Vite 8 |
+| Routing | TanStack Router |
+| Styling | Tailwind CSS 4 |
+| Animations | GSAP, Motion |
+| Icons | Lucide React |
+| Backend | Node.js, Express 4 |
+| API Validation | Zod |
+| Database | MariaDB / compatible MySQL |
+| ORM | Drizzle ORM |
+| Database Driver | mysql2 |
+| Authentication | Argon2id, server-managed sessions |
+| Security | Helmet, CORS, rate limiting, RBAC |
+| Testing | Vitest, Supertest |
+| Package Manager | pnpm |
 
----
+## Architecture
 
-## Repository layout
+RIVR follows a frontend and backend architecture with a centralized API and relational database.
 
 ```text
-.
-├── apps/
-│   └── api/
-│       ├── drizzle/                 # generated SQL migrations
-│       ├── scripts/create-admin.ts  # non-interactive first admin setup
-│       ├── src/
-│       │   ├── config/              # environment configuration
-│       │   ├── database/            # pool, schema, migrations, seed/reset
-│       │   ├── middleware/          # auth, validation, errors, rate limits
-│       │   ├── modules/             # auth, public, and admin route modules
-│       │   ├── services/            # domain logic and transactional workflows
-│       │   ├── utils/               # dates, money, IDs, validation, HTTP
-│       │   ├── app.ts               # Express app
-│       │   └── server.ts            # process entry point
-│       └── tests/                   # Vitest + Supertest integration tests
-├── src/
-│   ├── components/hotel/            # shared hotel UI
-│   ├── lib/api.ts                   # typed frontend API client
-│   ├── lib/hotel-data.ts            # domain types, formatters, seed source
-│   ├── lib/hotel-store.tsx          # API-backed application store
-│   ├── pages/                       # guest and admin pages
-│   └── router.tsx                   # TanStack Router route tree
-├── package.json                     # frontend + workspace scripts
-├── pnpm-workspace.yaml
-└── vite.config.ts                   # Vite dev proxy for /api
+                  RIVR HOTEL ERP
+                         |
+             +-----------+-----------+
+             |                       |
+       Public Website          Staff Workspace
+             |                       |
+             +-----------+-----------+
+                         |
+                  React Frontend
+                 TypeScript + Vite
+                         |
+                  Typed API Client
+                         |
+                 Express REST API
+                         |
+             +-----------+-----------+
+             |                       |
+       Authentication           API Modules
+       & Authorization           & Services
+             |                       |
+             +-----------+-----------+
+                         |
+                    Drizzle ORM
+                         |
+                     MariaDB
 ```
 
----
+### Repository Structure
 
-## Prerequisites
+```text
+hotel-erp/
+│
+├── apps/
+│   └── api/
+│       ├── drizzle/
+│       │   └── migrations/
+│       ├── scripts/
+│       ├── src/
+│       │   ├── config/
+│       │   ├── database/
+│       │   ├── middleware/
+│       │   ├── modules/
+│       │   ├── services/
+│       │   ├── utils/
+│       │   ├── app.ts
+│       │   └── server.ts
+│       └── tests/
+│
+├── src/
+│   ├── components/
+│   │   └── hotel/
+│   ├── lib/
+│   │   ├── api.ts
+│   │   ├── hotel-data.ts
+│   │   └── hotel-store.tsx
+│   ├── pages/
+│   └── router.tsx
+│
+├── scripts/
+├── reports/
+├── package.json
+├── pnpm-workspace.yaml
+├── tsconfig.json
+├── vite.config.ts
+└── README.md
+```
 
-- Node.js 20 or newer
-- pnpm 12.18.0 (`corepack enable` then `corepack prepare pnpm@12.18.0 --activate`)
-- MariaDB 10.6+ or a compatible MySQL 5.7+ server
-- A database user that can create tables and indexes
+## Security & Authentication
 
-The schema intentionally avoids MySQL-8-only features so it also runs on older MySQL-compatible servers. For very old servers (for example MySQL 5.5), keep the migration runner's `created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP` / `DATETIME` pattern; MySQL 5.5 allows only one automatic `TIMESTAMP` column per table.
+Security is an important part of the RIVR architecture.
 
----
+The documented implementation includes:
 
-## Install
+- Password hashing using Argon2id.
+- Server-managed sessions.
+- HTTP-only session cookies.
+- HMAC-SHA256 hashing of stored session tokens.
+- Explicit-origin CORS configuration.
+- Helmet security headers.
+- API rate limiting.
+- Zod request validation.
+- Backend-enforced role-based permissions.
+- Protected administrative endpoints.
+- Restricted reservation verification.
+- Session invalidation following relevant account security changes.
+
+The frontend does not determine privileged user roles. Authorization is enforced by the backend.
+
+## Reservation & Operational Rules
+
+The system includes business rules intended to protect reservation and room operations.
+
+- Reservations cannot overlap for the same room.
+- Booking transactions lock the relevant room row before checking availability.
+- Public reservations begin with a pending two-hour hold.
+- Staff-created reservations begin as confirmed.
+- Expired public holds are handled through cleanup.
+- Rooms marked for maintenance, cleaning or out-of-order use are not sellable.
+- Check-in and check-out follow date and permission rules.
+- Certain manager/admin overrides are logged.
+- Payment and invoice updates use transaction-safe server-side calculations.
+
+## Getting Started
+
+Follow the instructions below to run RIVR locally.
+
+### Prerequisites
+
+Install the following:
+
+- Node.js 20 or newer.
+- pnpm 12.18.0.
+- MariaDB 10.6+ or compatible MySQL 5.7+.
+- Git.
+- A code editor such as Visual Studio Code.
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Trishit6/hotel-erp.git
+cd hotel-erp
+```
+
+### 2. Enable pnpm
+
+```bash
+corepack enable
+corepack prepare pnpm@12.18.0 --activate
+```
+
+Verify the installation:
+
+```bash
+node -v
+pnpm -v
+```
+
+### 3. Install Dependencies
 
 ```bash
 pnpm install
 ```
 
-This installs the frontend and the `@rivr/api` workspace package.
+### 4. Configure Environment Variables
 
----
+Create the API environment file.
 
-## Environment
-
-Create the API environment file:
-
-```bash
-cp apps/api/.env.example apps/api/.env
-```
-
-On Windows PowerShell:
+**Windows PowerShell:**
 
 ```powershell
 Copy-Item apps/api/.env.example apps/api/.env
 ```
 
-Edit `apps/api/.env` and set at least:
+**macOS / Linux:**
 
-```dotenv
+```bash
+cp apps/api/.env.example apps/api/.env
+```
+
+Open `apps/api/.env` and configure the required values:
+
+```env
+NODE_ENV=development
+
+PORT=4000
+WEB_ORIGIN=http://localhost:5173
+
 DB_HOST=127.0.0.1
 DB_PORT=3307
 DB_USER=root
-DB_PASSWORD=your-database-password
+DB_PASSWORD=your_database_password
 DB_NAME=rivr_hotel
 DB_TEST_NAME=rivr_hotel_test
-SESSION_SECRET=replace-with-a-long-random-secret
-WEB_ORIGIN=http://localhost:5173
+
+SESSION_SECRET=replace_with_a_long_random_secret
 ```
 
-Important variables:
+Use the database port configured in your MariaDB installation. The example above uses port `3307`.
 
-| Variable | Purpose |
-| --- | --- |
-| `NODE_ENV` | `development` or `production` |
-| `PORT` | API port, default `4000` |
-| `WEB_ORIGIN` | Comma-separated frontend origins allowed by CORS |
-| `DB_*` | MariaDB/MySQL connection |
-| `DB_TEST_NAME` | Separate database used by integration tests |
-| `SESSION_SECRET` | Secret used to HMAC session tokens; required in production |
-| `SESSION_TTL_HOURS` | Session lifetime in hours |
-| `COOKIE_NAME` | Session cookie name |
-| `COOKIE_SECURE` | Set `true` when served over HTTPS; must be explicitly `true` in production |
-| `TRUST_PROXY` | Express proxy trust: `false`, `loopback`, `linklocal`, `uniquelocal`, or 1-10 hops |
-| `ALLOW_DEMO_RESET` | Enables the super-admin-only dev reset endpoint |
-| `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` | Optional extra admin created by `pnpm db:seed`; the demo seed also creates `admin@admin.com` / `password` |
+Generate a strong, unique session secret for your local environment.
 
-Never commit `.env` files. The repository `.gitignore` excludes them.
+**Security notice:** Never commit `.env` files, database passwords, session secrets or other credentials to GitHub.
 
----
+### 5. Create the Databases
 
-## Database setup
-
-Create the development and test databases:
+Connect to MariaDB and execute:
 
 ```sql
-CREATE DATABASE rivr_hotel CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE DATABASE rivr_hotel_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE rivr_hotel
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
+CREATE DATABASE rivr_hotel_test
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
 ```
 
-Run migrations:
+Ensure that the configured database user has the necessary permissions.
+
+### 6. Run Database Migrations
 
 ```bash
 pnpm db:migrate
 ```
 
-The migration runner applies SQL files from `apps/api/drizzle/migrations` in order and records applied files in the `schema_migrations` table. It is safe to re-run; already-applied files are skipped.
+This applies the available database migrations.
 
-Optional demo data:
+### 7. Create the First Administrator
 
-```bash
-pnpm db:seed
-```
-
-`pnpm db:seed` is destructive: it clears the business tables (including users and sessions) and inserts a large demo dataset across rooms, guests, staff, reservations, payments, invoices, housekeeping, attendance, inventory, suppliers, expenses, restaurant orders, activity, notifications, and settings. The demo seed creates the super-admin `admin@admin.com` with password `password`, plus role demo accounts (`manager@rivrhotel.in`, `reception@rivrhotel.in`, `housekeeping@rivrhotel.in`, `accountant@rivrhotel.in`, `restaurant@rivrhotel.in`, `staff@rivrhotel.in`) and customer accounts whose password is also `password`. These well-known credentials are for local development only; never run the demo seed against production data.
-
-Seed data is generated in `apps/api/src/database/seed-data.ts`. It does **not** import browser `localStorage` data. There is no automatic localStorage-to-database migration.
-
-### Create the first administrator
-
-The CLI is non-interactive:
+Use the dedicated CLI command:
 
 ```bash
-pnpm create-admin --email admin@example.com --password "a-12-plus-character-password"
+pnpm create-admin --email admin@example.com --password "your-strong-password"
 ```
 
-It migrates, seeds roles, and refuses if an active super-admin already exists. It requires a password of at least 12 characters.
+Use your own administrator email and a strong password of at least 12 characters.
 
-Alternatively, set `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` before `pnpm db:seed` to create an additional admin. Both must be set. The demo seed's built-in `admin@admin.com` / `password` account is separate and is intended only for local demo data.
+The CLI is designed for initial administrator creation and refuses to create another active super-administrator when one already exists.
 
-There is no `/api/auth/setup` endpoint.
-
-### Reset demo data
-
-`pnpm db:reset` is currently a no-op: `reset.ts` has no CLI entrypoint. Use the exported `resetDatabase()` / `dropAllTables()` helpers if a real reset is needed.
-
-The super-admin-only API endpoint `POST /api/admin/dev/reset` re-seeds demo data when `ALLOW_DEMO_RESET=true`. The Settings page exposes this only to a super administrator.
-
----
-
-## Development
-
-Start both the API and the frontend with one command:
+### 8. Start the Application
 
 ```bash
 pnpm dev
 ```
 
-The script starts the API, waits for `http://localhost:4000/api/health` (or `API_PROXY_TARGET`), then starts Vite. Open `http://localhost:5173`.
+The development script starts the API and frontend.
 
-To run them separately:
+Open:
 
-```bash
-# terminal 1
-pnpm dev:api
+| Service | Local URL |
+|---|---|
+| Guest Website | http://localhost:5173 |
+| Staff Login | http://localhost:5173/login |
+| API Health | http://localhost:4000/api/health |
 
-# terminal 2
-pnpm dev:web
+## Development Commands
+
+| Command | Description |
+|---|---|
+| `pnpm dev` | Start frontend and API together |
+| `pnpm dev:web` | Start frontend only |
+| `pnpm dev:api` | Start API only |
+| `pnpm build` | Typecheck and build frontend |
+| `pnpm build:api` | Build API |
+| `pnpm typecheck` | Frontend TypeScript check |
+| `pnpm typecheck:api` | API TypeScript check |
+| `pnpm test:api` | Run API integration tests |
+| `pnpm db:migrate` | Apply database migrations |
+| `pnpm create-admin` | Run administrator creation command |
+
+## API Overview
+
+The backend exposes REST endpoints under:
+
+```text
+http://localhost:4000/api
 ```
 
-Vite proxies `/api` to `http://localhost:4000` by default. Override the proxy target with `API_PROXY_TARGET` if the API runs elsewhere:
+### Public Endpoints
 
-```bash
-API_PROXY_TARGET=http://localhost:4000 pnpm dev
-```
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/health` | API and database health |
+| GET | `/public/room-types` | Room types and amenities |
+| GET | `/public/catalog` | Public hotel catalogue |
+| GET | `/public/rooms` | Public rooms |
+| GET | `/public/availability` | Availability search |
+| POST | `/public/reservations` | Create a guest reservation |
+| POST | `/public/reservations/verify` | Verify reservation ownership |
 
-On Windows PowerShell:
+### Authentication Endpoints
 
-```powershell
-$env:API_PROXY_TARGET="http://localhost:4000"; pnpm dev
-```
+| Method | Endpoint | Purpose |
+|---|---|---|
+| POST | `/auth/login` | Sign in |
+| POST | `/auth/logout` | Sign out |
+| GET | `/auth/me` | Retrieve current session |
+| POST | `/auth/change-password` | Change password |
 
-The frontend API base can also be set at build time with `VITE_API_URL`. Leave it unset when using the Vite proxy or a same-origin reverse proxy.
+### Administrative API
 
-### Staff sign-in
+Administrative modules include:
 
-Open `http://localhost:5173/login` and use a seeded or created account. For the local demo seed, use `admin@admin.com` / `password`. The old demo role picker has been removed. The API sets an HTTP-only session cookie; the browser never chooses a privileged role.
+- Dashboard and activity.
+- Reservations.
+- Rooms and room types.
+- Guest management.
+- Payments and invoices.
+- Housekeeping.
+- Staff and attendance.
+- Inventory.
+- Expenses.
+- Restaurant orders.
+- Reports.
+- User management.
 
-Guest sign-in, guest registration, the guest dashboard, my-bookings, and guest password reset are implemented under `/api/account` and the guest pages. Booking lookup requires the exact reservation reference plus the matching email address or phone number.
+All administrative routes require an authenticated session and the relevant server-side permission.
 
----
+## Testing
 
-## Checks and tests
+The project uses Vitest and Supertest for API integration testing.
 
-Frontend typecheck:
+Before considering a build ready, run:
 
 ```bash
 pnpm typecheck
-```
-
-`pnpm typecheck` runs `tsc -b`; `pnpm exec tsc -b` is the equivalent direct command.
-
-Frontend production build:
-
-```bash
-pnpm build
-```
-
-API typecheck:
-
-```bash
-pnpm typecheck:api
-```
-
-API integration tests:
-
-```bash
-pnpm test:api
-```
-
-Tests use `DB_TEST_NAME` (default `rivr_hotel_test`) and exercise real routes, sessions, RBAC, validation, payments, check-in/check-out, housekeeping, expenses, and concurrent double-booking protection. Ensure the test database exists and `DB_*` credentials are valid before running them.
-
-Run everything before shipping:
-
-```bash
-pnpm exec tsc -b
 pnpm build
 pnpm typecheck:api
 pnpm test:api
 ```
 
----
+The API integration tests use the configured test database. Ensure that `DB_TEST_NAME` points to a separate test database and that its credentials are correct.
 
-## API overview
+Do not run tests against production data.
 
-Base URL in development: `http://localhost:4000/api`
+## Production Deployment
 
-### Public
+Before deploying RIVR:
 
-| Method | Path | Purpose |
-| --- | --- | --- |
-| `GET` | `/health` | Health and database connectivity |
-| `GET` | `/public/room-types` | Public room types and amenities |
-| `GET` | `/public/catalog` | Room types, rooms, and active busy date ranges |
-| `GET` | `/public/rooms` | Public rooms |
-| `GET` | `/public/availability` | Availability search |
-| `POST` | `/public/reservations` | Create a guest reservation with a two-hour pending hold |
-| `POST` | `/public/reservations/verify` | Verify a reference plus matching email or phone |
+1. Configure production environment variables.
+2. Use a strong session secret.
+3. Enable secure cookies over HTTPS.
+4. Configure the correct production frontend origin.
+5. Disable development reset functionality.
+6. Remove demo credentials and development-only accounts.
+7. Run database migrations as a controlled deployment step.
+8. Build the API and frontend.
+9. Deploy the API and frontend behind an appropriately configured web server or reverse proxy.
+10. Verify authentication, authorization, booking operations and database connectivity.
 
-### Auth
-
-| Method | Path | Purpose |
-| --- | --- | --- |
-| `POST` | `/auth/login` | Email/password sign-in; creates a server session |
-| `POST` | `/auth/logout` | Destroys the current session |
-| `GET` | `/auth/me` | Current session user |
-| `POST` | `/auth/change-password` | Change the current user's password |
-
-### Admin
-
-All admin routes require an authenticated session and the relevant permission.
-
-| Area | Endpoints |
-| --- | --- |
-| Bootstrap | `GET /admin/bootstrap` |
-| Activity | `GET /admin/activity` |
-| Reservations | `GET /admin/reservations`, `POST /admin/reservations`, `GET /admin/reservations/:id`, `PATCH /admin/reservations/:id`, `PATCH /admin/reservations/:id/status`, `PATCH /admin/reservations/:id/room`, `POST /admin/reservations/:id/check-in`, `POST /admin/reservations/:id/check-out` |
-| Rooms | `GET /admin/rooms`, `GET /admin/rooms/types`, `POST /admin/rooms`, `PATCH /admin/rooms/:id/status` |
-| Guests | `GET /admin/guests`, `POST /admin/guests`, `GET /admin/guests/:id`, `PATCH /admin/guests/:id` |
-| Payments & invoices | `GET /admin/payments`, `POST /admin/payments`, `GET /admin/payments/invoices` |
-| Housekeeping | `GET /admin/housekeeping/tasks`, `POST /admin/housekeeping/tasks`, `PATCH /admin/housekeeping/tasks/:id` |
-| Staff & attendance | `GET /admin/staff`, `GET /admin/staff/attendance`, `PATCH /admin/staff/attendance/:id`, `POST /admin/staff`, `PATCH /admin/staff/:id` |
-| Inventory | `GET /admin/inventory`, `POST /admin/inventory`, `POST /admin/inventory/:id/adjust` |
-| Expenses | `GET /admin/expenses`, `POST /admin/expenses`, `PATCH /admin/expenses/:id/approval` |
-| Restaurant | `GET /admin/restaurant/orders`, `POST /admin/restaurant/orders`, `PATCH /admin/restaurant/orders/:id/status` |
-| Reports | `GET /admin/reports/dashboard`, `GET /admin/reports/summary` |
-| Users | `GET /admin/users`, `POST /admin/users`, `PATCH /admin/users/:id` |
-| Dev reset | `POST /admin/dev/reset` (super-admin only, `ALLOW_DEMO_RESET=true`) |
-
-Money is stored as `DECIMAL(12,2)` and calculated in integer paise on the server. Clients never submit trusted totals, tax, or payment status.
-
----
-
-## Authentication and security
-
-- Passwords are hashed with Argon2id.
-- Sessions are server-side rows. The browser receives a random token in an HTTP-only cookie; only an HMAC-SHA256 hash of the token is stored in the database.
-- Cookies are `SameSite=Lax`, `HttpOnly`, and `Secure` when `COOKIE_SECURE=true` or `NODE_ENV=production`.
-- The session token is never exposed to JavaScript.
-- Login is rate-limited; all API traffic has a global limit. Public reservation verification is limited to 10 attempts per 15 minutes per IP.
-- Public lookup requires an exact reference and matching normalized email or phone, returns a minimal allowlist, and never exposes full guest records.
-- Production startup rejects insecure cookies, loopback web origins, and session secrets shorter than 32 characters.
-- Helmet sets security headers.
-- CORS uses an explicit allow-list from `WEB_ORIGIN`; credentials are enabled.
-- Every mutation validates its body with Zod and enforces a server-side permission from the permission catalogue.
-- The client cannot choose its role. Roles come from the authenticated user row.
-- User deactivation and password changes destroy the affected user's other sessions.
-- The last active super administrator cannot be demoted or deactivated.
-- The initial admin is created through the CLI or `SEED_ADMIN_*`; the demo seed also creates `admin@admin.com` / `password` for local development only.
-
-### Roles
-
-`super-admin`, `admin`, `manager`, `receptionist`, `housekeeping`, `accountant`, `restaurant`, `staff`.
-
-Permissions are defined in `apps/api/src/services/permissions.ts`. Frontend navigation uses the same role names for visibility hints, but the API is authoritative.
-
----
-
-## Frontend integration
-
-- `src/lib/api.ts` is the single typed fetch client. It uses `credentials: "include"`, parses the API error envelope into `ApiError`, and points at `/api` or `VITE_API_URL`.
-- `src/lib/hotel-store.tsx` loads the public catalogue before authentication, calls `/auth/me`, and loads `/admin/bootstrap` after sign-in.
-- Public availability stays synchronous for the existing UI by loading active busy date ranges from `/public/catalog`; the server still re-checks availability and locks the room row before confirming a booking.
-- Admin pages use the bootstrap data and await every mutation, then refresh the affected slices.
-- Loading states are shown while the catalogue or workspace loads. Errors are surfaced in the admin shell and in the relevant forms.
-- A `401` from a mutation clears the local session and asks the user to sign in again.
-- Booking success uses the creation response through a one-time `sessionStorage` handoff. Later booking lookup requires the reference plus matching email or phone, so it works across browsers and devices without exposing reference-only data.
-- `localStorage` is used only for the `rivr-theme` UI preference. Business records are no longer stored in the browser.
-
----
-
-## Data model
-
-The normalized schema contains 17 tables:
-
-- `roles`
-- `staff`
-- `users`
-- `sessions`
-- `room_types`
-- `room_type_amenities`
-- `rooms`
-- `guests`
-- `reservations`
-- `payments`
-- `invoices`
-- `housekeeping_tasks`
-- `attendance`
-- `inventory`
-- `expenses`
-- `restaurant_orders`
-- `activity_logs`
-
-Foreign keys, unique constraints, indexes, timestamps, and decimal money columns are defined in `apps/api/src/database/schema.ts`. The generated migration is in `apps/api/drizzle/migrations`.
-
----
-
-## Business rules
-
-- Dates are date-only `YYYY-MM-DD` strings compared lexicographically. The API and UI use Asia/Kolkata (`Asia/Kolkata`) for "today" and Indian display formats.
-- Reservations cannot overlap for the same room. The booking transaction locks the room row with `SELECT ... FOR UPDATE` before the overlap check, preventing concurrent double bookings.
-- Rooms in `maintenance`, `out-of-order`, or `cleaning` are not sellable.
-- Public reservations start `pending` with a two-hour hold; staff bookings start `confirmed`. Unexpired holds block availability, and expired holds are cancelled by cleanup.
-- Future reservations do not change a room's current status. A same-day stay may set an available room to `reserved`; check-in → `occupied`; check-out → `cleaning` + dirty housekeeping task; task `inspected` → `available`. Cancellation releases a room only when no other active stay needs it.
-- Check-in is allowed from the arrival date until the check-out date; early check-in and check-out with an outstanding balance require a manager/admin override that is logged.
-- Payments are transaction-safe and update invoice paid/balance values. There is no online payment gateway; payments are recorded by staff.
-- Tax is a configurable 12% demo rate (`TAX_BASIS_POINTS = 1200`). Confirm the hotel's applicable GST slab before production use.
-- `hotelInfo` in `src/lib/hotel-data.ts` remains placeholder data. Do not treat its address or phone number as verified property details.
-
----
-
-## Production deployment
-
-1. Set `NODE_ENV=production`, a strong `SESSION_SECRET`, `COOKIE_SECURE=true`, and the production `WEB_ORIGIN`.
-2. Run migrations against the production database:
-
-   ```bash
-   pnpm db:migrate
-   ```
-
-3. Build the API and frontend:
-
-   ```bash
-   pnpm build:api
-   pnpm build
-   ```
-
-4. Start the API:
-
-   ```bash
-   node apps/api/dist/server.js
-   ```
-
-5. Serve the frontend `dist/` directory with SPA fallback to `index.html`.
-6. Put the frontend and API behind the same origin and reverse-proxy `/api` to the API process. This keeps the session cookie same-site and avoids CORS complexity. If they are on different origins, set `WEB_ORIGIN` explicitly and configure `VITE_API_URL`.
-7. Use HTTPS. Keep `COOKIE_SECURE=true` in production.
-8. Disable `ALLOW_DEMO_RESET` and remove any `SEED_ADMIN_*` credentials after initial setup.
-
-The API applies pending migrations on startup in development only (`apps/api/src/server.ts`). In production, run `pnpm db:migrate` as a release step before starting the server.
-
----
-
-## Limitations
-
-- No online payment gateway. Payments are recorded manually by staff; the UI does not claim otherwise.
-- Guest accounts, guest registration, the guest dashboard, my-bookings, and guest password reset are implemented. Staff authentication and RBAC are fully implemented.
-- No email, SMS, or calendar delivery service is integrated. The booking confirmation page and downloadable calendar file are generated locally.
-- Single-property configuration. `hotelInfo` is placeholder data and must be replaced before launch.
-- Seed data is demo data derived from the original frontend catalogue. It is not a production data import tool.
-- There is no automatic browser-storage migration. Import legacy data through a controlled, reviewed process if needed.
-- The frontend build is a single large bundle; code-splitting can be added later without changing the API.
-
----
-
-## Local quick start
+Build commands:
 
 ```bash
-pnpm install
-cp apps/api/.env.example apps/api/.env
-# edit apps/api/.env with your database password and a SESSION_SECRET
-pnpm db:migrate
-pnpm db:seed
-pnpm dev
+pnpm build:api
+pnpm build
 ```
 
-Then open the guest site at `http://localhost:5173` or the admin site at `http://localhost:5173/login` and sign in with the demo super-admin `admin@admin.com` / `password`. Change or remove the demo accounts before using real data.
+The API can be started using:
 
-- Guest site: `http://localhost:5173`
-- Staff portal: `http://localhost:5173/login`
-- API health: `http://localhost:4000/api/health`
+```bash
+node apps/api/dist/server.js
+```
 
----
+Serve the frontend build with SPA fallback to `index.html`.
 
-## Useful commands
+For session-cookie compatibility, serving the frontend and API behind the same origin is recommended.
 
-| Command | Description |
-| --- | --- |
-| `pnpm dev` | Start the API and the Vite frontend together |
-| `pnpm dev:web` | Start only the Vite frontend |
-| `pnpm dev:api` | Start only the API with `tsx watch` |
-| `pnpm build` | Typecheck and build the frontend |
-| `pnpm build:api` | Compile the API |
-| `pnpm exec tsc -b` | Real frontend typecheck |
-| `pnpm typecheck:api` | API typecheck |
-| `pnpm test:api` | Run API integration tests |
-| `pnpm db:migrate` | Apply pending SQL migrations |
-| `pnpm db:seed` | Seed the large demo dataset (destructive; creates `admin@admin.com` / `password`) |
-| `pnpm db:reset` | Currently a no-op; use the exported reset helpers |
-| `pnpm create-admin` | Non-interactive first-admin creation (`--email`, `--password` 12+ chars) |
+## Important Development & Data Safety Notes
 
----
+**Demo seed warning:** The `pnpm db:seed` command is destructive. It clears business tables and inserts demo data, including demo users and reservations. It can overwrite existing development business data.
+
+Do not run it against a database containing records you want to preserve.
+
+The built-in demo credentials are intended only for local development. Never use them in production.
+
+The project does not automatically migrate historical browser `localStorage` records into MariaDB.
+
+## Current Limitations
+
+The following limitations are documented in the current project:
+
+- No integrated online payment gateway. Payments are recorded by staff.
+- No integrated email, SMS or calendar delivery provider.
+- Single-property configuration.
+- Hotel contact details are placeholder data and must be replaced before launch.
+- Demo seed data is not a production data-import mechanism.
+- No automatic migration of historical browser-storage data.
+- Frontend bundle optimization and code splitting remain possible future improvements.
+
+## Future Development
+
+Potential areas for future development include:
+
+- Online payment gateway integration.
+- Automated email and SMS notifications.
+- Multi-property hotel management.
+- Advanced analytics and operational reporting.
+- Improved performance through route-level code splitting.
+- Expanded guest communication and service workflows.
+- Further enhancements to the reservation experience.
+
+These are development opportunities, not claims that the features are already implemented.
+
+## Contributing
+
+Contributions, suggestions and issue reports are welcome.
+
+If you would like to contribute:
+
+1. Fork the repository.
+2. Create a feature branch.
+3. Make focused changes.
+4. Test your changes.
+5. Submit a pull request with a clear description.
+
+Please avoid committing secrets, environment files, personal information or production database records.
 
 ## License
 
-Proprietary. All rights reserved.
+No license is currently specified in this repository.
+
+Unless a license is added, all rights remain with the copyright holder. Check the repository for licensing information before redistributing or reusing the project.
+
+---
+
+<p align="center">
+  <strong>RIVR Hotel ERP</strong><br/>
+  <em>Bringing hospitality operations into one connected platform.</em>
+</p>
+
+<p align="center">
+  <a href="https://github.com/Trishit6/hotel-erp">GitHub Repository</a>
+</p>
