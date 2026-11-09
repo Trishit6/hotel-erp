@@ -1,14 +1,10 @@
 import { Router } from "express";
 import { z } from "zod";
 import { validate } from "../../middleware/validate";
-import { publicWriteLimiter } from "../../middleware/rateLimit";
+import { publicLookupLimiter, publicWriteLimiter } from "../../middleware/rateLimit";
 import { asyncHandler } from "../../utils/http";
 import { dateOnly, publicReservationSchema } from "../shared/schemas";
-import {
-  createReservation,
-  getReservationDetail,
-  lookupReservations,
-} from "../../services/reservations";
+import { createReservation, verifyPublicReservation } from "../../services/reservations";
 import { getAvailability, getPublicCatalog } from "../../services/rooms";
 
 export const publicRouter = Router();
@@ -19,9 +15,17 @@ const availabilityQuery = z.object({
   guests: z.coerce.number().int().min(1).max(16),
 });
 
-const lookupQuery = z.object({
-  q: z.string().trim().min(1, "Enter a booking reference, email or phone.").max(120),
-});
+const verifyReservationSchema = z
+  .object({
+    reference: z.string().trim().min(1, "Enter your booking reference.").max(64),
+    email: z.string().trim().toLowerCase().email("Enter a valid email address.").max(191).optional(),
+    phone: z.string().trim().min(1, "Enter your mobile number.").max(32).optional(),
+  })
+  .strict()
+  .refine(
+    (value) => Number(Boolean(value.email)) + Number(Boolean(value.phone)) === 1,
+    "Provide either the booking email or the booking mobile number.",
+  );
 
 publicRouter.get(
   "/room-types",
@@ -59,29 +63,27 @@ publicRouter.post(
   publicWriteLimiter,
   validate(publicReservationSchema),
   asyncHandler(async (req, res) => {
-    const result = await createReservation(req.body);
+    const result = await createReservation(req.body, { source: "public" });
     res.status(201).json(result);
   }),
 );
 
-publicRouter.get(
-  "/reservations/lookup",
-  publicWriteLimiter,
-  validate(lookupQuery, "query"),
+// Contact details are sent in the body so they never appear in a URL, browser
+// history, or reverse-proxy access log. The limiter runs before validation and
+// before the database lookup.
+publicRouter.post(
+  "/reservations/verify",
+  publicLookupLimiter,
+  validate(verifyReservationSchema),
   asyncHandler(async (req, res) => {
-    const query = req.query as unknown as z.infer<typeof lookupQuery>;
-    res.json({ reservations: await lookupReservations(query.q) });
-  }),
-);
-
-publicRouter.get(
-  "/reservations/:reference",
-  asyncHandler(async (req, res) => {
-    const detail = await getReservationDetail(req.params.reference);
+    const detail = await verifyPublicReservation(req.body.reference, {
+      email: req.body.email,
+      phone: req.body.phone,
+    });
     if (!detail) {
       res.status(404).json({ error: { code: "not_found", message: "Reservation not found." } });
       return;
     }
-    res.json(detail);
+    res.json({ reservation: detail });
   }),
 );

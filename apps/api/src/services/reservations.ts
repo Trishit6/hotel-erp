@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, gt, gte, inArray, like, lt, lte, ne, notInArray, or, sql, type SQL } from "drizzle-orm";
+import { and, asc, desc, eq, gt, gte, like, lt, lte, ne, notInArray, or, sql, type SQL } from "drizzle-orm";
 import { db, type Tx } from "../database/client";
 import {
   guests,
@@ -19,18 +19,28 @@ import {
   CHECKIN_BLOCKED_ROOM_STATUSES,
   RELEASED_RESERVATION_STATUSES,
   RESERVATION_STATUSES,
+  STAFF_ROLES,
   TAX_BASIS_POINTS,
   UNAVAILABLE_ROOM_STATUSES,
   type ReservationStatus,
+  type StaffRole,
   type UserRole,
 } from "../constants";
 import { addDays, calculateNights, isDateRangeValid, todayIst } from "../utils/date";
-import { badRequest, conflict, notFound } from "../utils/http";
+import { badRequest, conflict, forbidden, HttpError, notFound } from "../utils/http";
 import { applyBasisPoints, fromPaise, toPaise } from "../utils/money";
-import { newId, newReference } from "../utils/id";
+import { generateUniqueReference, newId } from "../utils/id";
 import { paginated, type PageResult } from "../utils/pagination";
+import { normalizeEmailForMatch, normalizePhoneForMatch } from "../utils/contact";
+import { hasPermission } from "./permissions";
+import {
+  activeReservationCondition,
+  assertPublicHoldLimit,
+  PUBLIC_HOLD_HOURS,
+  unexpiredHoldCondition,
+} from "./reservationHolds";
 import { logActivity } from "./activity";
-import { mapGuest, mapInvoice, mapReservation, mapRoom, mapRoomType } from "./mappers";
+import { mapGuest, mapInvoice, mapPublicReservation, mapReservation, mapRoom, mapRoomType } from "./mappers";
 
 export interface ReservationCreateInput {
   guestName: string;
@@ -55,6 +65,11 @@ export interface Actor {
   role: UserRole;
 }
 
+export interface ReservationCreateOptions {
+  source: "public" | "staff";
+  actor?: Actor;
+}
+
 interface ReservationFilters {
   status?: ReservationStatus;
   q?: string;
@@ -74,6 +89,11 @@ function assertStayDates(checkIn: string, checkOut: string): number {
   return nights;
 }
 
+/** A stay is physically current when it starts today or earlier and ends later today. */
+function isCurrentStay(checkIn: string, checkOut: string, today = todayIst()): boolean {
+  return checkIn <= today && checkOut > today;
+}
+
 async function findGuestByEmail(tx: Tx, email: string) {
   const [guest] = await tx.select().from(guests).where(eq(guests.email, email.toLowerCase())).limit(1);
   return guest ?? null;
@@ -82,12 +102,22 @@ async function findGuestByEmail(tx: Tx, email: string) {
 async function upsertGuest(
   tx: Tx,
   input: ReservationCreateInput,
+  options: ReservationCreateOptions,
 ): Promise<typeof guests.$inferSelect> {
   const email = input.email.trim().toLowerCase();
   const existing = await findGuestByEmail(tx, email);
   const now = new Date();
 
   if (existing) {
+    // A public booking may attach a reservation to an existing guest, but it
+    // must never rewrite that guest's stored identity or contact profile.
+    const canUpdateProfile =
+      options.source === "staff" &&
+      options.actor !== undefined &&
+      (STAFF_ROLES as readonly string[]).includes(options.actor.role) &&
+      hasPermission(options.actor.role as StaffRole, "guests:write");
+    if (!canUpdateProfile) return existing;
+
     await tx
       .update(guests)
       .set({
@@ -143,6 +173,7 @@ async function overlappingReservation(
   const conditions = [
     eq(reservations.roomId, roomId),
     notInArray(reservations.status, RELEASED_RESERVATION_STATUSES),
+    unexpiredHoldCondition(),
     lt(reservations.checkIn, checkOut),
     gt(reservations.checkOut, checkIn),
   ];
@@ -156,7 +187,8 @@ async function overlappingReservation(
   return row ?? null;
 }
 
-export async function createReservation(input: ReservationCreateInput, actor?: Actor) {
+export async function createReservation(input: ReservationCreateInput, options: ReservationCreateOptions) {
+  const { actor, source } = options;
   const nights = assertStayDates(input.checkIn, input.checkOut);
   const discountPaise = toPaise(input.discount ?? 0);
   if (discountPaise < 0) throw badRequest("Discount cannot be negative.");
@@ -191,17 +223,29 @@ export async function createReservation(input: ReservationCreateInput, actor?: A
     const taxPaise = applyBasisPoints(taxablePaise, settingsRow?.taxRateBps ?? TAX_BASIS_POINTS);
     const totalPaise = taxablePaise + taxPaise;
 
-    const guest = await upsertGuest(tx, input);
+    const guest = await upsertGuest(tx, input, options);
+    if (source === "public") {
+      await assertPublicHoldLimit(tx, guest.id, input.email, input.phone);
+    }
 
-    let reference = newReference();
-    for (let attempt = 0; attempt < 3; attempt += 1) {
-      const [existing] = await tx
-        .select({ id: reservations.id })
-        .from(reservations)
-        .where(eq(reservations.reference, reference))
-        .limit(1);
-      if (!existing) break;
-      reference = newReference();
+    const initialStatus: ReservationStatus = source === "public" ? "pending" : "confirmed";
+
+    let reference: string;
+    try {
+      reference = await generateUniqueReference(async (candidate) => {
+        const [existing] = await tx
+          .select({ id: reservations.id })
+          .from(reservations)
+          .where(eq(reservations.reference, candidate))
+          .limit(1);
+        return Boolean(existing);
+      });
+    } catch {
+      throw new HttpError(
+        503,
+        "Could not allocate a reservation reference. Please try again.",
+        "reference_allocation_failed",
+      );
     }
 
     const reservationId = newId("res");
@@ -214,7 +258,7 @@ export async function createReservation(input: ReservationCreateInput, actor?: A
       checkOut: input.checkOut,
       adults: input.adults,
       children: input.children,
-      status: "confirmed",
+      status: initialStatus,
       paymentStatus: "pending",
       roomCharges: fromPaise(roomChargesPaise),
       additionalCharges: "0.00",
@@ -223,10 +267,16 @@ export async function createReservation(input: ReservationCreateInput, actor?: A
       total: fromPaise(totalPaise),
       paidAmount: "0.00",
       specialRequests: input.specialRequests ?? "",
+      holdExpiresAt:
+        source === "public"
+          ? sql.raw(`DATE_ADD(UTC_TIMESTAMP(), INTERVAL ${PUBLIC_HOLD_HOURS} HOUR)`)
+          : null,
       updatedAt: new Date(),
     });
 
-    if (room.status === "available") {
+    // A future booking is represented by its date range, not by changing the
+    // room's present physical state. Only a stay covering today reserves it.
+    if (room.status === "available" && isCurrentStay(input.checkIn, input.checkOut)) {
       await tx.update(rooms).set({ status: "reserved", updatedAt: new Date() }).where(eq(rooms.id, room.id));
     }
 
@@ -272,8 +322,8 @@ export async function createReservation(input: ReservationCreateInput, actor?: A
       id: newId("reshist"),
       reservationId,
       fromStatus: null,
-      toStatus: "confirmed",
-      note: "Reservation created",
+      toStatus: initialStatus,
+      note: source === "public" ? "Public hold created" : "Reservation created",
       changedBy: actor?.id ?? null,
     });
 
@@ -286,6 +336,15 @@ export async function createReservation(input: ReservationCreateInput, actor?: A
     });
 
     const [created] = await tx.select().from(reservations).where(eq(reservations.id, reservationId)).limit(1);
+
+    // The public creation response belongs only to the guest who just submitted
+    // this booking, but it still uses the same strict allowlist as later lookup.
+    if (source === "public") {
+      return {
+        reservation: mapPublicReservation({ reservation: created, guest, room, type }),
+      };
+    }
+
     const amenities = await tx
       .select()
       .from(roomTypeAmenities)
@@ -301,7 +360,7 @@ export async function createReservation(input: ReservationCreateInput, actor?: A
   });
 }
 
-export async function getReservationDetail(idOrReference: string) {
+async function reservationDetailRow(idOrReference: string) {
   const [row] = await db
     .select({ reservation: reservations, guest: guests, room: rooms, type: roomTypes })
     .from(reservations)
@@ -310,6 +369,12 @@ export async function getReservationDetail(idOrReference: string) {
     .innerJoin(roomTypes, eq(roomTypes.id, rooms.typeId))
     .where(or(eq(reservations.id, idOrReference), eq(reservations.reference, idOrReference)))
     .limit(1);
+  return row ?? null;
+}
+
+/** Staff-facing detail. Includes the full guest profile after permission checks. */
+export async function getReservationDetail(idOrReference: string) {
+  const row = await reservationDetailRow(idOrReference);
   if (!row) return null;
   return {
     reservation: mapReservation(row.reservation),
@@ -317,6 +382,39 @@ export async function getReservationDetail(idOrReference: string) {
     room: mapRoom(row.room),
     roomType: mapRoomType(row.type),
   };
+}
+
+/**
+ * Verify a public booking with an exact reference and the matching contact on
+ * that reservation. A wrong reference and a wrong contact intentionally return
+ * the same null result so callers can emit one generic 404.
+ */
+export async function verifyPublicReservation(
+  reference: string,
+  contact: { email?: string; phone?: string },
+) {
+  const normalizedReference = reference.trim().toLowerCase();
+  if (!normalizedReference) return null;
+
+  const [row] = await db
+    .select({ reservation: reservations, guest: guests, room: rooms, type: roomTypes })
+    .from(reservations)
+    .innerJoin(guests, eq(guests.id, reservations.guestId))
+    .innerJoin(rooms, eq(rooms.id, reservations.roomId))
+    .innerJoin(roomTypes, eq(roomTypes.id, rooms.typeId))
+    .where(sql`lower(${reservations.reference}) = ${normalizedReference}`)
+    .limit(1);
+  if (!row) return null;
+
+  const emailMatches = contact.email
+    ? normalizeEmailForMatch(row.guest.email) === normalizeEmailForMatch(contact.email)
+    : false;
+  const phoneMatches = contact.phone
+    ? normalizePhoneForMatch(row.guest.phone) === normalizePhoneForMatch(contact.phone)
+    : false;
+  if (!emailMatches && !phoneMatches) return null;
+
+  return mapPublicReservation(row);
 }
 
 export async function listReservations(filters: ReservationFilters): Promise<PageResult<ReturnType<typeof mapReservation>>> {
@@ -395,6 +493,7 @@ export async function updateReservationStatus(id: string, status: ReservationSta
       .set({
         status,
         cancelledAt: status === "cancelled" || status === "no-show" ? now : reservation.cancelledAt,
+        holdExpiresAt: status === "confirmed" ? null : reservation.holdExpiresAt,
         updatedAt: now,
       })
       .where(eq(reservations.id, id));
@@ -407,8 +506,8 @@ export async function updateReservationStatus(id: string, status: ReservationSta
           and(
             eq(reservations.roomId, room.id),
             ne(reservations.id, id),
-            notInArray(reservations.status, RELEASED_RESERVATION_STATUSES),
-            lt(reservations.checkIn, todayIst()),
+            activeReservationCondition(),
+            lte(reservations.checkIn, todayIst()),
             gt(reservations.checkOut, todayIst()),
           ),
         )
@@ -418,7 +517,11 @@ export async function updateReservationStatus(id: string, status: ReservationSta
       }
     }
 
-    if (status === "confirmed" && room.status === "available") {
+    if (
+      status === "confirmed" &&
+      room.status === "available" &&
+      isCurrentStay(reservation.checkIn, reservation.checkOut)
+    ) {
       await tx.update(rooms).set({ status: "reserved", updatedAt: now }).where(eq(rooms.id, room.id));
     }
 
@@ -479,8 +582,8 @@ export async function assignReservationRoom(id: string, roomId: string, actor: A
           and(
             eq(reservations.roomId, oldRoom.id),
             ne(reservations.id, id),
-            notInArray(reservations.status, RELEASED_RESERVATION_STATUSES),
-            lt(reservations.checkIn, todayIst()),
+            activeReservationCondition(),
+            lte(reservations.checkIn, todayIst()),
             gt(reservations.checkOut, todayIst()),
           ),
         )
@@ -489,7 +592,7 @@ export async function assignReservationRoom(id: string, roomId: string, actor: A
         await tx.update(rooms).set({ status: "available", updatedAt: now }).where(eq(rooms.id, oldRoom.id));
       }
     }
-    if (newRoom.status === "available") {
+    if (newRoom.status === "available" && isCurrentStay(reservation.checkIn, reservation.checkOut)) {
       await tx.update(rooms).set({ status: "reserved", updatedAt: now }).where(eq(rooms.id, newRoom.id));
     }
 
@@ -506,7 +609,11 @@ export async function assignReservationRoom(id: string, roomId: string, actor: A
   });
 }
 
-export async function checkInReservation(id: string, actor: Actor) {
+export async function checkInReservation(
+  id: string,
+  actor: Actor,
+  options: { earlyCheckIn?: boolean } = {},
+) {
   return db.transaction(async (tx) => {
     const [reservation] = await tx.select().from(reservations).where(eq(reservations.id, id)).limit(1).for("update");
     if (!reservation) throw notFound("Reservation not found.");
@@ -514,6 +621,22 @@ export async function checkInReservation(id: string, actor: Actor) {
     if (!["pending", "confirmed"].includes(reservation.status)) {
       throw conflict(`A ${reservation.status.replaceAll("-", " ")} reservation cannot be checked in.`);
     }
+
+    const today = todayIst();
+    if (today >= reservation.checkOut) {
+      throw conflict("This stay has passed its check-out date and cannot be checked in.");
+    }
+    const earlyCheckIn = today < reservation.checkIn;
+    if (earlyCheckIn && !options.earlyCheckIn) {
+      throw conflict(`Check-in opens on ${reservation.checkIn}.`);
+    }
+    if (
+      earlyCheckIn &&
+      !hasPermission(actor.role as StaffRole, "reservations:override")
+    ) {
+      throw forbidden("Only a manager or administrator may authorize an early check-in.");
+    }
+
     const [room] = await tx.select().from(rooms).where(eq(rooms.id, reservation.roomId)).limit(1).for("update");
     if (!room) throw notFound("Assigned room not found.");
     if (CHECKIN_BLOCKED_ROOM_STATUSES.includes(room.status)) {
@@ -524,7 +647,7 @@ export async function checkInReservation(id: string, actor: Actor) {
     const now = new Date();
     await tx
       .update(reservations)
-      .set({ status: "checked-in", checkedInAt: now, updatedAt: now })
+      .set({ status: "checked-in", checkedInAt: now, holdExpiresAt: null, updatedAt: now })
       .where(eq(reservations.id, id));
     await tx.update(rooms).set({ status: "occupied", updatedAt: now }).where(eq(rooms.id, room.id));
     await tx.insert(checkIns).values({
@@ -539,6 +662,7 @@ export async function checkInReservation(id: string, actor: Actor) {
       reservationId: id,
       fromStatus: reservation.status,
       toStatus: "checked-in",
+      note: earlyCheckIn ? "Early check-in override" : "",
       changedBy: actor.id,
     });
 
@@ -549,18 +673,46 @@ export async function checkInReservation(id: string, actor: Actor) {
       tone: "success",
       userId: actor.id,
     });
+    if (earlyCheckIn) {
+      await logActivity(tx, {
+        actor: actor.name,
+        action: "Early check-in override",
+        detail: `${reservation.reference} - checked in ${today}, arrival ${reservation.checkIn}`,
+        tone: "warning",
+        userId: actor.id,
+      });
+    }
 
     const [updated] = await tx.select().from(reservations).where(eq(reservations.id, id)).limit(1);
     return mapReservation(updated);
   });
 }
 
-export async function checkOutReservation(id: string, actor: Actor) {
+export async function checkOutReservation(
+  id: string,
+  actor: Actor,
+  options: { overrideOutstandingBalance?: boolean } = {},
+) {
   return db.transaction(async (tx) => {
     const [reservation] = await tx.select().from(reservations).where(eq(reservations.id, id)).limit(1).for("update");
     if (!reservation) throw notFound("Reservation not found.");
     if (reservation.status === "checked-out") throw conflict("This guest is already checked out.");
     if (reservation.status !== "checked-in") throw conflict("Only checked-in guests can be checked out.");
+
+    const outstandingPaise = toPaise(reservation.total) - toPaise(reservation.paidAmount);
+    if (outstandingPaise > 0) {
+      if (!options.overrideOutstandingBalance) {
+        throw new HttpError(
+          409,
+          `Outstanding balance of INR ${fromPaise(outstandingPaise)} must be settled before check-out.`,
+          "outstanding_balance",
+          { outstandingBalance: Number(fromPaise(outstandingPaise)), currency: "INR" },
+        );
+      }
+      if (!hasPermission(actor.role as StaffRole, "reservations:override")) {
+        throw forbidden("Only a manager or administrator may override an outstanding balance.");
+      }
+    }
 
     const [room] = await tx.select().from(rooms).where(eq(rooms.id, reservation.roomId)).limit(1).for("update");
     if (!room) throw notFound("Assigned room not found.");
@@ -568,7 +720,7 @@ export async function checkOutReservation(id: string, actor: Actor) {
     const now = new Date();
     await tx
       .update(reservations)
-      .set({ status: "checked-out", checkedOutAt: now, updatedAt: now })
+      .set({ status: "checked-out", checkedOutAt: now, holdExpiresAt: null, updatedAt: now })
       .where(eq(reservations.id, id));
     await tx.update(rooms).set({ status: "cleaning", updatedAt: now }).where(eq(rooms.id, room.id));
     await tx.insert(checkOuts).values({
@@ -583,6 +735,7 @@ export async function checkOutReservation(id: string, actor: Actor) {
       reservationId: id,
       fromStatus: reservation.status,
       toStatus: "checked-out",
+      note: outstandingPaise > 0 ? "Outstanding balance override" : "",
       changedBy: actor.id,
     });
     await tx.insert(housekeepingTasks).values({
@@ -613,49 +766,19 @@ export async function checkOutReservation(id: string, actor: Actor) {
       tone: "success",
       userId: actor.id,
     });
+    if (outstandingPaise > 0) {
+      await logActivity(tx, {
+        actor: actor.name,
+        action: "Outstanding balance checkout override",
+        detail: `${reservation.reference} - INR ${fromPaise(outstandingPaise)} outstanding`,
+        tone: "warning",
+        userId: actor.id,
+      });
+    }
 
     const [updated] = await tx.select().from(reservations).where(eq(reservations.id, id)).limit(1);
     return mapReservation(updated);
   });
-}
-
-export async function lookupReservations(query: string) {
-  const normalized = query.trim().toLowerCase();
-  if (!normalized) return [];
-  const matchingGuests = await db
-    .select({ id: guests.id })
-    .from(guests)
-    .where(
-      or(
-        like(sql`lower(${guests.email})`, `%${normalized}%`),
-        like(sql`lower(${guests.name})`, `%${normalized}%`),
-        like(sql`lower(${guests.phone})`, `%${normalized}%`),
-      ),
-    )
-    .limit(50);
-
-  const guestIds = matchingGuests.map((guest) => guest.id);
-  const referenceMatch = `%${normalized}%`;
-  const condition = guestIds.length
-    ? or(like(sql`lower(${reservations.reference})`, referenceMatch), inArray(reservations.guestId, guestIds))
-    : like(sql`lower(${reservations.reference})`, referenceMatch);
-
-  const rows = await db
-    .select({ reservation: reservations, guest: guests, room: rooms, type: roomTypes })
-    .from(reservations)
-    .innerJoin(guests, eq(guests.id, reservations.guestId))
-    .innerJoin(rooms, eq(rooms.id, reservations.roomId))
-    .innerJoin(roomTypes, eq(roomTypes.id, rooms.typeId))
-    .where(condition)
-    .orderBy(desc(reservations.createdAt))
-    .limit(20);
-
-  return rows.map((row) => ({
-    reservation: mapReservation(row.reservation),
-    guest: mapGuest(row.guest),
-    room: mapRoom(row.room),
-    roomType: mapRoomType(row.type),
-  }));
 }
 
 export async function listInvoices(page = 1, pageSize = 50) {

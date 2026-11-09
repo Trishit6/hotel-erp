@@ -54,13 +54,25 @@ adminRouter.get(
     const can = (permission: Parameters<typeof hasPermission>[1]) =>
       hasPermission(role as Parameters<typeof hasPermission>[0], permission);
 
+    // Staff management data is permission-gated. Other operational roles only
+    // receive the minimum directory they need to assign tasks or count teams.
+    const staffRowsPromise = can("staff:read")
+      ? db.select().from(schema.staff).then((rows) => rows.map(mapStaff))
+      : db.select({
+          id: schema.staff.id,
+          name: schema.staff.name,
+          department: schema.staff.department,
+          role: schema.staff.role,
+          status: schema.staff.status,
+        }).from(schema.staff);
+
     const [roomTypeRows, roomRows, reservationRows, taskRows, staffRows, inventoryRows, orderRows, menuCategoryRows, menuItemRows] =
       await Promise.all([
         db.select().from(schema.roomTypes),
         db.select().from(schema.rooms),
         db.select().from(schema.reservations).orderBy(desc(schema.reservations.createdAt)).limit(500),
         db.select().from(schema.housekeepingTasks).orderBy(desc(schema.housekeepingTasks.updatedAt)).limit(500),
-        db.select().from(schema.staff),
+        staffRowsPromise,
         db.select().from(schema.inventory),
         db.select().from(schema.restaurantOrders).orderBy(desc(schema.restaurantOrders.createdAt)).limit(500),
         db.select().from(schema.restaurantMenuCategories).orderBy(schema.restaurantMenuCategories.sortOrder),
@@ -95,7 +107,7 @@ adminRouter.get(
       rooms: roomRows.map(mapRoom),
       reservations: reservationRows.map(mapReservation),
       tasks: taskRows.map(mapTask),
-      staff: staffRows.map(mapStaff),
+      staff: staffRows,
       inventory: inventoryRows.map(mapInventory),
       orders: orderRows.map(mapOrder),
       menuCategories: menuCategoryRows.map(mapMenuCategory),

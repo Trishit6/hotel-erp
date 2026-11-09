@@ -1,4 +1,4 @@
-import { and, desc, eq, inArray, ne, notInArray, gt, lt } from "drizzle-orm";
+import { and, desc, eq, inArray, ne, gt, lte } from "drizzle-orm";
 import { db } from "../database/client";
 import {
   guests,
@@ -9,13 +9,14 @@ import {
   rooms,
   users,
 } from "../database/schema";
-import { RELEASED_RESERVATION_STATUSES } from "../constants";
+
 import { todayIst } from "../utils/date";
 import { badRequest, conflict, forbidden, notFound } from "../utils/http";
 import { newId } from "../utils/id";
 import { logActivity } from "./activity";
 import { mapGuest, mapInvoice, mapPayment, mapReservation } from "./mappers";
 import { getSettings } from "./settings";
+import { activeReservationCondition } from "./reservationHolds";
 
 export interface AccountProfileInput {
   name?: string;
@@ -153,8 +154,8 @@ export async function cancelOwnReservation(userId: string, reservationId: string
           and(
             eq(reservations.roomId, room.id),
             ne(reservations.id, reservation.id),
-            notInArray(reservations.status, RELEASED_RESERVATION_STATUSES),
-            lt(reservations.checkIn, todayIst()),
+            activeReservationCondition(),
+            lte(reservations.checkIn, todayIst()),
             gt(reservations.checkOut, todayIst()),
           ),
         )

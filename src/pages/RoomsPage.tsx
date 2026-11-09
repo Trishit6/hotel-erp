@@ -31,7 +31,7 @@ export default function RoomsPage() {
           eyebrow="Rooms & suites"
           title="Find your room,"
           accent="then make it yours."
-          intro="Five room styles, one considered approach. Browse the collection in INR, then check live availability for your dates."
+          intro={`${roomTypes.length ? `${roomTypes.length} room styles` : "A considered collection"}, one approach. Browse the collection in INR, then check live availability for your dates.`}
           image="https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1600&q=90"
           imageAlt="A considered guest room at RIVR"
         >

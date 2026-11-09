@@ -20,11 +20,18 @@ export async function getUserById(id: string) {
   return user ?? null;
 }
 
+// A valid Argon2id hash used only to keep failed-login timing similar for
+// unknown emails. It has no matching account and is not a credential.
+const DUMMY_PASSWORD_HASH =
+  "$argon2id$v=19$m=19456,t=2,p=1$7aX9VFSf20IuUMaWmrxUVg$FgX6ftBBpuRfuNntPJVY2BFWTLaFdc7PLsV4uwk9x2w";
+
 export async function authenticate(email: string, password: string) {
   const user = await findUserByEmail(email);
-  if (!user || !user.isActive) return null;
-  const valid = await verifyPassword(user.passwordHash, password);
-  if (!valid) return null;
+  // Missing and inactive accounts both take the dummy verification path so
+  // response timing does not reveal whether an account exists or is disabled.
+  const passwordHash = user?.isActive ? user.passwordHash : DUMMY_PASSWORD_HASH;
+  const valid = await verifyPassword(passwordHash, password);
+  if (!user || !user.isActive || !valid) return null;
   await db.update(users).set({ lastLoginAt: new Date(), updatedAt: new Date() }).where(eq(users.id, user.id));
   const [updated] = await db.select().from(users).where(eq(users.id, user.id)).limit(1);
   return updated;
@@ -37,8 +44,11 @@ export async function userCount(): Promise<number> {
 
 export async function createUser(
   input: { name: string; email: string; password: string; role: UserRole; staffId?: string | null },
-  actor?: { id: string; name: string },
+  actor?: { id: string; name: string; role: UserRole },
 ) {
+  if (input.role === "super-admin" && actor && actor.role !== "super-admin") {
+    throw forbidden("Only a super administrator can create another super administrator.");
+  }
   const existing = await findUserByEmail(input.email);
   if (existing) throw badRequest("A user with that email already exists.");
   if (input.staffId) {
@@ -153,11 +163,22 @@ async function activeSuperAdminCount(): Promise<number> {
 export async function updateUser(
   id: string,
   input: { name?: string; role?: StaffRole; isActive?: boolean; password?: string },
-  actor: { id: string; name: string },
+  actor: { id: string; name: string; role: UserRole },
   currentSessionId?: string,
 ) {
   const user = await getUserById(id);
   if (!user) throw notFound("User not found.");
+
+  // Admins may manage ordinary staff accounts, but only a super administrator
+  // may grant the super-admin role or modify an existing super-admin account.
+  if (actor.role !== "super-admin") {
+    if (input.role === "super-admin") {
+      throw forbidden("Only a super administrator can grant the super administrator role.");
+    }
+    if (user.role === "super-admin") {
+      throw forbidden("Only a super administrator can modify a super administrator account.");
+    }
+  }
 
   const losingSuperAdmin =
     user.role === "super-admin" &&

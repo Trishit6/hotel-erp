@@ -29,6 +29,13 @@
       "when": 1794057974830,
       "tag": "0003_worried_shinko_yamashiro",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1794221303655,
+      "tag": "0004_faithful_captain_stacy",
+      "breakpoints": true
     }
   ]
 }

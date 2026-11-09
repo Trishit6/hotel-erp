@@ -1,6 +1,6 @@
 import { and, desc, eq, gte, lte, sql, type SQL } from "drizzle-orm";
 import { db } from "../database/client";
-import { invoices, payments, reservations } from "../database/schema";
+import { invoices, payments, reservationStatusHistory, reservations } from "../database/schema";
 import type { PaymentMethod } from "../constants";
 import { badRequest, conflict, notFound } from "../utils/http";
 import { fromPaise, toPaise } from "../utils/money";
@@ -80,10 +80,27 @@ export async function recordPayment(
       recordedBy: actor.id,
     });
 
+    const confirmingHold = reservation.status === "pending";
     await tx
       .update(reservations)
-      .set({ paidAmount: fromPaise(nextPaid), paymentStatus, updatedAt: now })
+      .set({
+        paidAmount: fromPaise(nextPaid),
+        paymentStatus,
+        ...(confirmingHold ? { status: "confirmed" as const, holdExpiresAt: null } : {}),
+        updatedAt: now,
+      })
       .where(eq(reservations.id, reservation.id));
+
+    if (confirmingHold) {
+      await tx.insert(reservationStatusHistory).values({
+        id: newId("reshist"),
+        reservationId: reservation.id,
+        fromStatus: "pending",
+        toStatus: "confirmed",
+        note: "Payment received - hold confirmed",
+        changedBy: actor.id,
+      });
+    }
 
     const [invoice] = await tx
       .select()

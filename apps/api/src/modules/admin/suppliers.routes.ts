@@ -1,66 +1,83 @@
 import { Router } from "express";
-import { asyncHandler } from "../../utils/http";
-import { listSuppliers, getSupplier, createSupplier, updateSupplier, deleteSupplier } from "../../services/suppliers";
+import { asyncHandler, forbidden } from "../../utils/http";
+import { requirePermission } from "../../middleware/auth";
 import { validate } from "../../middleware/validate";
-import { idParam } from "../shared/schemas";
-import { requireAuth, requireStaff } from "../../middleware/auth"; import { forbidden } from "../../utils/http";
-import { hasPermission } from "../../services/permissions";
+import {
+  idParam,
+  supplierCreateSchema,
+  supplierQuerySchema,
+  supplierUpdateSchema,
+} from "../shared/schemas";
+import {
+  createSupplier,
+  deleteSupplier,
+  getSupplier,
+  listSuppliers,
+  updateSupplier,
+} from "../../services/suppliers";
 
 export const suppliersRouter = Router();
 
 suppliersRouter.get(
   "/",
-  requireAuth,
-  requireStaff,
+  requirePermission("inventory:read"),
+  validate(supplierQuerySchema, "query"),
   asyncHandler(async (req, res) => {
-    const search = (req.query.search as string) || undefined;
-    const suppliers = await listSuppliers(search);
-    res.json({ suppliers });
-  })
+    const query = req.query as unknown as { search?: string };
+    res.json({ suppliers: await listSuppliers(query.search) });
+  }),
 );
 
 suppliersRouter.get(
   "/:id",
-  requireAuth,
-  requireStaff,
+  requirePermission("inventory:read"),
   validate(idParam, "params"),
   asyncHandler(async (req, res) => {
     const supplier = await getSupplier(req.params.id);
-    if (!supplier) return res.status(404).json({ error: "Supplier not found" });
+    if (!supplier) {
+      res.status(404).json({ error: { code: "not_found", message: "Supplier not found." } });
+      return;
+    }
     res.json({ supplier });
-  })
+  }),
 );
 
 suppliersRouter.post(
   "/",
-  requireAuth,
-  requireStaff,
+  requirePermission("inventory:write"),
+  validate(supplierCreateSchema),
   asyncHandler(async (req, res) => {
     const supplier = await createSupplier(req.body);
     res.status(201).json({ supplier });
-  })
+  }),
 );
 
 suppliersRouter.patch(
   "/:id",
-  requireAuth,
-  requireStaff,
+  requirePermission("inventory:write"),
   validate(idParam, "params"),
+  validate(supplierUpdateSchema),
   asyncHandler(async (req, res) => {
     const supplier = await updateSupplier(req.params.id, req.body);
-    if (!supplier) return res.status(404).json({ error: "Supplier not found" });
+    if (!supplier) {
+      res.status(404).json({ error: { code: "not_found", message: "Supplier not found." } });
+      return;
+    }
     res.json({ supplier });
-  })
+  }),
 );
 
 suppliersRouter.delete(
   "/:id",
-  requireAuth,
-  requireStaff,
+  requirePermission("inventory:write"),
+  validate(idParam, "params"),
   asyncHandler(async (req, res) => {
     if (req.user!.role !== "super-admin") throw forbidden("Only a super administrator can delete suppliers.");
     const deleted = await deleteSupplier(req.params.id);
-    if (!deleted) return res.status(404).json({ error: "Supplier not found" });
+    if (!deleted) {
+      res.status(404).json({ error: { code: "not_found", message: "Supplier not found." } });
+      return;
+    }
     res.json({ deleted: true });
-  })
+  }),
 );

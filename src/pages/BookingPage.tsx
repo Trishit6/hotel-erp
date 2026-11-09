@@ -32,6 +32,7 @@ import {
   taxConfig,
 } from "../lib/hotel-data";
 import { useHotel } from "../lib/hotel-store";
+import { setBookingConfirmation } from "../lib/booking-handoff";
 
 const emptyForm = {
   guestName: "",
@@ -176,10 +177,11 @@ export default function BookingPage() {
       setError(result.error ?? "The reservation could not be confirmed.");
       return;
     }
+    setBookingConfirmation(result.reservation);
     startTransition(() => {
       navigate({
         to: "/booking/success",
-        search: { bookingId: result.reservation!.id },
+        search: {},
       });
     });
   };
@@ -230,11 +232,11 @@ export default function BookingPage() {
         <div className="grid gap-6 lg:grid-cols-[1fr_0.78fr]">
           <form
             onSubmit={submit}
-            className="rounded-[1.4rem] border border-[var(--line)] bg-[var(--surface)] p-5 shadow-[0_10px_35px_rgba(23,43,73,0.05)] md:p-8"
+            className="glass-card animate-rise-in rounded-[1.5rem] p-5 md:p-8"
           >
             <div className="flex flex-col justify-between gap-3 border-b border-[var(--line)] pb-5 sm:flex-row sm:items-center">
               <div>
-                <h2 className="text-lg font-semibold text-[var(--ink)]">
+                <h2 className="font-display text-2xl font-semibold text-[var(--ink)]">
                   Guest details
                 </h2>
                 <p className="mt-1 text-xs text-[var(--muted)]">
@@ -251,7 +253,7 @@ export default function BookingPage() {
                 <span className="mb-2 block text-xs font-semibold text-[var(--muted-strong)]">
                   Full name
                 </span>
-                <span className="flex items-center gap-2 rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 transition-colors focus-within:border-[var(--sage)]">
+                <span className="flex items-center gap-2 rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 transition-colors focus-within:border-[var(--accent-strong)]">
                   <UserRound className="h-4 w-4 text-[var(--faint)]" />
                   <input
                     required
@@ -269,7 +271,7 @@ export default function BookingPage() {
                 <span className="mb-2 block text-xs font-semibold text-[var(--muted-strong)]">
                   Email
                 </span>
-                <span className="flex items-center gap-2 rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 transition-colors focus-within:border-[var(--sage)]">
+                <span className="flex items-center gap-2 rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 transition-colors focus-within:border-[var(--accent-strong)]">
                   <Mail className="h-4 w-4 text-[var(--faint)]" />
                   <input
                     required
@@ -286,7 +288,7 @@ export default function BookingPage() {
                 <span className="mb-2 block text-xs font-semibold text-[var(--muted-strong)]">
                   Indian mobile number
                 </span>
-                <span className="flex items-center gap-2 rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 transition-colors focus-within:border-[var(--sage)]">
+                <span className="flex items-center gap-2 rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 transition-colors focus-within:border-[var(--accent-strong)]">
                   <Phone className="h-4 w-4 text-[var(--faint)]" />
                   <input
                     required
@@ -325,7 +327,7 @@ export default function BookingPage() {
                     onChange={(event) => update("address", event.target.value)}
                     autoComplete="street-address"
                     placeholder="Street address"
-                    className="w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors placeholder:text-[var(--faint)] focus:border-[var(--sage)]"
+                    className="w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors placeholder:text-[var(--faint)] focus:border-[var(--accent-strong)]"
                   />
                 </label>
                 <label>
@@ -337,7 +339,7 @@ export default function BookingPage() {
                     onChange={(event) => update("city", event.target.value)}
                     autoComplete="address-level2"
                     placeholder="Mumbai"
-                    className="w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors placeholder:text-[var(--faint)] focus:border-[var(--sage)]"
+                    className="w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors placeholder:text-[var(--faint)] focus:border-[var(--accent-strong)]"
                   />
                 </label>
                 <label>
@@ -348,7 +350,7 @@ export default function BookingPage() {
                     value={form.state}
                     onChange={(event) => update("state", event.target.value)}
                     autoComplete="address-level1"
-                    className="w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors focus:border-[var(--sage)]"
+                    className="w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors focus:border-[var(--accent-strong)]"
                   >
                     <option value="">Select a state</option>
                     {indianStates.map((state) => (
@@ -373,7 +375,7 @@ export default function BookingPage() {
                     autoComplete="postal-code"
                     inputMode="numeric"
                     placeholder="400001"
-                    className="w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors placeholder:text-[var(--faint)] focus:border-[var(--sage)]"
+                    className="w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors placeholder:text-[var(--faint)] focus:border-[var(--accent-strong)]"
                   />
                 </label>
                 <label>
@@ -388,7 +390,7 @@ export default function BookingPage() {
                     rows={3}
                     maxLength={500}
                     placeholder="Arrival notes, accessibility needs, or preferences"
-                    className="w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors placeholder:text-[var(--faint)] focus:border-[var(--sage)]"
+                    className="w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors placeholder:text-[var(--faint)] focus:border-[var(--accent-strong)]"
                   />
                 </label>
               </div>
@@ -411,7 +413,8 @@ export default function BookingPage() {
             <button
               type="submit"
               disabled={submitting || !available}
-              className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] py-3.5 text-sm font-semibold text-[var(--on-primary)] transition-colors hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-60"
+              data-cursor="Confirm"
+              className="btn-sheen mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] py-3.5 text-sm font-semibold text-[var(--on-primary)] transition-colors hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
               {submitting ? "Confirming..." : "Confirm reservation"}{" "}
@@ -423,7 +426,7 @@ export default function BookingPage() {
             </p>
           </form>
 
-          <aside className="h-fit overflow-hidden rounded-[1.4rem] border border-[var(--line)] bg-[var(--surface)] shadow-[0_10px_35px_rgba(23,43,73,0.05)]">
+          <aside className="h-fit overflow-hidden rounded-[1.4rem] border border-[var(--line)] bg-[var(--surface)] shadow-[0_10px_35px_rgba(23,43,73,0.05)] lg:sticky lg:top-24">
             <RoomVisual room={room} />
             <div className="p-5 md:p-6">
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--sage)]">

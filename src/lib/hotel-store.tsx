@@ -23,6 +23,7 @@ import {
   type Invoice,
   type Payment,
   type PaymentMethod,
+  type PublicReservation,
   type PublicSettings,
   type Reservation,
   type ReservationStatus,
@@ -138,7 +139,7 @@ export interface RegisterInput {
 }
 
 type MutationResult = { error?: string; redirect?: string };
-type ReservationResult = { reservation?: Reservation; error?: string };
+type ReservationResult = { reservation?: PublicReservation; error?: string };
 type GuestResult = { guest?: Guest; error?: string };
 
 type PublicCatalogResponse = {
@@ -670,14 +671,36 @@ export function HotelProvider({ children }: { children: ReactNode }) {
           postalCode: data.postalCode ?? "",
           ...(role && role !== "customer" ? { discount: data.discount } : {}),
         };
-        const result = await api.post<{ reservation: Reservation }>(
+        const result = await api.post<{
+          reservation: PublicReservation | Reservation;
+        }>(
           role && role !== "customer"
             ? "/admin/reservations"
             : "/public/reservations",
           body,
         );
         await refresh();
-        return { reservation: result.reservation };
+        const created = result.reservation;
+        // Public creation already returns the allowlisted view. Staff creation
+        // returns the internal reservation, so build the same immediate view
+        // from the catalog data the form is already displaying.
+        return {
+          reservation:
+            "guestFirstName" in created
+              ? created
+              : {
+                  reference: created.reference,
+                  status: created.status,
+                  checkIn: created.checkIn,
+                  checkOut: created.checkOut,
+                  roomTypeName: type.name,
+                  roomNumber: getRoom(data.roomId)?.number ?? "",
+                  guestFirstName: data.guestName.trim().split(/\s+/)[0] ?? "",
+                  total: created.total,
+                  paidAmount: created.paidAmount,
+                  paymentStatus: created.paymentStatus,
+                },
+        };
       } catch (caught) {
         return handleError(caught, false);
       }

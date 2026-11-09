@@ -103,6 +103,14 @@ export const adminReservationSchema = reservationBaseSchema.extend({
 export const reservationStatusSchema = z.object({ status: z.enum(RESERVATION_STATUSES) });
 export const assignRoomSchema = z.object({ roomId: z.string().min(1).max(64) });
 
+// Overrides are explicit request-body flags, never inferred from the UI.
+export const checkInOverrideSchema = z
+  .object({ earlyCheckIn: z.boolean().default(false) })
+  .strict();
+export const checkoutOverrideSchema = z
+  .object({ overrideOutstandingBalance: z.boolean().default(false) })
+  .strict();
+
 export const guestSchema = z.object({
   name: z.string().trim().min(2).max(120),
   email,
@@ -234,6 +242,22 @@ export const roomUpdateSchema = z.object({
 });
 
 export const inventoryUpdateSchema = inventorySchema.partial();
+
+export const supplierCreateSchema = z.object({
+  name: z.string().trim().min(2).max(120),
+  contactName: z.string().trim().max(120).default(""),
+  email: z.union([z.literal(""), email]).default(""),
+  phone: z.string().trim().max(32).default(""),
+  address: z.string().trim().max(300).default(""),
+});
+
+export const supplierUpdateSchema = supplierCreateSchema
+  .partial()
+  .refine((value) => Object.keys(value).length > 0, "Provide at least one field to update.");
+
+export const supplierQuerySchema = z.object({
+  search: z.string().trim().max(120).optional(),
+});
 
 export const expenseUpdateSchema = expenseSchema.partial();
 

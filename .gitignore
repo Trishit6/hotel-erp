@@ -1,5 +1,18 @@
 .env
 apps/api/.env
 apps/api/.env.local
-apps/api/dist
 node_modules
+
+# Build, test, and debug output
+dist/
+apps/api/dist/
+apps/api/playwright-report/
+apps/api/test-results/
+*.log
+*.tsbuildinfo
+schema-out.txt
+verify-out.txt
+columns.txt
+apps/api/.tmp-inspect.cjs
+apps/api/schema-out.txt
+verify.ljs

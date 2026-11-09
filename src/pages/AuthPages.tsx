@@ -15,6 +15,7 @@ import { Link, useSearch } from "@tanstack/react-router";
 import { motion, useReducedMotion } from "motion/react";
 import { BrandMark } from "../components/hotel/HotelUi";
 import { ThemeToggle } from "../components/hotel/ThemeToggle";
+import { GsapImage } from "../components/motion/GsapImage";
 import { hotelInfo, isIndianPhone, roleHome } from "../lib/hotel-data";
 import { useHotel } from "../lib/hotel-store";
 import { ApiError, api } from "../lib/api";
@@ -56,30 +57,34 @@ function AuthShell({
           <ThemeToggle />
         </div>
       </header>
-      <main className="mx-auto grid max-w-[1320px] gap-5 px-4 pb-10 md:px-7 lg:min-h-[calc(100vh-92px)] lg:grid-cols-[1.02fr_0.98fr]">
-        <section className="relative hidden min-h-[640px] overflow-hidden rounded-[1.9rem] bg-[var(--deep)] lg:block">
-          <motion.img
-            initial={reduceMotion ? false : { scale: 1.06 }}
-            animate={reduceMotion ? undefined : { scale: 1 }}
-            transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-            src={image}
-            alt={imageAlt}
-            className="h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--deep)]/90 via-[var(--deep)]/25 to-[var(--deep)]/10" />
+      <main className="mx-auto grid max-w-[1360px] gap-5 px-4 pb-10 md:px-7 lg:min-h-[calc(100vh-92px)] lg:grid-cols-[1.02fr_0.98fr]">
+        <section className="relative hidden min-h-[660px] overflow-hidden rounded-[2rem] border border-white/10 bg-[var(--deep)] lg:block">
+          <div className="absolute inset-0">
+            <GsapImage
+              src={image}
+              alt={imageAlt}
+              className="h-full w-full"
+              priority
+              parallax
+            />
+          </div>
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--deep)]/95 via-[var(--deep)]/30 to-[var(--deep)]/10" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[var(--deep)]/35 via-transparent to-transparent" />
+          <span className="corner-mark corner-mark--tl" aria-hidden="true" />
           <div className="absolute inset-x-0 bottom-0 p-10 text-white xl:p-14">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--sage-on-dark)]">
+            <div className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
+              <span className="h-px w-7 bg-[var(--accent)]" />
               RIVR · {hotelInfo.city}
-            </p>
-            <h1 className="mt-4 max-w-md font-display text-[clamp(2.8rem,4vw,4.4rem)] leading-[0.98] tracking-[-0.03em]">
+            </div>
+            <h1 className="mt-5 max-w-md font-display text-[clamp(2.9rem,4.2vw,4.6rem)] leading-[0.96] tracking-[-0.035em]">
               A quieter kind of arrival.
             </h1>
             <p className="mt-4 max-w-sm text-sm leading-6 text-white/70">
               One account for guests and staff. Your access is determined by the
               role on your RIVR account.
             </p>
-            <div className="mt-6 flex items-center gap-2 text-[11px] text-white/55">
-              <ShieldCheck className="h-3.5 w-3.5 text-[var(--sage-on-dark)]" />{" "}
+            <div className="mt-7 flex items-center gap-2 border-t border-white/10 pt-5 text-[11px] text-white/50">
+              <ShieldCheck className="h-3.5 w-3.5 text-[var(--accent)]" />{" "}
               Sessions are HTTP-only and expire automatically.
             </div>
           </div>
@@ -92,16 +97,18 @@ function AuthShell({
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             className="w-full max-w-[500px]"
           >
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--sage)]">
+            <div className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--muted-strong)]">
+              <span className="h-px w-6 bg-[var(--accent)]" />
               {eyebrow}
-            </p>
-            <h2 className="mt-4 font-display text-[clamp(2.4rem,4vw,3.8rem)] leading-[1.02] tracking-[-0.03em] text-[var(--ink)]">
+            </div>
+            <h2 className="mt-5 font-display text-[clamp(2.5rem,4.2vw,4rem)] leading-[0.98] tracking-[-0.035em] text-[var(--ink)]">
               {title}
             </h2>
-            <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
+            <p className="mt-3 max-w-md text-sm leading-6 text-[var(--muted)]">
               {subtitle}
             </p>
-            <div className="mt-7 rounded-[1.4rem] border border-[var(--line)] bg-[var(--surface)] p-5 shadow-[0_14px_45px_rgba(23,43,73,0.07)] md:p-7">
+            <div className="glass-card mt-7 rounded-[1.6rem] p-5 md:p-7">
+              <div className="mb-5 h-px bg-gradient-to-r from-[var(--accent)]/70 via-[var(--line)] to-transparent" />
               {children}
             </div>
             {footer && (
@@ -155,8 +162,8 @@ function PasswordField({
   return (
     <label>
       <span className={labelClass}>{label}</span>
-      <span className="flex items-center gap-2 rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 transition-colors focus-within:border-[var(--sage)]">
-        <LockKeyhole className="h-4 w-4 text-[var(--faint)]" />
+      <span className="group flex items-center gap-2 rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 transition-colors focus-within:border-[var(--accent)] focus-within:ring-4 focus-within:ring-[var(--accent)]/10">
+        <LockKeyhole className="h-4 w-4 text-[var(--faint)] transition-colors group-focus-within:text-[var(--accent-strong)]" />
         <input
           type={show ? "text" : "password"}
           value={value}
@@ -168,7 +175,7 @@ function PasswordField({
         <button
           type="button"
           onClick={() => setShow((current) => !current)}
-          className="text-[var(--faint)] transition-colors hover:text-[var(--ink)]"
+          className="grid h-7 w-7 place-items-center rounded-full text-[var(--faint)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--ink)]"
           aria-label={show ? "Hide password" : "Show password"}
         >
           {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -273,10 +280,10 @@ export function LoginPage() {
         <button
           type="submit"
           disabled={submitting}
-          className="mt-1 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] py-3.5 text-sm font-semibold text-[var(--on-primary)] transition-colors hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-60"
+          className="btn-sheen group mt-1 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] py-3.5 text-sm font-semibold text-[var(--on-primary)] transition-colors hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {submitting ? "Signing in..." : "Sign in"}{" "}
-          <ArrowRight className="h-4 w-4" />
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
         </button>
         {status && <Status tone="error">{status}</Status>}
       </form>
@@ -425,13 +432,13 @@ export function RegisterPage() {
           <div className="-mt-1">
             <div className="flex items-center justify-between text-[11px] text-[var(--faint)]">
               <span>Password strength</span>
-              <span>{strengthLabel}</span>
+              <span className={score >= 3 ? "text-[var(--success)]" : "text-[var(--warning)]"}>{strengthLabel}</span>
             </div>
             <div className="mt-1.5 grid grid-cols-4 gap-1">
               {[1, 2, 3, 4].map((step) => (
                 <span
                   key={step}
-                  className={`h-1.5 rounded-full ${score >= step ? "bg-[var(--sage)]" : "bg-[var(--line-2)]"}`}
+                  className={`h-1.5 rounded-full transition-colors duration-300 ${score >= step ? "bg-[var(--sage)]" : "bg-[var(--line-2)]"}`}
                 />
               ))}
             </div>

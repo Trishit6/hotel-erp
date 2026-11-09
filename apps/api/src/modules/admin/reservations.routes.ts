@@ -5,6 +5,8 @@ import { asyncHandler } from "../../utils/http";
 import {
   adminReservationSchema,
   assignRoomSchema,
+  checkInOverrideSchema,
+  checkoutOverrideSchema,
   idParam,
   reservationStatusSchema,
 } from "../shared/schemas";
@@ -37,7 +39,7 @@ reservationsRouter.post(
   requirePermission("reservations:write"),
   validate(adminReservationSchema),
   asyncHandler(async (req, res) => {
-    const result = await createReservation(req.body, actorFrom(req));
+    const result = await createReservation(req.body, { source: "staff", actor: actorFrom(req) });
     res.status(201).json(result);
   }),
 );
@@ -81,8 +83,13 @@ reservationsRouter.post(
   "/:id/check-in",
   requirePermission("reservations:checkin"),
   validate(idParam, "params"),
+  validate(checkInOverrideSchema),
   asyncHandler(async (req, res) => {
-    res.json({ reservation: await checkInReservation(req.params.id, actorFrom(req)) });
+    res.json({
+      reservation: await checkInReservation(req.params.id, actorFrom(req), {
+        earlyCheckIn: req.body.earlyCheckIn,
+      }),
+    });
   }),
 );
 
@@ -90,7 +97,12 @@ reservationsRouter.post(
   "/:id/check-out",
   requirePermission("reservations:checkout"),
   validate(idParam, "params"),
+  validate(checkoutOverrideSchema),
   asyncHandler(async (req, res) => {
-    res.json({ reservation: await checkOutReservation(req.params.id, actorFrom(req)) });
+    res.json({
+      reservation: await checkOutReservation(req.params.id, actorFrom(req), {
+        overrideOutstandingBalance: req.body.overrideOutstandingBalance,
+      }),
+    });
   }),
 );

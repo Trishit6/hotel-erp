@@ -14,6 +14,8 @@ export const PERMISSIONS = {
   "reservations:cancel": ["super-admin", "admin", "manager", "receptionist"],
   "reservations:checkin": ["super-admin", "admin", "manager", "receptionist"],
   "reservations:checkout": ["super-admin", "admin", "manager", "receptionist"],
+  // Early check-in and outstanding-balance checkout are manager-level actions.
+  "reservations:override": ["super-admin", "admin", "manager"],
   "rooms:read": STAFF_ROLES,
   "rooms:write": ["super-admin", "admin", "manager"],
   "rooms:status": ["super-admin", "admin", "manager", "housekeeping"],

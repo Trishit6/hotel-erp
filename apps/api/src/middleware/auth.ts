@@ -20,7 +20,9 @@ export async function attachUser(req: Request, _res: Response, next: NextFunctio
       req.sessionId = session.sessionId;
     }
   } catch {
-    // A failed session lookup must not block public endpoints.
+    // A failed session lookup must not block public endpoints. Keep the log
+    // free of cookies, tokens, session hashes, and user details.
+    console.error("[auth] session lookup failed");
   }
   next();
 }

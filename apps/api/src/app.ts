@@ -18,7 +18,7 @@ import { accountRouter } from "./modules/account/routes";
 export function createApp() {
   const app = express();
 
-  app.set("trust proxy", 1);
+  app.set("trust proxy", env.trustProxy);
   app.disable("x-powered-by");
 
   app.use(
@@ -45,8 +45,9 @@ export function createApp() {
   app.use(express.json({ limit: "200kb" }));
   app.use(cookieParser());
   app.use(requestLogger);
-  app.use(attachUser);
+  // Reject request floods before doing a database session lookup.
   app.use(globalLimiter);
+  app.use(attachUser);
 
   app.get(
     "/api/health",

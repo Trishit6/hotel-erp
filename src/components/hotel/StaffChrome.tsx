@@ -8,20 +8,21 @@ import {
   ChevronRight,
   ClipboardCheck,
   CreditCard,
-  FileText,
   Gauge,
+  Globe2,
   Hotel,
   LayoutDashboard,
   Loader2,
   LogOut,
   Menu,
   Package,
+  PanelLeftClose,
+  PanelLeftOpen,
   ReceiptText,
   Search,
   Settings2,
   ShieldCheck,
   ShoppingBag,
-  UserRound,
   UsersRound,
   X,
 } from "lucide-react";
@@ -38,6 +39,7 @@ type NavItem = {
   icon: React.ComponentType<{ className?: string }>;
   roles?: StaffRole[];
 };
+
 const navGroups: { label: string; items: NavItem[] }[] = [
   {
     label: "Workspace",
@@ -147,6 +149,28 @@ const navGroups: { label: string; items: NavItem[] }[] = [
   },
 ];
 
+const pathLabels: Record<string, string> = {
+  "/admin/dashboard": "Overview",
+  "/admin/reservations": "Reservations",
+  "/admin/rooms": "Rooms & room types",
+  "/admin/room-types": "Rooms & room types",
+  "/admin/guests": "Guests",
+  "/admin/front-desk": "Front desk",
+  "/admin/check-in": "Check-in",
+  "/admin/check-out": "Check-out",
+  "/admin/housekeeping": "Housekeeping",
+  "/admin/staff": "Staff & attendance",
+  "/admin/attendance": "Staff & attendance",
+  "/admin/payments": "Payments & invoices",
+  "/admin/invoices": "Payments & invoices",
+  "/admin/expenses": "Expenses",
+  "/admin/inventory": "Inventory",
+  "/admin/restaurant": "Restaurant & services",
+  "/admin/reports": "Reports & analytics",
+  "/admin/activity-logs": "Activity logs",
+  "/admin/settings": "Settings",
+};
+
 export function AdminLayout({ children }: { children?: ReactNode }) {
   const {
     role,
@@ -162,12 +186,19 @@ export function AdminLayout({ children }: { children?: ReactNode }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [open, setOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   const [query, setQuery] = useState("");
+
   useEffect(() => {
     if (status === "ready" && !role) navigate({ to: "/login" });
     if (status === "ready" && role === "customer")
       navigate({ to: "/guest/dashboard" });
   }, [navigate, role, status]);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+
   const links = useMemo(
     () =>
       navGroups.map((group) => ({
@@ -176,20 +207,24 @@ export function AdminLayout({ children }: { children?: ReactNode }) {
       })),
     [can],
   );
+
   if (status === "loading")
     return (
       <div className="grid min-h-screen place-items-center bg-[var(--canvas)] text-[var(--muted)]">
-        <div className="flex items-center gap-3 text-sm">
-          <Loader2 className="h-5 w-5 animate-spin text-[var(--sage)]" />{" "}
-          Loading the RIVR workspace…
+        <div className="flex items-center gap-3 rounded-full border border-[var(--line)] bg-[var(--surface)] px-5 py-3 text-sm shadow-[var(--shadow-soft)]">
+          <Loader2 className="h-5 w-5 animate-spin text-[var(--sage)]" /> Loading the RIVR workspace…
         </div>
       </div>
     );
+
   if (status === "error")
     return (
       <div className="grid min-h-screen place-items-center bg-[var(--canvas)] px-5 text-center text-[var(--text)]">
-        <div className="max-w-md rounded-[1.4rem] border border-[var(--line)] bg-[var(--surface)] p-8">
-          <h1 className="font-display text-3xl text-[var(--ink)]">
+        <div className="glass-card max-w-md rounded-[1.5rem] p-8">
+          <span className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-[var(--danger-soft)] text-[var(--danger)]">
+            <ShieldCheck className="h-5 w-5" />
+          </span>
+          <h1 className="mt-5 font-display text-3xl text-[var(--ink)]">
             The workspace could not load.
           </h1>
           <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
@@ -213,7 +248,9 @@ export function AdminLayout({ children }: { children?: ReactNode }) {
         </div>
       </div>
     );
+
   if (!role || role === "customer") return null;
+
   const logoutNow = () => {
     void logout();
     navigate({ to: "/login" });
@@ -235,17 +272,47 @@ export function AdminLayout({ children }: { children?: ReactNode }) {
       item.roles &&
       !item.roles.includes(role),
   );
+  const pageLabel =
+    pathLabels[location.pathname] ??
+    adminNav.find(
+      (item) =>
+        location.pathname === item.to ||
+        location.pathname.startsWith(`${item.to}/`),
+    )?.label ??
+    "Workspace";
+  const initials = actorName
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
   return (
     <div className="min-h-screen bg-[var(--canvas)] text-[var(--text)] lg:flex">
+      <a
+        href="#admin-main"
+        className="sr-only z-[100] rounded-lg bg-[var(--primary)] px-4 py-2 text-xs font-semibold text-[var(--on-primary)] focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+      >
+        Skip to main content
+      </a>
+
       <div
-        className={`fixed inset-0 z-50 bg-[var(--deep)]/45 lg:hidden ${open ? "block" : "hidden"}`}
+        className={`fixed inset-0 z-40 bg-[var(--deep)]/55 backdrop-blur-sm transition-opacity lg:hidden ${
+          open ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
         onClick={() => setOpen(false)}
+        aria-hidden="true"
       />
+
       <aside
-        className={`glass-sidebar no-print fixed inset-y-0 left-0 z-50 flex w-[288px] -translate-x-full flex-col px-5 py-6 text-white transition-transform lg:static lg:translate-x-0 ${open ? "translate-x-0" : ""}`}
+        className={`glass-sidebar no-print fixed inset-y-0 left-0 z-50 flex w-[288px] -translate-x-full flex-col px-4 py-5 text-white transition-[width,transform] duration-300 lg:sticky lg:bottom-auto lg:top-0 lg:h-screen lg:translate-x-0 ${
+          open ? "translate-x-0" : ""
+        } ${collapsed ? "lg:w-[92px]" : "lg:w-[288px]"}`}
       >
         <div className="flex items-center justify-between">
-          <BrandMark dark />
+          <div className={collapsed ? "hidden lg:block" : ""}>
+            <BrandMark dark compact={collapsed} />
+          </div>
           <button
             type="button"
             onClick={() => setOpen(false)}
@@ -255,21 +322,31 @@ export function AdminLayout({ children }: { children?: ReactNode }) {
             <X className="h-4 w-4" />
           </button>
         </div>
-        <div className="mt-9 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-3">
-          <div className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--accent)] text-[var(--accent-ink)]">
+
+        <div
+          className={`mt-8 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-3 ${
+            collapsed ? "lg:justify-center lg:p-2" : ""
+          }`}
+        >
+          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--accent)] text-[var(--accent-ink)]">
             <ShieldCheck className="h-4 w-4" />
           </div>
-          <div>
+          <div className={collapsed ? "lg:hidden" : ""}>
             <p className="text-xs font-semibold capitalize">
               {role.replaceAll("-", " ")}
             </p>
             <p className="mt-0.5 text-[10px] text-white/50">RIVR operations</p>
           </div>
         </div>
-        <nav className="scrollbar-thin mt-8 flex flex-1 flex-col gap-6 overflow-y-auto">
+
+        <nav className="scrollbar-thin mt-7 flex flex-1 flex-col gap-5 overflow-y-auto">
           {links.map((group) => (
             <div key={group.label}>
-              <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/35">
+              <p
+                className={`mb-2 px-3 text-[9px] font-semibold uppercase tracking-[0.22em] text-white/35 ${
+                  collapsed ? "lg:hidden" : ""
+                }`}
+              >
                 {group.label}
               </p>
               <div className="grid gap-1">
@@ -278,32 +355,63 @@ export function AdminLayout({ children }: { children?: ReactNode }) {
                     key={to}
                     to={to}
                     onClick={() => setOpen(false)}
-                    activeProps={{ className: "bg-white/12 text-white" }}
+                    title={collapsed ? label : undefined}
+                    activeProps={{
+                      className:
+                        "bg-white/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]",
+                      "aria-current": "page",
+                    }}
                     inactiveProps={{
                       className:
                         "text-white/58 hover:bg-white/8 hover:text-white",
                     }}
-                    className="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors"
+                    className={`sidebar-link group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${
+                      collapsed ? "lg:justify-center lg:px-2" : ""
+                    }`}
                   >
                     <Icon className="h-4 w-4 shrink-0" />
-                    <span className="truncate">{label}</span>
-                    <ChevronRight className="ml-auto h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-50" />
+                    <span className={`truncate ${collapsed ? "lg:hidden" : ""}`}>
+                      {label}
+                    </span>
+                    <ChevronRight
+                      className={`ml-auto h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-50 ${
+                        collapsed ? "lg:hidden" : ""
+                      }`}
+                    />
                   </Link>
                 ))}
               </div>
             </div>
           ))}
         </nav>
-        <div className="mt-5 rounded-2xl border border-white/10 bg-[linear-gradient(145deg,rgba(201,169,106,0.2),rgba(109,94,252,0.14))] p-4 text-white shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
-          <Gauge className="mb-4 h-5 w-5 text-[var(--accent)]" />
-          <p className="text-sm font-semibold">A clear day ahead.</p>
-          <p className="mt-1 text-[11px] leading-4 text-white/62">
-            Keep arrivals, rooms, and people moving together.
-          </p>
-        </div>
+
+        {collapsed ? (
+          <Link
+            to="/"
+            title="View guest website"
+            className="mx-auto mt-4 grid h-10 w-10 place-items-center rounded-full border border-white/10 text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+          >
+            <Globe2 className="h-4 w-4" />
+          </Link>
+        ) : (
+          <div className="mt-4 rounded-2xl border border-white/10 bg-[linear-gradient(145deg,rgba(194,163,107,0.2),rgba(63,107,91,0.14))] p-4 text-white shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
+            <Gauge className="mb-4 h-5 w-5 text-[var(--accent)]" />
+            <p className="text-sm font-semibold">A clear day ahead.</p>
+            <p className="mt-1 text-[11px] leading-4 text-white/60">
+              Keep arrivals, rooms, and people moving together.
+            </p>
+            <Link
+              to="/"
+              className="mt-4 inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/55 transition-colors hover:text-white"
+            >
+              <Globe2 className="h-3 w-3" /> View guest site
+            </Link>
+          </div>
+        )}
       </aside>
+
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="glass-header no-print sticky top-0 z-30 flex items-center justify-between gap-4 px-5 py-4 md:px-8 lg:px-10">
+        <header className="glass-header no-print sticky top-0 z-30 flex items-center justify-between gap-4 px-5 py-3.5 md:px-8 lg:px-10">
           <div className="flex min-w-0 items-center gap-3">
             <button
               type="button"
@@ -313,30 +421,36 @@ export function AdminLayout({ children }: { children?: ReactNode }) {
             >
               <Menu className="h-4 w-4" />
             </button>
-            <div className="hidden lg:block">
-              <p className="text-[11px] text-[var(--faint)]">
-                {new Intl.DateTimeFormat("en-US", {
-                  weekday: "long",
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                }).format(new Date())}
-              </p>
-              <h1 className="mt-0.5 text-lg font-semibold">
-                Good morning, {actorName.split(" ")[0]}.
-              </h1>
+            <button
+              type="button"
+              onClick={() => setCollapsed((value) => !value)}
+              className="hidden h-9 w-9 place-items-center rounded-xl border border-[var(--line-2)] bg-[var(--surface)] text-[var(--muted)] transition-colors hover:border-[var(--accent)]/40 hover:text-[var(--ink)] lg:grid"
+              aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+              title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            >
+              {collapsed ? <PanelLeftOpen className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
+            </button>
+            <div className="hidden min-w-0 md:block">
+              <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--faint)]">
+                <Link to="/admin/dashboard" className="transition-colors hover:text-[var(--ink)]">
+                  Workspace
+                </Link>
+                <ChevronRight className="h-3 w-3" />
+                <span className="truncate text-[var(--muted-strong)]">{pageLabel}</span>
+              </div>
             </div>
-            <div className="lg:hidden">
+            <div className="md:hidden">
               <BrandMark />
             </div>
           </div>
-          <div className="flex items-center gap-2 md:gap-3">
+
+          <div className="flex items-center gap-2 md:gap-2.5">
             <form
               onSubmit={(event) => {
                 event.preventDefault();
                 navigate({ to: "/admin/reservations", search: { q: query } });
               }}
-              className="hidden items-center gap-2 rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3 py-2 shadow-sm md:flex"
+              className="hidden items-center gap-2 rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3 py-2 shadow-sm transition-colors focus-within:border-[var(--accent)]/50 lg:flex"
             >
               <Search className="h-4 w-4 text-[var(--faint)]" />
               <input
@@ -344,19 +458,19 @@ export function AdminLayout({ children }: { children?: ReactNode }) {
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search reservations..."
                 aria-label="Search reservations"
-                className="w-40 bg-transparent text-xs outline-none placeholder:text-[var(--faint)]"
+                className="w-36 bg-transparent text-xs outline-none placeholder:text-[var(--faint)] xl:w-44"
               />
             </form>
             <Link
               to="/admin/reservations"
               search={{ q: query }}
-              className="hidden rounded-xl bg-[var(--primary)] px-3.5 py-2.5 text-xs font-semibold text-white hover:bg-[var(--primary-hover)] sm:flex"
+              className="hidden rounded-xl bg-[var(--primary)] px-3.5 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-[var(--primary-hover)] sm:flex"
             >
               Quick action
             </Link>
             <Link
               to={alertTo}
-              className="relative grid h-9 w-9 place-items-center rounded-xl border border-[var(--line-2)] bg-[var(--surface)] text-[var(--muted)] transition-colors hover:border-[var(--violet)] hover:text-[var(--ink)]"
+              className="relative grid h-9 w-9 place-items-center rounded-xl border border-[var(--line-2)] bg-[var(--surface)] text-[var(--muted)] transition-colors hover:border-[var(--accent)]/40 hover:text-[var(--ink)]"
               aria-label={
                 pending > 0
                   ? `${pending} pending reservations — open alerts`
@@ -366,25 +480,37 @@ export function AdminLayout({ children }: { children?: ReactNode }) {
             >
               <Bell className="h-4 w-4" />
               {pending > 0 && (
-                <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-[var(--danger)]" />
+                <span className="absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] font-bold text-white">
+                  {pending > 9 ? "9+" : pending}
+                </span>
               )}
             </Link>
             <ThemeToggle />
-            <div className="hidden h-8 w-px bg-[var(--line)] sm:block" />
-            <div className="grid h-9 w-9 place-items-center rounded-full bg-[var(--info-soft)] text-xs font-bold text-[var(--info)]">
-              {actorName.slice(0, 1).toUpperCase()}
+            <span className="hidden h-8 w-px bg-[var(--line)] sm:block" aria-hidden="true" />
+            <div className="hidden items-center gap-2.5 sm:flex">
+              <span className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10px] font-bold text-[var(--deep)] ring-2 ring-[var(--surface)]">
+                {initials}
+              </span>
+              <span className="hidden lg:block">
+                <span className="block text-[11px] font-semibold text-[var(--ink)]">{actorName}</span>
+                <span className="block text-[9px] capitalize text-[var(--faint)]">
+                  {role.replaceAll("-", " ")}
+                </span>
+              </span>
             </div>
             <button
               type="button"
               onClick={logoutNow}
-              className="hidden text-xs text-[var(--muted)] hover:text-[var(--ink)] sm:block"
+              className="grid h-9 w-9 place-items-center rounded-xl border border-transparent text-[var(--muted)] transition-colors hover:border-[var(--line-2)] hover:text-[var(--danger)]"
               title="Sign out"
+              aria-label="Sign out"
             >
               <LogOut className="h-4 w-4" />
             </button>
           </div>
         </header>
-        <main className="admin-main flex-1 px-5 py-6 md:px-8 md:py-8 lg:px-10">
+
+        <main id="admin-main" className="admin-main flex-1 px-5 py-6 md:px-8 md:py-8 lg:px-10">
           {error && (
             <div
               role="alert"
@@ -403,19 +529,19 @@ export function AdminLayout({ children }: { children?: ReactNode }) {
           {restricted ? (
             <div className="grid min-h-[60vh] place-items-center">
               <div className="max-w-md text-center">
-                <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-[var(--danger-soft)] text-[var(--danger)]">
+                <div className="mx-auto grid h-14 w-14 place-items-center rounded-full border border-[var(--danger-line)] bg-[var(--danger-soft)] text-[var(--danger)]">
                   <ShieldCheck className="h-5 w-5" />
                 </div>
-                <h2 className="mt-4 text-xl font-semibold">
+                <h2 className="mt-4 font-display text-3xl text-[var(--ink)]">
                   This workspace is restricted.
                 </h2>
-                <p className="mt-2 text-sm text-[var(--faint)]">
+                <p className="mt-2 text-sm leading-6 text-[var(--faint)]">
                   Your current role does not have access to{" "}
                   {restricted.label.toLowerCase()}.
                 </p>
                 <Link
                   to="/admin/dashboard"
-                  className="mt-5 inline-flex rounded-lg bg-[var(--primary)] px-4 py-2.5 text-xs font-semibold text-white"
+                  className="mt-5 inline-flex rounded-full bg-[var(--primary)] px-4 py-2.5 text-xs font-semibold text-white"
                 >
                   Back to overview
                 </Link>

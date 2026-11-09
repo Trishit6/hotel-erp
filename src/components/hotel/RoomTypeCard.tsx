@@ -9,32 +9,37 @@ export function RoomTypeCard({ type, search, compact = false }: { type: RoomType
 
   return (
     <motion.article
-      whileHover={reduceMotion ? undefined : { y: -5 }}
-      transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-      className="group flex h-full flex-col overflow-hidden rounded-[1.35rem] border border-[var(--line)] bg-[var(--surface)] shadow-[0_10px_35px_rgba(23,43,73,0.05)] transition-shadow hover:shadow-[0_22px_55px_rgba(23,43,73,0.12)]"
+      whileHover={reduceMotion ? undefined : { y: -6 }}
+      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+      className="group lux-card flex h-full flex-col overflow-hidden rounded-[1.45rem]"
     >
-      <div className={`relative overflow-hidden bg-[var(--surface-3)] ${compact ? "h-44" : "h-56"}`}>
+      <div className={`image-frame relative overflow-hidden bg-[var(--surface-3)] ${compact ? "h-44" : "h-60"}`}>
         <img
           src={type.image}
           alt={`${type.name} interior at RIVR`}
           loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+          decoding="async"
+          className="h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.06]"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--deep)]/60 via-transparent to-transparent" />
-        <span className="absolute left-4 top-4 rounded-full bg-[var(--glass-strong)] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--on-glass)] backdrop-blur">
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--deep)]/65 via-[var(--deep)]/5 to-transparent" />
+        <span className="absolute left-4 top-4 rounded-full border border-white/25 bg-black/20 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur">
           {type.name}
+        </span>
+        <span className="absolute bottom-4 right-4 rounded-full bg-[var(--glass-strong)] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--on-glass)] backdrop-blur">
+          {type.size} m²
         </span>
       </div>
 
-      <div className="flex flex-1 flex-col p-5">
+      <div className="flex flex-1 flex-col p-5 md:p-6">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="font-display text-2xl leading-tight text-[var(--ink)]">{type.name}</h3>
+          <h3 className="font-display text-3xl leading-none text-[var(--ink)]">{type.name}</h3>
           <div className="text-right">
-            <span className="font-display text-xl text-[var(--ink)]">{formatCurrency(type.rate)}</span>
-            <span className="block text-[10px] text-[var(--faint)]">per night</span>
+            <span className="font-display text-2xl leading-none text-[var(--ink)]">{formatCurrency(type.rate)}</span>
+            <span className="mt-1 block text-[10px] uppercase tracking-[0.1em] text-[var(--faint)]">per night</span>
           </div>
         </div>
-        <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{type.description}</p>
+        <div className="gold-rule mt-4" aria-hidden="true" />
+        <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{type.description}</p>
 
         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[var(--faint)]">
           <span className="flex items-center gap-1.5">
@@ -57,7 +62,8 @@ export function RoomTypeCard({ type, search, compact = false }: { type: RoomType
             to="/booking"
             search={search}
             aria-label={`Check availability for ${type.name}`}
-            className="inline-flex items-center gap-1.5 rounded-full bg-[var(--primary)] px-4 py-2.5 text-xs font-semibold text-[var(--on-primary)] transition-colors hover:bg-[var(--primary-hover)]"
+            data-cursor="Check dates"
+            className="btn-sheen inline-flex items-center gap-1.5 rounded-full bg-[var(--primary)] px-4 py-2.5 text-xs font-semibold text-[var(--on-primary)] transition-colors hover:bg-[var(--primary-hover)]"
           >
             Check dates <ArrowUpRight className="h-3.5 w-3.5" />
           </Link>

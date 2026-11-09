@@ -1,0 +1,544 @@
+{
+  "results": [
+    {
+      "label": "public-desktop",
+      "route": "/",
+      "status": 200,
+      "overflow": 0,
+      "heading": "A quieter kind of luxury,by the water."
+    },
+    {
+      "label": "public-desktop",
+      "route": "/stay",
+      "status": 200,
+      "overflow": 0,
+      "heading": "A slower stay,with more room to breathe."
+    },
+    {
+      "label": "public-desktop",
+      "route": "/rooms",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Find your room,then make it yours."
+    },
+    {
+      "label": "public-desktop",
+      "route": "/amenities",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Everything you need,nothing you don't."
+    },
+    {
+      "label": "public-desktop",
+      "route": "/about",
+      "status": 200,
+      "overflow": 0,
+      "heading": "A house built aroundthe way you like to stay."
+    },
+    {
+      "label": "public-desktop",
+      "route": "/contact",
+      "status": 200,
+      "overflow": 0,
+      "heading": "We are herewhen you need us."
+    },
+    {
+      "label": "public-desktop",
+      "route": "/search",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Your next stay starts here."
+    },
+    {
+      "label": "public-desktop",
+      "route": "/booking",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Your next stay starts here."
+    },
+    {
+      "label": "public-desktop",
+      "route": "/booking/lookup",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Your bookings."
+    },
+    {
+      "label": "public-desktop",
+      "route": "/booking/success",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Reservation not found"
+    },
+    {
+      "label": "public-desktop",
+      "route": "/my-bookings",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Your bookings."
+    },
+    {
+      "label": "public-desktop",
+      "route": "/login",
+      "status": 200,
+      "overflow": 0,
+      "heading": "A quieter kind of arrival."
+    },
+    {
+      "label": "public-desktop",
+      "route": "/register",
+      "status": 200,
+      "overflow": 0,
+      "heading": "A quieter kind of arrival."
+    },
+    {
+      "label": "public-desktop",
+      "route": "/forgot-password",
+      "status": 200,
+      "overflow": 0,
+      "heading": "A quieter kind of arrival."
+    },
+    {
+      "label": "public-desktop",
+      "route": "/reset-password",
+      "status": 200,
+      "overflow": 0,
+      "heading": "A quieter kind of arrival."
+    },
+    {
+      "label": "public-desktop",
+      "route": "/verify-email",
+      "status": 200,
+      "overflow": 0,
+      "heading": "A quieter kind of arrival."
+    },
+    {
+      "label": "public-mobile",
+      "route": "/",
+      "status": 200,
+      "overflow": 0,
+      "heading": "A quieter kind of luxury,by the water."
+    },
+    {
+      "label": "public-mobile",
+      "route": "/stay",
+      "status": 200,
+      "overflow": 0,
+      "heading": "A slower stay,with more room to breathe."
+    },
+    {
+      "label": "public-mobile",
+      "route": "/rooms",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Find your room,then make it yours."
+    },
+    {
+      "label": "public-mobile",
+      "route": "/amenities",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Everything you need,nothing you don't."
+    },
+    {
+      "label": "public-mobile",
+      "route": "/about",
+      "status": 200,
+      "overflow": 0,
+      "heading": "A house built aroundthe way you like to stay."
+    },
+    {
+      "label": "public-mobile",
+      "route": "/contact",
+      "status": 200,
+      "overflow": 0,
+      "heading": "We are herewhen you need us."
+    },
+    {
+      "label": "public-mobile",
+      "route": "/search",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Your next stay starts here."
+    },
+    {
+      "label": "public-mobile",
+      "route": "/booking",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Your next stay starts here."
+    },
+    {
+      "label": "public-mobile",
+      "route": "/booking/lookup",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Your bookings."
+    },
+    {
+      "label": "public-mobile",
+      "route": "/booking/success",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Reservation not found"
+    },
+    {
+      "label": "public-mobile",
+      "route": "/my-bookings",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Your bookings."
+    },
+    {
+      "label": "public-mobile",
+      "route": "/login",
+      "status": 200,
+      "overflow": 0,
+      "heading": "A quieter kind of arrival."
+    },
+    {
+      "label": "public-mobile",
+      "route": "/register",
+      "status": 200,
+      "overflow": 0,
+      "heading": "A quieter kind of arrival."
+    },
+    {
+      "label": "public-mobile",
+      "route": "/forgot-password",
+      "status": 200,
+      "overflow": 0,
+      "heading": "A quieter kind of arrival."
+    },
+    {
+      "label": "public-mobile",
+      "route": "/reset-password",
+      "status": 200,
+      "overflow": 0,
+      "heading": "A quieter kind of arrival."
+    },
+    {
+      "label": "public-mobile",
+      "route": "/verify-email",
+      "status": 200,
+      "overflow": 0,
+      "heading": "A quieter kind of arrival."
+    },
+    {
+      "label": "tablet",
+      "route": "/",
+      "status": 200,
+      "overflow": 0,
+      "heading": "A quieter kind of luxury,by the water."
+    },
+    {
+      "label": "tablet",
+      "route": "/rooms",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Find your room,then make it yours."
+    },
+    {
+      "label": "tablet",
+      "route": "/login",
+      "status": 200,
+      "overflow": 0,
+      "heading": "A quieter kind of arrival."
+    },
+    {
+      "label": "tablet",
+      "route": "/booking",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Your next stay starts here."
+    },
+    {
+      "label": "laptop",
+      "route": "/",
+      "status": 200,
+      "overflow": 0,
+      "heading": "A quieter kind of luxury,by the water."
+    },
+    {
+      "label": "laptop",
+      "route": "/rooms",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Find your room,then make it yours."
+    },
+    {
+      "label": "laptop",
+      "route": "/login",
+      "status": 200,
+      "overflow": 0,
+      "heading": "A quieter kind of arrival."
+    },
+    {
+      "label": "laptop",
+      "route": "/booking",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Your next stay starts here."
+    },
+    {
+      "label": "admin-desktop",
+      "route": "/admin/dashboard",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Good afternoon, RIVR."
+    },
+    {
+      "label": "admin-desktop",
+      "route": "/admin/reservations",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Reservations"
+    },
+    {
+      "label": "admin-desktop",
+      "route": "/admin/rooms",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Rooms & room types"
+    },
+    {
+      "label": "admin-desktop",
+      "route": "/admin/room-types",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Rooms & room types"
+    },
+    {
+      "label": "admin-desktop",
+      "route": "/admin/guests",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Guests"
+    },
+    {
+      "label": "admin-desktop",
+      "route": "/admin/front-desk",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Arrivals & departures"
+    },
+    {
+      "label": "admin-desktop",
+      "route": "/admin/check-in",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Arrivals & departures"
+    },
+    {
+      "label": "admin-desktop",
+      "route": "/admin/check-out",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Arrivals & departures"
+    },
+    {
+      "label": "admin-desktop",
+      "route": "/admin/housekeeping",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Housekeeping"
+    },
+    {
+      "label": "admin-desktop",
+      "route": "/admin/staff",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Staff & attendance"
+    },
+    {
+      "label": "admin-desktop",
+      "route": "/admin/attendance",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Staff & attendance"
+    },
+    {
+      "label": "admin-desktop",
+      "route": "/admin/payments",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Payments & invoices"
+    },
+    {
+      "label": "admin-desktop",
+      "route": "/admin/invoices",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Payments & invoices"
+    },
+    {
+      "label": "admin-desktop",
+      "route": "/admin/expenses",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Expenses"
+    },
+    {
+      "label": "admin-desktop",
+      "route": "/admin/inventory",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Inventory"
+    },
+    {
+      "label": "admin-desktop",
+      "route": "/admin/restaurant",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Restaurant & services"
+    },
+    {
+      "label": "admin-desktop",
+      "route": "/admin/reports",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Reports & analytics"
+    },
+    {
+      "label": "admin-desktop",
+      "route": "/admin/settings",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Settings"
+    },
+    {
+      "label": "admin-desktop",
+      "route": "/admin/activity-logs",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Activity logs"
+    },
+    {
+      "label": "admin-mobile",
+      "route": "/admin/dashboard",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Good afternoon, RIVR."
+    },
+    {
+      "label": "admin-mobile",
+      "route": "/admin/reservations",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Reservations"
+    },
+    {
+      "label": "admin-mobile",
+      "route": "/admin/rooms",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Rooms & room types"
+    },
+    {
+      "label": "admin-mobile",
+      "route": "/admin/room-types",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Rooms & room types"
+    },
+    {
+      "label": "admin-mobile",
+      "route": "/admin/guests",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Guests"
+    },
+    {
+      "label": "admin-mobile",
+      "route": "/admin/front-desk",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Arrivals & departures"
+    },
+    {
+      "label": "admin-mobile",
+      "route": "/admin/check-in",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Arrivals & departures"
+    },
+    {
+      "label": "admin-mobile",
+      "route": "/admin/check-out",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Arrivals & departures"
+    },
+    {
+      "label": "customer-desktop",
+      "route": "/guest/dashboard",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Welcome back, Aarav."
+    },
+    {
+      "label": "customer-desktop",
+      "route": "/my-bookings",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Your bookings."
+    },
+    {
+      "label": "customer-mobile",
+      "route": "/guest/dashboard",
+      "status": 200,
+      "overflow": 0,
+      "heading": "Welcome back, Aarav."
+    },
+    {
+      "label": "cursor",
+      "route": "/",
+      "present": false,
+      "display": null,
+      "coarse": true
+    },
+    {
+      "label": "staff",
+      "route": "/manager/dashboard",
+      "landed": "/manager/dashboard",
+      "overflow": 0,
+      "heading": "Good afternoon, Meera."
+    },
+    {
+      "label": "staff",
+      "route": "/reception/dashboard",
+      "landed": "/reception/dashboard",
+      "overflow": 0,
+      "heading": "Arrivals & departures"
+    },
+    {
+      "label": "staff",
+      "route": "/housekeeping/dashboard",
+      "landed": "/housekeeping/dashboard",
+      "overflow": 0,
+      "heading": "Housekeeping"
+    },
+    {
+      "label": "staff",
+      "route": "/admin/reports",
+      "landed": "/admin/reports",
+      "overflow": 0,
+      "heading": "Reports & analytics"
+    },
+    {
+      "label": "staff",
+      "route": "/admin/restaurant",
+      "landed": "/admin/restaurant",
+      "overflow": 0,
+      "heading": "Restaurant & services"
+    },
+    {
+      "label": "staff",
+      "route": "/staff/dashboard",
+      "landed": "/staff/dashboard",
+      "overflow": 0,
+      "heading": "Good to see you, Rahul."
+    }
+  ],
+  "issues": []
+}

@@ -7,6 +7,7 @@ import {
   CalendarDays,
   Check,
   ChevronDown,
+  ChevronRight,
   IndianRupee,
   ClipboardCheck,
   Clock3,
@@ -36,7 +37,8 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ComponentType } from "react";
-import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate, useSearch } from "@tanstack/react-router";
+import { motion, useReducedMotion } from "motion/react";
 import {
   Card,
   EmptyState,
@@ -87,6 +89,12 @@ const roleLabels: Record<UserRole, string> = {
   customer: "Customer",
 };
 const today = dateAt(0);
+function salutation() {
+  const hour = new Date().getHours();
+  if (hour < 12) return "Good morning";
+  if (hour < 17) return "Good afternoon";
+  return "Good evening";
+}
 function downloadCsv(filename: string, rows: string[][]) {
   const csv = rows
     .map((row) =>
@@ -209,10 +217,10 @@ function ExecutiveDashboard() {
   return (
     <AdminPageShell
       eyebrow="Today at RIVR"
-      title={`Good morning, ${actorName.split(" ")[0] || "team"}.`}
+      title={`${salutation()}, ${actorName.split(" ")[0] || "team"}.`}
       description="Here’s what’s happening across the property today."
     >
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
         <MetricCard
           label="Total rooms"
           value={String(totalRooms)}
@@ -274,7 +282,7 @@ function ExecutiveDashboard() {
           tone="rose"
         />
       </div>
-      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-5 grid grid-cols-2 gap-3 xl:grid-cols-4">
         <QuickAction
           to="/admin/front-desk"
           label="Open front desk"
@@ -348,22 +356,23 @@ function ExecutiveDashboard() {
               </button>
             </div>
           </div>
-          <div className="mt-8 flex h-48 items-end gap-2 border-b border-l border-[var(--line)] px-3 pb-0 pt-4">
+          <div className="chart-grid mt-8 flex h-48 items-end gap-2 rounded-lg border-b border-l border-[var(--line)] px-3 pb-0 pt-4">
             {chartSeries.length === 0 && (
               <p className="m-auto text-xs text-[var(--faint)]">
                 Revenue analytics will appear after the first booking.
               </p>
             )}
-            {chartSeries.map((point) => (
+            {chartSeries.map((point, index) => (
               <div
                 key={point.month}
                 className="group relative flex h-full flex-1 items-end"
                 title={`${point.label}: ${formatCurrency(point.revenue)} · ${point.bookings} bookings`}
               >
                 <div
-                  className="chart-bar w-full rounded-t-lg"
+                  className="chart-bar w-full rounded-t-md"
                   style={{
                     height: `${Math.max(3, Math.round((point.revenue / maxRevenue) * 100))}%`,
+                    animationDelay: `${Math.min(index * 35, 320)}ms`,
                   }}
                 />
                 <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[9px] text-[var(--faint)]">
@@ -393,17 +402,8 @@ function ExecutiveDashboard() {
             </div>
             <BarChart3 className="h-5 w-5 text-[var(--sage)]" />
           </div>
-          <div
-            className="mx-auto mt-7 grid h-40 w-40 place-items-center rounded-full"
-            style={{
-              background: `conic-gradient(var(--sage) 0 ${occupancy}%, var(--accent) ${occupancy}% ${occupancy + Math.round((available / Math.max(totalRooms, 1)) * 100)}%, var(--line-2) ${occupancy + Math.round((available / Math.max(totalRooms, 1)) * 100)}% 100%)`,
-            }}
-          >
-            <div className="grid h-28 w-28 place-items-center rounded-full bg-[var(--surface)]">
-              <span className="text-3xl font-semibold text-[var(--ink)]">
-                {occupancy}%
-              </span>
-            </div>
+          <div className="mt-7 grid place-items-center">
+            <OccupancyRing occupancy={occupancy} />
           </div>
           <div className="mt-7 grid grid-cols-2 gap-3 text-center text-xs">
             <div>
@@ -727,16 +727,16 @@ function QuickAction({
   return (
     <Link
       to={to}
-      className="glass-card group flex items-center gap-3 rounded-2xl p-4 transition hover:-translate-y-0.5 hover:border-[var(--violet)]/30"
+      className="glass-card group flex items-center gap-3 rounded-2xl p-4 transition hover:-translate-y-0.5 hover:border-[var(--accent)]/40"
     >
-      <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${tones[tone]}`}>
+      <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-full ${tones[tone]}`}>
         <Icon className="h-4 w-4" />
       </span>
       <span className="min-w-0">
         <span className="block text-xs font-semibold text-[var(--text)]">{label}</span>
         <span className="mt-0.5 block truncate text-[10px] text-[var(--faint)]">{detail}</span>
       </span>
-      <ArrowUpRight className="ml-auto h-4 w-4 shrink-0 text-[var(--faint)] transition group-hover:text-[var(--violet)]" />
+      <ArrowUpRight className="ml-auto h-4 w-4 shrink-0 text-[var(--faint)] transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[var(--accent-strong)]" />
     </Link>
   );
 }
@@ -763,15 +763,15 @@ function AlertRow({
   return (
     <Link
       to={to}
-      className="group flex items-center gap-3 rounded-xl border border-[var(--line)] bg-[var(--surface)]/45 p-3 transition hover:border-[var(--violet)]/30 hover:bg-[var(--violet-soft)]/25"
+      className="group flex items-center gap-3 rounded-xl border border-[var(--line)] bg-[var(--surface)]/45 p-3 transition hover:border-[var(--accent)]/40 hover:bg-[var(--accent)]/5"
     >
       <span className={`h-2 w-2 shrink-0 rounded-full ${dots[tone]}`} />
       <span className="min-w-0 flex-1">
         <span className="block text-xs font-semibold">{label}</span>
         <span className="mt-0.5 block truncate text-[10px] text-[var(--faint)]">{detail}</span>
       </span>
-      <strong className="text-sm">{value}</strong>
-      <ArrowUpRight className="h-3.5 w-3.5 text-[var(--faint)] transition group-hover:text-[var(--violet)]" />
+      <strong className="font-display text-base">{value}</strong>
+      <ArrowUpRight className="h-3.5 w-3.5 text-[var(--faint)] transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[var(--accent-strong)]" />
     </Link>
   );
 }
@@ -793,7 +793,7 @@ function PanelHeader({
         <h3 className="text-base font-semibold text-[var(--text)]">{title}</h3>
         <p className="mt-1 text-xs text-[var(--faint)]">{copy}</p>
       </div>
-      {action ?? (Icon ? <Icon className="h-5 w-5 text-[var(--violet)]" /> : null)}
+      {action ?? (Icon ? <Icon className="h-5 w-5 text-[var(--accent-strong)]" /> : null)}
     </div>
   );
 }
@@ -801,44 +801,73 @@ function PanelHeader({
 function RevenueSpark({ series }: { series: DashboardSummary["revenueSeries"] }) {
   const max = Math.max(1, ...series.map((point) => point.revenue));
   return (
-    <div className="mt-6 flex h-44 items-end gap-2 border-b border-l border-[var(--line)] px-3 pb-0 pt-4">
-      {series.map((point) => (
-        <div
-          key={point.month}
-          className="group relative flex h-full flex-1 items-end"
-          title={`${point.label}: ${formatCurrency(point.revenue)} · ${point.bookings} bookings`}
-        >
+    <div>
+      <div className="chart-grid mt-6 flex h-44 items-end gap-2 rounded-lg border-b border-l border-[var(--line)] px-3 pb-0 pt-4">
+        {series.map((point, index) => (
           <div
-            className="chart-bar w-full rounded-t-lg"
-            style={{
-              height: `${Math.max(3, Math.round((point.revenue / max) * 100))}%`,
-            }}
-          />
-          <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[9px] text-[var(--faint)]">
-            {point.label}
-          </span>
-        </div>
-      ))}
+            key={point.month}
+            className="group relative flex h-full flex-1 items-end"
+            title={`${point.label}: ${formatCurrency(point.revenue)} · ${point.bookings} bookings`}
+          >
+            <div
+              className="chart-bar w-full rounded-t-md"
+              style={{
+                height: `${Math.max(3, Math.round((point.revenue / max) * 100))}%`,
+                animationDelay: `${Math.min(index * 35, 320)}ms`,
+              }}
+            />
+            <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[9px] text-[var(--faint)]">
+              {point.label}
+            </span>
+          </div>
+        ))}
+      </div>
+      {!series.length && (
+        <p className="mt-6 rounded-xl border border-dashed border-[var(--line-2)] p-5 text-center text-xs text-[var(--faint)]">
+          Revenue will appear once bookings are recorded.
+        </p>
+      )}
     </div>
   );
 }
 
 function OccupancyRing({ occupancy }: { occupancy: number }) {
   const value = Math.max(0, Math.min(100, occupancy));
+  const reduceMotion = useReducedMotion();
+  const radius = 52;
+  const circumference = 2 * Math.PI * radius;
   return (
-    <div
-      className="grid h-36 w-36 shrink-0 place-items-center rounded-full p-2 shadow-inner"
-      style={{
-        background: `conic-gradient(var(--violet) 0 ${value}%, var(--surface-3) ${value}% 100%)`,
-      }}
-    >
-      <div className="grid h-full w-full place-items-center rounded-full bg-[var(--surface)]">
-        <div className="text-center">
-          <span className="text-2xl font-bold tracking-[-0.04em]">{value}%</span>
-          <p className="mt-0.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-[var(--faint)]">
-            Occupied
-          </p>
-        </div>
+    <div className="relative grid h-36 w-36 shrink-0 place-items-center">
+      <svg viewBox="0 0 120 120" className="h-full w-full -rotate-90" aria-hidden="true">
+        <circle
+          cx="60"
+          cy="60"
+          r={radius}
+          fill="none"
+          stroke="var(--surface-3)"
+          strokeWidth="9"
+        />
+        <motion.circle
+          cx="60"
+          cy="60"
+          r={radius}
+          fill="none"
+          stroke="var(--accent)"
+          strokeWidth="9"
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          initial={reduceMotion ? false : { strokeDashoffset: circumference }}
+          animate={{ strokeDashoffset: circumference * (1 - value / 100) }}
+          transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+        />
+      </svg>
+      <div className="absolute text-center">
+        <span className="font-display text-3xl font-semibold tracking-[-0.02em] text-[var(--ink)]">
+          {value}%
+        </span>
+        <p className="mt-0.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-[var(--faint)]">
+          Occupied
+        </p>
       </div>
     </div>
   );
@@ -1001,10 +1030,10 @@ function ManagerDashboard() {
   return (
     <AdminPageShell
       eyebrow="Manager command centre"
-      title={`Good morning, ${actorName.split(" ")[0] || "team"}.`}
+      title={`${salutation()}, ${actorName.split(" ")[0] || "team"}.`}
       description="Occupancy, revenue, people, and service delivery in one operating view."
     >
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
         <MetricCard label="Occupancy" value={`${occupancy}%`} detail={`${occupied} of ${totalRooms} rooms occupied`} icon={Hotel} tone="gold" />
         <MetricCard label="Revenue" value={formatCurrency(revenue)} detail="Non-cancelled stay value" icon={IndianRupee} tone="blue" />
         <MetricCard label="Outstanding" value={formatCurrency(outstanding)} detail="Guest balances to collect" icon={WalletCards} tone="rose" />
@@ -1082,16 +1111,16 @@ function ReceptionistDashboard() {
   return (
     <AdminPageShell
       eyebrow="Front desk"
-      title={`Good morning, ${actorName.split(" ")[0] || "team"}.`}
+      title={`${salutation()}, ${actorName.split(" ")[0] || "team"}.`}
       description="Arrivals, departures, room availability, and guest requests for today."
     >
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
         <MetricCard label="Arrivals today" value={String(arrivals.length)} detail="Expected check-ins" icon={CalendarCheck2} tone="blue" />
         <MetricCard label="Departures today" value={String(departures.length)} detail="Expected check-outs" icon={ArrowUpRight} tone="gold" />
         <MetricCard label="In-house" value={String(inHouse.length)} detail={`${guests.length} guest profiles`} icon={UsersRound} />
         <MetricCard label="Available rooms" value={String(availableRooms.length)} detail={`${rooms.length} rooms total`} icon={BedDouble} tone="rose" />
       </div>
-      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-5 grid grid-cols-2 gap-3 xl:grid-cols-4">
         <QuickAction to="/admin/front-desk" label="Open front desk" detail="Run check-in and check-out" icon={Hotel} tone="violet" />
         <QuickAction to="/admin/reservations" label="New reservation" detail="Create or update a booking" icon={CalendarCheck2} tone="blue" />
         <QuickAction to="/admin/guests" label="Guest directory" detail="Profiles, contact and preferences" icon={UsersRound} tone="teal" />
@@ -1191,10 +1220,10 @@ function AccountantDashboard() {
   return (
     <AdminPageShell
       eyebrow="Finance desk"
-      title={`Good morning, ${actorName.split(" ")[0] || "team"}.`}
+      title={`${salutation()}, ${actorName.split(" ")[0] || "team"}.`}
       description="Revenue, collections, refunds, expenses, and invoice exposure at a glance."
     >
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
         <MetricCard label="Revenue" value={formatCurrency(revenue)} detail="Non-cancelled stay value" icon={IndianRupee} tone="blue" />
         <MetricCard label="Payments received" value={formatCurrency(received)} detail={`${payments.filter((payment) => payment.status === "completed").length} completed payments`} icon={CreditCard} />
         <MetricCard label="Outstanding" value={formatCurrency(outstanding)} detail="Guest balances to collect" icon={WalletCards} tone="rose" />
@@ -1263,16 +1292,16 @@ function HousekeepingDashboard() {
   return (
     <AdminPageShell
       eyebrow="Housekeeping"
-      title={`Good morning, ${actorName.split(" ")[0] || "team"}.`}
+      title={`${salutation()}, ${actorName.split(" ")[0] || "team"}.`}
       description="Cleaning priorities, inspection queue, and room readiness for the shift."
     >
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
         <MetricCard label="Needs cleaning" value={String(dirty.length)} detail="Dirty rooms waiting" icon={BedDouble} tone="rose" />
         <MetricCard label="In progress" value={String(inProgress.length)} detail="Assigned or being cleaned" icon={ClipboardCheck} tone="blue" />
         <MetricCard label="Inspection pending" value={String(inspection.length)} detail="Cleaned, awaiting sign-off" icon={Check} tone="gold" />
         <MetricCard label="Completed today" value={String(completed.length)} detail={`${highPriority.length} high-priority tasks`} icon={Star} />
       </div>
-      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-5 grid grid-cols-2 gap-3 xl:grid-cols-4">
         <QuickAction to="/admin/housekeeping" label="Housekeeping board" detail="Update task status and inspect rooms" icon={ClipboardCheck} tone="violet" />
         <QuickAction to="/admin/rooms" label="Room status" detail="Review room availability and blocks" icon={BedDouble} tone="blue" />
         <QuickAction to="/admin/inventory" label="Inventory" detail="Check linen and supply levels" icon={Package} tone="teal" />
@@ -1327,16 +1356,16 @@ function RestaurantDashboard() {
   return (
     <AdminPageShell
       eyebrow="Restaurant & services"
-      title={`Good morning, ${actorName.split(" ")[0] || "team"}.`}
+      title={`${salutation()}, ${actorName.split(" ")[0] || "team"}.`}
       description="Orders, service pace, and supply alerts for the restaurant operation."
     >
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
         <MetricCard label="New orders" value={String(newOrders.length)} detail="Waiting to be accepted" icon={Utensils} tone="rose" />
         <MetricCard label="Preparing" value={String(preparing.length)} detail="In the kitchen queue" icon={Clock3} tone="gold" />
         <MetricCard label="Served today" value={String(servedToday.length)} detail="Completed service today" icon={Check} tone="blue" />
         <MetricCard label="Low stock" value={String(lowStock.length)} detail="At or below minimum level" icon={Package} />
       </div>
-      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-5 grid grid-cols-2 gap-3 xl:grid-cols-4">
         <QuickAction to="/admin/restaurant" label="Order board" detail="Accept, prepare and serve orders" icon={Utensils} tone="violet" />
         <QuickAction to="/admin/inventory" label="Inventory" detail="Review stock and adjust levels" icon={Package} tone="blue" />
         <QuickAction to="/admin/rooms" label="Rooms" detail="Check in-room service context" icon={BedDouble} tone="teal" />
@@ -3869,7 +3898,7 @@ function BarRow({
       </div>
       <div className="h-2 overflow-hidden rounded-full bg-[var(--line)]">
         <div
-          className="h-full rounded-full bg-[var(--sage)]"
+          className="h-full rounded-full bg-[linear-gradient(90deg,var(--accent),var(--sage))] transition-[width] duration-500"
           style={{ width: `${max ? Math.max(5, (value / max) * 100) : 5}%` }}
         />
       </div>
@@ -4539,18 +4568,50 @@ function AdminPageShell({
   action?: React.ReactNode;
   children: React.ReactNode;
 }) {
+  const { pathname } = useLocation();
+  const trail =
+    pathname
+      .split("/")
+      .filter(Boolean)
+      .slice(1)
+      .map((segment) =>
+        segment === "dashboard" ? "Overview" : segment.replaceAll("-", " "),
+      )
+      .join(" / ") || "Overview";
+  const dateLabel = new Intl.DateTimeFormat("en-IN", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(new Date());
   return (
     <div className="animate-rise-in">
-      <div className="glass-card mb-6 flex flex-col justify-between gap-4 rounded-[1.6rem] px-5 py-5 md:flex-row md:items-end md:px-6 md:py-6">
-        <span className="pointer-events-none absolute -left-10 -top-16 h-44 w-44 rounded-full bg-[radial-gradient(circle,rgba(109,94,252,0.22),transparent_68%)] blur-2xl" />
-        <div className="relative">
-          <SectionEyebrow>{eyebrow}</SectionEyebrow>
-          <h2 className="mt-3 font-display text-3xl font-semibold tracking-[-0.02em] text-[var(--text)] md:text-[2.6rem] md:leading-[1.05]">
-            {title}
-          </h2>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--faint)]">{description}</p>
+      <div className="glass-card relative mb-6 overflow-hidden rounded-[1.5rem] px-5 py-6 md:px-7 md:py-7">
+        <span className="pointer-events-none absolute -left-10 -top-20 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(194,163,107,0.22),transparent_68%)] blur-2xl" />
+        <span className="pointer-events-none absolute -right-16 -bottom-24 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(63,107,91,0.11),transparent_70%)] blur-2xl" />
+        <div className="relative flex flex-col justify-between gap-5 md:flex-row md:items-end">
+          <div>
+            <div className="mb-4 flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--faint)]">
+              <Link to="/admin/dashboard" className="transition-colors hover:text-[var(--ink)]">
+                Workspace
+              </Link>
+              <ChevronRight className="h-3 w-3" />
+              <span className="capitalize text-[var(--muted-strong)]">{trail}</span>
+            </div>
+            <SectionEyebrow>{eyebrow}</SectionEyebrow>
+            <h1 className="mt-3 max-w-3xl font-display text-3xl font-semibold tracking-[-0.02em] text-[var(--ink)] md:text-[2.7rem] md:leading-[1.04]">
+              {title}
+            </h1>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--faint)]">{description}</p>
+          </div>
+          <div className="relative flex shrink-0 flex-col items-start gap-3 md:items-end">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-[var(--surface-2)] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--muted)]">
+              <CalendarDays className="h-3 w-3 text-[var(--accent-strong)]" /> {dateLabel}
+            </span>
+            {action}
+          </div>
         </div>
-        {action && <div className="relative shrink-0">{action}</div>}
+        <div className="relative mt-6 h-px bg-gradient-to-r from-[var(--accent)]/60 via-[var(--line)] to-transparent" />
       </div>
       {children}
     </div>
@@ -4558,8 +4619,10 @@ function AdminPageShell({
 }
 function Notice({ text }: { text: string }) {
   return (
-    <div className="mt-4 flex items-center gap-2 rounded-xl border border-[var(--success-line)] bg-[var(--success-soft)] px-4 py-3 text-xs text-[var(--success)]">
-      <Check className="h-4 w-4" />
+    <div className="mt-4 flex items-center gap-2.5 rounded-xl border border-[var(--success-line)] bg-[var(--success-soft)] px-4 py-3 text-xs text-[var(--success)]">
+      <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[var(--success)]/12">
+        <Check className="h-3 w-3" />
+      </span>
       {text}
     </div>
   );
@@ -4634,14 +4697,25 @@ function Modal({
   children: React.ReactNode;
 }) {
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-[var(--deep)]/35 p-4">
+    <div className="modal-backdrop fixed inset-0 z-50 grid place-items-center bg-[var(--deep)]/45 p-4">
       <form
         onSubmit={onSubmit}
-        className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl bg-[var(--surface)] p-6 shadow-2xl"
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
+        className="modal-panel max-h-[90vh] w-full max-w-md overflow-y-auto rounded-[1.5rem] border border-[var(--line)] bg-[var(--elevated)] p-6 shadow-[var(--shadow)]"
       >
-        <div className="flex items-start justify-between">
-          <h2 className="text-xl font-semibold">{title}</h2>
-          <button type="button" onClick={onClose}>
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h2 className="font-display text-2xl text-[var(--ink)]">{title}</h2>
+            <div className="gold-rule mt-3" aria-hidden="true" />
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="grid h-8 w-8 place-items-center rounded-full border border-[var(--line)] text-[var(--muted)] transition-colors hover:border-[var(--danger)]/30 hover:text-[var(--danger)]"
+            aria-label="Close dialog"
+          >
             <X className="h-4 w-4" />
           </button>
         </div>

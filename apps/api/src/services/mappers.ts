@@ -64,6 +64,31 @@ export function mapGuest(row: GuestRow) {
   };
 }
 
+/**
+ * Public booking responses use an explicit allowlist. In particular they never
+ * expose internal IDs, full guest profiles, contact details, addresses,
+ * identity-document fragments, preferences, or lifetime spend.
+ */
+export function mapPublicReservation(row: {
+  reservation: ReservationRow;
+  guest: GuestRow;
+  room: RoomRow;
+  type: RoomTypeRow;
+}) {
+  return {
+    reference: row.reservation.reference,
+    status: row.reservation.status,
+    checkIn: row.reservation.checkIn,
+    checkOut: row.reservation.checkOut,
+    roomTypeName: row.type.name,
+    roomNumber: row.room.number,
+    guestFirstName: row.guest.name.trim().split(/\s+/)[0] ?? "",
+    total: number(row.reservation.total),
+    paidAmount: number(row.reservation.paidAmount),
+    paymentStatus: row.reservation.paymentStatus,
+  };
+}
+
 export function mapReservation(row: ReservationRow) {
   return {
     id: row.id,
@@ -83,6 +108,7 @@ export function mapReservation(row: ReservationRow) {
     total: number(row.total),
     paidAmount: number(row.paidAmount),
     specialRequests: row.specialRequests,
+    holdExpiresAt: iso(row.holdExpiresAt),
     createdAt: row.createdAt.toISOString(),
   };
 }

@@ -2,54 +2,133 @@ import {
   createRootRoute,
   createRoute,
   createRouter,
+  lazyRouteComponent,
   Outlet,
   useLocation,
 } from "@tanstack/react-router";
 import { motion, useAnimationControls, useReducedMotion } from "motion/react";
 import { useLayoutEffect } from "react";
+import { CustomCursor } from "./components/motion/CustomCursor";
+import { ScrollProgress } from "./components/motion/ScrollProgress";
 import HomePage from "./pages/HomePage";
-import StayPage from "./pages/StayPage";
-import RoomsPage from "./pages/RoomsPage";
-import AmenitiesPage from "./pages/AmenitiesPage";
-import AboutPage from "./pages/AboutPage";
-import ContactPage from "./pages/ContactPage";
-import SearchPage from "./pages/SearchPage";
-import BookingEntryPage from "./pages/BookingEntryPage";
-import BookingPage from "./pages/BookingPage";
-import BookingSuccessPage from "./pages/BookingSuccessPage";
-import MyBookingsPage from "./pages/MyBookingsPage";
-import {
-  ForgotPasswordPage,
-  LoginPage,
-  RegisterPage,
-  ResetPasswordPage,
-  VerifyEmailPage,
-} from "./pages/AuthPages";
 import { AdminLayout } from "./components/hotel/StaffChrome";
-import {
-  AdminActivityPage,
-  AdminDashboardPage,
-  AdminExpensesPage,
-  AdminFrontDeskPage,
-  AdminGuestsPage,
-  AdminHousekeepingPage,
-  AdminIndexPage,
-  AdminInventoryPage,
-  AdminPaymentsPage,
-  AdminReportsPage,
-  AdminReservationsPage,
-  AdminRestaurantPage,
-  AdminRoomsPage,
-  AdminSettingsPage,
-  AdminStaffPage,
-} from "./pages/AdminPages";
-import {
-  HousekeepingDashboardPage,
-  ManagerDashboardPage,
-  ReceptionDashboardPage,
-  StaffDashboardPage,
-} from "./pages/RoleDashboards";
-import { GuestDashboardPage } from "./pages/GuestDashboardPage";
+
+const StayPage = lazyRouteComponent(() => import("./pages/StayPage"));
+const RoomsPage = lazyRouteComponent(() => import("./pages/RoomsPage"));
+const AmenitiesPage = lazyRouteComponent(() => import("./pages/AmenitiesPage"));
+const AboutPage = lazyRouteComponent(() => import("./pages/AboutPage"));
+const ContactPage = lazyRouteComponent(() => import("./pages/ContactPage"));
+const SearchPage = lazyRouteComponent(() => import("./pages/SearchPage"));
+const BookingEntryPage = lazyRouteComponent(
+  () => import("./pages/BookingEntryPage"),
+);
+const BookingPage = lazyRouteComponent(() => import("./pages/BookingPage"));
+const BookingSuccessPage = lazyRouteComponent(
+  () => import("./pages/BookingSuccessPage"),
+);
+const MyBookingsPage = lazyRouteComponent(
+  () => import("./pages/MyBookingsPage"),
+);
+const ForgotPasswordPage = lazyRouteComponent(
+  () => import("./pages/AuthPages"),
+  "ForgotPasswordPage",
+);
+const LoginPage = lazyRouteComponent(
+  () => import("./pages/AuthPages"),
+  "LoginPage",
+);
+const RegisterPage = lazyRouteComponent(
+  () => import("./pages/AuthPages"),
+  "RegisterPage",
+);
+const ResetPasswordPage = lazyRouteComponent(
+  () => import("./pages/AuthPages"),
+  "ResetPasswordPage",
+);
+const VerifyEmailPage = lazyRouteComponent(
+  () => import("./pages/AuthPages"),
+  "VerifyEmailPage",
+);
+const AdminActivityPage = lazyRouteComponent(
+  () => import("./pages/AdminPages"),
+  "AdminActivityPage",
+);
+const AdminDashboardPage = lazyRouteComponent(
+  () => import("./pages/AdminPages"),
+  "AdminDashboardPage",
+);
+const AdminExpensesPage = lazyRouteComponent(
+  () => import("./pages/AdminPages"),
+  "AdminExpensesPage",
+);
+const AdminFrontDeskPage = lazyRouteComponent(
+  () => import("./pages/AdminPages"),
+  "AdminFrontDeskPage",
+);
+const AdminGuestsPage = lazyRouteComponent(
+  () => import("./pages/AdminPages"),
+  "AdminGuestsPage",
+);
+const AdminHousekeepingPage = lazyRouteComponent(
+  () => import("./pages/AdminPages"),
+  "AdminHousekeepingPage",
+);
+const AdminIndexPage = lazyRouteComponent(
+  () => import("./pages/AdminPages"),
+  "AdminIndexPage",
+);
+const AdminInventoryPage = lazyRouteComponent(
+  () => import("./pages/AdminPages"),
+  "AdminInventoryPage",
+);
+const AdminPaymentsPage = lazyRouteComponent(
+  () => import("./pages/AdminPages"),
+  "AdminPaymentsPage",
+);
+const AdminReportsPage = lazyRouteComponent(
+  () => import("./pages/AdminPages"),
+  "AdminReportsPage",
+);
+const AdminReservationsPage = lazyRouteComponent(
+  () => import("./pages/AdminPages"),
+  "AdminReservationsPage",
+);
+const AdminRestaurantPage = lazyRouteComponent(
+  () => import("./pages/AdminPages"),
+  "AdminRestaurantPage",
+);
+const AdminRoomsPage = lazyRouteComponent(
+  () => import("./pages/AdminPages"),
+  "AdminRoomsPage",
+);
+const AdminSettingsPage = lazyRouteComponent(
+  () => import("./pages/AdminPages"),
+  "AdminSettingsPage",
+);
+const AdminStaffPage = lazyRouteComponent(
+  () => import("./pages/AdminPages"),
+  "AdminStaffPage",
+);
+const HousekeepingDashboardPage = lazyRouteComponent(
+  () => import("./pages/RoleDashboards"),
+  "HousekeepingDashboardPage",
+);
+const ManagerDashboardPage = lazyRouteComponent(
+  () => import("./pages/RoleDashboards"),
+  "ManagerDashboardPage",
+);
+const ReceptionDashboardPage = lazyRouteComponent(
+  () => import("./pages/RoleDashboards"),
+  "ReceptionDashboardPage",
+);
+const StaffDashboardPage = lazyRouteComponent(
+  () => import("./pages/RoleDashboards"),
+  "StaffDashboardPage",
+);
+const GuestDashboardPage = lazyRouteComponent(
+  () => import("./pages/GuestDashboardPage"),
+  "GuestDashboardPage",
+);
 import { normalizeStaySearch } from "./lib/hotel-data";
 import { useHotel } from "./lib/hotel-store";
 
@@ -112,15 +191,15 @@ function RootComponent() {
       initial={reduceMotion ? false : { opacity: 0.001 }}
       animate={controls}
     >
+      <ScrollProgress />
+      <CustomCursor />
       <Outlet />
       {!isStaffWorkspace && <ApiOfflineBanner />}
     </motion.div>
   );
 }
 
-const successSearch = (search: Record<string, unknown>) => ({
-  bookingId: typeof search.bookingId === "string" ? search.bookingId : "",
-});
+const successSearch = (_search: Record<string, unknown>) => ({});
 const reservationSearch = (
   search: Record<string, unknown>,
 ): { q?: string } => ({

@@ -1,11 +1,8 @@
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from "motion/react";
 import { useEffect, useRef, type ComponentType } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
+import { gsap } from "gsap";
+import { useGsap } from "../components/motion/gsap";
+import { GsapImage } from "../components/motion/GsapImage";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -42,6 +39,7 @@ import {
   reviews,
 } from "../lib/hotel-data";
 import { useHotel } from "../lib/hotel-store";
+import { useReducedMotion } from "motion/react";
 
 const featuredSearch = defaultStaySearch;
 
@@ -68,12 +66,9 @@ export default function HomePage() {
   const reduceMotion = useReducedMotion();
   const location = useLocation();
   const heroRef = useRef<HTMLElement | null>(null);
+  const heroFrameRef = useRef<HTMLDivElement | null>(null);
+  const heroImageRef = useRef<HTMLImageElement | null>(null);
   const { getAvailableRooms, roomTypes, rooms, status } = useHotel();
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
   const featuredRooms = getAvailableRooms(
     featuredSearch.checkIn,
     featuredSearch.checkOut,
@@ -83,6 +78,57 @@ export default function HomePage() {
   const minRate = roomTypes.length
     ? Math.min(...roomTypes.map((type) => type.rate))
     : 0;
+
+  useGsap(
+    () => {
+      const frame = heroFrameRef.current;
+      const image = heroImageRef.current;
+      if (!frame || !image) return;
+
+      gsap.set(frame, { clipPath: "inset(0 0 100% 0)" });
+      gsap.set(image, { scale: 1.18 });
+
+      const timeline = gsap.timeline({ defaults: { ease: "power3.out" } });
+      timeline
+        .from(".hero-eyebrow", { opacity: 0, y: 16, duration: 0.6 })
+        .from(
+          ".hero-title-line",
+          { yPercent: 115, opacity: 0, duration: 1.05, stagger: 0.1 },
+          "-=0.32",
+        )
+        .from(".hero-copy", { opacity: 0, y: 18, duration: 0.7 }, "-=0.78")
+        .from(
+          ".hero-cta",
+          { opacity: 0, y: 14, duration: 0.6, stagger: 0.08 },
+          "-=0.45",
+        )
+        .from(".hero-trust", { opacity: 0, duration: 0.6 }, "-=0.28")
+        .from(
+          ".hero-note",
+          { opacity: 0, y: 16, duration: 0.7, stagger: 0.12 },
+          "-=0.55",
+        )
+        .to(frame, { clipPath: "inset(0 0 0% 0)", duration: 1.4 }, 0.12)
+        .to(image, { scale: 1.1, duration: 1.8, ease: "power2.out" }, 0.12);
+
+      gsap.fromTo(
+        image,
+        { yPercent: -3 },
+        {
+          yPercent: 3,
+          ease: "none",
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        },
+      );
+    },
+    [],
+    heroRef,
+  );
 
   useEffect(() => {
     const id = location.hash.replace(/^#/, "");
@@ -106,75 +152,53 @@ export default function HomePage() {
           ref={heroRef}
           className="mx-auto max-w-[1440px] px-4 pt-4 md:px-7 md:pt-6"
         >
-          <div className="relative grid overflow-hidden rounded-[1.9rem] bg-[var(--surface-2)] pb-14 md:pb-16 lg:min-h-[660px] lg:grid-cols-[1.02fr_0.98fr]">
+          <div className="relative grid overflow-hidden rounded-[2rem] border border-[var(--line)] bg-[var(--surface-2)] pb-14 md:pb-16 lg:min-h-[680px] lg:grid-cols-[1.02fr_0.98fr]">
+            <span className="corner-mark corner-mark--tl" aria-hidden="true" />
             <div className="relative z-10 flex flex-col justify-center px-7 pb-10 pt-12 sm:px-12 lg:px-14 lg:pb-32 lg:pt-20 xl:px-20">
-              <motion.div
-                initial={reduceMotion ? false : { opacity: 0, y: 14 }}
-                animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-                transition={{ duration: 0.55 }}
-                className="flex flex-wrap items-center gap-3"
-              >
+              <div className="hero-eyebrow flex flex-wrap items-center gap-3">
                 <BookingPill>
                   {hotelInfo.city} · {hotelInfo.state}
                 </BookingPill>
-                <span className="hidden text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--faint)] sm:inline">
+                <span className="hidden text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--faint)] sm:inline">
                   Boutique hotel &amp; residences
                 </span>
-              </motion.div>
+              </div>
 
-              <motion.h1
-                initial={reduceMotion ? false : { opacity: 0, y: 20 }}
-                animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.7,
-                  delay: 0.08,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="mt-7 max-w-[660px] font-display text-[clamp(3.1rem,6vw,5.6rem)] leading-[0.95] tracking-[-0.035em] text-[var(--ink)]"
-              >
-                A quieter kind of luxury,
-                <br />
-                <em className="text-[var(--sage)]">by the water.</em>
-              </motion.h1>
+              <h1 className="mt-8 max-w-[660px] font-display text-[clamp(3.2rem,6vw,5.8rem)] leading-[0.94] tracking-[-0.038em] text-[var(--ink)]">
+                <span className="block overflow-hidden pb-1">
+                  <span className="hero-title-line block">A quieter kind of luxury,</span>
+                </span>{" "}
+                <span className="block overflow-hidden pb-2">
+                  <em className="hero-title-line block text-[var(--sage)]">by the water.</em>
+                </span>
+              </h1>
 
-              <motion.p
-                initial={reduceMotion ? false : { opacity: 0, y: 14 }}
-                animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.18 }}
-                className="mt-6 max-w-[500px] text-sm leading-7 text-[var(--muted)] md:text-[15px]"
-              >
+              <p className="hero-copy mt-6 max-w-[500px] text-sm leading-7 text-[var(--muted)] md:text-[15px]">
                 Considered rooms, generous service, and a little more room to
                 breathe. Stay with us on the edge of the city and close to the
                 water.
-              </motion.p>
+              </p>
 
-              <motion.div
-                initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-                animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, delay: 0.26 }}
-                className="mt-8 flex flex-wrap items-center gap-3"
-              >
+              <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link
                   to="/rooms"
-                  className="group inline-flex items-center gap-2 rounded-full bg-[var(--primary)] px-5 py-3.5 text-xs font-semibold text-[var(--on-primary)] transition-colors hover:bg-[var(--primary-hover)]"
+                  data-cursor="Explore"
+                  className="hero-cta btn-sheen group inline-flex items-center gap-2 rounded-full bg-[var(--primary)] px-5 py-3.5 text-xs font-semibold text-[var(--on-primary)] transition-colors hover:bg-[var(--primary-hover)]"
                 >
                   Explore rooms{" "}
-                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </Link>
                 <Link
                   to="/about"
-                  className="inline-flex items-center gap-2 rounded-full border border-[var(--line-strong)] px-5 py-3.5 text-xs font-semibold text-[var(--ink)] transition-colors hover:border-[var(--accent)]"
+                  data-cursor="Our story"
+                  className="hero-cta group inline-flex items-center gap-2 rounded-full border border-[var(--line-strong)] px-5 py-3.5 text-xs font-semibold text-[var(--ink)] transition-colors hover:border-[var(--accent)]"
                 >
-                  Discover RIVR <ArrowRight className="h-4 w-4" />
+                  Discover RIVR{" "}
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
-              </motion.div>
+              </div>
 
-              <motion.div
-                initial={reduceMotion ? false : { opacity: 0 }}
-                animate={reduceMotion ? undefined : { opacity: 1 }}
-                transition={{ duration: 0.7, delay: 0.38 }}
-                className="mt-10 flex flex-wrap items-center gap-x-7 gap-y-3 text-xs text-[var(--muted)]"
-              >
+              <div className="hero-trust mt-10 flex flex-wrap items-center gap-x-7 gap-y-3 text-xs text-[var(--muted)]">
                 <span className="flex items-center gap-2">
                   <HeartHandshake className="h-4 w-4 text-[var(--accent-strong)]" />{" "}
                   Thoughtful hospitality
@@ -183,42 +207,38 @@ export default function HomePage() {
                   <ShieldCheck className="h-4 w-4 text-[var(--accent-strong)]" />{" "}
                   Secure direct reservations
                 </span>
-              </motion.div>
+              </div>
+
+              <div className="mt-12 hidden items-center gap-3 text-[9px] font-semibold uppercase tracking-[0.3em] text-[var(--faint)] lg:flex" aria-hidden="true">
+                <span className="relative h-10 w-px overflow-hidden bg-[var(--line-2)]">
+                  <span className="absolute inset-x-0 top-0 h-4 animate-[float-slow_2.4s_ease-in-out_infinite] bg-[var(--accent)]" />
+                </span>
+                Scroll to discover
+              </div>
             </div>
 
-            <div className="relative min-h-[380px] overflow-hidden bg-[var(--deep)] lg:min-h-0">
-              <motion.div
-                style={reduceMotion ? undefined : { y: imageY }}
-                className="absolute inset-x-0 -top-[6%] h-[112%]"
-              >
-                <motion.img
-                  initial={reduceMotion ? false : { scale: 1.08 }}
-                  animate={
-                    reduceMotion ? undefined : { scale: [1.08, 1.16, 1.08] }
-                  }
-                  transition={
-                    reduceMotion
-                      ? undefined
-                      : { duration: 30, repeat: Infinity, ease: "easeInOut" }
-                  }
+            <div className="relative min-h-[400px] overflow-hidden bg-[var(--deep)] lg:min-h-0">
+              <div ref={heroFrameRef} className="image-frame absolute inset-0" data-cursor="RIVR">
+                <img
+                  ref={heroImageRef}
                   src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1600&q=90"
                   alt="A warmly lit guest room at RIVR with a view toward the harbor"
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority="high"
                   className="h-full w-full object-cover object-center"
                 />
-              </motion.div>
-              <div className="absolute inset-0 bg-gradient-to-t from-[var(--deep)]/75 via-[var(--deep)]/10 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-r from-[var(--deep)]/20 via-transparent to-transparent" />
+              </div>
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--deep)]/80 via-[var(--deep)]/10 to-transparent" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[var(--deep)]/30 via-transparent to-transparent" />
+              <span className="corner-mark corner-mark--br" aria-hidden="true" />
 
-              <motion.div
-                initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-                animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                className="glass absolute left-5 top-5 max-w-[220px] rounded-2xl p-4 text-[var(--on-glass)] sm:left-7 sm:top-7"
-              >
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--sage)]">
+              <div className="hero-note glass absolute left-5 top-5 max-w-[225px] rounded-2xl p-4 text-[var(--on-glass)] sm:left-7 sm:top-7">
+                <p className="flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.2em] text-[var(--sage)]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[var(--success)] animate-soft-pulse" />
                   Tonight at RIVR
                 </p>
-                <p className="mt-1 font-display text-xl leading-snug">
+                <p className="mt-2 font-display text-xl leading-snug">
                   {status === "loading"
                     ? "Loading availability"
                     : availableTonight > 0
@@ -229,15 +249,10 @@ export default function HomePage() {
                   Rates from {minRate ? formatCurrency(minRate) : "the hotel"}{" "}
                   per night.
                 </p>
-              </motion.div>
+              </div>
 
-              <motion.div
-                initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-                animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.62 }}
-                className="glass-strong absolute bottom-20 left-5 right-5 hidden rounded-2xl p-4 text-[var(--on-glass)] sm:bottom-24 sm:left-7 sm:right-auto sm:max-w-[290px] lg:block"
-              >
-                <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--sage)]">
+              <div className="hero-note glass-strong absolute bottom-24 left-5 right-5 hidden rounded-2xl p-4 text-[var(--on-glass)] sm:bottom-28 sm:left-7 sm:right-auto sm:max-w-[300px] lg:block">
+                <div className="flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.2em] text-[var(--sage)]">
                   <span className="h-1.5 w-1.5 rounded-full bg-[var(--success)]" />{" "}
                   A room to return to
                 </div>
@@ -254,7 +269,7 @@ export default function HomePage() {
                   <Phone className="h-3.5 w-3.5 text-[var(--accent-strong)]" />{" "}
                   {hotelInfo.phone}
                 </a>
-              </motion.div>
+              </div>
             </div>
           </div>
 
@@ -325,21 +340,22 @@ export default function HomePage() {
 
           <Reveal
             delay={0.08}
-            className="relative h-[360px] overflow-hidden rounded-[1.6rem] sm:h-[470px] lg:h-[560px]"
+            className="relative h-[360px] rounded-[1.6rem] sm:h-[470px] lg:h-[560px]"
           >
-            <img
+            <GsapImage
               src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1600&q=90"
               alt="RIVR hotel exterior with a pool overlooking the water"
-              loading="lazy"
-              className="h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[var(--deep)]/40 via-transparent to-transparent" />
-            <div className="glass absolute bottom-5 right-5 rounded-xl px-4 py-3 text-right text-[var(--on-glass)]">
-              <p className="font-display text-2xl">By the water</p>
-              <p className="text-[10px] uppercase tracking-[0.15em] opacity-70">
-                {hotelInfo.city}
-              </p>
-            </div>
+              className="h-full w-full rounded-[1.6rem]"
+              priority
+            >
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--deep)]/45 via-transparent to-transparent" />
+              <div className="glass absolute bottom-5 right-5 rounded-xl px-4 py-3 text-right text-[var(--on-glass)]">
+                <p className="font-display text-2xl">By the water</p>
+                <p className="text-[10px] uppercase tracking-[0.15em] opacity-70">
+                  {hotelInfo.city}
+                </p>
+              </div>
+            </GsapImage>
           </Reveal>
         </section>
 
@@ -423,27 +439,28 @@ export default function HomePage() {
               delay={0.08}
               className="grid gap-4 sm:grid-cols-[1.25fr_0.75fr] sm:items-end"
             >
-              <div className="relative h-[350px] overflow-hidden rounded-[1.5rem] sm:h-[430px]">
-                <img
+              <div className="group relative h-[350px] rounded-[1.5rem] sm:h-[430px]">
+                <GsapImage
                   src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1200&q=85"
                   alt="The RIVR dining room set for service"
-                  loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-                />
-                <div className="absolute bottom-4 left-4 rounded-lg bg-[var(--deep)]/85 px-3 py-2 text-xs text-white">
-                  Dining worth lingering over
-                </div>
+                  className="h-full w-full rounded-[1.5rem]"
+                  imgClassName="transition-transform duration-700 group-hover:scale-105"
+                >
+                  <div className="absolute bottom-4 left-4 rounded-lg border border-white/10 bg-[var(--deep)]/80 px-3 py-2 text-xs text-white backdrop-blur">
+                    Dining worth lingering over
+                  </div>
+                </GsapImage>
               </div>
               <div className="grid gap-4">
-                <div className="relative h-44 overflow-hidden rounded-[1.5rem]">
-                  <img
+                <div className="group relative h-44 rounded-[1.5rem]">
+                  <GsapImage
                     src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=900&q=85"
                     alt="A quiet spa treatment room at RIVR"
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                    className="h-full w-full rounded-[1.5rem]"
+                    imgClassName="transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
-                <div className="flex items-center gap-3 rounded-[1.5rem] bg-[var(--surface-3)] p-4">
+                <div className="flex items-center gap-3 rounded-[1.5rem] border border-[var(--line)] bg-[var(--surface-3)] p-4">
                   <Sparkles className="h-5 w-5 text-[var(--accent-strong)]" />
                   <span className="text-sm font-semibold text-[var(--ink)]">
                     Personal, not prescribed.
@@ -534,16 +551,19 @@ export default function HomePage() {
             <div className="mt-10 grid gap-5 md:grid-cols-2">
               {offers.map((offer, index) => (
                 <Reveal key={offer.id} delay={index * 0.06}>
-                  <article className="group relative min-h-[330px] overflow-hidden rounded-[1.5rem]">
-                    <img
-                      src={offer.image}
-                      alt={offer.title}
-                      loading="lazy"
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--deep)]/85 via-[var(--deep)]/10 to-transparent" />
-                    <div className="relative flex h-full flex-col justify-end p-6 text-white md:p-8">
-                      <span className="w-fit rounded-full bg-white/15 px-3 py-1.5 text-[11px] font-semibold backdrop-blur">
+                  <article className="group relative min-h-[340px] overflow-hidden rounded-[1.5rem]">
+                    <div className="absolute inset-0">
+                      <GsapImage
+                        src={offer.image}
+                        alt={offer.title}
+                        className="h-full w-full"
+                        imgClassName="transition-transform duration-700 group-hover:scale-105"
+                        parallax={false}
+                      />
+                    </div>
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--deep)]/88 via-[var(--deep)]/12 to-transparent" />
+                    <div className="absolute inset-0 flex flex-col justify-end p-6 text-white md:p-8">
+                      <span className="w-fit rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] backdrop-blur">
                         {offer.discount}
                       </span>
                       <h3 className="mt-4 font-display text-3xl">
@@ -555,7 +575,7 @@ export default function HomePage() {
                       <Link
                         to="/booking"
                         search={featuredSearch}
-                        className="mt-5 flex w-fit items-center gap-2 text-xs font-semibold text-white transition-colors hover:text-white/80"
+                        className="mt-5 flex w-fit items-center gap-2 text-xs font-semibold text-white transition-colors hover:text-[var(--accent)]"
                       >
                         Check dates <ArrowRight className="h-4 w-4" />
                       </Link>

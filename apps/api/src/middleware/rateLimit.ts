@@ -26,3 +26,14 @@ export const publicWriteLimiter = rateLimit({
   legacyHeaders: false,
   message: jsonMessage("Too many booking requests. Please try again later."),
 });
+
+// Reservation verification combines a reference with a contact secret. Count
+// every attempt, including successful ones, so the endpoint cannot be used for
+// sustained reference enumeration.
+export const publicLookupLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  standardHeaders: "draft-8",
+  legacyHeaders: false,
+  message: jsonMessage("Too many booking lookup attempts. Please try again later."),
+});

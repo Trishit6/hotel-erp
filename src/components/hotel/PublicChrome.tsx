@@ -118,11 +118,11 @@ export function PublicHeader() {
     <header
       className={`sticky top-0 z-50 border-b transition-[background-color,border-color,box-shadow] duration-300 ${
         scrolled
-          ? "border-[var(--line)] bg-[var(--canvas)]/92 shadow-[0_10px_40px_rgba(23,43,73,0.06)] backdrop-blur-xl"
-          : "border-transparent bg-[var(--canvas)]"
+          ? "glass-header border-[var(--line)] shadow-[0_14px_50px_rgba(30,25,16,0.07)]"
+          : "border-transparent bg-[var(--canvas)]/78 backdrop-blur-sm"
       }`}
     >
-      <div className="mx-auto flex min-h-[76px] max-w-[1440px] items-center justify-between gap-4 px-5 md:px-8 lg:px-10">
+      <div className="mx-auto flex min-h-[80px] max-w-[1440px] items-center justify-between gap-4 px-5 md:px-8 lg:px-10">
         <BrandMark />
 
         <nav
@@ -266,7 +266,8 @@ export function PublicHeader() {
           <Link
             to="/booking"
             search={defaultStaySearch}
-            className="hidden items-center gap-2 rounded-full bg-[var(--primary)] px-4 py-2.5 text-xs font-semibold text-[var(--on-primary)] shadow-sm transition-colors hover:bg-[var(--primary-hover)] md:flex"
+            data-cursor="Book"
+            className="btn-sheen hidden items-center gap-2 rounded-full bg-[var(--primary)] px-4 py-2.5 text-xs font-semibold text-[var(--on-primary)] shadow-sm transition-colors hover:bg-[var(--primary-hover)] md:flex"
           >
             Book Your Stay <ArrowUpRight className="h-3.5 w-3.5" />
           </Link>
@@ -391,113 +392,120 @@ export function BookingPill({ children }: { children: ReactNode }) {
 
 export function PublicFooter() {
   return (
-    <footer className="border-t border-[var(--line)] bg-[var(--surface-2)] px-5 py-12 text-sm text-[var(--muted)] md:px-9">
-      <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1.2fr_0.7fr_0.9fr_1fr]">
-        <div>
-          <BrandMark />
-          <p className="mt-4 max-w-xs text-xs leading-5">
-            Thoughtful rooms and generous hospitality in {hotelInfo.city}, with
-            the city and the water close at hand.
-          </p>
-          <p className="mt-4 text-[11px] text-[var(--faint)]">
-            Direct reservations · India · {hotelInfo.timeZone}
-          </p>
-        </div>
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--ink)]">
-            Explore
-          </p>
-          <div className="mt-3 grid gap-2 text-xs">
-            <Link
-              to="/stay"
-              className="transition-colors hover:text-[var(--ink)]"
-            >
-              Stay with us
-            </Link>
-            <Link
-              to="/rooms"
-              className="transition-colors hover:text-[var(--ink)]"
-            >
-              Rooms &amp; suites
-            </Link>
-            <Link
-              to="/amenities"
-              className="transition-colors hover:text-[var(--ink)]"
-            >
-              Amenities
-            </Link>
-            <Link
-              to="/about"
-              className="transition-colors hover:text-[var(--ink)]"
-            >
-              About RIVR
-            </Link>
-            <Link
-              to="/contact"
-              className="transition-colors hover:text-[var(--ink)]"
-            >
-              Contact
-            </Link>
-            <Link
-              to="/my-bookings"
-              className="transition-colors hover:text-[var(--ink)]"
-            >
-              My bookings
-            </Link>
+    <footer className="relative overflow-hidden bg-[var(--deep)] px-5 pb-10 pt-16 text-sm text-white/70 md:px-9 md:pt-20">
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-10 right-0 select-none font-display text-[26vw] leading-none text-white/[0.035] md:-bottom-24"
+      >
+        RIVR
+      </span>
+      <div className="relative mx-auto max-w-7xl">
+        <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-10 md:flex-row md:items-end">
+          <div>
+            <BrandMark dark />
+            <p className="mt-6 max-w-md font-display text-3xl leading-tight text-white md:text-4xl">
+              A quieter kind of luxury, by the water.
+            </p>
           </div>
+          <Link
+            to="/booking"
+            search={defaultStaySearch}
+            className="btn-sheen inline-flex w-fit items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3.5 text-xs font-semibold text-[var(--accent-ink)] transition-opacity hover:opacity-90"
+          >
+            Plan your stay <ArrowUpRight className="h-4 w-4" />
+          </Link>
         </div>
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--ink)]">
-            Contact
-          </p>
-          <div className="mt-3 grid gap-2.5 text-xs">
-            <a
-              href={`tel:${hotelInfo.phoneHref}`}
-              className="flex items-start gap-2 transition-colors hover:text-[var(--ink)]"
-            >
-              <Phone className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--sage)]" />{" "}
-              {hotelInfo.phone}
-            </a>
+
+        <div className="mt-12 grid gap-10 md:grid-cols-[1.1fr_0.6fr_0.9fr_1fr]">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/40">
+              The house
+            </p>
+            <p className="mt-4 max-w-xs text-xs leading-6">
+              Thoughtful rooms and generous hospitality in {hotelInfo.city}, with
+              the city and the water close at hand.
+            </p>
+            <p className="mt-5 text-[11px] text-white/40">
+              Direct reservations · India · {hotelInfo.timeZone}
+            </p>
+          </div>
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/40">
+              Explore
+            </p>
+            <div className="mt-4 grid gap-2.5 text-xs">
+              {[
+                ["/stay", "Stay with us"],
+                ["/rooms", "Rooms & suites"],
+                ["/amenities", "Amenities"],
+                ["/about", "About RIVR"],
+                ["/contact", "Contact"],
+                ["/my-bookings", "My bookings"],
+              ].map(([to, label]) => (
+                <Link
+                  key={to}
+                  to={to as "/stay"}
+                  className="w-fit transition-colors hover:text-[var(--accent)]"
+                >
+                  {label}
+                </Link>
+              ))}
+            </div>
+          </div>
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/40">
+              Contact
+            </p>
+            <div className="mt-4 grid gap-3 text-xs">
+              <a
+                href={`tel:${hotelInfo.phoneHref}`}
+                className="flex items-start gap-2 transition-colors hover:text-white"
+              >
+                <Phone className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--accent)]" />{" "}
+                {hotelInfo.phone}
+              </a>
+              <a
+                href={`mailto:${hotelInfo.email}`}
+                className="flex items-start gap-2 transition-colors hover:text-white"
+              >
+                <Mail className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--accent)]" />{" "}
+                {hotelInfo.email}
+              </a>
+              <span className="flex items-start gap-2">
+                <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--accent)]" />{" "}
+                {hotelInfo.address}
+              </span>
+            </div>
+          </div>
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/40">
+              Concierge
+            </p>
+            <p className="mt-4 text-xs leading-6">
+              Planning something particular? Our team is happy to help with
+              arrivals, celebrations, and stays that need a little more care.
+            </p>
             <a
               href={`mailto:${hotelInfo.email}`}
-              className="flex items-start gap-2 transition-colors hover:text-[var(--ink)]"
+              className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2.5 text-xs font-semibold text-white transition-colors hover:border-[var(--accent)]"
             >
-              <Mail className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--sage)]" />{" "}
-              {hotelInfo.email}
+              Write to the concierge <ArrowUpRight className="h-3.5 w-3.5" />
             </a>
-            <span className="flex items-start gap-2">
-              <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--sage)]" />{" "}
-              {hotelInfo.address}
-            </span>
           </div>
         </div>
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--ink)]">
-            Concierge
-          </p>
-          <p className="mt-3 text-xs leading-5">
-            Planning something particular? Our team is happy to help with
-            arrivals, celebrations, and stays that need a little more care.
-          </p>
-          <a
-            href={`mailto:${hotelInfo.email}`}
-            className="mt-4 inline-flex items-center gap-2 rounded-full border border-[var(--line-strong)] px-4 py-2.5 text-xs font-semibold text-[var(--ink)] transition-colors hover:border-[var(--accent)]"
-          >
-            Write to the concierge <ArrowUpRight className="h-3.5 w-3.5" />
-          </a>
+
+        <div className="mt-12 flex flex-col justify-between gap-2 border-t border-white/10 pt-6 text-[11px] text-white/40 md:flex-row">
+          <span>
+            © {new Date().getFullYear()} RIVR Hotel &amp; Residences · India
+          </span>
+          <span>Reservations are stored securely by the hotel team.</span>
         </div>
+        {hotelInfo.isPlaceholder && (
+          <p className="mt-3 max-w-4xl text-[10px] leading-5 text-white/30">
+            {hotelInfo.notice}
+          </p>
+        )}
       </div>
-      <div className="mx-auto mt-10 flex max-w-7xl flex-col justify-between gap-2 border-t border-[var(--line)] pt-5 text-xs text-[var(--faint)] md:flex-row">
-        <span>
-          © {new Date().getFullYear()} RIVR Hotel &amp; Residences · India
-        </span>
-        <span>Reservations are stored securely by the hotel team.</span>
-      </div>
-      {hotelInfo.isPlaceholder && (
-        <p className="mx-auto mt-2 max-w-7xl text-[11px] text-[var(--faint)]">
-          {hotelInfo.notice}
-        </p>
-      )}
     </footer>
   );
 }

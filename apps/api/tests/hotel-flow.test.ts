@@ -1,6 +1,9 @@
 import request from "supertest";
+import { eq } from "drizzle-orm";
 import { beforeAll, describe, expect, it } from "vitest";
 import { createApp } from "../src/app";
+import { db } from "../src/database/client";
+import { reservations } from "../src/database/schema";
 import { dateAt } from "../src/utils/date";
 import { resetTestDatabase, seedTestCatalog, setupAdmin } from "./helpers";
 
@@ -41,13 +44,26 @@ describe("reservations, availability, payments, and housekeeping", () => {
 
     const created = await request(app).post("/api/public/reservations").send(booking());
     expect(created.status).toBe(201);
-    const reservation = created.body.reservation;
-    expect(reservation.status).toBe("confirmed");
+    const publicReservation = created.body.reservation;
+    expect(publicReservation.status).toBe("pending");
+    expect(publicReservation.reference).toMatch(/^RIVR-/);
+    expect(publicReservation.total).toBe(5600);
+    expect(publicReservation.id).toBeUndefined();
+
+    const [createdRow] = await db
+      .select()
+      .from(reservations)
+      .where(eq(reservations.reference, publicReservation.reference))
+      .limit(1);
+    expect(createdRow).toBeDefined();
+    const reservationId = createdRow.id;
+
+    const detail = await admin.get(`/api/admin/reservations/${reservationId}`);
+    expect(detail.status).toBe(200);
     // 2 nights x INR 2,500 + 12% tax
-    expect(reservation.roomCharges).toBe(5000);
-    expect(reservation.tax).toBe(600);
-    expect(reservation.total).toBe(5600);
-    expect(reservation.reference).toMatch(/^RIVR-/);
+    expect(detail.body.reservation.roomCharges).toBe(5000);
+    expect(detail.body.reservation.tax).toBe(600);
+    expect(detail.body.reservation.total).toBe(5600);
 
     const overlap = await request(app)
       .post("/api/public/reservations")
@@ -60,7 +76,7 @@ describe("reservations, availability, payments, and housekeeping", () => {
     expect(capacity.status).toBe(400);
 
     const partial = await admin.post("/api/admin/payments").send({
-      reservationId: reservation.id,
+      reservationId,
       amount: 1000,
       method: "upi",
       note: "Deposit",
@@ -70,14 +86,14 @@ describe("reservations, availability, payments, and housekeeping", () => {
     expect(partial.body.reservation.paidAmount).toBe(1000);
 
     const overpay = await admin.post("/api/admin/payments").send({
-      reservationId: reservation.id,
+      reservationId,
       amount: 999999,
       method: "card",
     });
     expect(overpay.status).toBe(400);
 
     const settle = await admin.post("/api/admin/payments").send({
-      reservationId: reservation.id,
+      reservationId,
       amount: 4600,
       method: "card",
     });
@@ -85,7 +101,11 @@ describe("reservations, availability, payments, and housekeeping", () => {
     expect(settle.body.reservation.paymentStatus).toBe("paid");
     expect(settle.body.reservation.paidAmount).toBe(5600);
 
-    const checkInResponse = await admin.post(`/api/admin/reservations/${reservation.id}/check-in`);
+    // The fixture arrives in the future, so this end-to-end flow uses the
+    // explicitly authorized early-check-in path instead of the normal date gate.
+    const checkInResponse = await admin
+      .post(`/api/admin/reservations/${reservationId}/check-in`)
+      .send({ earlyCheckIn: true });
     expect(checkInResponse.status).toBe(200);
     expect(checkInResponse.body.reservation.status).toBe("checked-in");
 
@@ -94,7 +114,7 @@ describe("reservations, availability, payments, and housekeeping", () => {
       "occupied",
     );
 
-    const checkOutResponse = await admin.post(`/api/admin/reservations/${reservation.id}/check-out`);
+    const checkOutResponse = await admin.post(`/api/admin/reservations/${reservationId}/check-out`);
     expect(checkOutResponse.status).toBe(200);
     expect(checkOutResponse.body.reservation.status).toBe("checked-out");
 
@@ -125,8 +145,14 @@ describe("reservations, availability, payments, and housekeeping", () => {
       .send(booking({ roomId: "room-test-2", email: "cancel.one@example.com", checkIn, checkOut }));
     expect(first.status).toBe(201);
 
+    const [firstRow] = await db
+      .select()
+      .from(reservations)
+      .where(eq(reservations.reference, first.body.reservation.reference))
+      .limit(1);
+    expect(firstRow).toBeDefined();
     const cancelled = await admin
-      .patch(`/api/admin/reservations/${first.body.reservation.id}/status`)
+      .patch(`/api/admin/reservations/${firstRow.id}/status`)
       .send({ status: "cancelled" });
     expect(cancelled.status).toBe(200);
 

@@ -1,4 +1,4 @@
-import { and, asc, eq, gte, inArray, lt, gt, notInArray, sql } from "drizzle-orm";
+import { and, asc, eq, gte, inArray, gt, lte, notInArray, sql } from "drizzle-orm";
 import { db } from "../database/client";
 import { reservations, roomTypeAmenities, roomTypes, rooms } from "../database/schema";
 import { RELEASED_RESERVATION_STATUSES, UNAVAILABLE_ROOM_STATUSES } from "../constants";
@@ -10,6 +10,7 @@ import { newId } from "../utils/id";
 import { badRequest, conflict, notFound } from "../utils/http";
 import { fromPaise, toPaise } from "../utils/money";
 import { todayIst } from "../utils/date";
+import { activeReservationCondition, unexpiredHoldCondition } from "./reservationHolds";
 
 export async function listRoomTypes() {
   const types = await db.select().from(roomTypes).orderBy(asc(roomTypes.name));
@@ -43,7 +44,13 @@ export async function getBusyRanges() {
   return db
     .select({ roomId: reservations.roomId, checkIn: reservations.checkIn, checkOut: reservations.checkOut })
     .from(reservations)
-    .where(and(notInArray(reservations.status, RELEASED_RESERVATION_STATUSES), gte(reservations.checkOut, todayIst())));
+    .where(
+      and(
+        notInArray(reservations.status, RELEASED_RESERVATION_STATUSES),
+        unexpiredHoldCondition(),
+        gte(reservations.checkOut, todayIst()),
+      ),
+    );
 }
 
 export async function getPublicCatalog() {
@@ -69,6 +76,7 @@ export async function getAvailability(checkIn: string, checkOut: string, guests:
           SELECT 1 FROM reservations res
           WHERE res.room_id = ${rooms.id}
             AND res.status NOT IN ('cancelled', 'checked-out', 'no-show')
+            AND (res.hold_expires_at IS NULL OR res.hold_expires_at > UTC_TIMESTAMP())
             AND res.check_in < ${checkOut}
             AND res.check_out > ${checkIn}
         )`,
@@ -115,8 +123,8 @@ export async function updateRoomStatus(id: string, status: RoomStatus, actor: { 
       .where(
         and(
           eq(reservations.roomId, id),
-          notInArray(reservations.status, RELEASED_RESERVATION_STATUSES),
-          lt(reservations.checkIn, todayIst()),
+          activeReservationCondition(),
+          lte(reservations.checkIn, todayIst()),
           gt(reservations.checkOut, todayIst()),
         ),
       )
@@ -143,8 +151,8 @@ export async function roomHasOtherActiveStay(roomId: string, exceptReservationId
       and(
         eq(reservations.roomId, roomId),
         sql`${reservations.id} <> ${exceptReservationId}`,
-        notInArray(reservations.status, RELEASED_RESERVATION_STATUSES),
-        lt(reservations.checkIn, todayIst()),
+        activeReservationCondition(),
+        lte(reservations.checkIn, todayIst()),
         gt(reservations.checkOut, todayIst()),
       ),
     )

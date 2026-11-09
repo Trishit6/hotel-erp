@@ -84,6 +84,20 @@ export interface Guest {
   totalSpent: number;
 }
 
+/** The only reservation fields exposed by unauthenticated booking lookup. */
+export interface PublicReservation {
+  reference: string;
+  status: ReservationStatus;
+  checkIn: string;
+  checkOut: string;
+  roomTypeName: string;
+  roomNumber: string;
+  guestFirstName: string;
+  total: number;
+  paidAmount: number;
+  paymentStatus: PaymentStatus;
+}
+
 export interface Reservation {
   id: string;
   reference: string;
@@ -102,6 +116,7 @@ export interface Reservation {
   total: number;
   paidAmount: number;
   specialRequests: string;
+  holdExpiresAt?: string | null;
   createdAt: string;
 }
 

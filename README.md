@@ -16,7 +16,7 @@ The existing guest pages, admin pages, routes, styling, and workflows are preser
 | Auth | Argon2id (`@node-rs/argon2`), server-managed sessions, HTTP-only cookies |
 | Security | Helmet, explicit-origin CORS, rate limiting, RBAC, Zod validation |
 | Tests | Vitest, Supertest, real database integration tests |
-| Package manager | pnpm 11 |
+| Package manager | pnpm 12 |
 
 ---
 
@@ -27,7 +27,7 @@ The existing guest pages, admin pages, routes, styling, and workflows are preser
 ├── apps/
 │   └── api/
 │       ├── drizzle/                 # generated SQL migrations
-│       ├── scripts/create-admin.ts  # interactive initial admin setup
+│       ├── scripts/create-admin.ts  # non-interactive first admin setup
 │       ├── src/
 │       │   ├── config/              # environment configuration
 │       │   ├── database/            # pool, schema, migrations, seed/reset
@@ -55,7 +55,7 @@ The existing guest pages, admin pages, routes, styling, and workflows are preser
 ## Prerequisites
 
 - Node.js 20 or newer
-- pnpm 11 (`corepack enable` then `corepack prepare pnpm@11 --activate`)
+- pnpm 12.18.0 (`corepack enable` then `corepack prepare pnpm@12.18.0 --activate`)
 - MariaDB 10.6+ or a compatible MySQL 5.7+ server
 - A database user that can create tables and indexes
 
@@ -112,7 +112,8 @@ Important variables:
 | `SESSION_SECRET` | Secret used to HMAC session tokens; required in production |
 | `SESSION_TTL_HOURS` | Session lifetime in hours |
 | `COOKIE_NAME` | Session cookie name |
-| `COOKIE_SECURE` | Set `true` when served over HTTPS |
+| `COOKIE_SECURE` | Set `true` when served over HTTPS; must be explicitly `true` in production |
+| `TRUST_PROXY` | Express proxy trust: `false`, `loopback`, `linklocal`, `uniquelocal`, or 1-10 hops |
 | `ALLOW_DEMO_RESET` | Enables the super-admin-only dev reset endpoint |
 | `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` | Optional extra admin created by `pnpm db:seed`; the demo seed also creates `admin@admin.com` / `password` |
 
@@ -207,17 +208,19 @@ The frontend API base can also be set at build time with `VITE_API_URL`. Leave i
 
 Open `http://localhost:5173/login` and use a seeded or created account. For the local demo seed, use `admin@admin.com` / `password`. The old demo role picker has been removed. The API sets an HTTP-only session cookie; the browser never chooses a privileged role.
 
-Guest sign-in, guest registration, the guest dashboard, my-bookings, and guest password reset are implemented under `/api/account` and the guest pages. Booking lookup by reference, email, or phone also works without an account.
+Guest sign-in, guest registration, the guest dashboard, my-bookings, and guest password reset are implemented under `/api/account` and the guest pages. Booking lookup requires the exact reservation reference plus the matching email address or phone number.
 
 ---
 
 ## Checks and tests
 
-Frontend typecheck (the real check; root `pnpm typecheck` is a no-op because the root `tsconfig.json` only has project references):
+Frontend typecheck:
 
 ```bash
-pnpm exec tsc -b
+pnpm typecheck
 ```
+
+`pnpm typecheck` runs `tsc -b`; `pnpm exec tsc -b` is the equivalent direct command.
 
 Frontend production build:
 
@@ -263,9 +266,8 @@ Base URL in development: `http://localhost:4000/api`
 | `GET` | `/public/catalog` | Room types, rooms, and active busy date ranges |
 | `GET` | `/public/rooms` | Public rooms |
 | `GET` | `/public/availability` | Availability search |
-| `POST` | `/public/reservations` | Create a guest reservation |
-| `GET` | `/public/reservations/lookup?q=` | Lookup by reference, email, name, or phone |
-| `GET` | `/public/reservations/:reference` | Reservation detail by id or reference |
+| `POST` | `/public/reservations` | Create a guest reservation with a two-hour pending hold |
+| `POST` | `/public/reservations/verify` | Verify a reference plus matching email or phone |
 
 ### Auth
 
@@ -307,7 +309,9 @@ Money is stored as `DECIMAL(12,2)` and calculated in integer paise on the server
 - Sessions are server-side rows. The browser receives a random token in an HTTP-only cookie; only an HMAC-SHA256 hash of the token is stored in the database.
 - Cookies are `SameSite=Lax`, `HttpOnly`, and `Secure` when `COOKIE_SECURE=true` or `NODE_ENV=production`.
 - The session token is never exposed to JavaScript.
-- Login is rate-limited; all API traffic has a global limit.
+- Login is rate-limited; all API traffic has a global limit. Public reservation verification is limited to 10 attempts per 15 minutes per IP.
+- Public lookup requires an exact reference and matching normalized email or phone, returns a minimal allowlist, and never exposes full guest records.
+- Production startup rejects insecure cookies, loopback web origins, and session secrets shorter than 32 characters.
 - Helmet sets security headers.
 - CORS uses an explicit allow-list from `WEB_ORIGIN`; credentials are enabled.
 - Every mutation validates its body with Zod and enforces a server-side permission from the permission catalogue.
@@ -318,7 +322,7 @@ Money is stored as `DECIMAL(12,2)` and calculated in integer paise on the server
 
 ### Roles
 
-`super-admin`, `admin`, `manager`, `receptionist`, `housekeeping`, `accountant`, `restaurant`.
+`super-admin`, `admin`, `manager`, `receptionist`, `housekeeping`, `accountant`, `restaurant`, `staff`.
 
 Permissions are defined in `apps/api/src/services/permissions.ts`. Frontend navigation uses the same role names for visibility hints, but the API is authoritative.
 
@@ -332,7 +336,7 @@ Permissions are defined in `apps/api/src/services/permissions.ts`. Frontend navi
 - Admin pages use the bootstrap data and await every mutation, then refresh the affected slices.
 - Loading states are shown while the catalogue or workspace loads. Errors are surfaced in the admin shell and in the relevant forms.
 - A `401` from a mutation clears the local session and asks the user to sign in again.
-- Booking lookup and booking confirmation fetch real reservation data from the API, so they work across browsers and devices.
+- Booking success uses the creation response through a one-time `sessionStorage` handoff. Later booking lookup requires the reference plus matching email or phone, so it works across browsers and devices without exposing reference-only data.
 - `localStorage` is used only for the `rivr-theme` UI preference. Business records are no longer stored in the browser.
 
 ---
@@ -368,7 +372,9 @@ Foreign keys, unique constraints, indexes, timestamps, and decimal money columns
 - Dates are date-only `YYYY-MM-DD` strings compared lexicographically. The API and UI use Asia/Kolkata (`Asia/Kolkata`) for "today" and Indian display formats.
 - Reservations cannot overlap for the same room. The booking transaction locks the room row with `SELECT ... FOR UPDATE` before the overlap check, preventing concurrent double bookings.
 - Rooms in `maintenance`, `out-of-order`, or `cleaning` are not sellable.
-- Reservation transitions are coupled: create → reservation `confirmed` + room `reserved`; cancel → room `available`; check-in → room `occupied`; check-out → room `cleaning` + dirty housekeeping task; task `inspected` → room `available`.
+- Public reservations start `pending` with a two-hour hold; staff bookings start `confirmed`. Unexpired holds block availability, and expired holds are cancelled by cleanup.
+- Future reservations do not change a room's current status. A same-day stay may set an available room to `reserved`; check-in → `occupied`; check-out → `cleaning` + dirty housekeeping task; task `inspected` → `available`. Cancellation releases a room only when no other active stay needs it.
+- Check-in is allowed from the arrival date until the check-out date; early check-in and check-out with an outstanding balance require a manager/admin override that is logged.
 - Payments are transaction-safe and update invoice paid/balance values. There is no online payment gateway; payments are recorded by staff.
 - Tax is a configurable 12% demo rate (`TAX_BASIS_POINTS = 1200`). Confirm the hotel's applicable GST slab before production use.
 - `hotelInfo` in `src/lib/hotel-data.ts` remains placeholder data. Do not treat its address or phone number as verified property details.
