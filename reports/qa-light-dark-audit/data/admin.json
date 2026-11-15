@@ -1,0 +1,5297 @@
+{
+  "generatedAt": "2026-11-15T10:52:31.294Z",
+  "login": {
+    "adminUrl": "http://localhost:5173/admin/dashboard",
+    "housekeepingUrl": "http://localhost:5173/housekeeping/dashboard",
+    "customerEmail": "aarav.mehta@example.com",
+    "customerUrl": "http://localhost:5173/login"
+  },
+  "routes": [
+    {
+      "route": "/admin",
+      "theme": "light",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/dashboard",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [],
+        "overflowCount": 0,
+        "contrast": {
+          "checked": 180,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "RS",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 165,
+            "Cormorant Garamond": 15
+          },
+          "sizes": {
+            "9": 24,
+            "10": 36,
+            "11": 26,
+            "12": 51,
+            "14": 12,
+            "16": 17,
+            "18": 3,
+            "30": 10,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 700",
+            "Cormorant Garamond 700",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Good afternoon, RIVR."
+          },
+          {
+            "level": 3,
+            "text": "Revenue analytics"
+          },
+          {
+            "level": 3,
+            "text": "Occupancy analytics"
+          },
+          {
+            "level": 3,
+            "text": "Recent reservations"
+          },
+          {
+            "level": 3,
+            "text": "Today’s operations"
+          },
+          {
+            "level": 3,
+            "text": "Recent activity"
+          },
+          {
+            "level": 3,
+            "text": "Team snapshot"
+          },
+          {
+            "level": 3,
+            "text": "Operational alerts"
+          }
+        ],
+        "headingSkips": 1,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to dark mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "View all",
+            "tag": "a",
+            "w": 42,
+            "h": 16
+          },
+          {
+            "label": "Open logs",
+            "tag": "a",
+            "w": 57,
+            "h": 16
+          },
+          {
+            "label": "Manage",
+            "tag": "a",
+            "w": 46,
+            "h": 16
+          }
+        ],
+        "smallTargetCount": 7,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-index"
+    },
+    {
+      "route": "/admin/dashboard",
+      "theme": "light",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/dashboard",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [],
+        "overflowCount": 0,
+        "contrast": {
+          "checked": 180,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "RS",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 165,
+            "Cormorant Garamond": 15
+          },
+          "sizes": {
+            "9": 24,
+            "10": 36,
+            "11": 26,
+            "12": 51,
+            "14": 12,
+            "16": 17,
+            "18": 3,
+            "30": 10,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 700",
+            "Cormorant Garamond 700",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Good afternoon, RIVR."
+          },
+          {
+            "level": 3,
+            "text": "Revenue analytics"
+          },
+          {
+            "level": 3,
+            "text": "Occupancy analytics"
+          },
+          {
+            "level": 3,
+            "text": "Recent reservations"
+          },
+          {
+            "level": 3,
+            "text": "Today’s operations"
+          },
+          {
+            "level": 3,
+            "text": "Recent activity"
+          },
+          {
+            "level": 3,
+            "text": "Team snapshot"
+          },
+          {
+            "level": 3,
+            "text": "Operational alerts"
+          }
+        ],
+        "headingSkips": 1,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to dark mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "View all",
+            "tag": "a",
+            "w": 42,
+            "h": 16
+          },
+          {
+            "label": "Open logs",
+            "tag": "a",
+            "w": 57,
+            "h": 16
+          },
+          {
+            "label": "Manage",
+            "tag": "a",
+            "w": 46,
+            "h": 16
+          }
+        ],
+        "smallTargetCount": 7,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-dashboard"
+    },
+    {
+      "route": "/admin/reservations",
+      "theme": "light",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/reservations",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [],
+        "overflowCount": 0,
+        "contrast": {
+          "checked": 985,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "RS",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 984,
+            "Cormorant Garamond": 1
+          },
+          "sizes": {
+            "9": 2,
+            "10": 13,
+            "11": 361,
+            "12": 243,
+            "14": 364,
+            "16": 1,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600",
+            "Manrope 700",
+            "Manrope 700"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Reservations"
+          }
+        ],
+        "headingSkips": 0,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to dark mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          }
+        ],
+        "smallTargetCount": 4,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-reservations"
+    },
+    {
+      "route": "/admin/rooms",
+      "theme": "light",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/rooms",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [
+          {
+            "tag": "div",
+            "cls": "flex items-center gap-1",
+            "left": 1240,
+            "right": 1447,
+            "w": 207
+          },
+          {
+            "tag": "select",
+            "cls": "rounded-lg border border-[var(--line-2)] bg-[var(--surface)] px-2 py-2 text-[11px] capitalize outlin",
+            "left": 1312,
+            "right": 1447,
+            "w": 135
+          },
+          {
+            "tag": "div",
+            "cls": "flex items-center gap-1",
+            "left": 1237,
+            "right": 1444,
+            "w": 207
+          },
+          {
+            "tag": "select",
+            "cls": "rounded-lg border border-[var(--line-2)] bg-[var(--surface)] px-2 py-2 text-[11px] capitalize outlin",
+            "left": 1309,
+            "right": 1444,
+            "w": 135
+          },
+          {
+            "tag": "div",
+            "cls": "flex items-center gap-1",
+            "left": 1237,
+            "right": 1444,
+            "w": 207
+          },
+          {
+            "tag": "select",
+            "cls": "rounded-lg border border-[var(--line-2)] bg-[var(--surface)] px-2 py-2 text-[11px] capitalize outlin",
+            "left": 1309,
+            "right": 1444,
+            "w": 135
+          }
+        ],
+        "overflowCount": 6,
+        "contrast": {
+          "checked": 300,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "RS",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 299,
+            "Cormorant Garamond": 1
+          },
+          "sizes": {
+            "9": 2,
+            "10": 103,
+            "11": 57,
+            "12": 11,
+            "14": 20,
+            "16": 58,
+            "18": 48,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600",
+            "Manrope 700",
+            "Manrope 700"
+          ]
+        },
+        "imgs": {
+          "total": 48,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Rooms & room types"
+          },
+          {
+            "level": 3,
+            "text": "King Studio"
+          },
+          {
+            "level": 3,
+            "text": "King Studio"
+          },
+          {
+            "level": 3,
+            "text": "Deluxe King"
+          },
+          {
+            "level": 3,
+            "text": "Twin Suite"
+          },
+          {
+            "level": 3,
+            "text": "Executive Suite"
+          },
+          {
+            "level": 3,
+            "text": "Penthouse"
+          },
+          {
+            "level": 3,
+            "text": "Garden Villa"
+          },
+          {
+            "level": 3,
+            "text": "Family Room"
+          },
+          {
+            "level": 3,
+            "text": "Studio Twin"
+          },
+          {
+            "level": 3,
+            "text": "King Studio"
+          },
+          {
+            "level": 3,
+            "text": "Deluxe King"
+          },
+          {
+            "level": 3,
+            "text": "Twin Suite"
+          },
+          {
+            "level": 3,
+            "text": "Twin Suite"
+          },
+          {
+            "level": 3,
+            "text": "Executive Suite"
+          },
+          {
+            "level": 3,
+            "text": "Penthouse"
+          },
+          {
+            "level": 3,
+            "text": "Garden Villa"
+          },
+          {
+            "level": 3,
+            "text": "Family Room"
+          },
+          {
+            "level": 3,
+            "text": "Studio Twin"
+          },
+          {
+            "level": 3,
+            "text": "King Studio"
+          },
+          {
+            "level": 3,
+            "text": "Deluxe King"
+          },
+          {
+            "level": 3,
+            "text": "Executive Suite"
+          },
+          {
+            "level": 3,
+            "text": "Penthouse"
+          },
+          {
+            "level": 3,
+            "text": "Deluxe King"
+          },
+          {
+            "level": 3,
+            "text": "Twin Suite"
+          },
+          {
+            "level": 3,
+            "text": "Executive Suite"
+          },
+          {
+            "level": 3,
+            "text": "Penthouse"
+          },
+          {
+            "level": 3,
+            "text": "Garden Villa"
+          },
+          {
+            "level": 3,
+            "text": "Family Room"
+          },
+          {
+            "level": 3,
+            "text": "Studio Twin"
+          },
+          {
+            "level": 3,
+            "text": "King Studio"
+          },
+          {
+            "level": 3,
+            "text": "Deluxe King"
+          },
+          {
+            "level": 3,
+            "text": "Twin Suite"
+          },
+          {
+            "level": 3,
+            "text": "Penthouse"
+          },
+          {
+            "level": 3,
+            "text": "Garden Villa"
+          },
+          {
+            "level": 3,
+            "text": "Family Room"
+          },
+          {
+            "level": 3,
+            "text": "Studio Twin"
+          },
+          {
+            "level": 3,
+            "text": "King Studio"
+          },
+          {
+            "level": 3,
+            "text": "Deluxe King"
+          },
+          {
+            "level": 3,
+            "text": "Twin Suite"
+          },
+          {
+            "level": 3,
+            "text": "Executive Suite"
+          },
+          {
+            "level": 3,
+            "text": "Garden Villa"
+          },
+          {
+            "level": 3,
+            "text": "Family Room"
+          },
+          {
+            "level": 3,
+            "text": "Studio Twin"
+          },
+          {
+            "level": 3,
+            "text": "King Studio"
+          },
+          {
+            "level": 3,
+            "text": "Deluxe King"
+          },
+          {
+            "level": 3,
+            "text": "Twin Suite"
+          },
+          {
+            "level": 3,
+            "text": "Executive Suite"
+          },
+          {
+            "level": 3,
+            "text": "Penthouse"
+          },
+          {
+            "level": 3,
+            "text": "Room types & rates"
+          }
+        ],
+        "headingSkips": 1,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to dark mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          }
+        ],
+        "smallTargetCount": 4,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-rooms"
+    },
+    {
+      "route": "/admin/room-types",
+      "theme": "light",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/room-types",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [
+          {
+            "tag": "div",
+            "cls": "flex items-center gap-1",
+            "left": 1240,
+            "right": 1447,
+            "w": 207
+          },
+          {
+            "tag": "select",
+            "cls": "rounded-lg border border-[var(--line-2)] bg-[var(--surface)] px-2 py-2 text-[11px] capitalize outlin",
+            "left": 1312,
+            "right": 1447,
+            "w": 135
+          },
+          {
+            "tag": "div",
+            "cls": "flex items-center gap-1",
+            "left": 1237,
+            "right": 1444,
+            "w": 207
+          },
+          {
+            "tag": "select",
+            "cls": "rounded-lg border border-[var(--line-2)] bg-[var(--surface)] px-2 py-2 text-[11px] capitalize outlin",
+            "left": 1309,
+            "right": 1444,
+            "w": 135
+          },
+          {
+            "tag": "div",
+            "cls": "flex items-center gap-1",
+            "left": 1237,
+            "right": 1444,
+            "w": 207
+          },
+          {
+            "tag": "select",
+            "cls": "rounded-lg border border-[var(--line-2)] bg-[var(--surface)] px-2 py-2 text-[11px] capitalize outlin",
+            "left": 1309,
+            "right": 1444,
+            "w": 135
+          }
+        ],
+        "overflowCount": 6,
+        "contrast": {
+          "checked": 299,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "RS",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 298,
+            "Cormorant Garamond": 1
+          },
+          "sizes": {
+            "9": 2,
+            "10": 103,
+            "11": 57,
+            "12": 11,
+            "14": 19,
+            "16": 58,
+            "18": 48,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600",
+            "Manrope 700",
+            "Manrope 700"
+          ]
+        },
+        "imgs": {
+          "total": 48,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Rooms & room types"
+          },
+          {
+            "level": 3,
+            "text": "King Studio"
+          },
+          {
+            "level": 3,
+            "text": "King Studio"
+          },
+          {
+            "level": 3,
+            "text": "Deluxe King"
+          },
+          {
+            "level": 3,
+            "text": "Twin Suite"
+          },
+          {
+            "level": 3,
+            "text": "Executive Suite"
+          },
+          {
+            "level": 3,
+            "text": "Penthouse"
+          },
+          {
+            "level": 3,
+            "text": "Garden Villa"
+          },
+          {
+            "level": 3,
+            "text": "Family Room"
+          },
+          {
+            "level": 3,
+            "text": "Studio Twin"
+          },
+          {
+            "level": 3,
+            "text": "King Studio"
+          },
+          {
+            "level": 3,
+            "text": "Deluxe King"
+          },
+          {
+            "level": 3,
+            "text": "Twin Suite"
+          },
+          {
+            "level": 3,
+            "text": "Twin Suite"
+          },
+          {
+            "level": 3,
+            "text": "Executive Suite"
+          },
+          {
+            "level": 3,
+            "text": "Penthouse"
+          },
+          {
+            "level": 3,
+            "text": "Garden Villa"
+          },
+          {
+            "level": 3,
+            "text": "Family Room"
+          },
+          {
+            "level": 3,
+            "text": "Studio Twin"
+          },
+          {
+            "level": 3,
+            "text": "King Studio"
+          },
+          {
+            "level": 3,
+            "text": "Deluxe King"
+          },
+          {
+            "level": 3,
+            "text": "Executive Suite"
+          },
+          {
+            "level": 3,
+            "text": "Penthouse"
+          },
+          {
+            "level": 3,
+            "text": "Deluxe King"
+          },
+          {
+            "level": 3,
+            "text": "Twin Suite"
+          },
+          {
+            "level": 3,
+            "text": "Executive Suite"
+          },
+          {
+            "level": 3,
+            "text": "Penthouse"
+          },
+          {
+            "level": 3,
+            "text": "Garden Villa"
+          },
+          {
+            "level": 3,
+            "text": "Family Room"
+          },
+          {
+            "level": 3,
+            "text": "Studio Twin"
+          },
+          {
+            "level": 3,
+            "text": "King Studio"
+          },
+          {
+            "level": 3,
+            "text": "Deluxe King"
+          },
+          {
+            "level": 3,
+            "text": "Twin Suite"
+          },
+          {
+            "level": 3,
+            "text": "Penthouse"
+          },
+          {
+            "level": 3,
+            "text": "Garden Villa"
+          },
+          {
+            "level": 3,
+            "text": "Family Room"
+          },
+          {
+            "level": 3,
+            "text": "Studio Twin"
+          },
+          {
+            "level": 3,
+            "text": "King Studio"
+          },
+          {
+            "level": 3,
+            "text": "Deluxe King"
+          },
+          {
+            "level": 3,
+            "text": "Twin Suite"
+          },
+          {
+            "level": 3,
+            "text": "Executive Suite"
+          },
+          {
+            "level": 3,
+            "text": "Garden Villa"
+          },
+          {
+            "level": 3,
+            "text": "Family Room"
+          },
+          {
+            "level": 3,
+            "text": "Studio Twin"
+          },
+          {
+            "level": 3,
+            "text": "King Studio"
+          },
+          {
+            "level": 3,
+            "text": "Deluxe King"
+          },
+          {
+            "level": 3,
+            "text": "Twin Suite"
+          },
+          {
+            "level": 3,
+            "text": "Executive Suite"
+          },
+          {
+            "level": 3,
+            "text": "Penthouse"
+          },
+          {
+            "level": 3,
+            "text": "Room types & rates"
+          }
+        ],
+        "headingSkips": 1,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to dark mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          }
+        ],
+        "smallTargetCount": 4,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-room-types"
+    },
+    {
+      "route": "/admin/guests",
+      "theme": "light",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/guests",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [],
+        "overflowCount": 0,
+        "contrast": {
+          "checked": 1027,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "RS",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 1026,
+            "Cormorant Garamond": 1
+          },
+          "sizes": {
+            "9": 2,
+            "10": 259,
+            "11": 1,
+            "12": 339,
+            "14": 88,
+            "16": 85,
+            "18": 252,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600",
+            "Manrope 700",
+            "Manrope 700"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Guests"
+          },
+          {
+            "level": 3,
+            "text": "Aarav Mehta"
+          },
+          {
+            "level": 3,
+            "text": "Ananya Iyer"
+          },
+          {
+            "level": 3,
+            "text": "Rohan Kapoor"
+          },
+          {
+            "level": 3,
+            "text": "Meera Nair"
+          },
+          {
+            "level": 3,
+            "text": "Aarav Nair"
+          },
+          {
+            "level": 3,
+            "text": "Ananya Verma"
+          },
+          {
+            "level": 3,
+            "text": "Rohan Kulkarni"
+          },
+          {
+            "level": 3,
+            "text": "Meera Sharma"
+          },
+          {
+            "level": 3,
+            "text": "Vivaan Gupta"
+          },
+          {
+            "level": 3,
+            "text": "Isha Pillai"
+          },
+          {
+            "level": 3,
+            "text": "Kabir Patel"
+          },
+          {
+            "level": 3,
+            "text": "Diya Joshi"
+          },
+          {
+            "level": 3,
+            "text": "Arjun Bhat"
+          },
+          {
+            "level": 3,
+            "text": "Saanvi Rao"
+          },
+          {
+            "level": 3,
+            "text": "Aditya Reddy"
+          },
+          {
+            "level": 3,
+            "text": "Kiara Mehta"
+          },
+          {
+            "level": 3,
+            "text": "Reyansh Menon"
+          },
+          {
+            "level": 3,
+            "text": "Aadhya Bose"
+          },
+          {
+            "level": 3,
+            "text": "Vihaan Iyer"
+          },
+          {
+            "level": 3,
+            "text": "Myra Desai"
+          },
+          {
+            "level": 3,
+            "text": "Karthik Chopra"
+          },
+          {
+            "level": 3,
+            "text": "Nisha Kapoor"
+          },
+          {
+            "level": 3,
+            "text": "Siddharth Singh"
+          },
+          {
+            "level": 3,
+            "text": "Pooja Mishra"
+          },
+          {
+            "level": 3,
+            "text": "Rahul Nair"
+          },
+          {
+            "level": 3,
+            "text": "Sneha Verma"
+          },
+          {
+            "level": 3,
+            "text": "Aman Kulkarni"
+          },
+          {
+            "level": 3,
+            "text": "Tanvi Sharma"
+          },
+          {
+            "level": 3,
+            "text": "Dev Gupta"
+          },
+          {
+            "level": 3,
+            "text": "Riya Pillai"
+          },
+          {
+            "level": 3,
+            "text": "Yash Patel"
+          },
+          {
+            "level": 3,
+            "text": "Neha Joshi"
+          },
+          {
+            "level": 3,
+            "text": "Ravi Bhat"
+          },
+          {
+            "level": 3,
+            "text": "Anjali Rao"
+          },
+          {
+            "level": 3,
+            "text": "Karan Reddy"
+          },
+          {
+            "level": 3,
+            "text": "Shreya Mehta"
+          },
+          {
+            "level": 3,
+            "text": "Aarav Menon"
+          },
+          {
+            "level": 3,
+            "text": "Ananya Bose"
+          },
+          {
+            "level": 3,
+            "text": "Rohan Iyer"
+          },
+          {
+            "level": 3,
+            "text": "Meera Desai"
+          },
+          {
+            "level": 3,
+            "text": "Vivaan Chopra"
+          },
+          {
+            "level": 3,
+            "text": "Isha Kapoor"
+          },
+          {
+            "level": 3,
+            "text": "Kabir Singh"
+          },
+          {
+            "level": 3,
+            "text": "Diya Mishra"
+          },
+          {
+            "level": 3,
+            "text": "Arjun Nair"
+          },
+          {
+            "level": 3,
+            "text": "Saanvi Verma"
+          },
+          {
+            "level": 3,
+            "text": "Aditya Kulkarni"
+          },
+          {
+            "level": 3,
+            "text": "Kiara Sharma"
+          },
+          {
+            "level": 3,
+            "text": "Reyansh Gupta"
+          },
+          {
+            "level": 3,
+            "text": "Aadhya Pillai"
+          },
+          {
+            "level": 3,
+            "text": "Vihaan Patel"
+          },
+          {
+            "level": 3,
+            "text": "Myra Joshi"
+          },
+          {
+            "level": 3,
+            "text": "Karthik Bhat"
+          },
+          {
+            "level": 3,
+            "text": "Nisha Rao"
+          },
+          {
+            "level": 3,
+            "text": "Siddharth Reddy"
+          },
+          {
+            "level": 3,
+            "text": "Pooja Mehta"
+          },
+          {
+            "level": 3,
+            "text": "Rahul Menon"
+          },
+          {
+            "level": 3,
+            "text": "Sneha Bose"
+          },
+          {
+            "level": 3,
+            "text": "Aman Iyer"
+          },
+          {
+            "level": 3,
+            "text": "Tanvi Desai"
+          },
+          {
+            "level": 3,
+            "text": "Dev Chopra"
+          },
+          {
+            "level": 3,
+            "text": "Riya Kapoor"
+          },
+          {
+            "level": 3,
+            "text": "Yash Singh"
+          },
+          {
+            "level": 3,
+            "text": "Neha Mishra"
+          },
+          {
+            "level": 3,
+            "text": "Ravi Nair"
+          },
+          {
+            "level": 3,
+            "text": "Anjali Verma"
+          },
+          {
+            "level": 3,
+            "text": "Karan Kulkarni"
+          },
+          {
+            "level": 3,
+            "text": "Shreya Sharma"
+          },
+          {
+            "level": 3,
+            "text": "Aarav Gupta"
+          },
+          {
+            "level": 3,
+            "text": "Ananya Pillai"
+          },
+          {
+            "level": 3,
+            "text": "Rohan Patel"
+          },
+          {
+            "level": 3,
+            "text": "Meera Joshi"
+          },
+          {
+            "level": 3,
+            "text": "Vivaan Bhat"
+          },
+          {
+            "level": 3,
+            "text": "Isha Rao"
+          },
+          {
+            "level": 3,
+            "text": "Kabir Reddy"
+          },
+          {
+            "level": 3,
+            "text": "Diya Mehta"
+          },
+          {
+            "level": 3,
+            "text": "Arjun Menon"
+          },
+          {
+            "level": 3,
+            "text": "Saanvi Bose"
+          },
+          {
+            "level": 3,
+            "text": "Aditya Iyer"
+          },
+          {
+            "level": 3,
+            "text": "Kiara Desai"
+          },
+          {
+            "level": 3,
+            "text": "Reyansh Chopra"
+          },
+          {
+            "level": 3,
+            "text": "Aadhya Kapoor"
+          },
+          {
+            "level": 3,
+            "text": "Vihaan Singh"
+          },
+          {
+            "level": 3,
+            "text": "Myra Mishra"
+          }
+        ],
+        "headingSkips": 1,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to dark mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          }
+        ],
+        "smallTargetCount": 4,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-guests"
+    },
+    {
+      "route": "/admin/front-desk",
+      "theme": "light",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/front-desk",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [],
+        "overflowCount": 0,
+        "contrast": {
+          "checked": 280,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "RS",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 279,
+            "Cormorant Garamond": 1
+          },
+          "sizes": {
+            "9": 2,
+            "10": 7,
+            "11": 52,
+            "12": 109,
+            "14": 56,
+            "16": 53,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600",
+            "Manrope 700",
+            "Manrope 700"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Arrivals & departures"
+          },
+          {
+            "level": 3,
+            "text": "Expected arrivals"
+          },
+          {
+            "level": 3,
+            "text": "Today's departures"
+          },
+          {
+            "level": 3,
+            "text": "Walk-in workflow"
+          }
+        ],
+        "headingSkips": 1,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to dark mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          }
+        ],
+        "smallTargetCount": 4,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-front-desk"
+    },
+    {
+      "route": "/admin/housekeeping",
+      "theme": "light",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/housekeeping",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [],
+        "overflowCount": 0,
+        "contrast": {
+          "checked": 631,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "RS",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 630,
+            "Cormorant Garamond": 1
+          },
+          "sizes": {
+            "9": 2,
+            "10": 135,
+            "11": 352,
+            "12": 67,
+            "14": 4,
+            "16": 65,
+            "24": 5,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600",
+            "Manrope 700",
+            "Manrope 700"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Housekeeping"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 4"
+          },
+          {
+            "level": 3,
+            "text": "Floor 4"
+          },
+          {
+            "level": 3,
+            "text": "Floor 5"
+          },
+          {
+            "level": 3,
+            "text": "Floor 5"
+          },
+          {
+            "level": 3,
+            "text": "Floor 5"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 4"
+          },
+          {
+            "level": 3,
+            "text": "Floor 4"
+          },
+          {
+            "level": 3,
+            "text": "Floor 5"
+          },
+          {
+            "level": 3,
+            "text": "Floor 5"
+          },
+          {
+            "level": 3,
+            "text": "Floor 5"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 4"
+          },
+          {
+            "level": 3,
+            "text": "Floor 4"
+          },
+          {
+            "level": 3,
+            "text": "Floor 5"
+          },
+          {
+            "level": 3,
+            "text": "Floor 5"
+          },
+          {
+            "level": 3,
+            "text": "Floor 5"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 4"
+          }
+        ],
+        "headingSkips": 1,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to dark mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          }
+        ],
+        "smallTargetCount": 4,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-housekeeping"
+    },
+    {
+      "route": "/admin/staff",
+      "theme": "light",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/staff",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [],
+        "overflowCount": 0,
+        "contrast": {
+          "checked": 264,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "RS",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 263,
+            "Cormorant Garamond": 1
+          },
+          "sizes": {
+            "9": 2,
+            "10": 12,
+            "11": 41,
+            "12": 163,
+            "14": 44,
+            "16": 1,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600",
+            "Manrope 700",
+            "Manrope 700"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Staff & attendance"
+          }
+        ],
+        "headingSkips": 0,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to dark mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          }
+        ],
+        "smallTargetCount": 4,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-staff"
+    },
+    {
+      "route": "/admin/attendance",
+      "theme": "light",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/attendance",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [],
+        "overflowCount": 0,
+        "contrast": {
+          "checked": 263,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "RS",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 262,
+            "Cormorant Garamond": 1
+          },
+          "sizes": {
+            "9": 2,
+            "10": 12,
+            "11": 41,
+            "12": 163,
+            "14": 43,
+            "16": 1,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600",
+            "Manrope 700",
+            "Manrope 700"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Staff & attendance"
+          }
+        ],
+        "headingSkips": 0,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to dark mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          }
+        ],
+        "smallTargetCount": 4,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-attendance"
+    },
+    {
+      "route": "/admin/payments",
+      "theme": "light",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/payments",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [],
+        "overflowCount": 0,
+        "contrast": {
+          "checked": 499,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "RS",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 498,
+            "Cormorant Garamond": 1
+          },
+          "sizes": {
+            "9": 2,
+            "10": 7,
+            "11": 237,
+            "12": 8,
+            "14": 122,
+            "16": 122,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600",
+            "Manrope 700",
+            "Manrope 700"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Payments & invoices"
+          },
+          {
+            "level": 3,
+            "text": "Record payment"
+          },
+          {
+            "level": 3,
+            "text": "Invoice register"
+          }
+        ],
+        "headingSkips": 1,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to dark mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          }
+        ],
+        "smallTargetCount": 4,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-payments"
+    },
+    {
+      "route": "/admin/invoices",
+      "theme": "light",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/invoices",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [],
+        "overflowCount": 0,
+        "contrast": {
+          "checked": 498,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "RS",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 497,
+            "Cormorant Garamond": 1
+          },
+          "sizes": {
+            "9": 2,
+            "10": 7,
+            "11": 237,
+            "12": 8,
+            "14": 121,
+            "16": 122,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600",
+            "Manrope 700",
+            "Manrope 700"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Payments & invoices"
+          },
+          {
+            "level": 3,
+            "text": "Record payment"
+          },
+          {
+            "level": 3,
+            "text": "Invoice register"
+          }
+        ],
+        "headingSkips": 1,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to dark mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          }
+        ],
+        "smallTargetCount": 4,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-invoices"
+    },
+    {
+      "route": "/admin/expenses",
+      "theme": "light",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/expenses",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [],
+        "overflowCount": 0,
+        "contrast": {
+          "checked": 251,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "RS",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 247,
+            "Cormorant Garamond": 4
+          },
+          "sizes": {
+            "9": 5,
+            "10": 10,
+            "11": 84,
+            "12": 43,
+            "14": 44,
+            "16": 61,
+            "30": 3,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600",
+            "Manrope 700",
+            "Manrope 700"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Expenses"
+          }
+        ],
+        "headingSkips": 0,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to dark mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          }
+        ],
+        "smallTargetCount": 4,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-expenses"
+    },
+    {
+      "route": "/admin/inventory",
+      "theme": "light",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/inventory",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [],
+        "overflowCount": 0,
+        "contrast": {
+          "checked": 344,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "RS",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 343,
+            "Cormorant Garamond": 1
+          },
+          "sizes": {
+            "9": 2,
+            "10": 13,
+            "11": 41,
+            "12": 123,
+            "14": 84,
+            "16": 80,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600",
+            "Manrope 700",
+            "Manrope 700"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Inventory"
+          }
+        ],
+        "headingSkips": 0,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to dark mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          }
+        ],
+        "smallTargetCount": 4,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-inventory"
+    },
+    {
+      "route": "/admin/restaurant",
+      "theme": "light",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/restaurant",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [],
+        "overflowCount": 0,
+        "contrast": {
+          "checked": 414,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "RS",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 413,
+            "Cormorant Garamond": 1
+          },
+          "sizes": {
+            "9": 2,
+            "10": 58,
+            "11": 69,
+            "12": 149,
+            "14": 72,
+            "16": 63,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600",
+            "Manrope 700",
+            "Manrope 700"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Restaurant & services"
+          },
+          {
+            "level": 3,
+            "text": "Add room service order"
+          },
+          {
+            "level": 3,
+            "text": "Menu & pricing"
+          },
+          {
+            "level": 4,
+            "text": "Breakfast"
+          },
+          {
+            "level": 4,
+            "text": "Starters"
+          },
+          {
+            "level": 4,
+            "text": "Main Course"
+          },
+          {
+            "level": 4,
+            "text": "Rice & Biryani"
+          },
+          {
+            "level": 4,
+            "text": "Desserts"
+          },
+          {
+            "level": 4,
+            "text": "Beverages"
+          },
+          {
+            "level": 4,
+            "text": "Soups & Salads"
+          },
+          {
+            "level": 4,
+            "text": "Indian Breads"
+          }
+        ],
+        "headingSkips": 1,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to dark mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          }
+        ],
+        "smallTargetCount": 4,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-restaurant"
+    },
+    {
+      "route": "/admin/reports",
+      "theme": "light",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/reports",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [],
+        "overflowCount": 0,
+        "contrast": {
+          "checked": 57,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "RS",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 52,
+            "Cormorant Garamond": 5
+          },
+          "sizes": {
+            "9": 6,
+            "10": 11,
+            "11": 5,
+            "12": 22,
+            "14": 4,
+            "16": 4,
+            "30": 4,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600",
+            "Manrope 700",
+            "Manrope 700"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Reports & analytics"
+          },
+          {
+            "level": 3,
+            "text": "Booking mix"
+          },
+          {
+            "level": 3,
+            "text": "Property health"
+          }
+        ],
+        "headingSkips": 1,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to dark mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          }
+        ],
+        "smallTargetCount": 4,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-reports"
+    },
+    {
+      "route": "/admin/settings",
+      "theme": "light",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/settings",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [],
+        "overflowCount": 0,
+        "contrast": {
+          "checked": 154,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "RS",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 153,
+            "Cormorant Garamond": 1
+          },
+          "sizes": {
+            "9": 2,
+            "10": 7,
+            "11": 2,
+            "12": 130,
+            "14": 4,
+            "16": 8,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600",
+            "Manrope 700",
+            "Manrope 700"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Settings"
+          },
+          {
+            "level": 3,
+            "text": "Hotel profile"
+          },
+          {
+            "level": 3,
+            "text": "Access & development data"
+          },
+          {
+            "level": 3,
+            "text": "Change your password"
+          },
+          {
+            "level": 3,
+            "text": "Team access"
+          }
+        ],
+        "headingSkips": 1,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to dark mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          }
+        ],
+        "smallTargetCount": 4,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-settings"
+    },
+    {
+      "route": "/admin/activity-logs",
+      "theme": "light",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/activity-logs",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [],
+        "overflowCount": 0,
+        "contrast": {
+          "checked": 418,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "RS",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 417,
+            "Cormorant Garamond": 1
+          },
+          "sizes": {
+            "9": 2,
+            "10": 7,
+            "11": 201,
+            "12": 103,
+            "14": 104,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600",
+            "Manrope 700",
+            "Manrope 700"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Activity logs"
+          }
+        ],
+        "headingSkips": 0,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to dark mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          }
+        ],
+        "smallTargetCount": 4,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-activity-logs"
+    },
+    {
+      "route": "/admin/dashboard",
+      "theme": "dark",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/dashboard",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "dark",
+        "metaThemeColor": "#101827",
+        "storedTheme": "dark",
+        "canvasVar": "#070b12",
+        "bodyBg": "rgb(7, 11, 18)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [],
+        "overflowCount": 0,
+        "contrast": {
+          "checked": 180,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "RS",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 165,
+            "Cormorant Garamond": 15
+          },
+          "sizes": {
+            "9": 24,
+            "10": 36,
+            "11": 26,
+            "12": 51,
+            "14": 12,
+            "16": 17,
+            "18": 3,
+            "30": 10,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 700",
+            "Cormorant Garamond 700",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Good afternoon, RIVR."
+          },
+          {
+            "level": 3,
+            "text": "Revenue analytics"
+          },
+          {
+            "level": 3,
+            "text": "Occupancy analytics"
+          },
+          {
+            "level": 3,
+            "text": "Recent reservations"
+          },
+          {
+            "level": 3,
+            "text": "Today’s operations"
+          },
+          {
+            "level": 3,
+            "text": "Recent activity"
+          },
+          {
+            "level": 3,
+            "text": "Team snapshot"
+          },
+          {
+            "level": 3,
+            "text": "Operational alerts"
+          }
+        ],
+        "headingSkips": 1,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to light mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "View all",
+            "tag": "a",
+            "w": 42,
+            "h": 16
+          },
+          {
+            "label": "Open logs",
+            "tag": "a",
+            "w": 57,
+            "h": 16
+          },
+          {
+            "label": "Manage",
+            "tag": "a",
+            "w": 46,
+            "h": 16
+          }
+        ],
+        "smallTargetCount": 7,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-dashboard-dark"
+    },
+    {
+      "route": "/admin/reservations",
+      "theme": "dark",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/reservations",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "dark",
+        "metaThemeColor": "#101827",
+        "storedTheme": "dark",
+        "canvasVar": "#070b12",
+        "bodyBg": "rgb(7, 11, 18)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [],
+        "overflowCount": 0,
+        "contrast": {
+          "checked": 985,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "RS",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 984,
+            "Cormorant Garamond": 1
+          },
+          "sizes": {
+            "9": 2,
+            "10": 13,
+            "11": 361,
+            "12": 243,
+            "14": 364,
+            "16": 1,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600",
+            "Manrope 700",
+            "Manrope 700"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Reservations"
+          }
+        ],
+        "headingSkips": 0,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to light mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          }
+        ],
+        "smallTargetCount": 4,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-reservations-dark"
+    },
+    {
+      "route": "/admin/settings",
+      "theme": "dark",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/settings",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "dark",
+        "metaThemeColor": "#101827",
+        "storedTheme": "dark",
+        "canvasVar": "#070b12",
+        "bodyBg": "rgb(7, 11, 18)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [],
+        "overflowCount": 0,
+        "contrast": {
+          "checked": 154,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "RS",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 153,
+            "Cormorant Garamond": 1
+          },
+          "sizes": {
+            "9": 2,
+            "10": 7,
+            "11": 2,
+            "12": 130,
+            "14": 4,
+            "16": 8,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600",
+            "Manrope 700",
+            "Manrope 700"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Settings"
+          },
+          {
+            "level": 3,
+            "text": "Hotel profile"
+          },
+          {
+            "level": 3,
+            "text": "Access & development data"
+          },
+          {
+            "level": 3,
+            "text": "Change your password"
+          },
+          {
+            "level": 3,
+            "text": "Team access"
+          }
+        ],
+        "headingSkips": 1,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to light mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          }
+        ],
+        "smallTargetCount": 4,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-settings-dark"
+    }
+  ],
+  "themeInWorkspace": {
+    "visible": true,
+    "before": {
+      "theme": "light",
+      "stored": "light",
+      "shellCanvas": "#070b12",
+      "shellText": "#d9dee7",
+      "shellBg": "rgb(7, 11, 18)",
+      "headerBg": "rgba(7, 12, 19, 0.74)",
+      "mainText": "rgb(217, 222, 231)"
+    },
+    "after": {
+      "theme": "dark",
+      "stored": "dark",
+      "shellCanvas": "#070b12",
+      "shellText": "#d9dee7",
+      "shellBg": "rgb(7, 11, 18)",
+      "headerBg": "rgba(7, 12, 19, 0.74)",
+      "mainText": "rgb(217, 222, 231)"
+    },
+    "changed": true
+  },
+  "modal": {
+    "found": true,
+    "open": false,
+    "label": null,
+    "initialFocus": {
+      "tag": "button",
+      "text": "New reservation",
+      "label": null
+    },
+    "tabEscapedDialog": true,
+    "stillOpenAfterEscape": false,
+    "box": null
+  },
+  "mobile": {
+    "dashboard": {
+      "route": "/admin/dashboard",
+      "theme": "light",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/dashboard",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 375,
+        "overflowOffenders": [
+          {
+            "tag": "span",
+            "cls": "metric-glow",
+            "left": 282,
+            "right": 394,
+            "w": 112
+          },
+          {
+            "tag": "span",
+            "cls": "metric-glow",
+            "left": 282,
+            "right": 394,
+            "w": 112
+          },
+          {
+            "tag": "span",
+            "cls": "metric-glow",
+            "left": 282,
+            "right": 394,
+            "w": 112
+          },
+          {
+            "tag": "span",
+            "cls": "metric-glow",
+            "left": 282,
+            "right": 394,
+            "w": 112
+          },
+          {
+            "tag": "aside",
+            "cls": "glass-sidebar no-print fixed inset-y-0 left-0 z-50 flex w-[288px] -translate-x-full flex-col px-4 py",
+            "left": -288,
+            "right": 0,
+            "w": 288
+          },
+          {
+            "tag": "div",
+            "cls": "flex items-center justify-between",
+            "left": -272,
+            "right": -17,
+            "w": 255
+          },
+          {
+            "tag": "button",
+            "cls": "grid h-8 w-8 place-items-center rounded-full bg-white/10 lg:hidden",
+            "left": -49,
+            "right": -17,
+            "w": 32
+          },
+          {
+            "tag": "div",
+            "cls": "mt-8 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-3 ",
+            "left": -272,
+            "right": -17,
+            "w": 255
+          },
+          {
+            "tag": "nav",
+            "cls": "scrollbar-thin mt-7 flex flex-1 flex-col gap-5 overflow-y-auto",
+            "left": -272,
+            "right": -17,
+            "w": 255
+          },
+          {
+            "tag": "div",
+            "cls": "",
+            "left": -272,
+            "right": -17,
+            "w": 255
+          },
+          {
+            "tag": "p",
+            "cls": "mb-2 px-3 text-[9px] font-semibold uppercase tracking-[0.22em] text-white/35 ",
+            "left": -272,
+            "right": -17,
+            "w": 255
+          },
+          {
+            "tag": "div",
+            "cls": "grid gap-1",
+            "left": -272,
+            "right": -17,
+            "w": 255
+          }
+        ],
+        "overflowCount": 156,
+        "contrast": {
+          "checked": 176,
+          "failCount": 1,
+          "solidFailCount": 1,
+          "mediaFailCount": 0,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": []
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 161,
+            "Cormorant Garamond": 15
+          },
+          "sizes": {
+            "7": 1,
+            "9": 32,
+            "10": 24,
+            "11": 25,
+            "12": 50,
+            "14": 13,
+            "16": 17,
+            "18": 3,
+            "25": 9,
+            "30": 2
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 700",
+            "Cormorant Garamond 700",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Good afternoon, RIVR."
+          },
+          {
+            "level": 3,
+            "text": "Revenue analytics"
+          },
+          {
+            "level": 3,
+            "text": "Occupancy analytics"
+          },
+          {
+            "level": 3,
+            "text": "Recent reservations"
+          },
+          {
+            "level": 3,
+            "text": "Today’s operations"
+          },
+          {
+            "level": 3,
+            "text": "Recent activity"
+          },
+          {
+            "level": 3,
+            "text": "Team snapshot"
+          },
+          {
+            "level": 3,
+            "text": "Operational alerts"
+          }
+        ],
+        "headingSkips": 1,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to dark mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "View all",
+            "tag": "a",
+            "w": 42,
+            "h": 16
+          },
+          {
+            "label": "Open logs",
+            "tag": "a",
+            "w": 57,
+            "h": 16
+          },
+          {
+            "label": "Manage",
+            "tag": "a",
+            "w": 46,
+            "h": 16
+          }
+        ],
+        "smallTargetCount": 6,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-dashboard-mobile-light"
+    },
+    "nav": {
+      "asideLeft": 0,
+      "asideWidth": 288,
+      "scrollLocked": "hidden auto"
+    }
+  },
+  "roleRestriction": {
+    "restricted": {
+      "route": "/admin/settings",
+      "theme": "light",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/settings",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [],
+        "overflowCount": 0,
+        "contrast": {
+          "checked": 14,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "LM",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 13,
+            "Cormorant Garamond": 1
+          },
+          "sizes": {
+            "9": 2,
+            "10": 3,
+            "11": 1,
+            "12": 4,
+            "14": 3,
+            "30": 1
+          },
+          "manrope": true,
+          "cormorant": true,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 400",
+            "Cormorant Garamond 400",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600",
+            "Manrope 700",
+            "Manrope 700"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 2,
+            "text": "This workspace is restricted."
+          }
+        ],
+        "headingSkips": 0,
+        "h1Count": 0,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to dark mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          }
+        ],
+        "smallTargetCount": 3,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-settings-housekeeping"
+    },
+    "allowed": {
+      "route": "/admin/housekeeping",
+      "theme": "light",
+      "console": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/admin/housekeeping",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [],
+        "overflowCount": 0,
+        "contrast": {
+          "checked": 631,
+          "failCount": 2,
+          "solidFailCount": 1,
+          "mediaFailCount": 1,
+          "solid": [
+            {
+              "text": "4",
+              "tag": "span",
+              "cls": "absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] f",
+              "fg": "rgb(255, 255, 255)",
+              "bg": "rgb(248, 152, 171)",
+              "ratio": 2.09,
+              "need": 4.5,
+              "size": 9,
+              "weight": 700,
+              "overMedia": false
+            }
+          ],
+          "media": [
+            {
+              "text": "LM",
+              "tag": "span",
+              "cls": "grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10p",
+              "fg": "rgb(4, 8, 15)",
+              "bg": "rgb(7, 12, 19)",
+              "ratio": 1.02,
+              "need": 4.5,
+              "size": 10,
+              "weight": 700,
+              "overMedia": true
+            }
+          ]
+        },
+        "fonts": {
+          "families": {
+            "Manrope": 630,
+            "Cormorant Garamond": 1
+          },
+          "sizes": {
+            "9": 2,
+            "10": 135,
+            "11": 352,
+            "12": 67,
+            "14": 4,
+            "16": 65,
+            "24": 5,
+            "43": 1
+          },
+          "manrope": true,
+          "cormorant": false,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 600",
+            "Cormorant Garamond 600",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 500",
+            "Manrope 500",
+            "Manrope 600",
+            "Manrope 600",
+            "Manrope 700",
+            "Manrope 700"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Housekeeping"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 4"
+          },
+          {
+            "level": 3,
+            "text": "Floor 4"
+          },
+          {
+            "level": 3,
+            "text": "Floor 5"
+          },
+          {
+            "level": 3,
+            "text": "Floor 5"
+          },
+          {
+            "level": 3,
+            "text": "Floor 5"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 4"
+          },
+          {
+            "level": 3,
+            "text": "Floor 4"
+          },
+          {
+            "level": 3,
+            "text": "Floor 5"
+          },
+          {
+            "level": 3,
+            "text": "Floor 5"
+          },
+          {
+            "level": 3,
+            "text": "Floor 5"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 4"
+          },
+          {
+            "level": 3,
+            "text": "Floor 4"
+          },
+          {
+            "level": 3,
+            "text": "Floor 5"
+          },
+          {
+            "level": 3,
+            "text": "Floor 5"
+          },
+          {
+            "level": 3,
+            "text": "Floor 5"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 1"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 2"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 3"
+          },
+          {
+            "level": 3,
+            "text": "Floor 4"
+          }
+        ],
+        "headingSkips": 1,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 1,
+          "main": 1,
+          "footer": 0,
+          "nav": 1
+        },
+        "toggle": {
+          "label": "Switch to dark mode",
+          "w": 40,
+          "h": 40
+        },
+        "smallTargets": [
+          {
+            "label": "Skip to main content",
+            "tag": "a",
+            "w": 32,
+            "h": 16
+          },
+          {
+            "label": "View guest site",
+            "tag": "a",
+            "w": 120,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          },
+          {
+            "label": "Workspace",
+            "tag": "a",
+            "w": 75,
+            "h": 15
+          }
+        ],
+        "smallTargetCount": 4,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "admin-housekeeping-role"
+    },
+    "restrictedText": "Skip to main content\nRIVR\nHOTEL & RESIDENCES\n\nHousekeeping\n\nRIVR operations\n\nWORKSPACE\n\nOverview\nReservations\nRooms & room types\n\nOPERATIONS\n\nFront desk\nHousekeeping\nInventory\n\nINSIGHTS\n\nA clear day ahead.\n\nKeep arrivals, rooms, and people moving together.\n\nVIEW GUEST SITE\nWORKSPACE\nHOUSEKEEPING\nQuick action\n4\nLM\nLakshmi Menon\nHousekeeping\nWORKSPACE\nHousekeeping\nROOM CARE\nHousekeeping\n\nKeep every ",
+    "urlAfter": "http://localhost:5173/admin/housekeeping"
+  },
+  "guest": {
+    "light": {
+      "route": "/guest/dashboard",
+      "theme": "light",
+      "console": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/guest/dashboard",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "light",
+        "metaThemeColor": "#f6f3ed",
+        "storedTheme": "light",
+        "canvasVar": "#f4f1ea",
+        "bodyBg": "rgb(244, 241, 234)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [
+          {
+            "tag": "span",
+            "cls": "cursor-ring no-print",
+            "left": -115,
+            "right": -85,
+            "w": 30
+          },
+          {
+            "tag": "span",
+            "cls": "cursor-dot no-print",
+            "left": -102,
+            "right": -97,
+            "w": 5
+          }
+        ],
+        "overflowCount": 2,
+        "contrast": {
+          "checked": 4,
+          "failCount": 0,
+          "solidFailCount": 0,
+          "mediaFailCount": 0,
+          "solid": [],
+          "media": []
+        },
+        "fonts": {
+          "families": {
+            "Cormorant Garamond": 1,
+            "Manrope": 3
+          },
+          "sizes": {
+            "12": 2,
+            "14": 1,
+            "36": 1
+          },
+          "manrope": true,
+          "cormorant": true,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 400",
+            "Cormorant Garamond 400",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 600",
+            "Manrope 600"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Guest area"
+          }
+        ],
+        "headingSkips": 0,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 0,
+          "main": 0,
+          "footer": 0,
+          "nav": 0
+        },
+        "toggle": null,
+        "smallTargets": [],
+        "smallTargetCount": 0,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "guest-dashboard-light"
+    },
+    "dark": {
+      "route": "/guest/dashboard",
+      "theme": "dark",
+      "console": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ],
+      "pageErrors": [],
+      "failedRequests": [],
+      "status": 200,
+      "metrics": {
+        "url": "/guest/dashboard",
+        "title": "RIVR — Hotel & Residences | India",
+        "themeAttr": "dark",
+        "metaThemeColor": "#101827",
+        "storedTheme": "dark",
+        "canvasVar": "#070b12",
+        "bodyBg": "rgb(7, 11, 18)",
+        "hScroll": 0,
+        "clientW": 1440,
+        "overflowOffenders": [
+          {
+            "tag": "span",
+            "cls": "cursor-ring no-print",
+            "left": -115,
+            "right": -85,
+            "w": 30
+          },
+          {
+            "tag": "span",
+            "cls": "cursor-dot no-print",
+            "left": -102,
+            "right": -97,
+            "w": 5
+          }
+        ],
+        "overflowCount": 2,
+        "contrast": {
+          "checked": 4,
+          "failCount": 0,
+          "solidFailCount": 0,
+          "mediaFailCount": 0,
+          "solid": [],
+          "media": []
+        },
+        "fonts": {
+          "families": {
+            "Cormorant Garamond": 1,
+            "Manrope": 3
+          },
+          "sizes": {
+            "12": 2,
+            "14": 1,
+            "36": 1
+          },
+          "manrope": true,
+          "cormorant": true,
+          "status": "loaded",
+          "jsLoaded": [
+            "Cormorant Garamond 400",
+            "Cormorant Garamond 400",
+            "Manrope 400",
+            "Manrope 400",
+            "Manrope 600",
+            "Manrope 600"
+          ]
+        },
+        "imgs": {
+          "total": 0,
+          "missingAlt": 0,
+          "broken": 0
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Guest area"
+          }
+        ],
+        "headingSkips": 0,
+        "h1Count": 1,
+        "landmarks": {
+          "header": 0,
+          "main": 0,
+          "footer": 0,
+          "nav": 0
+        },
+        "toggle": null,
+        "smallTargets": [],
+        "smallTargetCount": 0,
+        "iconButtonsMissingName": [],
+        "iconButtonMissingNameCount": 0
+      },
+      "screenshot": "guest-dashboard-dark"
+    },
+    "visibleEmailSample": [
+      "aarav.mehta@example.com",
+      "ananya.iyer@example.com",
+      "rohan.kapoor@example.com",
+      "meera.nair@example.com",
+      "aarav.nair5@example.com"
+    ]
+  },
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+  ]
+}

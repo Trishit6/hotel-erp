@@ -1,0 +1,237 @@
+{
+  "generatedAt": "2026-11-15T10:55:27.482Z",
+  "persistence": {
+    "baseline": {
+      "theme": "light",
+      "stored": "light"
+    },
+    "toggled": {
+      "theme": "dark",
+      "stored": "dark",
+      "meta": "#101827",
+      "canvas": "#070b12",
+      "bodyBg": "rgb(30, 34, 39)"
+    },
+    "reloaded": {
+      "theme": "dark",
+      "stored": "dark",
+      "canvas": "#070b12"
+    },
+    "navigated": {
+      "theme": "dark",
+      "stored": "dark"
+    },
+    "newTab": {
+      "theme": "dark",
+      "stored": "dark"
+    }
+  },
+  "browsers": [
+    {
+      "engine": "chromium",
+      "version": "158.0.8127.18",
+      "light": {
+        "theme": "light",
+        "hScroll": 0,
+        "fontManrope": true,
+        "fontCormorant": true,
+        "toggle": true,
+        "canvas": "#f4f1ea",
+        "toggledTo": "dark",
+        "consoleErrors": []
+      },
+      "dark": {
+        "theme": "dark",
+        "hScroll": 0,
+        "fontManrope": true,
+        "fontCormorant": true,
+        "toggle": true,
+        "canvas": "#070b12",
+        "toggledTo": "light",
+        "consoleErrors": []
+      }
+    },
+    {
+      "engine": "firefox",
+      "version": "159.0",
+      "light": {
+        "theme": "light",
+        "hScroll": 0,
+        "fontManrope": true,
+        "fontCormorant": true,
+        "toggle": true,
+        "canvas": "#f4f1ea",
+        "toggledTo": "dark",
+        "consoleErrors": []
+      },
+      "dark": {
+        "theme": "dark",
+        "hScroll": 0,
+        "fontManrope": true,
+        "fontCormorant": true,
+        "toggle": true,
+        "canvas": "#070b12",
+        "toggledTo": "light",
+        "consoleErrors": []
+      }
+    },
+    {
+      "engine": "webkit",
+      "version": "27.2",
+      "light": {
+        "theme": "light",
+        "hScroll": 0,
+        "fontManrope": true,
+        "fontCormorant": true,
+        "toggle": true,
+        "canvas": "#f4f1ea",
+        "toggledTo": "dark",
+        "consoleErrors": []
+      },
+      "dark": {
+        "theme": "dark",
+        "hScroll": 0,
+        "fontManrope": true,
+        "fontCormorant": true,
+        "toggle": true,
+        "canvas": "#070b12",
+        "toggledTo": "light",
+        "consoleErrors": []
+      }
+    },
+    {
+      "engine": "edge",
+      "version": "157.0.4341.46",
+      "light": {
+        "theme": "light",
+        "hScroll": 0,
+        "fontManrope": true,
+        "fontCormorant": true,
+        "toggle": true,
+        "canvas": "#f4f1ea",
+        "toggledTo": "dark",
+        "consoleErrors": []
+      },
+      "dark": {
+        "theme": "dark",
+        "hScroll": 0,
+        "fontManrope": true,
+        "fontCormorant": true,
+        "toggle": true,
+        "canvas": "#070b12",
+        "toggledTo": "light",
+        "consoleErrors": []
+      }
+    }
+  ],
+  "perf": {
+    "home": {
+      "lcp": 6248,
+      "cls": 0,
+      "longTasks": 10,
+      "longTaskMs": 2302,
+      "domContentLoaded": 951,
+      "load": 2835,
+      "transferKB": 15658,
+      "resources": {
+        "script": {
+          "count": 40,
+          "transfer": 14937134
+        },
+        "css": {
+          "count": 1,
+          "transfer": 1312
+        },
+        "fetch": {
+          "count": 4,
+          "transfer": 21118
+        },
+        "img": {
+          "count": 7,
+          "transfer": 1074475
+        }
+      },
+      "fontRequests": 1
+    },
+    "rooms": {
+      "lcp": 2920,
+      "cls": 0.078,
+      "longTasks": 7,
+      "longTaskMs": 1086,
+      "domContentLoaded": 561,
+      "load": 1627,
+      "transferKB": 15777,
+      "resources": {
+        "script": {
+          "count": 43,
+          "transfer": 15009041
+        },
+        "css": {
+          "count": 1,
+          "transfer": 1312
+        },
+        "fetch": {
+          "count": 4,
+          "transfer": 21118
+        },
+        "img": {
+          "count": 9,
+          "transfer": 1124018
+        }
+      },
+      "fontRequests": 1
+    },
+    "login": {
+      "lcp": 2280,
+      "cls": 0,
+      "longTasks": 3,
+      "longTaskMs": 467,
+      "domContentLoaded": 535,
+      "load": 1072,
+      "transferKB": 15000,
+      "resources": {
+        "script": {
+          "count": 41,
+          "transfer": 15046242
+        },
+        "css": {
+          "count": 1,
+          "transfer": 1312
+        },
+        "fetch": {
+          "count": 4,
+          "transfer": 21118
+        },
+        "img": {
+          "count": 1,
+          "transfer": 291159
+        }
+      },
+      "fontRequests": 1
+    },
+    "adminDashboard": {
+      "lcp": 1392,
+      "cls": 0,
+      "longTasks": 3,
+      "longTaskMs": 275,
+      "domContentLoaded": 152,
+      "load": 160,
+      "transferKB": 281,
+      "resources": {
+        "script": {
+          "count": 41,
+          "transfer": 8400
+        },
+        "css": {
+          "count": 5,
+          "transfer": 0
+        },
+        "fetch": {
+          "count": 6,
+          "transfer": 279683
+        }
+      },
+      "fontRequests": 5
+    }
+  }
+}

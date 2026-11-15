@@ -1,0 +1,680 @@
+{
+  "generatedAt": "2026-11-15T11:01:54.519Z",
+  "axeAvailable": true,
+  "axe": [
+    {
+      "label": "home-light",
+      "violations": [
+        {
+          "id": "aria-prohibited-attr",
+          "impact": "serious",
+          "help": "Elements must only use permitted ARIA attributes",
+          "nodes": 3,
+          "sample": [
+            {
+              "target": [
+                "div:nth-child(1) > figure > .text-\\[var\\(--accent\\)\\].flex[aria-label=\"5 out of 5 stars\"]"
+              ],
+              "summary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            },
+            {
+              "target": [
+                "div:nth-child(2) > figure > .text-\\[var\\(--accent\\)\\].flex[aria-label=\"5 out of 5 stars\"]"
+              ],
+              "summary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            },
+            {
+              "target": [
+                "div[aria-label=\"4 out of 5 stars\"]"
+              ],
+              "summary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            }
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": 14,
+          "sample": [
+            {
+              "target": [
+                ":root > body > #root > div > .min-h-screen > main > .home-hero > .-mt-10 > form > label > .gap-0\\.5.flex-1.min-w-0 > .tracking-\\[0\\.14em\\].text-\\[var\\(--faint\\)\\].uppercase"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.88 (foreground color: #78818d, background color: #fffdfa, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ":root > body > #root > div > .min-h-screen > main > .home-hero > .-mt-10 > form > label > .gap-0\\.5.flex-1.min-w-0 > .tracking-\\[0\\.14em\\].text-\\[var\\(--faint\\)\\].uppercase"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.88 (foreground color: #78818d, background color: #fffdfa, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".sm\\:px-3.px-2:nth-child(1) > .gap-0\\.5.flex-1.min-w-0 > .tracking-\\[0\\.14em\\].text-\\[var\\(--faint\\)\\].uppercase"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.88 (foreground color: #78818d, background color: #fffdfa, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "home-dark",
+      "violations": [
+        {
+          "id": "aria-prohibited-attr",
+          "impact": "serious",
+          "help": "Elements must only use permitted ARIA attributes",
+          "nodes": 3,
+          "sample": [
+            {
+              "target": [
+                "div:nth-child(1) > figure > .text-\\[var\\(--accent\\)\\].flex[aria-label=\"5 out of 5 stars\"]"
+              ],
+              "summary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            },
+            {
+              "target": [
+                "div:nth-child(2) > figure > .text-\\[var\\(--accent\\)\\].flex[aria-label=\"5 out of 5 stars\"]"
+              ],
+              "summary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            },
+            {
+              "target": [
+                "div[aria-label=\"4 out of 5 stars\"]"
+              ],
+              "summary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            }
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": 9,
+          "sample": [
+            {
+              "target": [
+                ".text-white\\/45"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.47 (foreground color: #75777b, background color: #04080f, font size: 5.3pt (7px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                "div:nth-child(1) > .text-white\\/40.tracking-\\[0\\.24em\\].uppercase"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.74 (foreground color: #686b6f, background color: #04080f, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".text-white\\/40.text-\\[11px\\].mt-5"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.74 (foreground color: #686b6f, background color: #04080f, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "rooms-light",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": 14,
+          "sample": [
+            {
+              "target": [
+                ":root > body > #root > div > .min-h-screen > main > .-mt-8 > form > .group > .flex-1.gap-0\\.5.min-w-0 > .tracking-\\[0\\.14em\\].text-\\[var\\(--faint\\)\\].text-\\[10px\\]"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.88 (foreground color: #78818d, background color: #fffdfa, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ":root > body > #root > div > .min-h-screen > main > .-mt-8 > form > .group > .flex-1.gap-0\\.5.min-w-0 > .tracking-\\[0\\.14em\\].text-\\[var\\(--faint\\)\\].text-\\[10px\\]"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.88 (foreground color: #78818d, background color: #fffdfa, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".sm\\:px-3.px-2:nth-child(1) > .flex-1.gap-0\\.5.min-w-0 > .tracking-\\[0\\.14em\\].text-\\[var\\(--faint\\)\\].text-\\[10px\\]"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.88 (foreground color: #78818d, background color: #fffdfa, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "rooms-dark",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": 9,
+          "sample": [
+            {
+              "target": [
+                ".text-white\\/45"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.47 (foreground color: #75777b, background color: #04080f, font size: 5.3pt (7px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                "div:nth-child(1) > .text-white\\/40.tracking-\\[0\\.24em\\].text-\\[10px\\]"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.74 (foreground color: #686b6f, background color: #04080f, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".mt-5.text-\\[11px\\].text-white\\/40"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.74 (foreground color: #686b6f, background color: #04080f, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "booking-light",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": 16,
+          "sample": [
+            {
+              "target": [
+                ":root > body > #root > div > .min-h-screen > main > form > .px-3.group.gap-3 > .flex-1.gap-0\\.5.flex-col > .tracking-\\[0\\.14em\\].text-\\[var\\(--faint\\)\\].text-\\[10px\\]"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.88 (foreground color: #78818d, background color: #fffdfa, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ":root > body > #root > div > .min-h-screen > main > form > .px-3.group.gap-3 > .flex-1.gap-0\\.5.flex-col > .tracking-\\[0\\.14em\\].text-\\[var\\(--faint\\)\\].text-\\[10px\\]"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.88 (foreground color: #78818d, background color: #fffdfa, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".px-2.sm\\:px-3:nth-child(1) > .flex-1.gap-0\\.5.flex-col > .tracking-\\[0\\.14em\\].text-\\[var\\(--faint\\)\\].text-\\[10px\\]"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.88 (foreground color: #78818d, background color: #fffdfa, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "booking-dark",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": 9,
+          "sample": [
+            {
+              "target": [
+                ".text-white\\/45"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.47 (foreground color: #75777b, background color: #04080f, font size: 5.3pt (7px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                "div:nth-child(1) > .text-white\\/40.tracking-\\[0\\.24em\\]"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.74 (foreground color: #686b6f, background color: #04080f, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".mt-5.text-\\[11px\\].text-white\\/40"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.74 (foreground color: #686b6f, background color: #04080f, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "login-light",
+      "violations": []
+    },
+    {
+      "label": "login-dark",
+      "violations": []
+    },
+    {
+      "label": "my-bookings-light",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": 11,
+          "sample": [
+            {
+              "target": [
+                ".text-white\\/45"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.49 (foreground color: #77797e, background color: #080c14, font size: 5.3pt (7px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                "div:nth-child(1) > .text-\\[10px\\].text-white\\/40.uppercase"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.77 (foreground color: #6b6d72, background color: #080c14, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".text-\\[11px\\].mt-5.text-white\\/40"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.77 (foreground color: #6b6d72, background color: #080c14, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "my-bookings-dark",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": 9,
+          "sample": [
+            {
+              "target": [
+                ".text-white\\/45"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.47 (foreground color: #75777b, background color: #04080f, font size: 5.3pt (7px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                "div:nth-child(1) > .text-\\[10px\\].text-white\\/40.uppercase"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.74 (foreground color: #686b6f, background color: #04080f, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                ".text-\\[11px\\].mt-5.text-white\\/40"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.74 (foreground color: #686b6f, background color: #04080f, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "admin-dashboard-light",
+      "violations": []
+    },
+    {
+      "label": "admin-dashboard-dark",
+      "violations": []
+    }
+  ],
+  "keyboard": {
+    "stops": [
+      {
+        "tag": "a",
+        "type": null,
+        "name": "RIVR home",
+        "outline": "solid 2px rgb(231, 207, 159)",
+        "boxShadow": "none",
+        "rect": {
+          "w": 144,
+          "h": 36
+        }
+      },
+      {
+        "tag": "a",
+        "type": null,
+        "name": "Back to hotel",
+        "outline": "solid 2px rgb(155, 164, 177)",
+        "boxShadow": "none",
+        "rect": {
+          "w": 93,
+          "h": 16
+        }
+      },
+      {
+        "tag": "button",
+        "type": "button",
+        "name": "Switch to light mode",
+        "outline": "solid 2px rgb(196, 203, 213)",
+        "boxShadow": "none",
+        "rect": {
+          "w": 40,
+          "h": 40
+        }
+      },
+      {
+        "tag": "input",
+        "type": null,
+        "name": "you@example.com",
+        "outline": "none 3px rgb(227, 222, 211)",
+        "boxShadow": "none",
+        "rect": {
+          "w": 389,
+          "h": 24
+        }
+      },
+      {
+        "tag": "input",
+        "type": "password",
+        "name": "Enter your password",
+        "outline": "none 3px rgb(227, 222, 211)",
+        "boxShadow": "none",
+        "rect": {
+          "w": 358,
+          "h": 24
+        }
+      },
+      {
+        "tag": "button",
+        "type": "button",
+        "name": "Show password",
+        "outline": "solid 2px rgb(127, 136, 150)",
+        "boxShadow": "none",
+        "rect": {
+          "w": 24,
+          "h": 28
+        }
+      },
+      {
+        "tag": "a",
+        "type": null,
+        "name": "Forgot password?",
+        "outline": "solid 2px rgb(231, 207, 159)",
+        "boxShadow": "none",
+        "rect": {
+          "w": 101,
+          "h": 16
+        }
+      },
+      {
+        "tag": "button",
+        "type": "submit",
+        "name": "Sign in",
+        "outline": "solid 2px rgb(255, 255, 255)",
+        "boxShadow": "none",
+        "rect": {
+          "w": 442,
+          "h": 52
+        }
+      },
+      {
+        "tag": "a",
+        "type": null,
+        "name": "Create an account",
+        "outline": "solid 2px rgb(231, 207, 159)",
+        "boxShadow": "none",
+        "rect": {
+          "w": 105,
+          "h": 17
+        }
+      }
+    ],
+    "toggle": {
+      "labelBefore": "Switch to light mode",
+      "after": {
+        "theme": "light",
+        "label": "Switch to dark mode"
+      }
+    }
+  },
+  "loginErrors": {
+    "alertText": "Too many requests. Please try again shortly.Retry",
+    "alertInLiveRegion": true,
+    "inputs": [
+      {
+        "type": null,
+        "ariaInvalid": null,
+        "describedBy": null,
+        "required": false,
+        "validationMessage": "",
+        "borderColor": "rgb(38, 48, 63)"
+      },
+      {
+        "type": "password",
+        "ariaInvalid": null,
+        "describedBy": null,
+        "required": false,
+        "validationMessage": "",
+        "borderColor": "rgb(38, 48, 63)"
+      }
+    ],
+    "activeElement": "BUTTON"
+  },
+  "targets": {
+    "/": {
+      "total": 39,
+      "under24": 11,
+      "examples": [
+        {
+          "label": "Search availability",
+          "w": 145,
+          "h": 20
+        },
+        {
+          "label": "Check dates",
+          "w": 95,
+          "h": 16
+        },
+        {
+          "label": "Check dates",
+          "w": 95,
+          "h": 16
+        },
+        {
+          "label": "Stay with us",
+          "w": 67,
+          "h": 16
+        },
+        {
+          "label": "Rooms & suites",
+          "w": 85,
+          "h": 16
+        },
+        {
+          "label": "Amenities",
+          "w": 55,
+          "h": 16
+        },
+        {
+          "label": "About RIVR",
+          "w": 61,
+          "h": 16
+        },
+        {
+          "label": "Contact",
+          "w": 46,
+          "h": 16
+        }
+      ]
+    },
+    "/rooms": {
+      "total": 32,
+      "under24": 8,
+      "examples": [
+        {
+          "label": "Stay with us",
+          "w": 67,
+          "h": 16
+        },
+        {
+          "label": "Rooms & suites",
+          "w": 85,
+          "h": 16
+        },
+        {
+          "label": "Amenities",
+          "w": 55,
+          "h": 16
+        },
+        {
+          "label": "About RIVR",
+          "w": 61,
+          "h": 16
+        },
+        {
+          "label": "Contact",
+          "w": 46,
+          "h": 16
+        },
+        {
+          "label": "My bookings",
+          "w": 69,
+          "h": 16
+        },
+        {
+          "label": "+91 22 0000 0000",
+          "w": 335,
+          "h": 16
+        },
+        {
+          "label": "stay@rivrhotel.in",
+          "w": 335,
+          "h": 16
+        }
+      ]
+    },
+    "/login": {
+      "total": 8,
+      "under24": 3,
+      "examples": [
+        {
+          "label": "Show password",
+          "w": 23,
+          "h": 28
+        },
+        {
+          "label": "Forgot password?",
+          "w": 101,
+          "h": 16
+        },
+        {
+          "label": "Create an account",
+          "w": 105,
+          "h": 17
+        }
+      ]
+    }
+  },
+  "reducedMotion": {
+    "orbAnimation": "none",
+    "washAnimation": "none",
+    "elementsWithLongAnimation": 0,
+    "scrollBehavior": "auto"
+  },
+  "modal": {
+    "opened": false,
+    "note": "New reservation trigger not found"
+  },
+  "headings": {
+    "home-light": {
+      "sequence": [
+        1,
+        2,
+        2,
+        3,
+        2,
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        2,
+        3,
+        3,
+        2,
+        2
+      ],
+      "skips": []
+    },
+    "home-dark": {
+      "sequence": [
+        1,
+        2,
+        2,
+        3,
+        2,
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        2,
+        3,
+        3,
+        2,
+        2
+      ],
+      "skips": []
+    },
+    "rooms-light": {
+      "sequence": [
+        1,
+        2,
+        2
+      ],
+      "skips": []
+    },
+    "rooms-dark": {
+      "sequence": [
+        1,
+        2,
+        2
+      ],
+      "skips": []
+    },
+    "booking-light": {
+      "sequence": [
+        1
+      ],
+      "skips": []
+    },
+    "booking-dark": {
+      "sequence": [
+        1
+      ],
+      "skips": []
+    },
+    "login-light": {
+      "sequence": [
+        1,
+        2
+      ],
+      "skips": []
+    },
+    "login-dark": {
+      "sequence": [
+        1,
+        2
+      ],
+      "skips": []
+    },
+    "my-bookings-light": {
+      "sequence": [
+        1
+      ],
+      "skips": []
+    },
+    "my-bookings-dark": {
+      "sequence": [
+        1
+      ],
+      "skips": []
+    }
+  }
+}

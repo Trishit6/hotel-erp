@@ -1,0 +1,957 @@
+{
+  "generatedAt": "2026-11-15T11:00:57.435Z",
+  "modals": [
+    {
+      "route": "/admin/staff",
+      "trigger": "Add staff",
+      "opened": true,
+      "ariaLabel": "Add staff member",
+      "initial": {
+        "inDialog": false,
+        "tag": "BUTTON",
+        "label": null,
+        "name": "Add staff"
+      },
+      "tabEscapedDialog": true,
+      "escapedAt": 11,
+      "openAfterEscape": true,
+      "afterEscape": {
+        "tag": "BUTTON",
+        "text": "",
+        "inDialog": false
+      }
+    }
+  ],
+  "guest": {
+    "loginUrl": "http://localhost:5173/guest/dashboard",
+    "errorText": null,
+    "landedAt": "http://localhost:5173/guest/dashboard",
+    "light": {
+      "url": "/guest/dashboard",
+      "title": "RIVR — Hotel & Residences | India",
+      "themeAttr": "light",
+      "metaThemeColor": "#f6f3ed",
+      "storedTheme": "light",
+      "canvasVar": "#f4f1ea",
+      "bodyBg": "rgb(244, 241, 234)",
+      "hScroll": 0,
+      "clientW": 1440,
+      "overflowOffenders": [
+        {
+          "tag": "span",
+          "cls": "cursor-ring no-print",
+          "left": -115,
+          "right": -85,
+          "w": 30
+        },
+        {
+          "tag": "span",
+          "cls": "cursor-dot no-print",
+          "left": -102,
+          "right": -97,
+          "w": 5
+        }
+      ],
+      "overflowCount": 2,
+      "contrast": {
+        "checked": 49,
+        "failCount": 11,
+        "solidFailCount": 2,
+        "mediaFailCount": 9,
+        "solid": [
+          {
+            "text": "Hotel & Residences",
+            "tag": "span",
+            "cls": "mt-1 text-[7px] font-medium uppercase tracking-[0.22em] text-[var(--faint)]",
+            "fg": "rgb(120, 129, 141)",
+            "bg": "rgb(244, 241, 234)",
+            "ratio": 3.5,
+            "need": 4.5,
+            "size": 7,
+            "weight": 500,
+            "overMedia": false
+          },
+          {
+            "text": "Guest account",
+            "tag": "span",
+            "cls": "block text-[10px] text-[var(--faint)]",
+            "fg": "rgb(120, 129, 141)",
+            "bg": "rgb(244, 241, 234)",
+            "ratio": 3.5,
+            "need": 4.5,
+            "size": 10,
+            "weight": 400,
+            "overMedia": false
+          }
+        ],
+        "media": [
+          {
+            "text": "1 reservation ahead",
+            "tag": "p",
+            "cls": "text-[11px] text-[var(--faint)]",
+            "fg": "rgb(120, 129, 141)",
+            "bg": "rgb(244, 241, 234)",
+            "ratio": 3.5,
+            "need": 4.5,
+            "size": 11,
+            "weight": 400,
+            "overMedia": true
+          },
+          {
+            "text": "checked in",
+            "tag": "span",
+            "cls": "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold capitalize ring-1 ring-ins",
+            "fg": "rgb(47, 125, 91)",
+            "bg": "rgb(232, 243, 236)",
+            "ratio": 4.39,
+            "need": 4.5,
+            "size": 11,
+            "weight": 600,
+            "overMedia": true
+          },
+          {
+            "text": "A record of your billing with RIVR.",
+            "tag": "p",
+            "cls": "text-[11px] text-[var(--faint)]",
+            "fg": "rgb(120, 129, 141)",
+            "bg": "rgb(244, 241, 234)",
+            "ratio": 3.5,
+            "need": 4.5,
+            "size": 11,
+            "weight": 400,
+            "overMedia": true
+          },
+          {
+            "text": "Invoice",
+            "tag": "th",
+            "cls": "px-4 py-3 font-semibold",
+            "fg": "rgb(120, 129, 141)",
+            "bg": "rgb(239, 234, 225)",
+            "ratio": 3.29,
+            "need": 4.5,
+            "size": 10,
+            "weight": 600,
+            "overMedia": true
+          },
+          {
+            "text": "Issued",
+            "tag": "th",
+            "cls": "px-4 py-3 font-semibold",
+            "fg": "rgb(120, 129, 141)",
+            "bg": "rgb(239, 234, 225)",
+            "ratio": 3.29,
+            "need": 4.5,
+            "size": 10,
+            "weight": 600,
+            "overMedia": true
+          }
+        ]
+      },
+      "fonts": {
+        "families": {
+          "Manrope": 43,
+          "Cormorant Garamond": 6
+        },
+        "sizes": {
+          "7": 1,
+          "10": 6,
+          "11": 16,
+          "12": 13,
+          "14": 5,
+          "16": 2,
+          "20": 1,
+          "24": 4,
+          "67": 1
+        },
+        "manrope": true,
+        "cormorant": true,
+        "status": "loaded",
+        "jsLoaded": [
+          "Cormorant Garamond 400",
+          "Cormorant Garamond 400",
+          "Manrope 400",
+          "Manrope 400",
+          "Manrope 500",
+          "Manrope 500",
+          "Manrope 600",
+          "Manrope 600",
+          "Manrope 700",
+          "Manrope 700"
+        ]
+      },
+      "imgs": {
+        "total": 0,
+        "missingAlt": 0,
+        "broken": 0
+      },
+      "headings": [
+        {
+          "level": 1,
+          "text": "Welcome back, Aarav."
+        },
+        {
+          "level": 2,
+          "text": "Upcoming stays"
+        },
+        {
+          "level": 2,
+          "text": "Reservation history"
+        },
+        {
+          "level": 2,
+          "text": "Invoices & payments"
+        },
+        {
+          "level": 2,
+          "text": "Your profile"
+        }
+      ],
+      "headingSkips": 0,
+      "h1Count": 1,
+      "landmarks": {
+        "header": 1,
+        "main": 1,
+        "footer": 0,
+        "nav": 0
+      },
+      "toggle": {
+        "label": "Switch to dark mode",
+        "w": 40,
+        "h": 40
+      },
+      "smallTargets": [
+        {
+          "label": "Guest website",
+          "tag": "a",
+          "w": 81,
+          "h": 16
+        },
+        {
+          "label": "Find a booking",
+          "tag": "a",
+          "w": 89,
+          "h": 17
+        }
+      ],
+      "smallTargetCount": 2,
+      "iconButtonsMissingName": [],
+      "iconButtonMissingNameCount": 0
+    },
+    "dark": {
+      "url": "/guest/dashboard",
+      "title": "RIVR — Hotel & Residences | India",
+      "themeAttr": "dark",
+      "metaThemeColor": "#101827",
+      "storedTheme": "dark",
+      "canvasVar": "#070b12",
+      "bodyBg": "rgb(7, 11, 18)",
+      "hScroll": 0,
+      "clientW": 1440,
+      "overflowOffenders": [
+        {
+          "tag": "span",
+          "cls": "cursor-ring no-print",
+          "left": -115,
+          "right": -85,
+          "w": 30
+        },
+        {
+          "tag": "span",
+          "cls": "cursor-dot no-print",
+          "left": -102,
+          "right": -97,
+          "w": 5
+        }
+      ],
+      "overflowCount": 2,
+      "contrast": {
+        "checked": 49,
+        "failCount": 0,
+        "solidFailCount": 0,
+        "mediaFailCount": 0,
+        "solid": [],
+        "media": []
+      },
+      "fonts": {
+        "families": {
+          "Manrope": 43,
+          "Cormorant Garamond": 6
+        },
+        "sizes": {
+          "7": 1,
+          "10": 6,
+          "11": 16,
+          "12": 13,
+          "14": 5,
+          "16": 2,
+          "20": 1,
+          "24": 4,
+          "67": 1
+        },
+        "manrope": true,
+        "cormorant": true,
+        "status": "loaded",
+        "jsLoaded": [
+          "Cormorant Garamond 400",
+          "Cormorant Garamond 400",
+          "Manrope 400",
+          "Manrope 400",
+          "Manrope 500",
+          "Manrope 500",
+          "Manrope 600",
+          "Manrope 600",
+          "Manrope 700",
+          "Manrope 700"
+        ]
+      },
+      "imgs": {
+        "total": 0,
+        "missingAlt": 0,
+        "broken": 0
+      },
+      "headings": [
+        {
+          "level": 1,
+          "text": "Welcome back, Aarav."
+        },
+        {
+          "level": 2,
+          "text": "Upcoming stays"
+        },
+        {
+          "level": 2,
+          "text": "Reservation history"
+        },
+        {
+          "level": 2,
+          "text": "Invoices & payments"
+        },
+        {
+          "level": 2,
+          "text": "Your profile"
+        }
+      ],
+      "headingSkips": 0,
+      "h1Count": 1,
+      "landmarks": {
+        "header": 1,
+        "main": 1,
+        "footer": 0,
+        "nav": 0
+      },
+      "toggle": {
+        "label": "Switch to light mode",
+        "w": 40,
+        "h": 40
+      },
+      "smallTargets": [
+        {
+          "label": "Guest website",
+          "tag": "a",
+          "w": 81,
+          "h": 16
+        },
+        {
+          "label": "Find a booking",
+          "tag": "a",
+          "w": 89,
+          "h": 17
+        }
+      ],
+      "smallTargetCount": 2,
+      "iconButtonsMissingName": [],
+      "iconButtonMissingNameCount": 0
+    }
+  },
+  "solidContrast": [
+    {
+      "route": "/",
+      "theme": "light",
+      "checked": 159,
+      "solidFails": 54,
+      "mediaFails": 0,
+      "worst": [
+        {
+          "text": "Dining worth lingering over",
+          "tag": "div",
+          "cls": "absolute bottom-4 left-4 rounded-lg border border-white/10 bg-[var(--deep)]/80 px-3 py-2 text-xs text-white ba",
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(244, 241, 234)",
+          "ratio": 1.13,
+          "need": 4.5,
+          "size": 12,
+          "weight": 400,
+          "overMedia": false
+        },
+        {
+          "text": "Mornings by the water. Evenings that take their time.",
+          "tag": "h2",
+          "cls": "mt-5 font-display text-[clamp(2.4rem,4.6vw,4.4rem)] leading-[1.02] tracking-[-0.03em]",
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(244, 241, 234)",
+          "ratio": 1.13,
+          "need": 3,
+          "size": 66.2,
+          "weight": 400,
+          "overMedia": false
+        },
+        {
+          "text": "4th night on us",
+          "tag": "span",
+          "cls": "w-fit rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking",
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(230, 223, 211)",
+          "ratio": 1.32,
+          "need": 4.5,
+          "size": 10,
+          "weight": 600,
+          "overMedia": false
+        },
+        {
+          "text": "The Long Weekend",
+          "tag": "h3",
+          "cls": "mt-4 font-display text-3xl",
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(230, 223, 211)",
+          "ratio": 1.32,
+          "need": 3,
+          "size": 30,
+          "weight": 400,
+          "overMedia": false
+        },
+        {
+          "text": "Check dates",
+          "tag": "a",
+          "cls": "mt-5 flex w-fit items-center gap-2 text-xs font-semibold text-white transition-colors hover:text-[var(--accent",
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(230, 223, 211)",
+          "ratio": 1.32,
+          "need": 4.5,
+          "size": 12,
+          "weight": 600,
+          "overMedia": false
+        }
+      ]
+    },
+    {
+      "route": "/stay",
+      "theme": "light",
+      "checked": 156,
+      "solidFails": 48,
+      "mediaFails": 0,
+      "worst": [
+        {
+          "text": "Dining worth lingering over",
+          "tag": "div",
+          "cls": "absolute bottom-4 left-4 rounded-lg border border-white/10 bg-[var(--deep)]/75 px-3 py-2 text-xs text-white ba",
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(252, 250, 245)",
+          "ratio": 1.04,
+          "need": 4.5,
+          "size": 12,
+          "weight": 400,
+          "overMedia": false
+        },
+        {
+          "text": "Deluxe King",
+          "tag": "span",
+          "cls": "absolute left-4 top-4 rounded-full border border-white/25 bg-black/20 px-3 py-1.5 text-[9px] font-semibold upp",
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(230, 223, 211)",
+          "ratio": 1.32,
+          "need": 4.5,
+          "size": 9,
+          "weight": 600,
+          "overMedia": false
+        },
+        {
+          "text": "Executive Suite",
+          "tag": "span",
+          "cls": "absolute left-4 top-4 rounded-full border border-white/25 bg-black/20 px-3 py-1.5 text-[9px] font-semibold upp",
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(230, 223, 211)",
+          "ratio": 1.32,
+          "need": 4.5,
+          "size": 9,
+          "weight": 600,
+          "overMedia": false
+        },
+        {
+          "text": "Family Room",
+          "tag": "span",
+          "cls": "absolute left-4 top-4 rounded-full border border-white/25 bg-black/20 px-3 py-1.5 text-[9px] font-semibold upp",
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(230, 223, 211)",
+          "ratio": 1.32,
+          "need": 4.5,
+          "size": 9,
+          "weight": 600,
+          "overMedia": false
+        },
+        {
+          "text": "Garden Villa",
+          "tag": "span",
+          "cls": "absolute left-4 top-4 rounded-full border border-white/25 bg-black/20 px-3 py-1.5 text-[9px] font-semibold upp",
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(230, 223, 211)",
+          "ratio": 1.32,
+          "need": 4.5,
+          "size": 9,
+          "weight": 600,
+          "overMedia": false
+        }
+      ]
+    },
+    {
+      "route": "/rooms",
+      "theme": "light",
+      "checked": 144,
+      "solidFails": 48,
+      "mediaFails": 0,
+      "worst": [
+        {
+          "text": "Deluxe King",
+          "tag": "span",
+          "cls": "absolute left-4 top-4 rounded-full border border-white/25 bg-black/20 px-3 py-1.5 text-[9px] font-semibold upp",
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(230, 223, 211)",
+          "ratio": 1.32,
+          "need": 4.5,
+          "size": 9,
+          "weight": 600,
+          "overMedia": false
+        },
+        {
+          "text": "Executive Suite",
+          "tag": "span",
+          "cls": "absolute left-4 top-4 rounded-full border border-white/25 bg-black/20 px-3 py-1.5 text-[9px] font-semibold upp",
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(230, 223, 211)",
+          "ratio": 1.32,
+          "need": 4.5,
+          "size": 9,
+          "weight": 600,
+          "overMedia": false
+        },
+        {
+          "text": "Family Room",
+          "tag": "span",
+          "cls": "absolute left-4 top-4 rounded-full border border-white/25 bg-black/20 px-3 py-1.5 text-[9px] font-semibold upp",
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(230, 223, 211)",
+          "ratio": 1.32,
+          "need": 4.5,
+          "size": 9,
+          "weight": 600,
+          "overMedia": false
+        },
+        {
+          "text": "Garden Villa",
+          "tag": "span",
+          "cls": "absolute left-4 top-4 rounded-full border border-white/25 bg-black/20 px-3 py-1.5 text-[9px] font-semibold upp",
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(230, 223, 211)",
+          "ratio": 1.32,
+          "need": 4.5,
+          "size": 9,
+          "weight": 600,
+          "overMedia": false
+        },
+        {
+          "text": "King Studio",
+          "tag": "span",
+          "cls": "absolute left-4 top-4 rounded-full border border-white/25 bg-black/20 px-3 py-1.5 text-[9px] font-semibold upp",
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(230, 223, 211)",
+          "ratio": 1.32,
+          "need": 4.5,
+          "size": 9,
+          "weight": 600,
+          "overMedia": false
+        }
+      ]
+    },
+    {
+      "route": "/search?checkIn=2026-11-20&checkOut=2026-11-22&adults=2&children=0&rooms=1",
+      "theme": "light",
+      "checked": 369,
+      "solidFails": 138,
+      "mediaFails": 0,
+      "worst": [
+        {
+          "text": "Hotel & Residences",
+          "tag": "span",
+          "cls": "mt-1 text-[7px] font-medium uppercase tracking-[0.22em] text-[var(--faint)]",
+          "fg": "rgb(120, 129, 141)",
+          "bg": "rgb(244, 241, 234)",
+          "ratio": 3.5,
+          "need": 4.5,
+          "size": 7,
+          "weight": 500,
+          "overMedia": false
+        },
+        {
+          "text": "Rates per night · taxes calculated at checkout",
+          "tag": "span",
+          "cls": "text-xs text-[var(--faint)]",
+          "fg": "rgb(120, 129, 141)",
+          "bg": "rgb(244, 241, 234)",
+          "ratio": 3.5,
+          "need": 4.5,
+          "size": 12,
+          "weight": 400,
+          "overMedia": false
+        },
+        {
+          "text": "Each reservation secures one room. For more than one room, complete a ",
+          "tag": "p",
+          "cls": "mt-6 text-center text-[11px] text-[var(--faint)] sm:text-left",
+          "fg": "rgb(120, 129, 141)",
+          "bg": "rgb(244, 241, 234)",
+          "ratio": 3.5,
+          "need": 4.5,
+          "size": 11,
+          "weight": 400,
+          "overMedia": false
+        },
+        {
+          "text": "Up to",
+          "tag": "span",
+          "cls": "flex items-center gap-1.5",
+          "fg": "rgb(120, 129, 141)",
+          "bg": "rgb(252, 250, 245)",
+          "ratio": 3.78,
+          "need": 4.5,
+          "size": 12,
+          "weight": 400,
+          "overMedia": false
+        },
+        {
+          "text": "38",
+          "tag": "span",
+          "cls": "flex items-center gap-1.5",
+          "fg": "rgb(120, 129, 141)",
+          "bg": "rgb(252, 250, 245)",
+          "ratio": 3.78,
+          "need": 4.5,
+          "size": 12,
+          "weight": 400,
+          "overMedia": false
+        }
+      ]
+    },
+    {
+      "route": "/booking?checkIn=2026-11-20&checkOut=2026-11-22&adults=2&children=0&rooms=1",
+      "theme": "light",
+      "checked": 369,
+      "solidFails": 138,
+      "mediaFails": 0,
+      "worst": [
+        {
+          "text": "Hotel & Residences",
+          "tag": "span",
+          "cls": "mt-1 text-[7px] font-medium uppercase tracking-[0.22em] text-[var(--faint)]",
+          "fg": "rgb(120, 129, 141)",
+          "bg": "rgb(244, 241, 234)",
+          "ratio": 3.5,
+          "need": 4.5,
+          "size": 7,
+          "weight": 500,
+          "overMedia": false
+        },
+        {
+          "text": "Rates per night · taxes calculated at checkout",
+          "tag": "span",
+          "cls": "text-xs text-[var(--faint)]",
+          "fg": "rgb(120, 129, 141)",
+          "bg": "rgb(244, 241, 234)",
+          "ratio": 3.5,
+          "need": 4.5,
+          "size": 12,
+          "weight": 400,
+          "overMedia": false
+        },
+        {
+          "text": "Each reservation secures one room. For more than one room, complete a ",
+          "tag": "p",
+          "cls": "mt-6 text-center text-[11px] text-[var(--faint)] sm:text-left",
+          "fg": "rgb(120, 129, 141)",
+          "bg": "rgb(244, 241, 234)",
+          "ratio": 3.5,
+          "need": 4.5,
+          "size": 11,
+          "weight": 400,
+          "overMedia": false
+        },
+        {
+          "text": "Up to",
+          "tag": "span",
+          "cls": "flex items-center gap-1.5",
+          "fg": "rgb(120, 129, 141)",
+          "bg": "rgb(252, 250, 245)",
+          "ratio": 3.78,
+          "need": 4.5,
+          "size": 12,
+          "weight": 400,
+          "overMedia": false
+        },
+        {
+          "text": "38",
+          "tag": "span",
+          "cls": "flex items-center gap-1.5",
+          "fg": "rgb(120, 129, 141)",
+          "bg": "rgb(252, 250, 245)",
+          "ratio": 3.78,
+          "need": 4.5,
+          "size": 12,
+          "weight": 400,
+          "overMedia": false
+        }
+      ]
+    },
+    {
+      "route": "/contact",
+      "theme": "light",
+      "checked": 47,
+      "solidFails": 8,
+      "mediaFails": 0,
+      "worst": [
+        {
+          "text": "Hotel & Residences",
+          "tag": "span",
+          "cls": "mt-1 text-[7px] font-medium uppercase tracking-[0.22em] text-[var(--faint)]",
+          "fg": "rgb(120, 129, 141)",
+          "bg": "rgb(244, 241, 234)",
+          "ratio": 3.5,
+          "need": 4.5,
+          "size": 7,
+          "weight": 500,
+          "overMedia": false
+        },
+        {
+          "text": "Demo property details — replace the address and phone with the hotel's",
+          "tag": "p",
+          "cls": "mt-4 text-[11px] leading-5 text-[var(--faint)]",
+          "fg": "rgb(120, 129, 141)",
+          "bg": "rgb(244, 241, 234)",
+          "ratio": 3.5,
+          "need": 4.5,
+          "size": 11,
+          "weight": 400,
+          "overMedia": false
+        },
+        {
+          "text": "Front desk",
+          "tag": "span",
+          "cls": "block text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--faint)]",
+          "fg": "rgb(120, 129, 141)",
+          "bg": "rgb(252, 250, 245)",
+          "ratio": 3.78,
+          "need": 4.5,
+          "size": 10,
+          "weight": 600,
+          "overMedia": false
+        },
+        {
+          "text": "Daily · IST",
+          "tag": "span",
+          "cls": "mt-1 block text-[11px] text-[var(--faint)]",
+          "fg": "rgb(120, 129, 141)",
+          "bg": "rgb(252, 250, 245)",
+          "ratio": 3.78,
+          "need": 4.5,
+          "size": 11,
+          "weight": 400,
+          "overMedia": false
+        },
+        {
+          "text": "Email",
+          "tag": "span",
+          "cls": "block text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--faint)]",
+          "fg": "rgb(120, 129, 141)",
+          "bg": "rgb(252, 250, 245)",
+          "ratio": 3.78,
+          "need": 4.5,
+          "size": 10,
+          "weight": 600,
+          "overMedia": false
+        }
+      ]
+    },
+    {
+      "route": "/login",
+      "theme": "light",
+      "checked": 14,
+      "solidFails": 1,
+      "mediaFails": 0,
+      "worst": [
+        {
+          "text": "Hotel & Residences",
+          "tag": "span",
+          "cls": "mt-1 text-[7px] font-medium uppercase tracking-[0.22em] text-[var(--faint)]",
+          "fg": "rgb(120, 129, 141)",
+          "bg": "rgb(244, 241, 234)",
+          "ratio": 3.5,
+          "need": 4.5,
+          "size": 7,
+          "weight": 500,
+          "overMedia": false
+        }
+      ]
+    },
+    {
+      "route": "/booking/lookup",
+      "theme": "light",
+      "checked": 24,
+      "solidFails": 3,
+      "mediaFails": 0,
+      "worst": [
+        {
+          "text": "Hotel & Residences",
+          "tag": "span",
+          "cls": "mt-1 text-[7px] font-medium uppercase tracking-[0.22em] text-[var(--faint)]",
+          "fg": "rgb(120, 129, 141)",
+          "bg": "rgb(244, 241, 234)",
+          "ratio": 3.5,
+          "need": 4.5,
+          "size": 7,
+          "weight": 500,
+          "overMedia": false
+        },
+        {
+          "text": "·",
+          "tag": "span",
+          "cls": "",
+          "fg": "rgb(120, 129, 141)",
+          "bg": "rgb(244, 241, 234)",
+          "ratio": 3.5,
+          "need": 4.5,
+          "size": 11,
+          "weight": 400,
+          "overMedia": false
+        },
+        {
+          "text": "Need a hand finding your stay?",
+          "tag": "p",
+          "cls": "",
+          "fg": "rgb(120, 129, 141)",
+          "bg": "rgb(244, 241, 234)",
+          "ratio": 3.5,
+          "need": 4.5,
+          "size": 12,
+          "weight": 400,
+          "overMedia": false
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "theme": "dark",
+      "checked": 159,
+      "solidFails": 1,
+      "mediaFails": 0,
+      "worst": [
+        {
+          "text": "Explore the house",
+          "tag": "a",
+          "cls": "btn-sheen inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3.5 text-xs font-semibold tex",
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(214, 183, 125)",
+          "ratio": 1.92,
+          "need": 4.5,
+          "size": 12,
+          "weight": 600,
+          "overMedia": false
+        }
+      ]
+    },
+    {
+      "route": "/stay",
+      "theme": "dark",
+      "checked": 156,
+      "solidFails": 0,
+      "mediaFails": 0,
+      "worst": []
+    },
+    {
+      "route": "/rooms",
+      "theme": "dark",
+      "checked": 144,
+      "solidFails": 0,
+      "mediaFails": 0,
+      "worst": []
+    },
+    {
+      "route": "/search?checkIn=2026-11-20&checkOut=2026-11-22&adults=2&children=0&rooms=1",
+      "theme": "dark",
+      "checked": 369,
+      "solidFails": 0,
+      "mediaFails": 0,
+      "worst": []
+    },
+    {
+      "route": "/booking?checkIn=2026-11-20&checkOut=2026-11-22&adults=2&children=0&rooms=1",
+      "theme": "dark",
+      "checked": 369,
+      "solidFails": 0,
+      "mediaFails": 0,
+      "worst": []
+    },
+    {
+      "route": "/contact",
+      "theme": "dark",
+      "checked": 47,
+      "solidFails": 0,
+      "mediaFails": 0,
+      "worst": []
+    },
+    {
+      "route": "/login",
+      "theme": "dark",
+      "checked": 14,
+      "solidFails": 0,
+      "mediaFails": 0,
+      "worst": []
+    },
+    {
+      "route": "/booking/lookup",
+      "theme": "dark",
+      "checked": 24,
+      "solidFails": 0,
+      "mediaFails": 0,
+      "worst": []
+    }
+  ],
+  "p404": {
+    "light": {
+      "text": "Not Found",
+      "theme": "light",
+      "hasHeader": false,
+      "hasFooter": false,
+      "hasToggle": false,
+      "h1": 0,
+      "title": "RIVR — Hotel & Residences | India"
+    },
+    "dark": {
+      "text": "Not Found",
+      "theme": "dark",
+      "hasHeader": false,
+      "hasFooter": false,
+      "hasToggle": false,
+      "h1": 0,
+      "title": "RIVR — Hotel & Residences | India"
+    }
+  },
+  "adminUrl": "http://localhost:5173/admin/dashboard",
+  "customerEmailCandidates": [
+    "aarav.mehta@example.com",
+    "ananya.iyer@example.com",
+    "rohan.kapoor@example.com",
+    "meera.nair@example.com",
+    "aarav.nair5@example.com",
+    "ananya.verma6@example.com",
+    "rohan.kulkarni7@example.com",
+    "meera.sharma8@example.com"
+  ],
+  "customerEmail": "aarav.nair5@example.com"
+}
