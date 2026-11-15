@@ -84,7 +84,7 @@ Access is enforced by the backend through authenticated sessions and server-side
 | Database Driver | mysql2 |
 | Authentication | Argon2id, server-managed sessions |
 | Security | Helmet, CORS, rate limiting, RBAC |
-| Testing | Vitest, Supertest |
+| Testing | Vitest, Supertest, Playwright |
 | Package Manager | pnpm |
 
 ## Architecture
@@ -186,9 +186,11 @@ The system includes business rules intended to protect reservation and room oper
 
 - Reservations cannot overlap for the same room.
 - Booking transactions lock the relevant room row before checking availability.
-- Public reservations begin with a pending two-hour hold.
+- Customer-created reservations begin as pending with a two-hour hold and expire automatically.
+- A contact may hold at most three unexpired public holds at a time.
+- Expired holds stop blocking availability immediately and are cancelled by a background cleanup job.
 - Staff-created reservations begin as confirmed.
-- Expired public holds are handled through cleanup.
+- Converting a hold to confirmed (payment or staff confirmation) clears the expiry.
 - Rooms marked for maintenance, cleaning or out-of-order use are not sellable.
 - Check-in and check-out follow date and permission rules.
 - Certain manager/admin overrides are logged.
@@ -257,21 +259,35 @@ Open `apps/api/.env` and configure the required values:
 NODE_ENV=development
 
 PORT=4000
+# Comma-separated list of allowed browser origins.
 WEB_ORIGIN=http://localhost:5173
+# false, loopback, linklocal, uniquelocal, or a hop count between 1 and 10.
+TRUST_PROXY=loopback
 
 DB_HOST=127.0.0.1
-DB_PORT=3307
+DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=your_database_password
 DB_NAME=rivr_hotel
 DB_TEST_NAME=rivr_hotel_test
 
 SESSION_SECRET=replace_with_a_long_random_secret
+SESSION_TTL_HOURS=12
+COOKIE_NAME=rivr_session
+COOKIE_SECURE=false
 ```
 
-Use the database port configured in your MariaDB installation. The example above uses port `3307`.
+Use the database port configured in your MariaDB installation. The example above uses port `3306`;
+some local installations use `3307`.
 
 Generate a strong, unique session secret for your local environment.
+
+In production, startup validation also requires `SESSION_SECRET` of at least 32 characters,
+`COOKIE_SECURE=true`, and a `WEB_ORIGIN` list that contains no localhost or loopback origin.
+
+The integration suite drops every table in `DB_TEST_NAME`, so it must contain a `test` name segment
+(for example `rivr_hotel_test`) and must differ from `DB_NAME`; otherwise the suite fails before
+connecting.
 
 **Security notice:** Never commit `.env` files, database passwords, session secrets or other credentials to GitHub.
 
@@ -340,6 +356,8 @@ Open:
 | `pnpm typecheck:api` | API TypeScript check |
 | `pnpm test:api` | Run API integration tests |
 | `pnpm db:migrate` | Apply database migrations |
+| `pnpm db:seed` | Delete business data and insert the demo dataset (local only; refuses `NODE_ENV=production`) |
+| `pnpm db:reset` | Refuses to run: no destructive CLI reset is wired up (see Data Safety below) |
 | `pnpm create-admin` | Run administrator creation command |
 
 ## API Overview
@@ -352,58 +370,88 @@ http://localhost:4000/api
 
 ### Public Endpoints
 
+These are unauthenticated and read-only, except for the rate-limited verification call.
+
 | Method | Endpoint | Purpose |
 |---|---|---|
 | GET | `/health` | API and database health |
 | GET | `/public/room-types` | Room types and amenities |
 | GET | `/public/catalog` | Public hotel catalogue |
 | GET | `/public/rooms` | Public rooms |
-| GET | `/public/availability` | Availability search |
-| POST | `/public/reservations` | Create a guest reservation |
-| POST | `/public/reservations/verify` | Verify reservation ownership |
+| GET | `/public/availability` | Availability search (room stays blocked by unexpired holds are excluded) |
+| POST | `/public/reservations/verify` | Verify reservation ownership with a reference plus the booking email **or** phone |
+
+There is deliberately **no** unauthenticated reservation-creation route. Reservation creation requires
+a signed-in customer account.
 
 ### Authentication Endpoints
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| POST | `/auth/login` | Sign in |
-| POST | `/auth/logout` | Sign out |
-| GET | `/auth/me` | Retrieve current session |
-| POST | `/auth/change-password` | Change password |
+| POST | `/auth/register` | Create a customer account and start a session (always role `customer`) |
+| POST | `/auth/login` | Sign in (every role; the role comes from the database) |
+| POST | `/auth/logout` | Sign out and invalidate the session |
+| GET | `/auth/me` | Retrieve the current session |
+| POST | `/auth/change-password` | Change the signed-in account's password |
+| POST | `/auth/forgot-password` | Issue a reset token; outside production the token is returned because no email provider is configured |
+| POST | `/auth/reset-password` | Consume a reset token |
+
+### Authenticated Customer Endpoints
+
+All routes below require a session whose role is `customer`; staff and anonymous callers are rejected.
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/account/overview` | Account profile, own reservations, invoices and payments |
+| POST | `/account/reservations` | Create a reservation (server derives the guest from the session and starts a pending hold) |
+| PATCH | `/account/profile` | Update own contact profile |
+| POST | `/account/reservations/:id/cancel` | Cancel an own reservation |
+
 
 ### Administrative API
 
 Administrative modules include:
 
-- Dashboard and activity.
-- Reservations.
-- Rooms and room types.
+- Dashboard (`GET /admin/bootstrap`, `GET /admin/reports/dashboard`) and activity.
+- Reservations, rooms and room types.
 - Guest management.
 - Payments and invoices.
 - Housekeeping.
 - Staff and attendance.
-- Inventory.
-- Expenses.
-- Restaurant orders.
-- Reports.
-- User management.
+- Inventory and suppliers.
+- Expenses and approvals.
+- Restaurant menus and orders.
+- Reports and property settings.
+- User and role management.
 
 All administrative routes require an authenticated session and the relevant server-side permission.
+The aggregate `GET /admin/bootstrap` payload is filtered by permission, so a role without
+`payments:read` does not receive payment records. `GET /admin/settings` requires `settings:manage`.
 
 ## Testing
 
-The project uses Vitest and Supertest for API integration testing.
+The project uses Vitest and Supertest for API integration testing, with a Playwright suite for
+browser flows.
 
 Before considering a build ready, run:
 
 ```bash
-pnpm typecheck
 pnpm build
 pnpm typecheck:api
 pnpm test:api
 ```
 
-The API integration tests use the configured test database. Ensure that `DB_TEST_NAME` points to a separate test database and that its credentials are correct.
+The API integration tests use the database configured through `DB_TEST_NAME` (default
+`rivr_hotel_test`). The suite drops every table in that database, so it must be separate from
+`DB_NAME`; the test setup fails fast when `DB_TEST_NAME` does not contain a `test` name segment or
+resolves to `DB_NAME`. Database-backed suites run serially.
+
+Browser tests hit a running app at `http://127.0.0.1:5173` (no `webServer` is configured), so start
+`pnpm dev` and seed the demo data first:
+
+```bash
+pnpm --filter @rivr/api exec playwright test
+```
 
 Do not run tests against production data.
 
@@ -441,11 +489,22 @@ For session-cookie compatibility, serving the frontend and API behind the same o
 
 ## Important Development & Data Safety Notes
 
-**Demo seed warning:** The `pnpm db:seed` command is destructive. It clears business tables and inserts demo data, including demo users and reservations. It can overwrite existing development business data.
+**Demo seed warning:** The `pnpm db:seed` command is destructive. It clears the business tables
+(including users and sessions) and inserts demo data, including demo users and reservations. It can
+overwrite existing development business data. It refuses to run when `NODE_ENV=production`.
 
 Do not run it against a database containing records you want to preserve.
 
 The built-in demo credentials are intended only for local development. Never use them in production.
+
+`pnpm db:reset` is intentionally **not** a destructive reset command. No CLI reset is wired up
+because dropping every table from a CLI flag is too easy to misdirect; the command prints an
+explanation and exits non-zero without touching the database. Tests reset their own isolated
+`DB_TEST_NAME` database. For a deliberate local schema rebuild, call the exported
+`dropAllTables()` / `resetDatabase()` from a reviewed one-off script after confirming `DB_NAME`.
+
+`pnpm create-admin` never resets anything. It loads the API environment (including `apps/api/.env`),
+migrates, seeds roles, and refuses once an active super-administrator exists.
 
 The project does not automatically migrate historical browser `localStorage` records into MariaDB.
 
@@ -459,7 +518,6 @@ The following limitations are documented in the current project:
 - Hotel contact details are placeholder data and must be replaced before launch.
 - Demo seed data is not a production data-import mechanism.
 - No automatic migration of historical browser-storage data.
-- Frontend bundle optimization and code splitting remain possible future improvements.
 
 ## Future Development
 
@@ -469,7 +527,6 @@ Potential areas for future development include:
 - Automated email and SMS notifications.
 - Multi-property hotel management.
 - Advanced analytics and operational reporting.
-- Improved performance through route-level code splitting.
 - Expanded guest communication and service workflows.
 - Further enhancements to the reservation experience.
 

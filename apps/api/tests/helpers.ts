@@ -1,6 +1,7 @@
 import request from "supertest";
 import type TestAgent from "supertest/lib/agent";
 import { db } from "../src/database/client";
+import { env } from "../src/config/env";
 import { roomTypes, rooms } from "../src/database/schema";
 import { ensureDatabaseExists } from "../src/database/ensure";
 import { dropAllTables } from "../src/database/reset";
@@ -9,6 +10,11 @@ import { seedRolesOnly } from "../src/database/seed";
 import { createUser } from "../src/services/users";
 
 export async function resetTestDatabase(): Promise<void> {
+  // Defence in depth: setup.ts already rejects a non-test DB_TEST_NAME, but a
+  // helper imported from a non-test process must never drop tables either.
+  if (!env.isTest) {
+    throw new Error("resetTestDatabase() only runs with NODE_ENV=test.");
+  }
   await ensureDatabaseExists();
   await dropAllTables();
   await migrate();

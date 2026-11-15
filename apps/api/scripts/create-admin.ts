@@ -1,4 +1,4 @@
-import "dotenv/config";
+import { env } from "../src/config/env";
 import { hashPassword } from "../src/services/password";
 import { closeDatabase, pool } from "../src/database/client";
 import { ensureDatabaseExists } from "../src/database/reset";
@@ -18,9 +18,9 @@ function arg(name: string): string | undefined {
  * super administrator exists.
  */
 async function main() {
-  const email = (arg("email") ?? process.env.SEED_ADMIN_EMAIL ?? "").trim().toLowerCase();
-  const password = arg("password") ?? process.env.SEED_ADMIN_PASSWORD ?? "";
-  const name = arg("name") ?? process.env.SEED_ADMIN_NAME ?? "RIVR Administrator";
+  const email = (arg("email") ?? env.seedAdmin.email ?? "").trim().toLowerCase();
+  const password = arg("password") ?? env.seedAdmin.password ?? "";
+  const name = arg("name") ?? env.seedAdmin.name ?? "RIVR Administrator";
 
   if (!email || !password) {
     throw new Error("Provide --email and --password (or SEED_ADMIN_EMAIL / SEED_ADMIN_PASSWORD).");

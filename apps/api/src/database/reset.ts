@@ -92,3 +92,18 @@ export async function createAdminFromEnv(): Promise<void> {
   );
   console.log(`Admin account ready for ${env.seedAdmin.email.toLowerCase()}.`);
 }
+
+/**
+ * `pnpm db:reset` intentionally does not reset anything. Dropping every table
+ * from a CLI flag is too easy to run against the wrong database, so this
+ * command fails loudly instead of succeeding silently.
+ */
+if (require.main === module) {
+  console.error(
+    "[db:reset] Refusing to run: this script does not reset the database, because doing so drops every table in DB_NAME.",
+  );
+  console.error(
+    "[db:reset] Database-backed tests reset their isolated DB_TEST_NAME database through tests/helpers.ts. For a deliberate local reset, call the exported dropAllTables()/resetDatabase() from a reviewed one-off script after confirming DB_NAME.",
+  );
+  process.exitCode = 1;
+}

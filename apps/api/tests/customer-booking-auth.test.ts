@@ -114,6 +114,17 @@ describe("customer-authenticated reservation creation", () => {
     expect(await reservationCount()).toBe(before);
   });
 
+  it("rejects a forged or expired session cookie without creating a hold", async () => {
+    const before = await reservationCount();
+    const attempt = await request(app)
+      .post("/api/account/reservations")
+      .set("Cookie", "rivr_session=not-a-real-session-token")
+      .send(bookingBody({ checkIn: dateAt(46), checkOut: dateAt(48) }));
+    expect(attempt.status).toBe(401);
+    expect(attempt.body.error.code).toBe("unauthorized");
+    expect(await reservationCount()).toBe(before);
+  });
+
   it("creates a pending hold owned by the authenticated customer's guest", async () => {
     const [row] = await db
       .select()

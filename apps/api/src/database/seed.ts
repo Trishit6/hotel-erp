@@ -3,6 +3,7 @@ import { db, pool } from "./client";
 import * as schema from "./schema";
 import { ensureDatabaseExists } from "./ensure";
 import { migrate } from "./migrate";
+import { assertDemoSeedAllowed } from "./seedPolicy";
 import { createAdminFromEnv } from "./reset";
 import { ensureRoles } from "../services/roles";
 import { hashPassword } from "../services/password";
@@ -108,6 +109,9 @@ export async function seedRolesOnly(): Promise<void> {
 }
 
 export async function seedDatabase(): Promise<void> {
+  // Hard stop before any database contact. The HTTP reset route is already
+  // gated by ALLOW_DEMO_RESET (forced off in production); this covers the CLI.
+  assertDemoSeedAllowed(env.isProduction);
   await ensureDatabaseExists();
   await migrate();
   await clearBusinessData();
@@ -190,11 +194,6 @@ export async function seedDatabase(): Promise<void> {
   await db.insert(schema.guests).values(seedGuests.map((guest) => ({ ...guest, updatedAt: now })));
   await db.insert(schema.staff).values(seedStaff.map((person) => ({ ...person, updatedAt: now })));
 
-  if (env.isProduction) {
-    console.warn(
-      "WARNING: seeding demo accounts with a well-known password. Do not run the demo seed against production data.",
-    );
-  }
   const passwordHashes = new Map<string, string>();
   const userRows: Array<typeof schema.users.$inferInsert> = [];
   for (const { password, ...user } of seedUsers) {
