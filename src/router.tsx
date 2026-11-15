@@ -11,6 +11,7 @@ import { useLayoutEffect } from "react";
 import { CustomCursor } from "./components/motion/CustomCursor";
 import { ScrollProgress } from "./components/motion/ScrollProgress";
 import HomePage from "./pages/HomePage";
+import NotFoundPage from "./pages/NotFoundPage";
 import { AdminLayout } from "./components/hotel/StaffChrome";
 
 const StayPage = lazyRouteComponent(() => import("./pages/StayPage"));
@@ -225,7 +226,10 @@ const resetSearch = (search: Record<string, unknown>) => ({
 const authSearch = (search: Record<string, unknown>): { returnTo?: string } => ({
   returnTo: safeReturnTo(search.returnTo),
 });
-const rootRoute = createRootRoute({ component: RootComponent });
+const rootRoute = createRootRoute({
+  component: RootComponent,
+  notFoundComponent: NotFoundPage,
+});
 const homeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",

@@ -1,0 +1,124 @@
+{
+ "stay": {
+  "load": [
+   {
+    "i": 0,
+    "top": 81,
+    "height": 693,
+    "opacity": 1,
+    "transform": "none",
+    "text": "STAY WITH US A slower stay, with more room to breathe. Thoughtful room"
+   },
+   {
+    "i": 1,
+    "top": 726,
+    "height": 108,
+    "opacity": 1,
+    "transform": "none",
+    "text": "CHECK IN CHECK OUT ADULTS 1 2 3 4 5 6 7 8 CHILDREN 0 1 2 3 4 5 6 ROOMS"
+   },
+   {
+    "i": 2,
+    "top": 833,
+    "height": 2268,
+    "opacity": 1,
+    "transform": "none",
+    "text": "WAYS TO STAY A room for the way you travel. From a quiet studio to a p"
+   },
+   {
+    "i": 3,
+    "top": 3101,
+    "height": 696,
+    "opacity": 1,
+    "transform": "none",
+    "text": "THE RIVR STAY The details are the stay. A stay here is made of small t"
+   },
+   {
+    "i": 4,
+    "top": 3802,
+    "height": 414,
+    "opacity": 1,
+    "transform": "none",
+    "text": "Rooms with room to breathe Considered layouts, generous light, and the"
+   },
+   {
+    "i": 5,
+    "top": 4216,
+    "height": 247,
+    "opacity": 1,
+    "transform": "none",
+    "text": "READY WHEN YOU ARE Find your room at RIVR. Book your stay"
+   }
+  ],
+  "docHeight": 5120,
+  "afterScroll": [
+   {
+    "i": 0,
+    "top": 81,
+    "height": 693,
+    "opacity": 1,
+    "transform": "none",
+    "text": "STAY WITH US A slower stay, with more room to breathe. Thoughtful room"
+   },
+   {
+    "i": 1,
+    "top": 726,
+    "height": 108,
+    "opacity": 1,
+    "transform": "none",
+    "text": "CHECK IN CHECK OUT ADULTS 1 2 3 4 5 6 7 8 CHILDREN 0 1 2 3 4 5 6 ROOMS"
+   },
+   {
+    "i": 2,
+    "top": 833,
+    "height": 2268,
+    "opacity": 1,
+    "transform": "none",
+    "text": "WAYS TO STAY A room for the way you travel. From a quiet studio to a p"
+   },
+   {
+    "i": 3,
+    "top": 3101,
+    "height": 696,
+    "opacity": 1,
+    "transform": "none",
+    "text": "THE RIVR STAY The details are the stay. A stay here is made of small t"
+   },
+   {
+    "i": 4,
+    "top": 3802,
+    "height": 414,
+    "opacity": 1,
+    "transform": "none",
+    "text": "Rooms with room to breathe Considered layouts, generous light, and the"
+   },
+   {
+    "i": 5,
+    "top": 4216,
+    "height": 247,
+    "opacity": 1,
+    "transform": "none",
+    "text": "READY WHEN YOU ARE Find your room at RIVR. Book your stay"
+   }
+  ]
+ },
+ "success": {
+  "heading": "We’ll see you by the water.",
+  "storedAfterLoad": "{\"reference\":\"RIVR-DIAGNOSTIC1\",\"status\":\"confirmed\",\"checkIn\":\"2026-12-01\",\"checkOut\":\"2026-12-03\",\"roomTypeName\":\"Diagnostic Suite\",\"roomNumber\":\"T-01\",\"guestFirstName\":\"Diagnostic\",\"total\":12345,\"paidAmount\":0,\"paymentStatus\":\"pending\"}",
+  "url": "http://localhost:5173/booking/success",
+  "headingAfterRefresh": "We’ll see you by the water.",
+  "urlAfterRefresh": "http://localhost:5173/booking/success"
+ },
+ "notFound": {
+  "title": "RIVR — Hotel & Residences | India",
+  "h1Count": 1,
+  "hasHeader": true,
+  "hasFooter": true,
+  "hasToggle": true,
+  "text": "RIVR HOTEL & RESIDENCES Home Stay With Us Explore Rooms Amenities About Us Contact My Bookings Sign In Book Your Stay 404 · OFF THE MAP This page has checked out. We couldn’t find "
+ },
+ "console": [
+  "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+  "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+ ]
+}

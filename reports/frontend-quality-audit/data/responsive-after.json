@@ -1,0 +1,2170 @@
+{
+  "generatedAt": "2026-11-15T11:37:46.878Z",
+  "results": [
+    {
+      "theme": "light",
+      "viewport": "360",
+      "route": "home",
+      "hScroll": 0,
+      "docHeight": 10856,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen hero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "360",
+      "route": "stay",
+      "hScroll": 0,
+      "docHeight": 10230,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "360",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 8210,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "360",
+      "route": "booking",
+      "hScroll": 0,
+      "docHeight": 18919,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "360",
+      "route": "login",
+      "hScroll": 0,
+      "docHeight": 800,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "360",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 5971,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "360",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 6302,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "360",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 4247,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "360",
+      "route": "my-bookings",
+      "hScroll": 0,
+      "docHeight": 2033,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "360",
+      "route": "404",
+      "hScroll": 0,
+      "docHeight": 2252,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "390",
+      "route": "home",
+      "hScroll": 0,
+      "docHeight": 11958,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "390",
+      "route": "stay",
+      "hScroll": 0,
+      "docHeight": 9891,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "390",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 7853,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "390",
+      "route": "booking",
+      "hScroll": 0,
+      "docHeight": 18895,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "390",
+      "route": "login",
+      "hScroll": 0,
+      "docHeight": 844,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "390",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 5773,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "390",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 6136,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "390",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 4049,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "390",
+      "route": "my-bookings",
+      "hScroll": 0,
+      "docHeight": 2009,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "390",
+      "route": "404",
+      "hScroll": 0,
+      "docHeight": 2200,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "430",
+      "route": "home",
+      "hScroll": 0,
+      "docHeight": 11731,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "430",
+      "route": "stay",
+      "hScroll": 0,
+      "docHeight": 9751,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "430",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 7825,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "430",
+      "route": "booking",
+      "hScroll": 0,
+      "docHeight": 18895,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "430",
+      "route": "login",
+      "hScroll": 0,
+      "docHeight": 932,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "430",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 5674,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "430",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 6009,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "430",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 4049,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "430",
+      "route": "my-bookings",
+      "hScroll": 0,
+      "docHeight": 1981,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "430",
+      "route": "404",
+      "hScroll": 0,
+      "docHeight": 2144,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "768",
+      "route": "home",
+      "hScroll": 0,
+      "docHeight": 9281,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "768",
+      "route": "stay",
+      "hScroll": 0,
+      "docHeight": 6578,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "768",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 5047,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "768",
+      "route": "booking",
+      "hScroll": 0,
+      "docHeight": 10710,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "768",
+      "route": "login",
+      "hScroll": 0,
+      "docHeight": 1024,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "768",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 4847,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "768",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 4566,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "768",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 3340,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "768",
+      "route": "my-bookings",
+      "hScroll": 0,
+      "docHeight": 1393,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "768",
+      "route": "404",
+      "hScroll": 0,
+      "docHeight": 1502,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1366",
+      "route": "home",
+      "hScroll": 0,
+      "docHeight": 7591,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "DIV.hero-note glass-strong absolute bottom-24 left-5 r"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1366",
+      "route": "stay",
+      "hScroll": 0,
+      "docHeight": 5097,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1366",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 3936,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1366",
+      "route": "booking",
+      "hScroll": 0,
+      "docHeight": 7408,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1366",
+      "route": "login",
+      "hScroll": 0,
+      "docHeight": 780,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1366",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 3688,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1366",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 3470,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1366",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 2551,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1366",
+      "route": "my-bookings",
+      "hScroll": 0,
+      "docHeight": 1375,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1366",
+      "route": "404",
+      "hScroll": 0,
+      "docHeight": 1338,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1440",
+      "route": "home",
+      "hScroll": 0,
+      "docHeight": 7633,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen hero-sweep",
+        "DIV.hero-note glass-strong absolute bottom-24 left-5 r"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1440",
+      "route": "stay",
+      "hScroll": 0,
+      "docHeight": 5120,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1440",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 3945,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1440",
+      "route": "booking",
+      "hScroll": 0,
+      "docHeight": 7412,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1440",
+      "route": "login",
+      "hScroll": 0,
+      "docHeight": 900,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1440",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 3791,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1440",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 3500,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1440",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 2571,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1440",
+      "route": "my-bookings",
+      "hScroll": 0,
+      "docHeight": 1375,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1440",
+      "route": "404",
+      "hScroll": 0,
+      "docHeight": 1367,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1920",
+      "route": "home",
+      "hScroll": 0,
+      "docHeight": 7661,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen hero-sweep",
+        "DIV.hero-note glass-strong absolute bottom-24 left-5 r"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1920",
+      "route": "stay",
+      "hScroll": 0,
+      "docHeight": 5134,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1920",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 3951,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1920",
+      "route": "booking",
+      "hScroll": 0,
+      "docHeight": 7413,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1920",
+      "route": "login",
+      "hScroll": 0,
+      "docHeight": 1080,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1920",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 3811,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1920",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 3513,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1920",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 2585,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1920",
+      "route": "my-bookings",
+      "hScroll": 0,
+      "docHeight": 1375,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1920",
+      "route": "404",
+      "hScroll": 0,
+      "docHeight": 1493,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "360",
+      "route": "home",
+      "hScroll": 0,
+      "docHeight": 12258,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "360",
+      "route": "stay",
+      "hScroll": 0,
+      "docHeight": 10230,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "360",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 8210,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "360",
+      "route": "booking",
+      "hScroll": 0,
+      "docHeight": 18919,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "360",
+      "route": "login",
+      "hScroll": 0,
+      "docHeight": 800,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "360",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 5971,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "360",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 6302,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "360",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 4247,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "360",
+      "route": "my-bookings",
+      "hScroll": 0,
+      "docHeight": 2033,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "360",
+      "route": "404",
+      "hScroll": 0,
+      "docHeight": 2252,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "390",
+      "route": "home",
+      "hScroll": 0,
+      "docHeight": 11958,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "390",
+      "route": "stay",
+      "hScroll": 0,
+      "docHeight": 9891,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "390",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 7853,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "390",
+      "route": "booking",
+      "hScroll": 0,
+      "docHeight": 18895,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "390",
+      "route": "login",
+      "hScroll": 0,
+      "docHeight": 844,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "390",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 5773,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "390",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 6136,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "390",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 4049,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "390",
+      "route": "my-bookings",
+      "hScroll": 0,
+      "docHeight": 2009,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "390",
+      "route": "404",
+      "hScroll": 0,
+      "docHeight": 2200,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "430",
+      "route": "home",
+      "hScroll": 0,
+      "docHeight": 11731,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "430",
+      "route": "stay",
+      "hScroll": 0,
+      "docHeight": 9751,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "430",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 7825,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "430",
+      "route": "booking",
+      "hScroll": 0,
+      "docHeight": 18895,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "430",
+      "route": "login",
+      "hScroll": 0,
+      "docHeight": 932,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "430",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 5674,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "430",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 6009,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "430",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 4049,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "430",
+      "route": "my-bookings",
+      "hScroll": 0,
+      "docHeight": 1981,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "430",
+      "route": "404",
+      "hScroll": 0,
+      "docHeight": 2144,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "768",
+      "route": "home",
+      "hScroll": 0,
+      "docHeight": 9281,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "768",
+      "route": "stay",
+      "hScroll": 0,
+      "docHeight": 6578,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "768",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 5047,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "768",
+      "route": "booking",
+      "hScroll": 0,
+      "docHeight": 10710,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "768",
+      "route": "login",
+      "hScroll": 0,
+      "docHeight": 1024,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "768",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 4847,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "768",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 4566,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "768",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 3340,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "768",
+      "route": "my-bookings",
+      "hScroll": 0,
+      "docHeight": 1393,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "768",
+      "route": "404",
+      "hScroll": 0,
+      "docHeight": 1502,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1366",
+      "route": "home",
+      "hScroll": 0,
+      "docHeight": 7591,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "DIV.hero-note glass-strong absolute bottom-24 left-5 r"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1366",
+      "route": "stay",
+      "hScroll": 0,
+      "docHeight": 5097,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1366",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 3936,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1366",
+      "route": "booking",
+      "hScroll": 0,
+      "docHeight": 7408,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1366",
+      "route": "login",
+      "hScroll": 0,
+      "docHeight": 780,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1366",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 3688,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1366",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 3470,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1366",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 2551,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1366",
+      "route": "my-bookings",
+      "hScroll": 0,
+      "docHeight": 1375,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1366",
+      "route": "404",
+      "hScroll": 0,
+      "docHeight": 1338,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1440",
+      "route": "home",
+      "hScroll": 0,
+      "docHeight": 7633,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "DIV.hero-note glass-strong absolute bottom-24 left-5 r"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1440",
+      "route": "stay",
+      "hScroll": 0,
+      "docHeight": 5120,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1440",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 3945,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1440",
+      "route": "booking",
+      "hScroll": 0,
+      "docHeight": 7412,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1440",
+      "route": "login",
+      "hScroll": 0,
+      "docHeight": 900,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1440",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 3791,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1440",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 3500,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1440",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 2571,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1440",
+      "route": "my-bookings",
+      "hScroll": 0,
+      "docHeight": 1375,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1440",
+      "route": "404",
+      "hScroll": 0,
+      "docHeight": 1367,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1920",
+      "route": "home",
+      "hScroll": 0,
+      "docHeight": 7661,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "DIV.hero-note glass-strong absolute bottom-24 left-5 r"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1920",
+      "route": "stay",
+      "hScroll": 0,
+      "docHeight": 5134,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1920",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 3951,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1920",
+      "route": "booking",
+      "hScroll": 0,
+      "docHeight": 7413,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1920",
+      "route": "login",
+      "hScroll": 0,
+      "docHeight": 1080,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1920",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 3811,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1920",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 3513,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1920",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 2585,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1920",
+      "route": "my-bookings",
+      "hScroll": 0,
+      "docHeight": 1375,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1920",
+      "route": "404",
+      "hScroll": 0,
+      "docHeight": 1493,
+      "headingsClipped": [],
+      "hiddenLarge": [],
+      "brokenImages": []
+    }
+  ],
+  "consoleErrors": [],
+  "failures": [
+    {
+      "theme": "light",
+      "viewport": "360",
+      "route": "home",
+      "hScroll": 0,
+      "docHeight": 10856,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen hero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "430",
+      "route": "stay",
+      "hScroll": 0,
+      "docHeight": 9751,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "430",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 7825,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "768",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 5047,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "768",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 4847,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "768",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 4566,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "768",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 3340,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1366",
+      "route": "home",
+      "hScroll": 0,
+      "docHeight": 7591,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "DIV.hero-note glass-strong absolute bottom-24 left-5 r"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1366",
+      "route": "stay",
+      "hScroll": 0,
+      "docHeight": 5097,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1366",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 3936,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1366",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 3688,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1366",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 3470,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1366",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 2551,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1440",
+      "route": "home",
+      "hScroll": 0,
+      "docHeight": 7633,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen hero-sweep",
+        "DIV.hero-note glass-strong absolute bottom-24 left-5 r"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1440",
+      "route": "stay",
+      "hScroll": 0,
+      "docHeight": 5120,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1440",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 3945,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1440",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 3791,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1440",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 3500,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1440",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 2571,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1920",
+      "route": "home",
+      "hScroll": 0,
+      "docHeight": 7661,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen hero-sweep",
+        "DIV.hero-note glass-strong absolute bottom-24 left-5 r"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1920",
+      "route": "stay",
+      "hScroll": 0,
+      "docHeight": 5134,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1920",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 3951,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1920",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 3811,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1920",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 3513,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "light",
+      "viewport": "1920",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 2585,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "360",
+      "route": "stay",
+      "hScroll": 0,
+      "docHeight": 10230,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "360",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 8210,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "360",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 5971,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "360",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 4247,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "390",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 6136,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "430",
+      "route": "stay",
+      "hScroll": 0,
+      "docHeight": 9751,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "430",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 7825,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "430",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 5674,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "430",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 6009,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "768",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 5047,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "768",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 4847,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "768",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 3340,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1366",
+      "route": "home",
+      "hScroll": 0,
+      "docHeight": 7591,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "DIV.hero-note glass-strong absolute bottom-24 left-5 r"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1366",
+      "route": "stay",
+      "hScroll": 0,
+      "docHeight": 5097,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1366",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 3688,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1366",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 3470,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1366",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 2551,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1440",
+      "route": "home",
+      "hScroll": 0,
+      "docHeight": 7633,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "DIV.hero-note glass-strong absolute bottom-24 left-5 r"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1440",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 3945,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1440",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 3791,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1440",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 3500,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1440",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 2571,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1920",
+      "route": "home",
+      "hScroll": 0,
+      "docHeight": 7661,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "DIV.hero-note glass-strong absolute bottom-24 left-5 r"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1920",
+      "route": "rooms",
+      "hScroll": 0,
+      "docHeight": 3951,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1920",
+      "route": "about",
+      "hScroll": 0,
+      "docHeight": 3811,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1920",
+      "route": "amenities",
+      "hScroll": 0,
+      "docHeight": 3513,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    },
+    {
+      "theme": "dark",
+      "viewport": "1920",
+      "route": "contact",
+      "hScroll": 0,
+      "docHeight": 2585,
+      "headingsClipped": [],
+      "hiddenLarge": [
+        "P.pagehero-intro mt-6 max-w-[500px] text-sm leading-",
+        "SPAN.hero-sheen pagehero-sweep"
+      ],
+      "brokenImages": []
+    }
+  ]
+}

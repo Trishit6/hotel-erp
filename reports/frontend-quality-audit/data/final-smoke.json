@@ -1,0 +1,45 @@
+{
+  "roles": [
+    {
+      "role": "manager",
+      "url": "http://localhost:5173/manager/dashboard",
+      "desktop": {
+        "path": "/manager/dashboard",
+        "h1": "Good evening, Meera.",
+        "hScroll": 0
+      },
+      "mobile": {
+        "hScroll": 0
+      }
+    },
+    {
+      "role": "reception",
+      "url": "http://localhost:5173/reception/dashboard",
+      "desktop": {
+        "path": "/reception/dashboard",
+        "h1": "Arrivals & departures",
+        "hScroll": 0
+      },
+      "mobile": {
+        "hScroll": 0
+      }
+    },
+    {
+      "role": "staff",
+      "url": "http://localhost:5173/staff/dashboard",
+      "desktop": {
+        "path": "/staff/dashboard",
+        "h1": "Good to see you, Rahul.",
+        "hScroll": 0
+      },
+      "mobile": {
+        "hScroll": 0
+      }
+    }
+  ],
+  "bookingSearch": {
+    "path": "/search",
+    "hScroll": 0,
+    "summary": "30 rooms available for this stay"
+  }
+}

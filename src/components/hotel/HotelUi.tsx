@@ -33,7 +33,7 @@ export function BrandMark({ dark = false, compact = false }: { dark?: boolean; c
           </span>
           <span
             className={`mt-1 text-[7px] font-medium uppercase tracking-[0.22em] ${
-              dark ? "text-white/45" : "text-[var(--faint)]"
+              dark ? "text-white/60" : "text-[var(--faint)]"
             }`}
           >
             Hotel &amp; Residences
@@ -111,9 +111,13 @@ export function RoomVisual({
   );
 }
 
-export function SectionEyebrow({ children }: { children: ReactNode }) {
+export function SectionEyebrow({ children, onDark = false }: { children: ReactNode; onDark?: boolean }) {
   return (
-    <div className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--muted-strong)]">
+    <div
+      className={`flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.24em] ${
+        onDark ? "text-[var(--sage-on-dark)]" : "text-[var(--muted-strong)]"
+      }`}
+    >
       <span className="h-px w-6 bg-[var(--accent)]" aria-hidden="true" />
       <Sparkles className="h-3 w-3 text-[var(--accent-strong)]" aria-hidden="true" />
       {children}

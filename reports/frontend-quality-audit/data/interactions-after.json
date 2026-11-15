@@ -1,0 +1,71 @@
+{
+  "generatedAt": "2026-11-15T11:40:51.230Z",
+  "consoleErrors": [],
+  "loginValidation": {
+    "emailType": "email",
+    "ariaInvalid": "true",
+    "describedBy": "login-email-error",
+    "errorRole": "alert",
+    "errorText": "Enter the email address on your account.",
+    "focusedAutocomplete": "username",
+    "focusedType": "email"
+  },
+  "theme": {
+    "beforeToggle": {
+      "theme": "light",
+      "dates": [
+        "2026-12-12",
+        "2026-12-15"
+      ]
+    },
+    "afterToggle": {
+      "theme": "dark",
+      "dates": [
+        "2026-12-12",
+        "2026-12-15"
+      ],
+      "stored": "dark"
+    },
+    "afterReload": {
+      "theme": "dark",
+      "dates": [
+        "2026-12-12",
+        "2026-12-15"
+      ]
+    }
+  },
+  "stayValuesAfterNavigation": {
+    "path": "/rooms",
+    "dates": [
+      "2026-12-12",
+      "2026-12-15"
+    ]
+  },
+  "bookingValidation": {
+    "alert": "Choose a checkout date after your check-in date.",
+    "hScroll": 0,
+    "path": "/stay"
+  },
+  "adminThemeToggleCount": 0,
+  "modal": {
+    "activeInside": true,
+    "activeTag": "INPUT",
+    "activeLabel": "",
+    "tabPresses": 20,
+    "focusEscapes": 0,
+    "closedOnEscape": true,
+    "focusReturnedTo": "Add staff",
+    "mobile": {
+      "width": 309,
+      "right": 349,
+      "viewport": 390,
+      "hScroll": 0
+    }
+  },
+  "guest": {
+    "heading": "Welcome back, Aarav.",
+    "desktopHScroll": 0,
+    "darkTheme": "dark",
+    "mobileHScroll": 0
+  }
+}

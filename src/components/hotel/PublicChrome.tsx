@@ -418,19 +418,19 @@ export function PublicFooter() {
 
         <div className="mt-12 grid gap-10 md:grid-cols-[1.1fr_0.6fr_0.9fr_1fr]">
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/40">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/65">
               The house
             </p>
             <p className="mt-4 max-w-xs text-xs leading-6">
               Thoughtful rooms and generous hospitality in {hotelInfo.city}, with
               the city and the water close at hand.
             </p>
-            <p className="mt-5 text-[11px] text-white/40">
+            <p className="mt-5 text-[11px] text-white/65">
               Direct reservations · India · {hotelInfo.timeZone}
             </p>
           </div>
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/40">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/65">
               Explore
             </p>
             <div className="mt-4 grid gap-2.5 text-xs">
@@ -453,7 +453,7 @@ export function PublicFooter() {
             </div>
           </div>
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/40">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/65">
               Contact
             </p>
             <div className="mt-4 grid gap-3 text-xs">
@@ -478,7 +478,7 @@ export function PublicFooter() {
             </div>
           </div>
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/40">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/65">
               Concierge
             </p>
             <p className="mt-4 text-xs leading-6">
@@ -494,14 +494,14 @@ export function PublicFooter() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col justify-between gap-2 border-t border-white/10 pt-6 text-[11px] text-white/40 md:flex-row">
+        <div className="mt-12 flex flex-col justify-between gap-2 border-t border-white/10 pt-6 text-[11px] text-white/65 md:flex-row">
           <span>
             © {new Date().getFullYear()} RIVR Hotel &amp; Residences · India
           </span>
           <span>Reservations are stored securely by the hotel team.</span>
         </div>
         {hotelInfo.isPlaceholder && (
-          <p className="mt-3 max-w-4xl text-[10px] leading-5 text-white/30">
+          <p className="mt-3 max-w-4xl text-[10px] leading-5 text-white/55">
             {hotelInfo.notice}
           </p>
         )}

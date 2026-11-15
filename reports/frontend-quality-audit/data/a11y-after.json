@@ -1,0 +1,49 @@
+{
+  "generatedAt": "2026-11-15T11:48:46.958Z",
+  "runs": [
+    {
+      "theme": "light",
+      "state": "home",
+      "violations": []
+    },
+    {
+      "theme": "light",
+      "state": "stay",
+      "violations": []
+    },
+    {
+      "theme": "light",
+      "state": "login",
+      "violations": []
+    },
+    {
+      "theme": "light",
+      "state": "404",
+      "violations": []
+    },
+    {
+      "theme": "dark",
+      "state": "home",
+      "violations": []
+    },
+    {
+      "theme": "dark",
+      "state": "stay",
+      "violations": []
+    },
+    {
+      "theme": "dark",
+      "state": "login",
+      "violations": []
+    },
+    {
+      "theme": "dark",
+      "state": "404",
+      "violations": []
+    }
+  ],
+  "cta": {
+    "color": "rgb(20, 29, 44)",
+    "background": "rgb(194, 163, 107)"
+  }
+}

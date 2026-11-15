@@ -36,7 +36,8 @@ import {
   WalletCards,
   X,
 } from "lucide-react";
-import { useEffect, useMemo, useState, type ComponentType } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type ComponentType } from "react";
+import { createPortal } from "react-dom";
 import { Link, useLocation, useNavigate, useSearch } from "@tanstack/react-router";
 import { motion, useReducedMotion } from "motion/react";
 import {
@@ -75,7 +76,6 @@ import {
   type ReservationInput,
   type RoomTypeInput,
 } from "../lib/hotel-store";
-import { ThemeToggle } from "../components/hotel/ThemeToggle";
 
 const roleLabels: Record<UserRole, string> = {
   "super-admin": "Super Admin",
@@ -4331,7 +4331,7 @@ export function AdminSettingsPage() {
                   }
                   rows={3}
                   placeholder="Explain the cancellation window and any charges."
-                  className="rounded-lg border border-[var(--line-2)] bg-[var(--surface)] px-3 py-2.5 text-sm font-normal outline-none focus:border-[var(--sage)]"
+                  className="rounded-lg border border-[var(--line-2)] bg-[var(--surface)] px-3 py-2.5 text-sm font-normal outline-none focus:border-[var(--accent-strong)]"
                 />
               </label>
             </div>
@@ -4658,7 +4658,7 @@ function Field({
         value={value}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
-        className="rounded-lg border border-[var(--line-2)] bg-[var(--surface)] px-3 py-2.5 text-sm font-normal outline-none focus:border-[var(--sage)]"
+        className="rounded-lg border border-[var(--line-2)] bg-[var(--surface)] px-3 py-2.5 text-sm font-normal outline-none focus:border-[var(--accent-strong)]"
       />
     </label>
   );
@@ -4696,18 +4696,74 @@ function Modal({
   onSubmit: (event: React.FormEvent) => void;
   children: React.ReactNode;
 }) {
-  return (
-    <div className="modal-backdrop fixed inset-0 z-50 grid place-items-center bg-[var(--deep)]/45 p-4">
+  const panelRef = useRef<HTMLFormElement>(null);
+  const titleId = useId();
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+
+  useEffect(() => {
+    const panel = panelRef.current;
+    if (!panel) return;
+    const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const selector =
+      'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+    const focusable = () =>
+      [...panel.querySelectorAll<HTMLElement>(selector)].filter((element) => element.getClientRects().length > 0);
+
+    const firstField = panel.querySelector<HTMLElement>(
+      'input:not([disabled]),select:not([disabled]),textarea:not([disabled])',
+    );
+    (firstField ?? focusable()[0] ?? panel).focus();
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onCloseRef.current();
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const nodes = focusable();
+      if (!nodes.length) {
+        event.preventDefault();
+        panel.focus();
+        return;
+      }
+      const first = nodes[0];
+      const last = nodes[nodes.length - 1];
+      if (event.shiftKey && (document.activeElement === first || !panel.contains(document.activeElement))) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
+      previous?.focus();
+    };
+  }, []);
+
+  return createPortal(
+    <div className="admin-shell">
+      <div className="modal-backdrop fixed inset-0 z-50 grid place-items-center bg-[var(--deep)]/45 p-4">
       <form
+        ref={panelRef}
         onSubmit={onSubmit}
         role="dialog"
         aria-modal="true"
-        aria-label={title}
+        aria-labelledby={titleId}
+        tabIndex={-1}
         className="modal-panel max-h-[90vh] w-full max-w-md overflow-y-auto rounded-[1.5rem] border border-[var(--line)] bg-[var(--elevated)] p-6 shadow-[var(--shadow)]"
       >
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 className="font-display text-2xl text-[var(--ink)]">{title}</h2>
+            <h2 id={titleId} className="font-display text-2xl text-[var(--ink)]">{title}</h2>
             <div className="gold-rule mt-3" aria-hidden="true" />
           </div>
           <button
@@ -4736,6 +4792,8 @@ function Modal({
           </button>
         </div>
       </form>
-    </div>
+      </div>
+    </div>,
+    document.body,
   );
 }

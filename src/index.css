@@ -25,7 +25,7 @@
   --text: #26303f;
   --muted: #5d6674;
   --muted-strong: #424b58;
-  --faint: #78818d;
+  --faint: #5f6875;
   --line: rgba(89, 97, 110, 0.16);
   --line-2: rgba(89, 97, 110, 0.26);
   --line-strong: rgba(89, 97, 110, 0.4);
@@ -218,12 +218,6 @@ textarea:not(.bg-transparent):focus {
 ) {
   border-color: var(--accent-strong);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
-}
-
-/* The shared availability widget nests the field inside a rounded label. */
-form[aria-label="Search room availability"] label:focus-within {
-  outline: 1px solid var(--accent-strong);
-  outline-offset: -1px;
 }
 
 /* Browsers without :has() get the outline back rather than losing focus. */
@@ -969,7 +963,7 @@ html.theme-transition *::after {
   background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 65%, transparent), transparent);
 }
 
-.cinematic-band a {
+.cinematic-band a:not(.btn-sheen) {
   color: white;
 }
 

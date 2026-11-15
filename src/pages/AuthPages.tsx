@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useMemo, useRef, useState, type ReactNode } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -22,7 +22,7 @@ import { useHotel } from "../lib/hotel-store";
 import { ApiError, api } from "../lib/api";
 
 const inputClass =
-  "w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors placeholder:text-[var(--faint)] focus:border-[var(--sage)]";
+  "w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors placeholder:text-[var(--faint)] focus:border-[var(--accent-strong)]";
 const labelClass =
   "mb-2 block text-xs font-semibold text-[var(--muted-strong)]";
 
@@ -85,7 +85,7 @@ function AuthShell({
               One account for guests and staff. Your access is determined by the
               role on your RIVR account.
             </p>
-            <div className="mt-7 flex items-center gap-2 border-t border-white/10 pt-5 text-[11px] text-white/50">
+            <div className="mt-7 flex items-center gap-2 border-t border-white/10 pt-5 text-[11px] text-white/65">
               <ShieldCheck className="h-3.5 w-3.5 text-[var(--accent)]" />{" "}
               Sessions are HTTP-only and expire automatically.
             </div>
@@ -154,23 +154,32 @@ function PasswordField({
   onChange,
   label = "Password",
   autoComplete = "current-password",
+  inputRef,
+  invalid = false,
+  describedBy,
 }: {
   value: string;
   onChange: (value: string) => void;
   label?: string;
   autoComplete?: string;
+  inputRef?: React.RefObject<HTMLInputElement | null>;
+  invalid?: boolean;
+  describedBy?: string;
 }) {
   const [show, setShow] = useState(false);
   return (
     <label>
       <span className={labelClass}>{label}</span>
-      <span className="group flex items-center gap-2 rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 transition-colors focus-within:border-[var(--accent)] focus-within:ring-4 focus-within:ring-[var(--accent)]/10">
+      <span className="group flex items-center gap-2 rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 transition-colors focus-within:border-[var(--accent-strong)] focus-within:ring-4 focus-within:ring-[var(--accent)]/15">
         <LockKeyhole className="h-4 w-4 text-[var(--faint)] transition-colors group-focus-within:text-[var(--accent-strong)]" />
         <input
+          ref={inputRef}
           type={show ? "text" : "password"}
           value={value}
           onChange={(event) => onChange(event.target.value)}
           autoComplete={autoComplete}
+          aria-invalid={invalid || undefined}
+          aria-describedby={describedBy}
           className="w-full bg-transparent text-sm text-[var(--text)] outline-none placeholder:text-[var(--faint)]"
           placeholder="Enter your password"
         />
@@ -206,6 +215,8 @@ export function LoginPage() {
   );
   const [status, setStatus] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -215,7 +226,13 @@ export function LoginPage() {
     if (!password) nextErrors.password = "Enter your password.";
     setErrors(nextErrors);
     setStatus("");
-    if (Object.keys(nextErrors).length) return;
+    if (Object.keys(nextErrors).length) {
+      requestAnimationFrame(() => {
+        if (nextErrors.email) emailRef.current?.focus();
+        else passwordRef.current?.focus();
+      });
+      return;
+    }
 
     setSubmitting(true);
     const result = await login(email.trim(), password);
@@ -262,25 +279,35 @@ export function LoginPage() {
         )}
         <label>
           <span className={labelClass}>Email address</span>
-          <span className="flex items-center gap-2 rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 transition-colors focus-within:border-[var(--sage)]">
+          <span className="flex items-center gap-2 rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 transition-colors focus-within:border-[var(--accent-strong)] focus-within:ring-4 focus-within:ring-[var(--accent)]/15">
             <Mail className="h-4 w-4 text-[var(--faint)]" />
             <input
+              ref={emailRef}
+              type="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               autoComplete="username"
               placeholder="you@example.com"
+              aria-invalid={errors.email ? true : undefined}
+              aria-describedby={errors.email ? "login-email-error" : undefined}
               className="w-full bg-transparent text-sm text-[var(--text)] outline-none placeholder:text-[var(--faint)]"
             />
           </span>
           {errors.email && (
-            <span className="mt-1 block text-[11px] text-[var(--danger)]">
+            <span id="login-email-error" role="alert" className="mt-1 block text-[11px] text-[var(--danger)]">
               {errors.email}
             </span>
           )}
         </label>
-        <PasswordField value={password} onChange={setPassword} />
+        <PasswordField
+          value={password}
+          onChange={setPassword}
+          inputRef={passwordRef}
+          invalid={Boolean(errors.password)}
+          describedBy={errors.password ? "login-password-error" : undefined}
+        />
         {errors.password && (
-          <span className="-mt-2 text-[11px] text-[var(--danger)]">
+          <span id="login-password-error" role="alert" className="-mt-2 text-[11px] text-[var(--danger)]">
             {errors.password}
           </span>
         )}

@@ -260,11 +260,11 @@ export function GuestDashboardPage() {
                 className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur"
               >
                 <div className="flex items-center justify-between">
-                  <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/45">{label}</p>
+                  <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/65">{label}</p>
                   <Icon className="h-3.5 w-3.5 text-[var(--accent)]" />
                 </div>
                 <p className="mt-3 font-display text-2xl leading-none">{value}</p>
-                <p className="mt-1.5 text-[10px] text-white/45">{detail}</p>
+                <p className="mt-1.5 text-[10px] text-white/65">{detail}</p>
               </motion.div>
             ))}
           </div>

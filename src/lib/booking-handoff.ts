@@ -4,8 +4,8 @@ const KEY = "rivr-booking-confirmation";
 
 /**
  * Hand the already-allowlisted creation response to the confirmation page for
- * this tab only. The value is removed on read, so it does not become a durable
- * store of guest information the way localStorage would.
+ * this tab only. sessionStorage (not localStorage) keeps the value out of other
+ * tabs and clears it when the tab closes.
  */
 export function setBookingConfirmation(value: PublicReservation): void {
   try {
@@ -15,11 +15,15 @@ export function setBookingConfirmation(value: PublicReservation): void {
   }
 }
 
-export function takeBookingConfirmation(): PublicReservation | null {
+/**
+ * Read without consuming. The page must survive a refresh (and React
+ * StrictMode's double render); the handoff is tab-scoped rather than a durable
+ * store of guest information.
+ */
+export function readBookingConfirmation(): PublicReservation | null {
   try {
     const raw = sessionStorage.getItem(KEY);
     if (!raw) return null;
-    sessionStorage.removeItem(KEY);
     const value = JSON.parse(raw) as Partial<PublicReservation>;
     if (
       typeof value.reference !== "string" ||
@@ -38,5 +42,14 @@ export function takeBookingConfirmation(): PublicReservation | null {
     return value as PublicReservation;
   } catch {
     return null;
+  }
+}
+
+/** Explicit clear when the guest leaves the confirmation for a new journey. */
+export function clearBookingConfirmation(): void {
+  try {
+    sessionStorage.removeItem(KEY);
+  } catch {
+    /* storage is optional */
   }
 }

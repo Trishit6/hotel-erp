@@ -40,12 +40,15 @@ export function GsapImage({
       if (!frame || !image) return;
 
       if (reveal) {
-        gsap.set(frame, { clipPath: "inset(0 0 100% 0)" });
+        // Keep most of the image visible before the trigger fires. A full
+        // inset(100%) left every below-fold image as an empty block until the
+        // visitor scrolled, which read as a broken section.
+        gsap.set(frame, { clipPath: "inset(0 0 12% 0)" });
         gsap.to(frame, {
           clipPath: "inset(0 0 0% 0)",
           duration: 1.25,
           ease: "power3.inOut",
-          scrollTrigger: { trigger: frame, start: "top 88%", once: true },
+          scrollTrigger: { trigger: frame, start: "top 95%", once: true },
         });
       }
 
@@ -74,7 +77,7 @@ export function GsapImage({
   );
 
   return (
-    <div ref={frameRef} className={`relative overflow-hidden ${className}`}>
+    <div ref={frameRef} className={`relative overflow-hidden bg-[var(--surface-3)] ${className}`}>
       <img
         ref={imageRef}
         src={src}

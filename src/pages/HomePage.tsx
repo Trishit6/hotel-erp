@@ -555,7 +555,7 @@ export default function HomePage() {
         <section className="bg-[var(--deep)] px-5 py-20 text-white md:px-10 md:py-24">
           <div className="mx-auto max-w-7xl">
             <Reveal className="max-w-xl">
-              <SectionEyebrow>Why choose RIVR</SectionEyebrow>
+              <SectionEyebrow onDark>Why choose RIVR</SectionEyebrow>
               <h2 className="mt-5 font-display text-[clamp(2.6rem,4.8vw,4.4rem)] leading-[1.02] tracking-[-0.03em]">
                 Good hospitality is in the details.
               </h2>
@@ -652,6 +652,7 @@ export default function HomePage() {
                 <figure className="flex h-full flex-col rounded-[1.25rem] border border-[var(--line)] bg-[var(--surface)] p-6 shadow-[0_8px_28px_rgba(31,43,60,0.04)]">
                   <div
                     className="flex text-[var(--accent)]"
+                    role="img"
                     aria-label={`${review.rating} out of 5 stars`}
                   >
                     {Array.from({ length: review.rating }).map(
@@ -761,7 +762,7 @@ function Why({
     <div className="rounded-2xl border border-white/10 bg-white/5 p-5 transition-colors hover:bg-white/10">
       <Icon className="h-5 w-5 text-[var(--accent)]" />
       <h3 className="mt-7 text-base font-semibold">{title}</h3>
-      <p className="mt-2 text-sm leading-5 text-white/55">{text}</p>
+      <p className="mt-2 text-sm leading-5 text-white/65">{text}</p>
     </div>
   );
 }

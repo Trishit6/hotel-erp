@@ -31,7 +31,6 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useHotel } from "../../lib/hotel-store";
 import type { StaffRole } from "../../lib/hotel-data";
 import { BrandMark } from "./HotelUi";
-import { ThemeToggle } from "./ThemeToggle";
 
 type NavItem = {
   to: string;
@@ -336,7 +335,7 @@ export function AdminLayout({ children }: { children?: ReactNode }) {
             <p className="text-xs font-semibold capitalize">
               {role.replaceAll("-", " ")}
             </p>
-            <p className="mt-0.5 text-[10px] text-white/50">RIVR operations</p>
+            <p className="mt-0.5 text-[10px] text-white/65">RIVR operations</p>
           </div>
         </div>
 
@@ -344,7 +343,7 @@ export function AdminLayout({ children }: { children?: ReactNode }) {
           {links.map((group) => (
             <div key={group.label}>
               <p
-                className={`mb-2 px-3 text-[9px] font-semibold uppercase tracking-[0.22em] text-white/35 ${
+                className={`mb-2 px-3 text-[9px] font-semibold uppercase tracking-[0.22em] text-white/60 ${
                   collapsed ? "lg:hidden" : ""
                 }`}
               >
@@ -403,7 +402,7 @@ export function AdminLayout({ children }: { children?: ReactNode }) {
             </p>
             <Link
               to="/"
-              className="mt-4 inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/55 transition-colors hover:text-white"
+              className="mt-4 inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/70 transition-colors hover:text-white"
             >
               <Globe2 className="h-3 w-3" /> View guest site
             </Link>
@@ -481,12 +480,11 @@ export function AdminLayout({ children }: { children?: ReactNode }) {
             >
               <Bell className="h-4 w-4" />
               {pending > 0 && (
-                <span className="absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] font-bold text-white">
+                <span className="absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] font-bold text-[var(--deep)]">
                   {pending > 9 ? "9+" : pending}
                 </span>
               )}
             </Link>
-            <ThemeToggle />
             <span className="hidden h-8 w-px bg-[var(--line)] sm:block" aria-hidden="true" />
             <div className="hidden items-center gap-2.5 sm:flex">
               <span className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--sage)] text-[10px] font-bold text-[var(--deep)] ring-2 ring-[var(--surface)]">

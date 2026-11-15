@@ -201,7 +201,7 @@ export function PageHero({
           </div>
           <div className="pointer-events-none absolute bottom-7 left-6 hidden max-w-[210px] border-l border-white/25 pl-4 text-white/80 md:block">
             <p className="font-display text-xl leading-tight text-white">A considered arrival.</p>
-            <p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-white/55">
+            <p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-white/65">
               RIVR · {new Date().getFullYear()}
             </p>
           </div>

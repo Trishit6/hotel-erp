@@ -118,22 +118,22 @@ export default function ContactPage() {
             <form onSubmit={submit} noValidate className="mt-6 grid gap-4 sm:grid-cols-2">
               <label>
                 <span className="mb-2 block text-xs font-semibold text-[var(--muted-strong)]">Name</span>
-                <input value={form.name} onChange={(event) => update("name", event.target.value)} autoComplete="name" placeholder="Your name" className="w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors placeholder:text-[var(--faint)] focus:border-[var(--sage)]" />
+                <input value={form.name} onChange={(event) => update("name", event.target.value)} autoComplete="name" placeholder="Your name" className="w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors placeholder:text-[var(--faint)] focus:border-[var(--accent-strong)]" />
                 {errors.name && <span className="mt-1 block text-[11px] text-[var(--danger)]">{errors.name}</span>}
               </label>
               <label>
                 <span className="mb-2 block text-xs font-semibold text-[var(--muted-strong)]">Email</span>
-                <input type="email" value={form.email} onChange={(event) => update("email", event.target.value)} autoComplete="email" placeholder="you@example.com" className="w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors placeholder:text-[var(--faint)] focus:border-[var(--sage)]" />
+                <input type="email" value={form.email} onChange={(event) => update("email", event.target.value)} autoComplete="email" placeholder="you@example.com" className="w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors placeholder:text-[var(--faint)] focus:border-[var(--accent-strong)]" />
                 {errors.email && <span className="mt-1 block text-[11px] text-[var(--danger)]">{errors.email}</span>}
               </label>
               <label>
                 <span className="mb-2 block text-xs font-semibold text-[var(--muted-strong)]">Phone <span className="font-normal text-[var(--faint)]">(optional)</span></span>
-                <input value={form.phone} onChange={(event) => update("phone", event.target.value)} autoComplete="tel" placeholder="+91 98765 43210" className="w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors placeholder:text-[var(--faint)] focus:border-[var(--sage)]" />
+                <input value={form.phone} onChange={(event) => update("phone", event.target.value)} autoComplete="tel" placeholder="+91 98765 43210" className="w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors placeholder:text-[var(--faint)] focus:border-[var(--accent-strong)]" />
                 {errors.phone && <span className="mt-1 block text-[11px] text-[var(--danger)]">{errors.phone}</span>}
               </label>
               <label>
                 <span className="mb-2 block text-xs font-semibold text-[var(--muted-strong)]">Subject</span>
-                <select value={form.subject} onChange={(event) => update("subject", event.target.value)} className="w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors focus:border-[var(--sage)]">
+                <select value={form.subject} onChange={(event) => update("subject", event.target.value)} className="w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors focus:border-[var(--accent-strong)]">
                   <option>Stay enquiry</option>
                   <option>Existing reservation</option>
                   <option>Group or event</option>
@@ -142,7 +142,7 @@ export default function ContactPage() {
               </label>
               <label className="sm:col-span-2">
                 <span className="mb-2 block text-xs font-semibold text-[var(--muted-strong)]">Message</span>
-                <textarea value={form.message} onChange={(event) => update("message", event.target.value)} rows={5} placeholder="Tell us what you need help with." className="w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors placeholder:text-[var(--faint)] focus:border-[var(--sage)]" />
+                <textarea value={form.message} onChange={(event) => update("message", event.target.value)} rows={5} placeholder="Tell us what you need help with." className="w-full rounded-xl border border-[var(--line-2)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--text)] outline-none transition-colors placeholder:text-[var(--faint)] focus:border-[var(--accent-strong)]" />
                 {errors.message && <span className="mt-1 block text-[11px] text-[var(--danger)]">{errors.message}</span>}
               </label>
               <div className="sm:col-span-2">

@@ -5,7 +5,7 @@ import { PageAtmosphere } from "../components/hotel/Cinematic";
 import { PublicFooter, PublicHeader } from "../components/hotel/PublicChrome";
 import { SectionEyebrow, StatusBadge } from "../components/hotel/HotelUi";
 import { calculateNights, formatCurrency, formatDate, hotelInfo, type PublicReservation } from "../lib/hotel-data";
-import { takeBookingConfirmation } from "../lib/booking-handoff";
+import { clearBookingConfirmation, readBookingConfirmation } from "../lib/booking-handoff";
 
 function downloadCalendar(reservation: PublicReservation) {
   const start = reservation.checkIn.replaceAll("-", "");
@@ -36,10 +36,10 @@ function downloadCalendar(reservation: PublicReservation) {
 
 export default function BookingSuccessPage() {
   const [copied, setCopied] = useState(false);
-  // The creation response is handed over once in sessionStorage, so the success
-  // page never needs an unauthenticated reference-only lookup. A refresh falls
-  // back to the verified lookup form.
-  const [reservation] = useState<PublicReservation | null>(() => takeBookingConfirmation());
+  // The creation response is handed over in sessionStorage for this tab. It is
+  // read without being consumed so a refresh (or StrictMode's double render)
+  // still shows the confirmation instead of a false not-found state.
+  const [reservation] = useState<PublicReservation | null>(readBookingConfirmation);
 
   if (!reservation) {
     return (
@@ -47,10 +47,10 @@ export default function BookingSuccessPage() {
         <PageAtmosphere />
         <PublicHeader />
         <main className="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center px-5 text-center">
-          <h1 className="font-display text-4xl text-[var(--ink)]">Reservation not found</h1>
-          <p className="mt-3 text-sm leading-6 text-[var(--muted)]">The confirmation link may be incomplete. Search with your booking reference, email, or phone number.</p>
+          <h1 className="font-display text-4xl text-[var(--ink)]">We couldn’t find that confirmation.</h1>
+          <p className="mt-3 max-w-md text-sm leading-6 text-[var(--muted)]">Confirmations open in the tab where the booking was completed. If this is a new tab, use your booking reference and the email address or mobile number from the reservation to look it up securely.</p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link to="/my-bookings" className="rounded-full bg-[var(--primary)] px-5 py-3 text-xs font-semibold text-[var(--on-primary)]">Find my booking</Link>
+            <Link to="/my-bookings" className="rounded-full bg-[var(--primary)] px-5 py-3 text-xs font-semibold text-[var(--on-primary)]">Look up my booking</Link>
             <Link to="/" className="rounded-full border border-[var(--line-strong)] px-5 py-3 text-xs font-semibold text-[var(--ink)]">Return home</Link>
           </div>
         </main>
@@ -125,7 +125,11 @@ export default function BookingSuccessPage() {
             <button type="button" onClick={() => downloadCalendar(reservation)} className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--line-strong)] px-4 py-3 text-xs font-semibold text-[var(--ink)] transition-colors hover:border-[var(--accent)]">
               <CalendarPlus className="h-4 w-4" /> Add to calendar
             </button>
-            <Link to="/my-bookings" className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-3 text-xs font-semibold text-[var(--on-primary)] transition-colors hover:bg-[var(--primary-hover)]">
+            <Link
+              to="/my-bookings"
+              onClick={clearBookingConfirmation}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-3 text-xs font-semibold text-[var(--on-primary)] transition-colors hover:bg-[var(--primary-hover)]"
+            >
               View my bookings <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
@@ -135,7 +139,7 @@ export default function BookingSuccessPage() {
           <span className="flex items-center gap-2"><MapPin className="h-3.5 w-3.5 text-[var(--sage)]" /> {hotelInfo.city}, {hotelInfo.state}</span>
           <span className="flex items-center gap-2"><Sparkles className="h-3.5 w-3.5 text-[var(--accent-strong)]" /> Thank you for choosing a slower stay.</span>
         </div>
-        <Link to="/" className="group mt-8 flex items-center gap-2 text-sm font-semibold text-[var(--ink)]">
+        <Link to="/" onClick={clearBookingConfirmation} className="group mt-8 flex items-center gap-2 text-sm font-semibold text-[var(--ink)]">
           Return to RIVR
           <span className="grid h-8 w-8 place-items-center rounded-full bg-[var(--surface-3)] transition-transform group-hover:translate-x-1">
             <ArrowRight className="h-4 w-4" />
