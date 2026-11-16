@@ -32,6 +32,7 @@ Full-stack hotel management + ERP: a guest-facing site and staff workspace (Reac
 | Generate migration | `pnpm --filter @rivr/api db:generate` |
 | Apply migrations | `pnpm db:migrate` |
 | Seed demo data | `pnpm db:seed` (destructive, see below) |
+| Bulk local dataset | `node apps/api/scripts/seed-bulk.cjs` (additive; run after `pnpm db:seed`; refuses while `bulk-res-*` rows exist; `BULK_GUESTS` / `BULK_RESERVATIONS` override counts) |
 | First super-admin | `pnpm create-admin --email <email> --password <12+ chars>` (non-interactive) |
 
 No lint, formatter, frontend test suite, or CI workflow is configured — do not invent them. Full gate, in order: `pnpm build` (already runs `tsc -b`), `pnpm typecheck:api`, `pnpm test:api`.
@@ -68,6 +69,7 @@ No lint, formatter, frontend test suite, or CI workflow is configured — do not
 - New business tables must be added to `TABLES` in `database/reset.ts` and `BUSINESS_TABLES` in `database/seed.ts` (plus seed inserts), or resets/seeds silently skip them. Idempotently seeded reference tables (`departments`, `shifts`, `housekeeping_status`) intentionally stay out of `BUSINESS_TABLES`.
 - `pnpm db:seed` deletes all `BUSINESS_TABLES` rows (including `users` and `sessions`) then reseeds a large demo dataset. Not additive; it hard-refuses when `NODE_ENV=production` before connecting, with no override. `SEED_ADMIN_*` can additionally create/update a separate admin.
 - `pnpm db:reset` does **not** reset anything: `database/reset.ts` deliberately has no destructive CLI entrypoint, so the command explains itself and exits non-zero. Use the exported `resetDatabase()` / `dropAllTables()` only from a reviewed one-off script after confirming `DB_NAME`.
+- `apps/api/scripts/seed-bulk.cjs` generates a large local dataset (default 5k guests / 12k reservations plus payments, invoices, orders, tasks, attendance, expenses) on top of the demo seed. It is additive, not run by `pnpm db:seed`, and refuses to run twice while `bulk-res-*` reservations remain.
 - `POST /api/admin/dev/reset` reseeds only when `ALLOW_DEMO_RESET=true` (forced off in production) and the caller is a super-admin; it clears users/sessions, so everyone must sign in again.
 - `pnpm create-admin` does not reset the DB; it loads env through `config/env.ts` (so `apps/api/.env` is honoured from any cwd), migrates, seeds roles, and refuses when an active super-admin already exists.
 - Tests are real-DB integration tests. `tests/setup.ts` forces `NODE_ENV=test`, resolves `DB_NAME` via `tests/database-guard.ts` (must contain a `test` segment and differ from `DB_NAME`, else the suite fails before connecting), a fixed test secret, and disables demo reset/seed admin. DB suites call `resetTestDatabase()` (drop → migrate → seed roles, refused unless `env.isTest`) in `beforeAll`; `fileParallelism` is off — keep DB suites serial and never weaken the guard. `tests/seed-auth.test.ts` asserts minimum row counts across ~30 tables and the permission matrix, so seed changes usually require updating it.
